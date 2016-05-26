@@ -6,7 +6,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
-import java.mygame.action.GameAction;
+import mygame.action.GameAction;
 
 import java.net.URL;
 import java.util.ResourceBundle;
