@@ -9,6 +9,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import mygame.action.GameAction;
 
+import java.io.File;
 import java.io.InputStream;
 
 public class Main extends Application {
@@ -21,13 +22,13 @@ public class Main extends Application {
 
         FXMLLoader fxmlLoader = new FXMLLoader();
 
-        InputStream inputStream = getClass().getResourceAsStream("game.fxml");
+        InputStream inputStream = getClass().getResourceAsStream("/game.fxml");
         root= fxmlLoader.load(inputStream);
         mAction = fxmlLoader.<Controller>getController();
 
         primaryStage.setTitle("Hello World");
 
-        Scene scene = new Scene(root, 800, 600);
+        Scene scene = new Scene(root, 800, 400);
         addOnKeyListener(scene);
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -65,7 +66,7 @@ public class Main extends Application {
 
     }
     public static void main(String[] args) {
-        Main.class.getClassLoader();
+
         launch(args);
     }
 }

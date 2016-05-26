@@ -45,8 +45,8 @@
                     prefWidth="600.0">
             <children>
                 <ImageView fx:id="ivBackground"
-                           fitHeight="370.0"
-                           fitWidth="600.0"
+                           fitHeight="400.0"
+                           fitWidth="800.0"
                            layoutY="3.0"
                            pickOnBounds="true"
                            preserveRatio="true"

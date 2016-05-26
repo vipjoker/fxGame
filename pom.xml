@@ -9,4 +9,22 @@
     <version>0.0.1</version>
     <packaging>jar</packaging>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <configuration>
+                    <mainClass>mygame.Main</mainClass>
+                    <arguments>
+                        <argument>HELLO WORLD</argument>
+                        <argument>HELLO AGAIN</argument>
+                    </arguments>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+
 </project>
