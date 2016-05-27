@@ -1,72 +1,61 @@
 package mygame;
 
 import javafx.application.Application;
-import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
+import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import mygame.action.GameAction;
+import mygame.level.FirstLevel;
 
-import java.io.File;
-import java.io.InputStream;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Main extends Application {
+    public Set<KeyCode> buttons ;
+    private static Main INSTANCE;
+
+    public static Main getInstance(){
+        return INSTANCE;
+    }
 
     private GameAction mAction;
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root;
+        INSTANCE = this;
+        buttons = new HashSet<>();
+        primaryStage.setTitle("Game");
+        Group group = new Group();
+        Scene scene = new Scene(group);
+        Canvas canvas = new Canvas(1280,720);
 
+        scene.setOnKeyPressed(this::onKeyPressed);
+        scene.setOnKeyReleased(this::onKeyReleased);
+        scene.setOnKeyTyped(this::onKeyTyped);
 
-        FXMLLoader fxmlLoader = new FXMLLoader();
-
-        InputStream inputStream = getClass().getResourceAsStream("/game.fxml");
-        root= fxmlLoader.load(inputStream);
-        mAction = fxmlLoader.<Controller>getController();
-
-        primaryStage.setTitle("Hello World");
-
-        Scene scene = new Scene(root, 800, 400);
-        addOnKeyListener(scene);
+        group.getChildren().add(canvas);
         primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
         primaryStage.show();
+
+        new FirstLevel(canvas);
     }
 
-    private void addOnKeyListener(Scene scene){
-
-    scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-        @Override
-        public void handle(KeyEvent event) {
-            switch (event.getCode()) {
-                case W:
-                    mAction.jump();
-                    System.out.println("up");
-                    break;
-                case S:
-                    mAction.crouch();
-                    System.out.println("down");
-                    break;
-                case A:
-                    mAction.moveLeft();
-                    System.out.println("left");
-                    break;
-                case D:
-                    mAction.moveRight();
-                    System.out.println("right");
-                    break;
-                case SHIFT:
-                    mAction.run();
-                    System.out.println("shift");
-                    break;
-            }
-        }
-    });
-
+    private void onKeyPressed(KeyEvent keyEvent){
+        buttons.add(keyEvent.getCode());
     }
+
+    private void onKeyReleased(KeyEvent keyEvent){
+        buttons.remove(keyEvent.getCode());
+    }
+
+    private void onKeyTyped(KeyEvent keyEvent){
+        buttons.remove(keyEvent.getCode());
+    }
+
     public static void main(String[] args) {
-
         launch(args);
     }
 }

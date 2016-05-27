@@ -40,7 +40,7 @@ public class HelloWorld extends Application{
 
         Font font  = Font.font("Times New Roman", FontWeight.BOLD,48);
         graphicsContext2D.setFont(font);
-        graphicsContext2D.fillText("Hello World",60,50);
+        graphicsContext2D.fillText("Hello World",60,80);
         graphicsContext2D.strokeText("Hello World", 60,50);
         primaryStage.show();
     }

@@ -1,5 +1,6 @@
 package mygame.person;
 
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -9,6 +10,8 @@ import javafx.scene.image.ImageView;
 public abstract class PersonState {
     protected Image[] frames;
 
+
+
     public PersonState (String... paths){
         frames = new Image[paths.length];
 
@@ -16,11 +19,10 @@ public abstract class PersonState {
             frames[i] =new Image(getClass().getResourceAsStream(paths[i]));
     }
 
-   public final  void animate (double anim , ImageView imageView){
+   public final  void animate (double anim , GraphicsContext gc){
 
            double factor = 1.0/(frames.length -1);
            int index =(int) Math.floor(anim/factor) ;
-
-           imageView.setImage(frames[index]);
+            gc.drawImage(frames[index],200,400 , 200,250);
        }
 }
