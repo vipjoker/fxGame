@@ -28,7 +28,6 @@ public class FirstLevel {
 
     public FirstLevel(Canvas canvas) {
         this.mCanvas = canvas;
-        buttons = Main.getInstance().buttons;
         init();
     }
 
