@@ -10,6 +10,8 @@ import javafx.scene.image.ImageView;
 public abstract class PersonState {
     protected Image[] frames;
 
+    protected int height = 250;
+    protected int width = 200;
 
 
     public PersonState (String... paths){
@@ -19,10 +21,10 @@ public abstract class PersonState {
             frames[i] =new Image(getClass().getResourceAsStream(paths[i]));
     }
 
-   public final  void animate (double anim , GraphicsContext gc){
+   public final  void animate (double anim ,int y, GraphicsContext gc){
 
            double factor = 1.0/(frames.length -1);
            int index =(int) Math.floor(anim/factor) ;
-            gc.drawImage(frames[index],200,400 , 200,250);
+            gc.drawImage(frames[index],200,y , width,height);
        }
 }

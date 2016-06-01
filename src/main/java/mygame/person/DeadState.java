@@ -6,6 +6,7 @@ package mygame.person;
 public class DeadState extends PersonState {
 
     public DeadState (){
+
         super(
                 "/knight/Dead (1).png",
                 "/knight/Dead (2).png",
@@ -18,5 +19,7 @@ public class DeadState extends PersonState {
                 "/knight/Dead (9).png",
                 "/knight/Dead (10).png"
         );
+        width = 350;
+        height = 200;
     }
 }
