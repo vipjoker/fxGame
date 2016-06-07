@@ -21,7 +21,11 @@ public class Renderer extends Thread {
     }
 
     public void pause(){
-        IS_PAUSED = !IS_PAUSED;
+        IS_PAUSED = true;
+    }
+
+    public void  unpause(){
+        IS_PAUSED = false;
     }
 
     @Override
@@ -33,7 +37,7 @@ public class Renderer extends Thread {
                 Thread.sleep(1000/60);
                 synchronized (this){
                     while (IS_PAUSED){
-                     wait();
+                      wait();
                     }
                 }
                 mUpdatable.mainLoop( System.currentTimeMillis() -l);
