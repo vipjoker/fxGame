@@ -10,6 +10,9 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import mygame.action.GameAction;
 import mygame.level.FirstLevel;
+import mygame.level.SimpleBackground;
+import mygame.level.SimpleLevel;
+import mygame.util.Constants;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -28,7 +31,8 @@ public class Main extends Application implements Updatable{
         primaryStage.setTitle("Game");
         Group group = new Group();
         Scene scene = new Scene(group);
-        Canvas canvas = new Canvas(1280,720);
+
+        Canvas canvas = new Canvas(Constants.WIDTH,Constants.HEIGHT);
         graphicsContext2D = canvas.getGraphicsContext2D();
         scene.setOnKeyPressed(this::onKeyPressed);
         scene.setOnKeyReleased(this::onKeyReleased);
@@ -36,11 +40,12 @@ public class Main extends Application implements Updatable{
         group.getChildren().add(canvas);
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
-        primaryStage.show();
 
-        //new FirstLevel(canvas);
+       // new FirstLevel(canvas);
+        primaryStage.show();
         mRenderer = new Renderer(this);
-        views.add(new Cube(100,100,100,100));
+        views.add(new SimpleBackground());
+        views.add(new SimpleLevel());
 
     }
 
@@ -48,8 +53,8 @@ public class Main extends Application implements Updatable{
     public void mainLoop(long time) {
         if(buttons.contains(KeyCode.SPACE))mRenderer.pause();
 
-        graphicsContext2D.clearRect(0,0,1280,720);
-         for(Renderable r : views)r.draw(graphicsContext2D);
+        graphicsContext2D.clearRect(0,0,640,480);
+        for(Renderable r : views)r.draw(graphicsContext2D);
     }
 
     private void onKeyPressed(KeyEvent keyEvent){
