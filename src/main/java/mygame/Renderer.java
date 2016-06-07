@@ -1,5 +1,7 @@
 package mygame;
 
+import javafx.application.Platform;
+
 /**
  * Created by Admin on 30.05.2016.
  */
@@ -21,7 +23,11 @@ public class Renderer extends Thread {
     }
 
     public void pause(){
-        IS_PAUSED = !IS_PAUSED;
+        IS_PAUSED = true;
+    }
+
+    public void  unpause(){
+        IS_PAUSED = false;
     }
 
     @Override
@@ -30,13 +36,13 @@ public class Renderer extends Thread {
         while(true){
 
             try {
-                Thread.sleep(1000/60);
+                Thread.sleep(1000/100);
                 synchronized (this){
                     while (IS_PAUSED){
-                     wait();
+                      wait();
                     }
                 }
-                mUpdatable.mainLoop( System.currentTimeMillis() -l);
+                Platform.runLater(()->mUpdatable.mainLoop( System.currentTimeMillis() -l));
 
             } catch (InterruptedException e) {
                 e.printStackTrace();

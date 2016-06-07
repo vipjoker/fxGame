@@ -5,30 +5,40 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import mygame.action.GameAction;
-import mygame.level.FirstLevel;
+import mygame.level.SimpleBackground;
+import mygame.level.SimpleFPS;
+import mygame.level.SimpleLevel;
+import mygame.util.Constants;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Main extends Application implements Updatable{
-    public static Set<KeyCode> buttons ;
+public class Main extends Application implements Updatable {
+    public static Set<KeyCode> buttons;
 
     private List<Renderable> views = new ArrayList<>();
     private Renderer mRenderer;
     private GraphicsContext graphicsContext2D;
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
         buttons = new HashSet<>();
         primaryStage.setTitle("Game");
         Group group = new Group();
         Scene scene = new Scene(group);
-        Canvas canvas = new Canvas(1280,720);
+
+        Canvas canvas = new Canvas(Constants.WIDTH, Constants.HEIGHT);
         graphicsContext2D = canvas.getGraphicsContext2D();
         scene.setOnKeyPressed(this::onKeyPressed);
         scene.setOnKeyReleased(this::onKeyReleased);
@@ -36,38 +46,46 @@ public class Main extends Application implements Updatable{
         group.getChildren().add(canvas);
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
-        primaryStage.show();
 
-        //new FirstLevel(canvas);
+        // new FirstLevel(canvas);
+        primaryStage.show();
         mRenderer = new Renderer(this);
-        views.add(new Cube(100,100,100,100));
+        views.add(new SimpleBackground());
+        views.add(new SimpleLevel());
+        views.add(new SimpleFPS());
 
     }
 
     @Override
     public void mainLoop(long time) {
-        if(buttons.contains(KeyCode.SPACE))mRenderer.pause();
 
-        graphicsContext2D.clearRect(0,0,1280,720);
-         for(Renderable r : views)r.draw(graphicsContext2D);
+        graphicsContext2D.setFill(Color.BLACK);
+        graphicsContext2D.fillRect(0, 0, 640, 480);
+
+        for (Renderable r : views) r.draw(graphicsContext2D);
     }
 
-    private void onKeyPressed(KeyEvent keyEvent){
-        if(keyEvent.getCode() == KeyCode.SPACE && mRenderer.isPaused()){
-            synchronized (mRenderer){
-                mRenderer.pause();
-               mRenderer.notify();
-            }
-        }
+    private void onKeyPressed(KeyEvent keyEvent) {
+
         buttons.add(keyEvent.getCode());
     }
 
-    private void onKeyReleased(KeyEvent keyEvent){
+    private void onKeyReleased(KeyEvent keyEvent) {
+
+
+        if (keyEvent.getCode() == KeyCode.SPACE)
+            if (mRenderer.isPaused()) {
+                graphicsContext2D.setGlobalAlpha(1.0);
+                synchronized (mRenderer) {
+                    mRenderer.unpause();
+                    mRenderer.notify();
+                }
+            }else{
+                graphicsContext2D.setGlobalAlpha(0.5);
+                mRenderer.pause();
+            }
+
+
         buttons.remove(keyEvent.getCode());
-    }
-
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }
