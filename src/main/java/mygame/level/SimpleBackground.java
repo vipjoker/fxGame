@@ -23,12 +23,21 @@ public class SimpleBackground implements Renderable {
     public void draw(GraphicsContext context) {
         if(Main.buttons.contains(KeyCode.D))x--;
         if(Main.buttons.contains(KeyCode.A))x++;
-
+        if(x <= -Constants.WIDTH || x >= Constants.WIDTH)x = 0;
 
         context.drawImage(mBackground,
                 x,
                 0,
                 Constants.WIDTH,
                 Constants.HEIGHT);
+
+
+        context.drawImage(mBackground,
+                            x<0? x+ Constants.WIDTH : x-Constants.WIDTH,
+                            0,
+                            Constants.WIDTH,
+                            Constants.HEIGHT);
+
+
     }
 }

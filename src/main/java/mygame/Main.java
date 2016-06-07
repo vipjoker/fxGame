@@ -8,6 +8,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import mygame.level.SimpleBackground;
 import mygame.level.SimpleFPS;
@@ -58,8 +59,8 @@ public class Main extends Application implements Updatable {
     @Override
     public void mainLoop(long time) {
 
-
-        graphicsContext2D.clearRect(0, 0, 640, 480);
+        graphicsContext2D.setFill(Color.BLACK);
+        graphicsContext2D.fillRect(0, 0, 640, 480);
 
         for (Renderable r : views) r.draw(graphicsContext2D);
     }
