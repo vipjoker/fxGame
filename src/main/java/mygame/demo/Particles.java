@@ -4,7 +4,6 @@ package mygame.demo;
  * Copyright (c) 2008, 2012 Oracle and/or its affiliates.
  * All rights reserved. Use is subject to license terms.
  */
-import com.sun.imageio.plugins.common.ImageUtil;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -28,6 +27,7 @@ import javafx.scene.effect.Reflection;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.*;
+import mygame.util.ImageUtil;
 
 /**
  * A sample that demonstrates how to draw and paint shapes, apply visual
@@ -91,7 +91,7 @@ public class Particles  extends Application {
                 canvas.setEffect(new Reflection(0,0.4,0.15,0));
 
 
-                background = new ImageView(("earth.jpg"));
+                background = new ImageView(ImageUtil.getImage("earth.jpg"));
                 getChildren().addAll(background,canvas);
                 // create animation timer that will be called every frame
                 // final AnimationTimer timer = new AnimationTimer() {

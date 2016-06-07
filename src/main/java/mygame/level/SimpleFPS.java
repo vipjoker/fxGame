@@ -1,6 +1,5 @@
 package mygame.level;
 
-import com.sun.tools.internal.jxc.ap.Const;
 import javafx.scene.canvas.GraphicsContext;
 import mygame.Renderable;
 import mygame.util.Constants;
