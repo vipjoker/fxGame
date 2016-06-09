@@ -23,8 +23,8 @@ public class SimpleFPS implements Renderable {
         long tmp = System.currentTimeMillis();
 
         long l = tmp - initTime;
-
-        context.fillText("FPS "  +1000 / (tmp - lastTime), Constants.WIDTH - 70, 50);
+        long result  = tmp - lastTime;
+        context.fillText("FPS "  +1000 /(result ==0 ? 1 : result), Constants.WIDTH - 70, 50);
         context.fillText("Time " + (l / 1000), Constants.WIDTH - 70, 80);
         lastTime = tmp;
     }

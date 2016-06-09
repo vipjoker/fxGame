@@ -9,13 +9,15 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
+import mygame.Renderable;
 import mygame.person.PersonState;
+import mygame.util.Constants;
 
 
 /**
  * Created by oleh on 25.05.16.
  */
-public class Knight {
+public class Knight implements Renderable{
 
     private PersonState ATTACK = new AttackState();
     private PersonState DEAD = new DeadState();
@@ -25,27 +27,24 @@ public class Knight {
     private PersonState STANDING = new StandingState();
     private PersonState WALKING = new WalkState();
 
-    private GraphicsContext gc;
     private PersonState mState;
 
 
-    final long nanotime = System.nanoTime();
-
+    private long initTime;
+    private long lastTime;
     private int duration;
     private int jump = 0 ;
     private boolean isJumping;
 
 
-    public Knight(GraphicsContext gc, PersonState state, int duration) {
-        this.gc = gc;
-        mState = state;
-        this.duration = duration;
+    public Knight() {
+        mState = new StandingState();
+        initTime = System.currentTimeMillis();
+        this.duration = 1000;
     }
 
     public void update(long time) {
-        double t = (time - nanotime) / 1000_000.0;
-        double state = (t % duration) / duration;
-        mState.animate(state, 400 - jump, gc);
+
     }
 
 
@@ -74,6 +73,24 @@ public class Knight {
             animateJump();
         }
         mState = JUMP;
+    }
+
+    @Override
+    public void draw(GraphicsContext context) {
+
+
+
+
+        long tmp = System.currentTimeMillis();
+
+        long result  = tmp - lastTime;
+        context.fillText("FPS "  +1000 /(result ==0 ? 1 : result), Constants.WIDTH - 70, 50);
+        lastTime = tmp;
+
+
+
+
+        mState.animate(state, 400 - jump, context);
     }
 
     private void animateJump(){

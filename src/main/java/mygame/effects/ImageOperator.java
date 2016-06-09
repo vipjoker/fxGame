@@ -58,7 +58,7 @@ public class ImageOperator extends Application {
                 xRatio = x / w;
                 yRatio = y / h;
                 hue = Math.sin(yRatio * (gridSize * Math.PI)) * Math.sin(xRatio * (gridSize * Math.PI)) * Math.tan(hueFactor / 20.0) * 360.0 + hueOffset;
-                Color c = Color.hsb(hue, 1.0, 1.0);
+                Color c = Color.rgb(1, 1, 1,1.0);
                 pw.setColor(x, y, c);
             }
         }
