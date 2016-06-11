@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import mygame.level.SimpleBackground;
 import mygame.level.SimpleFPS;
 import mygame.level.SimpleLevel;
+import mygame.person.Knight;
 import mygame.util.Constants;
 
 import java.util.ArrayList;
@@ -53,6 +54,7 @@ public class Main extends Application implements Updatable {
         views.add(new SimpleBackground());
         views.add(new SimpleLevel());
         views.add(new SimpleFPS());
+        views.add(new Knight());
 
     }
 
