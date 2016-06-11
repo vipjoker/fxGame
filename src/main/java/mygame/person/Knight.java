@@ -90,7 +90,7 @@ public class Knight implements Renderable{
 
 
 
-        mState.animate(state, 400 - jump, context);
+      //  mState.animate(mState, 400 - jump, context);
     }
 
     private void animateJump(){
