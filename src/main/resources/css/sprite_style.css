@@ -1,0 +1,75 @@
+body{
+    background-color: cadetblue;
+}
+
+.menu {
+    list-style: none;
+  
+}
+
+.menu > li{
+
+         background-image: url("buttons.bmp");
+         width: 124px;
+         height: 33px;
+            cursor: pointer;
+         display: inline-block;
+
+}
+
+.menu .menu1 {
+    background-position: 333px 253px;
+}
+.menu .menu1:hover {
+    background-position: 333px 221px;
+}
+
+.menu .menu1:active {
+    background-position: 333px 190px;
+}
+
+.menu .menu2 {
+      background-position: 203px 253px;
+}
+.menu .menu2:hover{
+      background-position: 203px 221px;
+}
+.menu .menu2:active{
+      background-position: 203px 190px;
+}
+.menu .menu3 {
+    background-position: 333px 151px;
+}
+.menu .menu3:hover {
+    background-position: 333px 119px;
+}
+.menu .menu3:active {
+    background-position: 333px 87px;
+}
+.menu .menu4 {
+    background-position: 203px 151px;
+}
+.menu .menu4:hover {
+    background-position: 203px 119px;
+}
+.menu .menu4:active {
+    background-position: 203px 87px;
+}
+
+.person{
+    width:  90px;
+    height: 120px;
+    background-image: url(soldier.jpg);
+    background-position: -10px -50px;
+    animation : mymove 5s infinite;
+    
+}
+
+@keyframes mymove {
+    0%   {background-position: -10px -50px;}
+    25%  {background-position: -108px -50px;}
+    50%   {background-position: -227px -50px;}
+    75%   {background-position: -313px -50px;}
+    100%  {background-position: -404px -50px;}
+}
+
