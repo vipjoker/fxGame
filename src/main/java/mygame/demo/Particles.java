@@ -30,7 +30,7 @@ import javafx.scene.paint.*;
 import mygame.util.ImageUtil;
 
 /**
- * A sample that demonstrates how to draw and paint shapes, apply visual
+ * A java.sample that demonstrates how to draw and paint shapes, apply visual
  * effects, blend colors in overlapping objects, and animate objects.
  *
  * @see javafx.scene.canvas.Canvas

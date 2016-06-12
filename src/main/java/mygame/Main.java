@@ -5,11 +5,11 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.effect.BlendMode;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import mygame.level.SimpleBackground;
 import mygame.level.SimpleFPS;
 import mygame.level.SimpleLevel;
@@ -38,7 +38,7 @@ public class Main extends Application implements Updatable {
         primaryStage.setTitle("Game");
         Group group = new Group();
         Scene scene = new Scene(group);
-
+        primaryStage.initStyle(StageStyle.TRANSPARENT);
         Canvas canvas = new Canvas(Constants.WIDTH, Constants.HEIGHT);
         graphicsContext2D = canvas.getGraphicsContext2D();
         scene.setOnKeyPressed(this::onKeyPressed);
