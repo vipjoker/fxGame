@@ -3,6 +3,10 @@ package mygame.effects;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Slider;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.Glow;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import javafx.scene.effect.GaussianBlur;
@@ -17,19 +21,47 @@ import mygame.util.ImageUtil;
 public class Gaussian  extends Application {
         private static final Image ICON_48 = ImageUtil.getImage("earth.jpg");
         private void init(Stage primaryStage) {
-            Group root = new Group();
+            VBox root = new VBox();
             primaryStage.setResizable(false);
-            primaryStage.setScene(new Scene(root, 48,48));
+            primaryStage.setScene(new Scene(root, 500,500));
             ImageView sample = new ImageView(ICON_48);
-            final GaussianBlur gaussianBlur = new GaussianBlur();
+            GaussianBlur gaussianBlur = new GaussianBlur();
             gaussianBlur.setRadius(8d);
+
             sample.setEffect(gaussianBlur);
-            root.getChildren().add(sample);
+            Glow glow = new Glow();
+            glow.setLevel(2.0);
+            Slider slider = new Slider();
+            slider.setShowTickLabels(true);
+            slider.setShowTickMarks(true);
+            slider.setMax(10);
+            slider.setMajorTickUnit(1);
+            slider.setMinorTickCount(4);
+
+            slider.valueProperty().addListener((observable, oldValue, newValue) -> {
+                gaussianBlur.setRadius(newValue.doubleValue());
+                sample.setEffect(gaussianBlur);
+            });
+
+
+            Slider shadowSlider = new Slider();
+            shadowSlider.setShowTickLabels(true);
+            shadowSlider.setShowTickMarks(true);
+            shadowSlider.setMax(10);
+            shadowSlider.setMajorTickUnit(1);
+           shadowSlider.setMinorTickCount(4);
+
+           shadowSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+               glow.setLevel(newValue.doubleValue());
+               sample.setEffect(glow);
+           });
+
+
+
+            root.getChildren().addAll(sample,slider,shadowSlider);
+
         }
 
-        public double getSampleWidth() { return 48; }
-
-        public double getSampleHeight() { return 48; }
 
         @Override public void start(Stage primaryStage) throws Exception {
             init(primaryStage);

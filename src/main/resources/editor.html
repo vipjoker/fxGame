@@ -45,6 +45,59 @@
         editor.insert(aValue);
     }
 </script>
+<script>
+
+
+
+    frameRate(24);
+    var n = 24;
+    var xArray = [0,19,38,57,76,95,114,133,151,170,188,206,225,243,261,278,296,313,329,345,361,375,388,400];
+    var yArray = [126,132,137,143,149,157,167,179,196,220,255,305,255,223,204,189,180,173,168,165,162,160,158,155];
+    var sArray = [50,50,50,50,50,49,48,47,45,42,38,32,38,42,44,46,48,48,49,50,50,50,50,50];
+    var rArray = [0,0,0,0,0,0,0,1,1,2,3,5,29,40,44,46,46,45,46,49,53,61,73,90];
+
+    var ball = getImage('pixar/luxoball');
+
+    var drawBall = function(img, x, y, r, s) {
+        s = map(s, 0, 100, 0.1, 1.9);
+        var rx = 32 * (2 - s);
+        var ry = 32 * s;
+
+        // Shadow
+        pushMatrix();
+        translate(x + 1, y - ry / 2 + 1);
+        rotate(r);
+        noStroke();
+        fill(0, 0, 0, 60);
+        ellipse(0, 0, rx - 3, ry - 3);
+        popMatrix();
+
+        // Ball
+        pushMatrix();
+        translate(x, y - ry / 2);
+        rotate(r);
+        image(img, -rx/2, -ry/2, rx, ry);
+        popMatrix();
+    };
+
+    draw = function() {
+        background(0);
+        fill(230, 240, 255);
+        noStroke();
+        rect(-1, 75, width + 2, 250);
+        fill(120, 200, 160);
+        rect(-1, 305, width + 2, 20);
+        strokeWeight(2);
+        stroke(28, 173, 123);
+        line(-1, 305, width + 1, 305);
+
+        var x = xArray[frameCount % n];
+        var y = yArray[frameCount % n];
+        var r = rArray[frameCount % n];
+        var s = sArray[frameCount % n];
+        drawBall(ball, x, y, r, s);
+    };
+</script>
 
 </body>
 </html>

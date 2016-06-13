@@ -25,24 +25,36 @@ public class MyRender  {
     public static void main(String[] args) {
         MyRender myRender = new MyRender();
         myRender.createImage();
-        myRender.drawLine(0,0,50,50);
+        myRender.drawLine(0,0,30,50);
+        myRender.drawLine(30,50,10,50);
+//        myRender.drawLine(10,50,0,0);
         myRender.save(myRender.file,myRender.image,myRender.suffix);
     }
 
 
     public void drawLine(int x1, int y1, int x2,int y2){
-        int height = y2 - y1;
-        int width = x2 - x1;
-        for(int x =x1 ; x < x2 ; x++){
+        int startPointX = Math.min(x1,x2);
+        int startPointY = Math.min(y1,y2);
+        int endPointX = Math.max(x1,x2);
+        int endPointY = Math.max(y1,y2);
 
-            int deltaY =    y1 +  height *(x - x2);
+        for(int x = startPointX ; x < endPointX; x++){
 
-            drawDot(x,deltaY);
+            double width = endPointX - startPointX;
+            double height =endPointY  - startPointY;
+
+            double fraction = width / height;
+            double fractionDelta = (x-startPointX) * fraction;
+
+            double y =  startPointX + fractionDelta;
+
+            if(y1 == y2)y = y1;
+            drawDot(x,(int)y);
         }
     }
 
     public void drawDot(int x,int y){
-        image.setRGB(x,y, Color.WHITE.getRGB());
+        image.setRGB(x,y, Color.GREEN.getRGB());
     }
 
     public  void createImage(){
