@@ -19,8 +19,8 @@
         <Menu mnemonicParsing="false" text="GAMED">
           <items>
             <MenuItem mnemonicParsing="false" text="Prefferences" />
-            <MenuItem mnemonicParsing="false" text="About" />
-            <Menu mnemonicParsing="false" text="Open Recent" />
+            <MenuItem mnemonicParsing="false" onAction="#onAbout" text="About" />
+            <Menu mnemonicParsing="false" text="Open folder" onAction="#onAdd" />
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem mnemonicParsing="false" text="Close" />
             <MenuItem mnemonicParsing="false" text="Save" />
@@ -81,19 +81,12 @@
          <items>
             <ScrollPane layoutY="26.0" pannable="true" prefHeight="707.0" prefWidth="619.0">
                <content>
-                  <Pane fx:id="pnGrid" onMouseClicked="#onClick" layoutX="100.0" layoutY="100.0" prefHeight="1000.0" prefWidth="1000.0" />
+                  <Pane fx:id="pnGrid" layoutX="100.0" layoutY="100.0" />
                </content>
             </ScrollPane>
-            <TilePane alignment="CENTER" hgap="10.0" prefWidth="200.0" vgap="10.0">
+            <TilePane fx:id="tilePane" alignment="CENTER" hgap="10.0" maxWidth="500.0" minWidth="200.0" prefWidth="200.0" vgap="10.0">
                <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="80.0" stroke="BLACK" strokeType="INSIDE" width="80.0" />
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="80.0" stroke="BLACK" strokeType="INSIDE" width="80.0" />
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="80.0" layoutX="130.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="80.0" />
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="80.0" layoutX="10.0" layoutY="121.0" stroke="BLACK" strokeType="INSIDE" width="80.0" />
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="80.0" layoutX="130.0" layoutY="121.0" stroke="BLACK" strokeType="INSIDE" width="80.0" />
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="80.0" layoutX="10.0" layoutY="232.0" stroke="BLACK" strokeType="INSIDE" width="80.0" />
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="80.0" layoutX="130.0" layoutY="232.0" stroke="BLACK" strokeType="INSIDE" width="80.0" />
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="80.0" layoutX="10.0" layoutY="343.0" stroke="BLACK" strokeType="INSIDE" width="80.0" />
+
                </children>
                <opaqueInsets>
                   <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
