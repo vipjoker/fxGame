@@ -20,7 +20,7 @@ public class Main  extends Application{
     public void start(Stage primaryStage) throws Exception {
         Parent load = FXMLLoader.load(this.getClass().getResource("/editor.fxml"));
         primaryStage.setTitle("Editor");
-        primaryStage.setScene(new Scene(load,1000,1000));
+        primaryStage.setScene(new Scene(load,500,500));
         primaryStage.show();
     }
 }

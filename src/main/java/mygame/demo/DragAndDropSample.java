@@ -36,9 +36,9 @@ public class DragAndDropSample extends Application{
                                     }
                                 });
 
-
-
         target.setOnDragOver(new EventHandler<DragEvent>() {
+
+
                                  @Override
                                  public void handle(DragEvent event) {
 
@@ -68,7 +68,9 @@ public class DragAndDropSample extends Application{
                                    }
 
                                });
+
         target.setOnDragDropped(new EventHandler<DragEvent>() {
+
                                     @Override
                                     public void handle(DragEvent event) {
                                         Dragboard db = event.getDragboard();
@@ -81,6 +83,7 @@ public class DragAndDropSample extends Application{
                                         event.setDropCompleted(success);
                                         event.consume();
                                     }
+
                                 });
         source.setOnDragDone(new EventHandler<DragEvent>() {
                                  @Override
