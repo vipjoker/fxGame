@@ -2,11 +2,14 @@ package mygame.editor;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -25,7 +28,7 @@ import java.util.ResourceBundle;
 public class Controller implements Initializable {
     public Pane pnGrid;
     public TilePane tilePane;
-
+    private StackPane mPane;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -35,37 +38,45 @@ public class Controller implements Initializable {
 
         for (int i = 0; i < width; i += 50)
             for (int j = 0; j < height; j += 50) {
-                Rectangle rectangle = new Rectangle(i + 2, j + 2, 46, 46);
-                Label label = new Label(j + " " + i);
-                label.setLayoutX(i);
-                label.setLayoutY(j);
+                Rectangle rectangle = new Rectangle(i , j , 50, 50);
+
 
                 rectangle.setFill(Color.WHITE);
                 rectangle.setStroke(Color.BLACK);
-                rectangle.setStrokeWidth(2);
+                rectangle.setStrokeWidth(.5);
 
                 rectangle.setArcHeight(5);
                 rectangle.setArcWidth(5);
 
-                rectangle.setOnMouseEntered(this::onMouseEnter);
-                rectangle.setOnMouseExited(this::onMouseOver);
+                rectangle.setOnMouseClicked(this::onMouseClicked);
                 pnGrid.getChildren().add(rectangle);
-                pnGrid.getChildren().add(label);
             }
 
     }
 
 
-    public void onMouseEnter(MouseEvent event) {
+    public void onMouseClicked(MouseEvent event) {
         Rectangle rectangle = (Rectangle) event.getSource();
         rectangle.setFill(Color.BLACK);
 
+
+        ImageView imageView = (ImageView)mPane.getChildren().get(0);
+        Image i = imageView.getImage();
+
+        ImageView newImage = new ImageView();
+
+        newImage.setFitHeight(rectangle.getHeight());
+        newImage.setFitWidth(rectangle.getWidth());
+        newImage.setLayoutX(rectangle.getLayoutX());
+        newImage.setLayoutY(rectangle.getLayoutY());
+
+        newImage.setImage(i);
+
+        pnGrid.getChildren().add(newImage);
+
+
     }
 
-    public void onMouseOver(MouseEvent event) {
-        Rectangle rectangle = (Rectangle) event.getSource();
-        rectangle.setFill(Color.WHITE);
-    }
 
 
     public void onAbout(ActionEvent event) {
@@ -90,14 +101,35 @@ public class Controller implements Initializable {
         Image image = null;
         try {
             image = new Image(new FileInputStream(file));
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        ImageView imageView = new ImageView(image);
-        imageView.setFitWidth(100);
-        imageView.setFitHeight(100);
+        StackPane pane = new StackPane();
 
-        tilePane.getChildren().add(imageView);
+        ImageView imageView = new ImageView(image);
+
+
+        imageView.setFitWidth(50);
+        imageView.setFitHeight(50);
+        pane.setStyle("-fx-border-color: #000000; -fx-border-width: 5px;-fx-border-radius: 5px;");
+
+        pane.getChildren().add(imageView);
+        imageView.setOnMouseClicked(this::onTileSelected);
+        tilePane.getChildren().add(pane);
+
+
+    }
+
+    public void onTileSelected(MouseEvent event){
+        ImageView imageView = (ImageView)event.getSource();
+
+        imageView.getParent().setStyle("-fx-border-color: #ff005e;-fx-border-width: 5px;-fx-border-radius: 5px;");
+        if(mPane != null)
+        mPane.setStyle("-fx-border-color: #000000;-fx-border-width: 5px;-fx-border-radius: 5px;");
+
+        mPane = (StackPane) imageView.getParent();
+
     }
 
 

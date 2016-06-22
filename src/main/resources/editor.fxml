@@ -20,7 +20,7 @@
           <items>
             <MenuItem mnemonicParsing="false" text="Prefferences" />
             <MenuItem mnemonicParsing="false" onAction="#onAbout" text="About" />
-            <Menu mnemonicParsing="false" text="Open folder" onAction="#onAdd" />
+            <Menu mnemonicParsing="false" onAction="#onAdd" text="Open folder" />
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem mnemonicParsing="false" text="Close" />
             <MenuItem mnemonicParsing="false" text="Save" />
@@ -84,14 +84,18 @@
                   <Pane fx:id="pnGrid" layoutX="100.0" layoutY="100.0" />
                </content>
             </ScrollPane>
-            <TilePane fx:id="tilePane" alignment="CENTER" hgap="10.0" maxWidth="500.0" minWidth="200.0" prefWidth="200.0" vgap="10.0">
-               <children>
-
-               </children>
-               <opaqueInsets>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-               </opaqueInsets>
-            </TilePane>
+            <ScrollPane prefViewportHeight="2190.0" prefViewportWidth="226.0">
+               <content>
+                  <TilePane fx:id="tilePane" alignment="CENTER" hgap="10.0" maxWidth="500.0" minWidth="200.0" prefWidth="200.0" vgap="10.0">
+                     <opaqueInsets>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                     </opaqueInsets>
+                     <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                     </padding>
+                  </TilePane>
+               </content>
+            </ScrollPane>
          </items>
       </SplitPane>
   </children>

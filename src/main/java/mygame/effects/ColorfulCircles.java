@@ -117,10 +117,6 @@ public class ColorfulCircles  extends Application {
             animation.play();
         }
 
-        public double getSampleWidth() { return 495; }
-
-        public double getSampleHeight() { return 480; }
-
         @Override public void start(Stage primaryStage) throws Exception {
             init(primaryStage);
             primaryStage.show();
