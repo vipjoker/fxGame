@@ -1,23 +1,38 @@
 package mygame.editor;
 
-import javafx.application.Application;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
+import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
+import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.SubScene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.effect.ColorAdjust;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.TilePane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.*;
+import javafx.scene.text.Text;
+import javafx.scene.transform.Transform;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import mygame.Constants;
+import mygame.editor.actions.*;
 import mygame.editor.model.TileModel;
 import mygame.util.LevelParser;
 
@@ -25,94 +40,211 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
-/**
- * Created by Admin on 11.06.2016.
- */
+
 public class Controller implements Initializable {
-    public Pane pnGrid;
+    private  SceneGestures panListener;
+    //    public Pane pnGrid;
     public TilePane tilePane;
-    private StackPane mPane;
+    public Button btnRun;
+    public Label tvStatus;
 
-    private List<TileModel> modelList;
+    public Pane canvas;
+    public FlowPane buttonLayout;
+    ToggleGroup group;
+
+    private float scale = 1;
+
+    private StackPane mPane;
+    private World world;
+    private Body body;
+    private AnimationTimer animationTimer;
+
+
+    private Drawer currentDrawer;
+    private Map<String, Drawer> actions;
+    private Group transGroup;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        double width = 700;
-        double height = 700;
 
-        modelList = new ArrayList<>();
-        modelList.add(new TileModel(100,100,10,10,"Hello"));
-        modelList.add(new TileModel(100,100,10,10,"Again"));
-        modelList.add(new TileModel(100,100,10,10,"GoodBye"));
+        group = new ToggleGroup();
+        for (Node node : buttonLayout.getChildren()) {
+            group.getToggles().add(((ToggleButton) node));
+        }
 
 
+        transGroup = new Group();
+
+        world = new World(new Vector2(0, 10), false);
+        panListener = new SceneGestures(transGroup);
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(10, 10);
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(.5f, .5f);
+
+        body = world.createBody(bodyDef);
+        body.createFixture(shape, .1f);
 
 
-        for (int i = 50; i < width; i += 50)
-            for (int j = 50; j < height; j += 50) {
-                Rectangle rectangle = new Rectangle(i , j , 50, 50);
 
 
-                rectangle.setFill(Color.WHITE);
-                rectangle.setStroke(Color.BLACK);
-                rectangle.setStrokeWidth(.5);
+        canvas.setBackground(new Background(new BackgroundFill(Constants.BACKGROUND, null, null)));
+        setListeners();
+//        setGrid();
+        initActions();
 
-                rectangle.setArcHeight(5);
-                rectangle.setArcWidth(5);
+        animationTimer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                Platform.runLater(() -> handleHere(now));
 
-                rectangle.setOnMouseClicked(this::onMouseClicked);
-
-                pnGrid.getChildren().add(rectangle);
             }
-
-    }
-
-
-    public void onMouseClicked(MouseEvent event) {
-        Rectangle rectangle = (Rectangle) event.getSource();
-
-        pnGrid.getChildren().remove(rectangle);
-
-        ImageView imageView = (ImageView)mPane.getChildren().get(0);
-        Image i = imageView.getImage();
-
-        ImageView newImage = new ImageView(i);
-
-        newImage.setFitHeight(rectangle.getHeight());
-        newImage.setFitWidth(rectangle.getWidth());
-
-        newImage.setLayoutX(rectangle.getX());
-        newImage.setLayoutY(rectangle.getY());
-
-        newImage.setOnMouseClicked(this::onMouseClicked);
-
-        pnGrid.getChildren().add(newImage);
+        };
 
 
     }
 
+    private void setListeners() {
+        canvas.setOnMouseDragged(event -> {
+            if (event.getButton() == MouseButton.SECONDARY) panListener.panCanvasDragged(event);
+            else if (currentDrawer != null) currentDrawer.mouseMoved(event);
+        });
+
+        canvas.setOnMousePressed(event -> {
+            if (event.getButton() == MouseButton.SECONDARY) panListener.panCanvasPressed(event);
+            else if (currentDrawer != null) currentDrawer.mousePressed(event);
+        });
 
 
+        canvas.setOnMouseReleased(event -> {
 
-    public void updateCanvas(){
+         if (currentDrawer != null) currentDrawer.mouseReleased(event);
+
+        });
+
+//        canvas.setOnScroll(event -> panListener.(event));
+        ChangeListener<Number> tChangeListener = (observable, oldValue, newValue) -> updateViews(0,0,0);
+
+        canvas.widthProperty().addListener(tChangeListener);
+        canvas.heightProperty().addListener(tChangeListener);
+
 
     }
 
 
-    public void onSave(ActionEvent event){
+    private void updateViews(double dx, double dy,double scale) {
+        System.out.println("Updated");
+
+//        Platform.runLater(() -> {
+        transGroup.getChildren().clear();
+        double width = canvas.getWidth();
+        double height = canvas.getHeight();
+
+        for (int y =  20; y < height; y += 20) {
+
+            transGroup.getChildren().addAll(
+                    getLine(dx ,dy + y, dx + width,dy + y)
+                   // getText(height, i)
+            );
+
+        }
+
+        for (int i = 20; i < width; i += 20) {
+            transGroup.getChildren().addAll(
+                    getLine(dx + i,dy + 0, dx + i, dy + height)
+                   // getText(height, i)
+            );
+        }
+
+
+        canvas.getChildren().add(transGroup);
+
+
+    }
+
+    private Text getText(double x, double y, String message) {
+        Text text = new Text(x,y,message);
+        text.setFill(Color.WHITE.deriveColor(1,1,1,.5));
+        return text;
+    }
+
+    private Line getLine(double x,double y,double x2,double y2) {
+        Line line = new Line(x,y,x2,y2);
+        line.setStroke(Constants.LIGHT_GREY);
+        line.setStrokeWidth(1);
+        return line;
+    }
+
+
+    private void initActions() {
+        actions = new HashMap<>();
+        actions.put(Constants.ACTION_POLYGON, new PolygonDrawer(canvas));
+        actions.put(Constants.ACTION_CIRCLE, new CircleDrawer(canvas));
+        actions.put(Constants.ACTION_RECTANGLE, new RectangleDrawer(canvas));
+        actions.put(Constants.ACTION_CHAIN, new LineDrawer(canvas));
+    }
+
+    private void handleHere(long now) {
+        Array<Body> bodies = new Array<>();
+        world.step(1f / 60f, 6, 3);
+        world.getBodies(bodies);
+
+        // pnGrid.getChildren().clear();
+        for (Body body : bodies) {
+
+            Vector2 position = body.getPosition();
+
+            tvStatus.setText(String.format("%s timer = %d", position.toString(), now));
+            Circle circle = new Circle(position.x, position.y, 10, Color.BLUE);
+
+            //  pnGrid.getChildren().add(circle);
+
+        }
+
+    }
+
+    private void onMouseClicked2(MouseEvent mouseEvent) {
+        double x = mouseEvent.getX();
+        double y = mouseEvent.getY();
+//
+//        Circle circle = new Circle(x,y ,10, Color.BLACK);
+//        if (mouseEvent.isDragDetect()) {
+//            pnGrid.getChildren().add(circle);
+//
+//        }
+
+
+        Path path = new Path();
+        path.getElements().add(new MoveTo(x, y));
+        path.getElements().add(new LineTo(x + 10, y));
+        path.getElements().add(new LineTo(x, y + 10));
+        path.getElements().add(new ClosePath());
+        path.setFill(Color.RED);
+        //  pnGrid.getChildren().add(path);
+
+
+    }
+
+
+    public void updateCanvas() {
+
+    }
+
+
+    public void onSave(ActionEvent event) {
 
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Level files" ,".level"));
+        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Level files", ".level"));
         File file = fileChooser.showSaveDialog(App.getInstance().getWindow());
-        LevelParser.saveLevel(modelList,file);
+//        LevelParser.saveLevel(modelList, file);
 
     }
 
-    public void onLoad(ActionEvent event){
+    public void onLoad(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open level");
 
@@ -132,12 +264,12 @@ public class Controller implements Initializable {
 
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Open Resource File");
-        Stage window = App.getInstance().getWindow();
+        Stage window = App.getInstance().getStage();
         File imageDir = directoryChooser.showDialog(window);
         if (imageDir != null) {
 
-            for(File file :imageDir.listFiles())
-            addTile(file);
+            for (File file : imageDir.listFiles())
+                addTile(file);
         }
     }
 
@@ -166,12 +298,12 @@ public class Controller implements Initializable {
 
     }
 
-    public void onTileSelected(MouseEvent event){
-        ImageView imageView = (ImageView)event.getSource();
+    public void onTileSelected(MouseEvent event) {
+        ImageView imageView = (ImageView) event.getSource();
 
         imageView.getParent().setStyle("-fx-border-color: #ff005e;-fx-border-width: 5px;-fx-border-radius: 5px;");
-        if(mPane != null)
-        mPane.setStyle("-fx-border-color: #000000;-fx-border-width: 5px;-fx-border-radius: 5px;");
+        if (mPane != null)
+            mPane.setStyle("-fx-border-color: #000000;-fx-border-width: 5px;-fx-border-radius: 5px;");
 
         mPane = (StackPane) imageView.getParent();
 
@@ -185,4 +317,62 @@ public class Controller implements Initializable {
     public void onRemoveH(ActionEvent event) {
 
     }
+
+    boolean started;
+
+    public void onRun(ActionEvent actionEvent) {
+        if (!started) {
+            animationTimer.start();
+            started = true;
+        } else {
+            animationTimer.stop();
+            started = false;
+        }
+    }
+
+    public void onMove(ActionEvent actionEvent) {
+        body.applyForceToCenter(new Vector2(10000, 0), true);
+
+    }
+
+
+    //buttons
+    public void onStatic(ActionEvent actionEvent) {
+
+    }
+
+    public void onKinematic(ActionEvent actionEvent) {
+
+    }
+
+    public void onDynamic(ActionEvent actionEvent) {
+
+    }
+
+    public void onPolygon(ActionEvent actionEvent) {
+        currentDrawer = actions.get(Constants.ACTION_POLYGON);
+
+    }
+
+    public void onChain(ActionEvent actionEvent) {
+        currentDrawer = actions.get(Constants.ACTION_CHAIN);
+    }
+
+    public void onRectangle(ActionEvent actionEvent) {
+        currentDrawer = actions.get(Constants.ACTION_RECTANGLE);
+    }
+
+    public void onCircle(ActionEvent actionEvent) {
+        currentDrawer = actions.get(Constants.ACTION_CIRCLE);
+    }
+
+    public void onDistance(ActionEvent actionEvent) {
+
+    }
+
+    public void onRevolute(ActionEvent actionEvent) {
+
+    }
+
+
 }
