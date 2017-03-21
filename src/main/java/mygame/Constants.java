@@ -1,6 +1,7 @@
 package mygame;
 
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 
 /**
  * Created by oleh on 3/18/17.
@@ -29,5 +30,5 @@ public class Constants {
     public static final String ACTION_DISTANCE = "distance";
 
 
-
+    public static final Color WHITE = Color.valueOf("#BDBDBD") ;
 }

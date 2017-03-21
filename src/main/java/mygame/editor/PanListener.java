@@ -5,34 +5,24 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 
 public class PanListener {
-    PanDelegateListener mListener;
-    private double tX;
-    private double tY;
-    private double scale= 1;
+    final PanDelegateListener mListener;
+    final ScaleListener scaleListener;
 
-    public double gettX() {
-        return tX;
-    }
 
-    public double gettY() {
-        return tY;
-    }
 
-    public double getScale() {
-        return scale;
-    }
 
-    public PanListener(PanDelegateListener listener) {
+    public PanListener(PanDelegateListener listener,ScaleListener scaleListener) {
         this.mListener = listener;
+        this.scaleListener = scaleListener;
     }
 
     Vector2 startEvent;
+    Vector2 lastEvent;
     void panCanvasReleased(MouseEvent event) {
-        if(startEvent!= null) {
-            tX = (event.getX() - startEvent.x);
-            tY = (event.getY() - startEvent.y);
-            startEvent = null;
-        }
+
+
+        startEvent = null;
+        lastEvent = null;
 
     }
 
@@ -43,13 +33,16 @@ public class PanListener {
     }
 
     void panCanvasDragged(MouseEvent event) {
-        if(startEvent != null){
-            mListener.onPanMoved(tX + (event.getX() -startEvent.x),tY + (event.getY() -startEvent.y),scale);
+        if(lastEvent != null){
+            mListener.onPanMoved( (event.getX() -lastEvent.x), (event.getY() -lastEvent.y));
+            lastEvent.set((float)event.getX(),(float)event.getY());
+        }else{
+            lastEvent = new Vector2((float) event.getX(),(float) event.getY());
         }
     }
 
     void onScroll(ScrollEvent event){
-        System.out.println(event.getDeltaY());
+        scaleListener.onScale(event.getDeltaY());
     }
 
 

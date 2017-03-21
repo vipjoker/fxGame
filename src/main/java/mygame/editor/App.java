@@ -5,6 +5,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Camera;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -21,6 +22,10 @@ public class App extends Application{
     private Stage stage;
     public static App getInstance(){
         return INSTANCE;
+    }
+
+    public Scene getScene() {
+        return scene;
     }
 
     public Window getWindow(){
@@ -40,25 +45,18 @@ public class App extends Application{
     @Override
     public void start(Stage primaryStage) throws Exception {
         INSTANCE = this;
+
         Parent load = FXMLLoader.load(this.getClass().getResource("/editor.fxml"));
+
+        scene  = new Scene(load,1200,800);
+
         primaryStage.setTitle("Editor");
-        scene  = new Scene(load,800,600);
         window  = scene.getWindow();
         stage = primaryStage;
 
         primaryStage.setScene(scene);
         primaryStage.show();
 
-//
-//        scene.widthProperty().addListener(new ChangeListener<Number>() {
-//            @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
-//                System.out.println("Width: " + newSceneWidth);
-//            }
-//        });
-//        scene.heightProperty().addListener(new ChangeListener<Number>() {
-//            @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
-//                System.out.println("Height: " + newSceneHeight);
-//            }
-//        });
+
     }
 }

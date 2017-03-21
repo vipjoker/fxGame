@@ -1,13 +1,17 @@
 package mygame.editor.actions;
 
 import com.badlogic.gdx.math.Vector2;
+
+import javafx.animation.FillTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.StrokeTransition;
 import javafx.animation.Timeline;
+import javafx.geometry.Point2D;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
+
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
@@ -18,66 +22,42 @@ import mygame.Constants;
  */
 public class RectangleDrawer extends Drawer {
 
-    public RectangleDrawer(Parent parent) {
+    public RectangleDrawer(Group parent) {
         super(parent);
     }
 
 
-    Vector2 startPoint;
-    Rectangle rectangle ;
+    Point2D startPoint;
+    Rectangle rectangle;
 
 
     @Override
-    public void mouseMoved(MouseEvent event) {
-        System.out.println(event.toString());
-        float x =(float) event.getX();
-        float y = (float) event.getY();
-        if(startPoint != null) {
-            if (rectangle == null ) {
-                rectangle = new Rectangle(startPoint.x, startPoint.y, x - startPoint.x, y - startPoint.y);
+    public void mouseMoved(Point2D pos) {
+
+        if (startPoint != null) {
+            if (rectangle == null) {
+
+
+                rectangle = new Rectangle(startPoint.getX() , startPoint.getY() , pos.getX() - startPoint.getX() , pos.getY() - startPoint.getY() );
                 rectangle.setStroke(Constants.RED);
                 rectangle.setStrokeWidth(2);
-                rectangle.setFill(Color.BLACK);
-
-                rectangle.setOnMouseEntered(event1 -> {
-                    Rectangle rect = (Rectangle) event1.getSource();
-
-
-                    StrokeTransition fill = new StrokeTransition(Duration.millis(500));
-                    fill.setToValue(Constants.GREEN);
-                    ParallelTransition transition = new ParallelTransition(rect, fill);
-
-
-                    transition.play();
-
-                });
-                rectangle.setOnMouseExited(event1 -> {
-                    Rectangle rect = (Rectangle) event1.getSource();
-                    StrokeTransition fill = new StrokeTransition(Duration.millis(500));
-                    fill.setToValue(Constants.RED);
-
-
-                    ParallelTransition transition = new ParallelTransition(rect, fill);
-
-
-                    transition.play();
-                });
+                rectangle.setFill(Color.RED.deriveColor(1,1,1,.25));
 
 
 
 
-                ((Pane)parent).getChildren().add(rectangle);
-            }else{
-                if(x > startPoint.x) rectangle.setWidth(x - startPoint.x);
+                parent.getChildren().add(rectangle);
+            } else {
+                if (pos.getX() > startPoint.getX()) rectangle.setWidth(pos.getX() -startPoint.getX());
                 else {
-                    rectangle.setWidth(startPoint.x - x );
-                    rectangle.setX(x);
+                    rectangle.setWidth(startPoint.getX() - pos.getX());
+                    rectangle.setX(pos.getX() );
                 }
 
-                if(y > startPoint.y) rectangle.setHeight(y - startPoint.y);
+                if (pos.getY() > startPoint.getY()) rectangle.setHeight(pos.getY() - startPoint.getY());
                 else {
-                    rectangle.setHeight( startPoint.y - y);
-                    rectangle.setY(y);
+                    rectangle.setHeight(startPoint.getY() - pos.getY());
+                    rectangle.setY(pos.getY() );
                 }
 
             }
@@ -86,18 +66,18 @@ public class RectangleDrawer extends Drawer {
 
     }
 
+
+
     @Override
-    public void mousePressed(MouseEvent event) {
-        float x =(float) event.getX();
-        float y = (float) event.getY();
-        if(startPoint == null) startPoint = new Vector2(x,y);
+    public void mousePressed(Point2D position) {
+
+        if (startPoint == null) startPoint = position;
     }
 
     @Override
-    public void mouseReleased(MouseEvent event) {
+    public void mouseReleased(Point2D position) {
 
-        float x =(float) event.getX();
-        float y = (float) event.getY();
+        setColorListeners(rectangle);
 
         startPoint = null;
         rectangle = null;

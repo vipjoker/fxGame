@@ -1,9 +1,13 @@
 package mygame.editor.actions;
 
+import com.badlogic.gdx.math.Vector2;
+import javafx.geometry.Point2D;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
@@ -16,33 +20,41 @@ public class LineDrawer extends Drawer {
 
     Path path;
     LineTo lineTo;
-    public LineDrawer(Parent parent) {
+    Circle last ;
+    public LineDrawer(Group parent) {
         super(parent);
     }
 
 
 
     @Override
-    public void mouseMoved(MouseEvent event) {
+    public void mouseMoved(Point2D pos) {
         if(lineTo == null){
-            lineTo = new LineTo(event.getX(),event.getY());
+            lineTo = new LineTo(pos.getX(),pos.getY());
+
             path.getElements().add(lineTo);
         }else{
-
-            lineTo.setX(event.getX());
-            lineTo.setY(event.getY());
+             if(last != null) {
+                 last.setCenterX(pos.getX());
+                 last.setCenterY(pos.getY());
+             }
+            lineTo.setX(pos.getX());
+            lineTo.setY(pos.getY());
         }
     }
 
     @Override
-    public void mousePressed(MouseEvent event) {
+    public void mousePressed(Point2D pos) {
+
         if (path == null) {
-            path = new Path(new MoveTo(event.getX(), event.getY()));
+            path = new Path(new MoveTo(pos.getX(), pos.getY()));
+            getHandler(pos);
             path.setStroke(Constants.RED);
             path.setStrokeWidth(2);
-            ((Pane) parent).getChildren().add(path);
+            ((Group) parent).getChildren().add(path);
         }else {
-            lineTo = new LineTo(event.getX(),event.getY());
+           last = getHandler(pos);
+            lineTo = new LineTo(pos.getX(),pos.getY());
             path.getElements().add(lineTo);
 
         }
@@ -50,12 +62,14 @@ public class LineDrawer extends Drawer {
     }
 
     @Override
-    public void mouseReleased(MouseEvent event) {
+    public void mouseReleased(Point2D pos) {
 
     }
 
     @Override
     public void finishDrawing() {
 
+        path = null;
+        lineTo = null;
     }
 }
