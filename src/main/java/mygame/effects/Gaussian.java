@@ -1,21 +1,14 @@
 package mygame.effects;
 
 import javafx.application.Application;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Slider;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.Glow;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import javafx.scene.Node;
 import javafx.scene.effect.GaussianBlur;
+import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import mygame.util.ImageUtil;
 
 public class Gaussian  extends Application {

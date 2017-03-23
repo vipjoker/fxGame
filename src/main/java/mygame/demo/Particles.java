@@ -4,30 +4,24 @@ package mygame.demo;
  * Copyright (c) 2008, 2012 Oracle and/or its affiliates.
  * All rights reserved. Use is subject to license terms.
  */
+
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.stage.Stage;
-import javafx.animation.Timeline;
-import javafx.scene.Group;
-import javafx.scene.effect.BlendMode;
-import javafx.scene.effect.BoxBlur;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
-import javafx.scene.shape.Circle;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Iterator;
-import javafx.animation.*;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.effect.Reflection;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.*;
+import javafx.stage.Stage;
 import mygame.util.ImageUtil;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * A java.sample that demonstrates how to draw and paint shapes, apply visual

@@ -1,7 +1,5 @@
 package mygame.person;
 
-import javafx.scene.image.ImageView;
-
 /**
  * Created by Admin on 27.05.2016.
  */

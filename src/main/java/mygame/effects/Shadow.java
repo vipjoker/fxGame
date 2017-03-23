@@ -3,13 +3,11 @@ package mygame.effects;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.stage.Stage;
-import javafx.scene.Node;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 /**
  * Created by Admin on 07.06.2016.

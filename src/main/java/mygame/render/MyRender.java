@@ -1,16 +1,11 @@
 package mygame.render;
 
 
-import mygame.demo.Picture;
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 /**
  * Created by Makhobey Oleh on 6/8/16.

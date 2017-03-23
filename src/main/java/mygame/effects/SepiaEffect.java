@@ -1,13 +1,12 @@
 package mygame.effects;
+
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.stage.Stage;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.Node;
 import javafx.scene.effect.SepiaTone;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 import mygame.util.ImageUtil;
 
 /**

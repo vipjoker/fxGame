@@ -1,19 +1,6 @@
 package mygame;
 
 
-import javafx.concurrent.Worker;
-import javafx.fxml.FXML;
-import javafx.scene.control.TextArea;
-import javafx.scene.input.*;
-import javafx.scene.web.WebView;
-import javafx.stage.Stage;
-import netscape.javascript.JSObject;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-
-import java.io.PrintWriter;
-import java.io.StringWriter;
-
 public class Editor {
 
 

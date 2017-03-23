@@ -1,9 +1,11 @@
 package mygame.editor.actions;
 
 import javafx.geometry.Point2D;
-import javafx.scene.Group;
+import javafx.scene.layout.Region;
 import javafx.scene.shape.Polygon;
 import mygame.Constants;
+import mygame.editor.model.AbstractModel;
+import mygame.editor.views.CustomRegion;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,12 +13,12 @@ import java.util.List;
 /**
  * Created by oleh on 3/18/17.
  */
-public class PolygonDrawer extends Drawer {
+public class PolygonDrawer extends Action {
     Polygon polygon;
     List<Point2D> points;
 
-    public PolygonDrawer(Group parent) {
-        super(parent);
+    public PolygonDrawer(CustomRegion parent, List<AbstractModel> models) {
+        super(parent,models);
     }
 
     @Override
@@ -36,7 +38,7 @@ public class PolygonDrawer extends Drawer {
                 polygon = new Polygon();
                 polygon.setFill(Constants.ORANGE.deriveColor(1, 1, 1, .25));
                 polygon.setStroke(Constants.ORANGE);
-                parent.getChildren().add(polygon);
+                parent.addChild(polygon);
                 for (Point2D point : points) {
                     polygon.getPoints().add(point.getX());
                     polygon.getPoints().add(point.getY());

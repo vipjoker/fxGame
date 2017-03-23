@@ -1,7 +1,6 @@
 package mygame;
 
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 
 /**
  * Created by oleh on 3/18/17.
@@ -21,6 +20,10 @@ public class Constants {
     public static final String ACTION_CIRCLE = "circle";
     public static final String ACTION_RECTANGLE = "rectangle";
     public static final String ACTION_CHAIN = "chain";
+
+    public static final String ACTION_MOVE = "move";
+    public static final String ACTION_ROTATE = "rotate";
+    public static final String ACTION_EDIT = "edit";
 
     public static final String ACTION_DYNAMIC = "dynamic";
     public static final String ACTION_KINEMATIC = "kinematic";

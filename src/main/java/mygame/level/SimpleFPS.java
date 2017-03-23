@@ -3,7 +3,6 @@ package mygame.level;
 import javafx.scene.canvas.GraphicsContext;
 import mygame.Renderable;
 import mygame.util.Constants;
-import sun.java2d.pipe.SpanShapeRenderer;
 
 /**
  * Created by Makhobey Oleh on 6/7/16.

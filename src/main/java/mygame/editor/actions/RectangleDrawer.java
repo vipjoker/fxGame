@@ -1,29 +1,22 @@
 package mygame.editor.actions;
 
-import com.badlogic.gdx.math.Vector2;
-
-import javafx.animation.FillTransition;
-import javafx.animation.ParallelTransition;
-import javafx.animation.StrokeTransition;
-import javafx.animation.Timeline;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
-import javafx.scene.Parent;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
-
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.util.Duration;
 import mygame.Constants;
+import mygame.editor.model.AbstractModel;
+import mygame.editor.views.CustomRegion;
+
+import java.util.List;
 
 /**
  * Created by oleh on 3/18/17.
  */
-public class RectangleDrawer extends Drawer {
+public class RectangleDrawer extends Action {
 
-    public RectangleDrawer(Group parent) {
-        super(parent);
+    public RectangleDrawer(CustomRegion parent, List<AbstractModel> models) {
+        super(parent,models);
     }
 
 
@@ -46,7 +39,7 @@ public class RectangleDrawer extends Drawer {
 
 
 
-                parent.getChildren().add(rectangle);
+                parent.addChild(rectangle);
             } else {
                 if (pos.getX() > startPoint.getX()) rectangle.setWidth(pos.getX() -startPoint.getX());
                 else {

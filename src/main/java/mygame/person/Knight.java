@@ -2,15 +2,9 @@ package mygame.person;
 
 import javafx.animation.Interpolator;
 import javafx.animation.Transition;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 import mygame.Renderable;
-import mygame.person.PersonState;
 import mygame.util.Constants;
 
 

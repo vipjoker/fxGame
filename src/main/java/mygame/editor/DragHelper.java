@@ -2,8 +2,6 @@ package mygame.editor;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.shape.Rectangle;
 
 /**
  * Created by oleh on 3/21/17.

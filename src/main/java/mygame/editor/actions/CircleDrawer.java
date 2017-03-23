@@ -1,49 +1,44 @@
 package mygame.editor.actions;
 
-import com.badlogic.gdx.math.Vector2;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
-import javafx.scene.Parent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
 import mygame.Constants;
+import mygame.editor.model.AbstractModel;
+import mygame.editor.model.CircleModel;
+import mygame.editor.views.CustomRegion;
+
+import java.util.List;
 
 /**
  * Created by oleh on 3/18/17.
  */
-public class CircleDrawer extends Drawer {
+public class CircleDrawer extends Action {
 
 
-    Point2D center;
-    Circle circle;
-    public CircleDrawer(Group parent) {
-        super(parent);
+   CircleModel model ;
+    public CircleDrawer(CustomRegion parent, List<AbstractModel> model) {
+        super(parent,model);
     }
 
     @Override
     public void mouseMoved(Point2D pos) {
-        if(circle == null){
-            circle = new Circle(pos.getX(),pos.getY(),center.distance(pos), Constants.GREEN.deriveColor(1,1,1,.25));
-            circle.setStroke(Constants.GREEN);
-            parent.getChildren().add(circle);
+        if(model != null) model.updateRadius(pos);
 
-        }else{
-            circle.setRadius(center.distance(pos));
-        }
     }
 
     @Override
     public void mousePressed(Point2D pos) {
-        if(center == null){
-            center = pos;
+        if(model == null) {
+            model = new CircleModel(pos);
+            parent.addChild(model);
         }
 
     }
 
     @Override
     public void mouseReleased(Point2D pos) {
-        circle = null;
-        center = null;
+        if (model != null)models.add(model);
     }
 
     @Override

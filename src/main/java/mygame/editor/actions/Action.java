@@ -1,7 +1,6 @@
 package mygame.editor.actions;
 
 
-import com.badlogic.gdx.math.Vector2;
 import javafx.animation.FillTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;
@@ -9,23 +8,26 @@ import javafx.animation.StrokeTransition;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import mygame.Constants;
 import mygame.editor.DragHelper;
+import mygame.editor.model.AbstractModel;
+import mygame.editor.views.CustomRegion;
+
+import java.util.List;
 
 /**
  * Created by oleh on 3/18/17.
  */
-public abstract class Drawer {
-    protected Group parent;
-
-    protected Drawer(Group parent) {
+public abstract class Action {
+    protected CustomRegion parent;
+    protected final List<AbstractModel> models;
+    protected Action(CustomRegion parent, List<AbstractModel> models) {
         this.parent = parent;
+        this.models = models;
     }
 
 
@@ -41,7 +43,7 @@ public abstract class Drawer {
         Circle circle = new Circle(point.getX(), point.getY(), 5);
         circle.setStroke(Constants.WHITE);
         circle.setFill(Constants.LIGHT_GREY);
-        parent.getChildren().add(circle);
+        parent.addChild(circle);
         setScaleListeners(circle);
 
         new DragHelper().setDrag(circle);
