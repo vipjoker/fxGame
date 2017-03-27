@@ -31,6 +31,7 @@ public class CircleDrawer extends Action {
     public void mousePressed(Point2D pos) {
         if(model == null) {
             model = new CircleModel(pos);
+
             parent.addChild(model);
         }
 
@@ -39,6 +40,7 @@ public class CircleDrawer extends Action {
     @Override
     public void mouseReleased(Point2D pos) {
         if (model != null)models.add(model);
+        model = null;
     }
 
     @Override

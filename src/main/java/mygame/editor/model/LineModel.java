@@ -16,7 +16,7 @@ public class LineModel extends AbstractModel {
     Path path;
     LineTo lineTo;
     public LineModel(Point2D startPosition){
-        super();
+        super(Type.LINE);
 
         MoveTo moveTo = new MoveTo(startPosition.getX(), startPosition.getY());
         path = new Path(moveTo);

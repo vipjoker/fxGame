@@ -30,6 +30,7 @@ public abstract class Action {
         this.models = models;
     }
 
+    public void init(){}
 
     public abstract void mouseMoved(Point2D position);
 

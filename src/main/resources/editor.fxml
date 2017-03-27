@@ -81,7 +81,7 @@
       <HBox alignment="CENTER_LEFT" spacing="10.0">
          <children>
             <Label fx:id="tvStatus" prefWidth="200.0" text="Label" />
-            <Button fx:id="btnRun" mnemonicParsing="false" onAction="#onRun" styleClass="button"  text="" />
+            <Button fx:id="btnRun" mnemonicParsing="false" onAction="#onRun" styleClass="button" text="" />
 
             <ChoiceBox prefWidth="150.0" />
          </children>
@@ -91,7 +91,7 @@
       </HBox>
       <BorderPane VBox.vgrow="ALWAYS">
          <center>
-            <Pane fx:id="canvas" layoutX="100.0" layoutY="100.0">
+            <Pane fx:id="canvas" layoutX="100.0" layoutY="100.0" prefHeight="422.0" prefWidth="495.0">
                <padding>
                   <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
                </padding>
@@ -119,12 +119,55 @@
             </FlowPane>
          </left>
          <right>
-            <TableView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-              <columns>
-                <TableColumn prefWidth="75.0" text="C1" />
-                <TableColumn prefWidth="75.0" text="C2" />
-              </columns>
-            </TableView>
+            <ScrollPane prefHeight="447.0" prefViewportHeight="422.0" prefViewportWidth="282.0" prefWidth="250.0">
+               <content>
+                  <GridPane hgap="5.0" prefHeight="333.0" prefWidth="250.0" vgap="5.0" BorderPane.alignment="CENTER">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="130.0" minWidth="10.0" prefWidth="108.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="207.0" minWidth="10.0" prefWidth="150.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints maxHeight="136.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="136.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="136.0" minHeight="0.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="282.0" minHeight="9.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="358.0" minHeight="7.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label text="Type" GridPane.halignment="LEFT" GridPane.rowIndex="2" />
+                        <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+                           <GridPane.margin>
+                              <Insets />
+                           </GridPane.margin>
+                        </ComboBox>
+                        <ColorPicker prefWidth="150.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
+                        <Label text="Color" GridPane.halignment="LEFT" GridPane.rowIndex="3" />
+                        <Label text="Name" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+                        <Label text="Label" GridPane.rowIndex="4" />
+                        <Label text="Label" GridPane.rowIndex="5" />
+                        <Label text="Label" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+                        <Separator prefWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="6" />
+                        <Label text="Physics" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="7" />
+                        <Label text="Shape" />
+                        <Label text="Friction" GridPane.rowIndex="9" />
+                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                        <Label text="Restitution" GridPane.rowIndex="8" />
+                        <Label text="Density" GridPane.rowIndex="10" />
+                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </GridPane>
+               </content>
+            </ScrollPane>
          </right>
       </BorderPane>
       <HBox prefHeight="43.0" prefWidth="855.0">

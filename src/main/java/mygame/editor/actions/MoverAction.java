@@ -20,12 +20,7 @@ public class MoverAction extends Action {
     }
 
     @Override
-    public void mouseMoved(Point2D position) {
-
-    }
-
-    @Override
-    public void mousePressed(Point2D position) {
+    public void init() {
         if(helpers == null || helpers.isEmpty()){
             helpers = new ArrayList<>();
 
@@ -37,6 +32,16 @@ public class MoverAction extends Action {
                 helpers.add(helper);
             }
         }
+    }
+
+    @Override
+    public void mouseMoved(Point2D position) {
+
+    }
+
+    @Override
+    public void mousePressed(Point2D position) {
+
     }
 
     @Override

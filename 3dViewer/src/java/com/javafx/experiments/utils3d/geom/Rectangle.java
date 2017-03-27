@@ -33,62 +33,62 @@
 package com.javafx.experiments.utils3d.geom;
 
 /**
- * A <code>Rectangle</code> specifies an area in a coordinate space that is
- * enclosed by the <code>Rectangle</code> object's upper-left point
+ * A <code>Polygon</code> specifies an area in a coordinate space that is
+ * enclosed by the <code>Polygon</code> object's upper-left point
  * {@code (x, y)}
  * in the coordinate space, its width, and its height.
  * <p>
- * A <code>Rectangle</code> object's <code>width</code> and
+ * A <code>Polygon</code> object's <code>width</code> and
  * <code>height</code> are <code>public</code> fields. The constructors
- * that create a <code>Rectangle</code>, and the methods that can modify
+ * that create a <code>Polygon</code>, and the methods that can modify
  * one, do not prevent setting a negative value for width or height.
  * <p>
  * <a name="Empty">
- * A {@code Rectangle} whose width or height is exactly zero has location
+ * A {@code Polygon} whose width or height is exactly zero has location
  * along those axes with zero dimension, but is otherwise considered empty.
- * The {@link #isEmpty} method will return true for such a {@code Rectangle}.
- * Methods which test if an empty {@code Rectangle} contains or intersects
+ * The {@link #isEmpty} method will return true for such a {@code Polygon}.
+ * Methods which test if an empty {@code Polygon} contains or intersects
  * a point or rectangle will always return false if either dimension is zero.
- * Methods which combine such a {@code Rectangle} with a point or rectangle
- * will include the location of the {@code Rectangle} on that axis in the
+ * Methods which combine such a {@code Polygon} with a point or rectangle
+ * will include the location of the {@code Polygon} on that axis in the
  * result as if the {@link #add(Point)} method were being called.
  * </a>
  * <p>
  * <a name="NonExistant">
- * A {@code Rectangle} whose width or height is negative has neither
+ * A {@code Polygon} whose width or height is negative has neither
  * location nor dimension along those axes with negative dimensions.
- * Such a {@code Rectangle} is treated as non-existant along those axes.
- * Such a {@code Rectangle} is also empty with respect to containment
+ * Such a {@code Polygon} is treated as non-existant along those axes.
+ * Such a {@code Polygon} is also empty with respect to containment
  * calculations and methods which test if it contains or intersects a
  * point or rectangle will always return false.
- * Methods which combine such a {@code Rectangle} with a point or rectangle
- * will ignore the {@code Rectangle} entirely in generating the result.
- * If two {@code Rectangle} objects are combined and each has a negative
+ * Methods which combine such a {@code Polygon} with a point or rectangle
+ * will ignore the {@code Polygon} entirely in generating the result.
+ * If two {@code Polygon} objects are combined and each has a negative
  * dimension, the result will have at least one negative dimension.
  * </a>
  * <p>
- * Methods which affect only the location of a {@code Rectangle} will
+ * Methods which affect only the location of a {@code Polygon} will
  * operate on its location regardless of whether or not it has a negative
  * or zero dimension along either axis.
  * <p>
- * Note that a {@code Rectangle} constructed with the default no-argument
+ * Note that a {@code Polygon} constructed with the default no-argument
  * constructor will have dimensions of {@code 0x0} and therefore be empty.
- * That {@code Rectangle} will still have a location of {@code (0, 0)} and
+ * That {@code Polygon} will still have a location of {@code (0, 0)} and
  * will contribute that location to the union and add operations.
  * Code attempting to accumulate the bounds of a set of points should
- * therefore initially construct the {@code Rectangle} with a specifically
+ * therefore initially construct the {@code Polygon} with a specifically
  * negative width and height or it should use the first point in the set
- * to construct the {@code Rectangle}.
+ * to construct the {@code Polygon}.
  * For example:
  * <pre>
- *     Rectangle bounds = new Rectangle(0, 0, -1, -1);
+ *     Polygon bounds = new Polygon(0, 0, -1, -1);
  *     for (int i = 0; i < points.length; i++) {
  *         bounds.add(points[i]);
  *     }
  * </pre>
  * or if we know that the points array contains at least one point:
  * <pre>
- *     Rectangle bounds = new Rectangle(points[0]);
+ *     Polygon bounds = new Polygon(points[0]);
  *     for (int i = 1; i < points.length; i++) {
  *         bounds.add(points[i]);
  *     }
@@ -120,27 +120,27 @@ package com.javafx.experiments.utils3d.geom;
 public class Rectangle {
 
     /**
-     * The X coordinate of the upper-left corner of the <code>Rectangle</code>.
+     * The X coordinate of the upper-left corner of the <code>Polygon</code>.
      */
     public int x;
 
     /**
-     * The Y coordinate of the upper-left corner of the <code>Rectangle</code>.
+     * The Y coordinate of the upper-left corner of the <code>Polygon</code>.
      */
     public int y;
 
     /**
-     * The width of the <code>Rectangle</code>.
+     * The width of the <code>Polygon</code>.
      */
     public int width;
 
     /**
-     * The height of the <code>Rectangle</code>.
+     * The height of the <code>Polygon</code>.
      */
     public int height;
 
     /**
-     * Constructs a new <code>Rectangle</code> whose upper-left corner
+     * Constructs a new <code>Polygon</code> whose upper-left corner
      * is at (0,&nbsp;0) in the coordinate space, and whose width and
      * height are both zero.
      */
@@ -149,40 +149,40 @@ public class Rectangle {
     }
 
     /**
-     * Constructs a new <code>Rectangle</code>, initialized to match
-     * the values of the specified <code>Rectangle</code>.
+     * Constructs a new <code>Polygon</code>, initialized to match
+     * the values of the specified <code>Polygon</code>.
      *
-     * @param r the <code>Rectangle</code> from which to copy initial values
-     *          to a newly constructed <code>Rectangle</code>
+     * @param r the <code>Polygon</code> from which to copy initial values
+     *          to a newly constructed <code>Polygon</code>
      */
     public Rectangle(BaseBounds b) {
         setBounds(b);
     }
 
     /**
-     * Constructs a new <code>Rectangle</code>, initialized to match
+     * Constructs a new <code>Polygon</code>, initialized to match
      * the values of the specified <code>BaseBounds</code>. Since BaseBounds has
-     * float values, the Rectangle will be created such that the bounding rectangle
+     * float values, the Polygon will be created such that the bounding rectangle
      * of the specified BaseBounds would always lie within the bounding box
-     * specified by this Rectangle.
+     * specified by this Polygon.
      *
      * @param r the <code>BaseBounds</code> from which to copy initial values
-     *          to a newly constructed <code>Rectangle</code>
+     *          to a newly constructed <code>Polygon</code>
      */
     public Rectangle(Rectangle r) {
         this(r.x, r.y, r.width, r.height);
     }
 
     /**
-     * Constructs a new <code>Rectangle</code> whose upper-left corner is
+     * Constructs a new <code>Polygon</code> whose upper-left corner is
      * specified as
      * {@code (x, y)} and whose width and height
      * are specified by the arguments of the same name.
      *
      * @param x      the specified X coordinate
      * @param y      the specified Y coordinate
-     * @param width  the width of the <code>Rectangle</code>
-     * @param height the height of the <code>Rectangle</code>
+     * @param width  the width of the <code>Polygon</code>
+     * @param height the height of the <code>Polygon</code>
      */
     public Rectangle(int x, int y, int width, int height) {
         this.x = x;
@@ -192,25 +192,25 @@ public class Rectangle {
     }
 
     /**
-     * Constructs a new <code>Rectangle</code> whose upper-left corner
+     * Constructs a new <code>Polygon</code> whose upper-left corner
      * is at (0,&nbsp;0) in the coordinate space, and whose width and
      * height are specified by the arguments of the same name.
      *
-     * @param width  the width of the <code>Rectangle</code>
-     * @param height the height of the <code>Rectangle</code>
+     * @param width  the width of the <code>Polygon</code>
+     * @param height the height of the <code>Polygon</code>
      */
     public Rectangle(int width, int height) {
         this(0, 0, width, height);
     }
 
     /**
-     * Sets the bounding <code>Rectangle</code> of this <code>Rectangle</code>
-     * to match the specified <code>Rectangle</code>.
+     * Sets the bounding <code>Polygon</code> of this <code>Polygon</code>
+     * to match the specified <code>Polygon</code>.
      * <p>
      * This method is included for completeness, to parallel the
      * <code>setBounds</code> method of <code>Component</code>.
      *
-     * @param r the specified <code>Rectangle</code>
+     * @param r the specified <code>Polygon</code>
      * @see #getBounds
      * @see java.awt.Component#setBounds(java.awt.Rectangle)
      */
@@ -219,8 +219,8 @@ public class Rectangle {
     }
 
     /**
-     * Sets the bounding <code>Rectangle</code> of this
-     * <code>Rectangle</code> to the specified
+     * Sets the bounding <code>Polygon</code> of this
+     * <code>Polygon</code> to the specified
      * <code>x</code>, <code>y</code>, <code>width</code>,
      * and <code>height</code>.
      * <p>
@@ -228,11 +228,11 @@ public class Rectangle {
      * <code>setBounds</code> method of <code>Component</code>.
      *
      * @param x      the new X coordinate for the upper-left
-     *               corner of this <code>Rectangle</code>
+     *               corner of this <code>Polygon</code>
      * @param y      the new Y coordinate for the upper-left
-     *               corner of this <code>Rectangle</code>
-     * @param width  the new width for this <code>Rectangle</code>
-     * @param height the new height for this <code>Rectangle</code>
+     *               corner of this <code>Polygon</code>
+     * @param width  the new width for this <code>Polygon</code>
+     * @param height the new height for this <code>Polygon</code>
      * @see #getBounds
      * @see java.awt.Component#setBounds(int, int, int, int)
      */
@@ -250,14 +250,14 @@ public class Rectangle {
     }
 
     /**
-     * Checks whether or not this <code>Rectangle</code> contains the
+     * Checks whether or not this <code>Polygon</code> contains the
      * point at the specified location {@code (cx, cy)}.
      *
      * @param cx the specified X coordinate
      * @param cy the specified Y coordinate
      * @return <code>true</code> if the point
      * {@code (cx, cy)} is inside this
-     * <code>Rectangle</code>;
+     * <code>Polygon</code>;
      * <code>false</code> otherwise.
      */
     public boolean contains(int cx, int cy) {
@@ -281,12 +281,12 @@ public class Rectangle {
     }
 
     /**
-     * Checks whether or not this <code>Rectangle</code> entirely contains
-     * the specified <code>Rectangle</code>.
+     * Checks whether or not this <code>Polygon</code> entirely contains
+     * the specified <code>Polygon</code>.
      *
-     * @param r the specified <code>Rectangle</code>
-     * @return <code>true</code> if the <code>Rectangle</code>
-     * is contained entirely inside this <code>Rectangle</code>;
+     * @param r the specified <code>Polygon</code>
+     * @return <code>true</code> if the <code>Polygon</code>
+     * is contained entirely inside this <code>Polygon</code>;
      * <code>false</code> otherwise
      */
     public boolean contains(Rectangle r) {
@@ -294,18 +294,18 @@ public class Rectangle {
     }
 
     /**
-     * Checks whether this <code>Rectangle</code> entirely contains
-     * the <code>Rectangle</code>
+     * Checks whether this <code>Polygon</code> entirely contains
+     * the <code>Polygon</code>
      * at the specified location {@code (cx, cy)} with the
      * specified dimensions {@code (cw, ch)}.
      *
      * @param cx the specified X coordinate
      * @param cy the specified Y coordinate
-     * @param cw the width of the <code>Rectangle</code>
-     * @param ch the height of the <code>Rectangle</code>
-     * @return <code>true</code> if the <code>Rectangle</code> specified by
+     * @param cw the width of the <code>Polygon</code>
+     * @param ch the height of the <code>Polygon</code>
+     * @return <code>true</code> if the <code>Polygon</code> specified by
      * {@code (cx, cy, cw, ch)}
-     * is entirely enclosed inside this <code>Rectangle</code>;
+     * is entirely enclosed inside this <code>Polygon</code>;
      * <code>false</code> otherwise.
      */
     public boolean contains(int cx, int cy, int cw, int ch) {
@@ -382,13 +382,13 @@ public class Rectangle {
     }
 
     /**
-     * Translates this <code>Rectangle</code> the indicated distance,
+     * Translates this <code>Polygon</code> the indicated distance,
      * to the right along the X coordinate axis, and
      * downward along the Y coordinate axis.
      *
-     * @param dx the distance to move this <code>Rectangle</code>
+     * @param dx the distance to move this <code>Polygon</code>
      *           along the X axis
-     * @param dy the distance to move this <code>Rectangle</code>
+     * @param dy the distance to move this <code>Polygon</code>
      *           along the Y axis
      * @see java.awt.Rectangle#setLocation(int, int)
      * @see java.awt.Rectangle#setLocation(java.awt.Point)
@@ -466,12 +466,12 @@ public class Rectangle {
 
     /**
      * Adds a point, specified by the integer arguments {@code newx, newy}
-     * to the bounds of this {@code Rectangle}.
+     * to the bounds of this {@code Polygon}.
      * <p>
-     * If this {@code Rectangle} has any dimension less than zero,
+     * If this {@code Polygon} has any dimension less than zero,
      * the rules for <a href=#NonExistant>non-existant</a>
      * rectangles apply.
-     * In that case, the new bounds of this {@code Rectangle} will
+     * In that case, the new bounds of this {@code Polygon} will
      * have a location equal to the specified coordinates and
      * width and height equal to zero.
      * <p>
@@ -479,12 +479,12 @@ public class Rectangle {
      * added point as an argument does not necessarily return
      * <code>true</code>. The <code>contains</code> method does not
      * return <code>true</code> for points on the right or bottom
-     * edges of a <code>Rectangle</code>. Therefore, if the added point
+     * edges of a <code>Polygon</code>. Therefore, if the added point
      * falls on the right or bottom edge of the enlarged
-     * <code>Rectangle</code>, <code>contains</code> returns
+     * <code>Polygon</code>, <code>contains</code> returns
      * <code>false</code> for that point.
      * If the specified point must be contained within the new
-     * {@code Rectangle}, a 1x1 rectangle should be added instead:
+     * {@code Polygon}, a 1x1 rectangle should be added instead:
      * <pre>
      *     r.add(newx, newy, 1, 1);
      * </pre>
@@ -517,28 +517,28 @@ public class Rectangle {
     }
 
     /**
-     * Adds a <code>Rectangle</code> to this <code>Rectangle</code>.
-     * The resulting <code>Rectangle</code> is the union of the two
+     * Adds a <code>Polygon</code> to this <code>Polygon</code>.
+     * The resulting <code>Polygon</code> is the union of the two
      * rectangles.
      * <p>
-     * If either {@code Rectangle} has any dimension less than 0, the
-     * result will have the dimensions of the other {@code Rectangle}.
-     * If both {@code Rectangle}s have at least one dimension less
+     * If either {@code Polygon} has any dimension less than 0, the
+     * result will have the dimensions of the other {@code Polygon}.
+     * If both {@code Polygon}s have at least one dimension less
      * than 0, the result will have at least one dimension less than 0.
      * <p>
-     * If either {@code Rectangle} has one or both dimensions equal
+     * If either {@code Polygon} has one or both dimensions equal
      * to 0, the result along those axes with 0 dimensions will be
      * equivalent to the results obtained by adding the corresponding
      * origin coordinate to the result rectangle along that axis,
      * similar to the operation of the {@link #add(Point)} method,
      * but contribute no further dimension beyond that.
      * <p>
-     * If the resulting {@code Rectangle} would have a dimension
+     * If the resulting {@code Polygon} would have a dimension
      * too large to be expressed as an {@code int}, the result
      * will have a dimension of {@code Integer.MAX_VALUE} along
      * that dimension.
      *
-     * @param r the specified <code>Rectangle</code>
+     * @param r the specified <code>Polygon</code>
      */
     public void add(Rectangle r) {
         long tx2 = this.width;
@@ -574,19 +574,19 @@ public class Rectangle {
     }
 
     /**
-     * Resizes the <code>Rectangle</code> both horizontally and vertically.
+     * Resizes the <code>Polygon</code> both horizontally and vertically.
      * <p>
-     * This method modifies the <code>Rectangle</code> so that it is
+     * This method modifies the <code>Polygon</code> so that it is
      * <code>h</code> units larger on both the left and right side,
      * and <code>v</code> units larger at both the top and bottom.
      * <p>
-     * The new <code>Rectangle</code> has {@code (x - h, y - v)}
+     * The new <code>Polygon</code> has {@code (x - h, y - v)}
      * as its upper-left corner,
      * width of {@code (width + 2h)},
      * and a height of {@code (height + 2v)}.
      * <p>
      * If negative values are supplied for <code>h</code> and
-     * <code>v</code>, the size of the <code>Rectangle</code>
+     * <code>v</code>, the size of the <code>Polygon</code>
      * decreases accordingly.
      * The {@code grow} method will check for integer overflow
      * and underflow, but does not check whether the resulting
@@ -668,12 +668,12 @@ public class Rectangle {
      * Checks whether two rectangles are equal.
      * <p>
      * The result is <code>true</code> if and only if the argument is not
-     * <code>null</code> and is a <code>Rectangle</code> object that has the
+     * <code>null</code> and is a <code>Polygon</code> object that has the
      * same upper-left corner, width, and height as
-     * this <code>Rectangle</code>.
+     * this <code>Polygon</code>.
      *
      * @param obj the <code>Object</code> to compare with
-     *            this <code>Rectangle</code>
+     *            this <code>Polygon</code>
      * @return <code>true</code> if the objects are equal;
      * <code>false</code> otherwise.
      */
@@ -700,10 +700,10 @@ public class Rectangle {
 
     /**
      * Returns a <code>String</code> representing this
-     * <code>Rectangle</code> and its values.
+     * <code>Polygon</code> and its values.
      *
      * @return a <code>String</code> representing this
-     * <code>Rectangle</code> object's coordinate and size values.
+     * <code>Polygon</code> object's coordinate and size values.
      */
     @Override
     public String toString() {

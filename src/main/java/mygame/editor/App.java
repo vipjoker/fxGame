@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.stage.Window;
 
 /**
@@ -43,6 +44,7 @@ public class App extends Application{
         INSTANCE = this;
 
         Parent load = FXMLLoader.load(this.getClass().getResource("/editor.fxml"));
+
 
         scene  = new Scene(load,1200,800);
 

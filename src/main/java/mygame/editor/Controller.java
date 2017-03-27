@@ -20,9 +20,11 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.scene.transform.Transform;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -40,7 +42,7 @@ import java.net.URL;
 import java.util.*;
 
 
-public class Controller implements Initializable  {
+public class Controller implements Initializable {
     private PanListener panListener;
     //    public Pane pnGrid;
     public TilePane tilePane;
@@ -49,22 +51,23 @@ public class Controller implements Initializable  {
     public Pane canvas;
     public FlowPane buttonLayout;
     ToggleGroup group;
+    Axis axis;
     Box2dDialog box2dDialog;
 
     private StackPane mPane;
 
-    private Line horLine,verLine;
+    private Line horLine, verLine;
 
     private Action currentDrawer;
     private Map<String, Action> actions;
     private CustomRegion transGroup;
-    private List <AbstractModel> models;
+    private List<AbstractModel> models;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         models = new ArrayList<>();
         group = new ToggleGroup();
-        box2dDialog= new Box2dDialog();
+        box2dDialog = new Box2dDialog();
         for (Node node : buttonLayout.getChildren()) {
             group.getToggles().add(((ToggleButton) node));
         }
@@ -73,9 +76,7 @@ public class Controller implements Initializable  {
         transGroup = new CustomRegion();
 
 
-
         canvas.getChildren().add(transGroup);
-
 
 
         panListener = new PanListener((x, y) -> {
@@ -86,12 +87,15 @@ public class Controller implements Initializable  {
             System.out.println(scaleMult + " " + transGroup.getScaleX());
             transGroup.setTranslateX(transGroup.getTranslateX() + x);
             transGroup.setTranslateY(transGroup.getTranslateY() + y);
+//            transGroup.getTransforms().add(Transform.translate(x,y));
+
             // transGroup.getTransforms().addAll(Transform.translate(scaleMult*x,scaleMult*y));
 
         }, (s) -> {
             double scale = transGroup.getScaleX() + s / 100;
             //child.getTransforms().add(Transform.translate(x,y));
             if (scale < 0.1 || scale > 10) return;
+
             transGroup.setScaleY(scale);
             transGroup.setScaleX(scale);
         }
@@ -100,17 +104,13 @@ public class Controller implements Initializable  {
         );
 
 
-
         canvas.setBackground(new Background(new BackgroundFill(Constants.BACKGROUND, null, null)));
         setListeners();
 //        setGrid();
         initActions();
 
 
-
-
     }
-
 
 
     private void setListeners() {
@@ -124,8 +124,6 @@ public class Controller implements Initializable  {
         });
 
 
-
-
         canvas.setCursor(Cursor.CROSSHAIR);
 
         canvas.prefWidthProperty().bind(((BorderPane) canvas.getParent()).widthProperty());
@@ -135,6 +133,7 @@ public class Controller implements Initializable  {
         canvas.setOnMouseDragged(event -> {
             if (event.getButton() == MouseButton.SECONDARY) {
                 panListener.panCanvasDragged(event);
+                updateViews();
 
             } else if (currentDrawer != null) currentDrawer.mouseMoved(asTranslated(event));
         });
@@ -142,6 +141,7 @@ public class Controller implements Initializable  {
         canvas.setOnMousePressed(event -> {
             if (event.getButton() == MouseButton.SECONDARY) {
                 panListener.panCanvasPressed(event);
+                updateViews();
 
             } else if (currentDrawer != null) currentDrawer.mousePressed(asTranslated(event));
         });
@@ -150,14 +150,19 @@ public class Controller implements Initializable  {
         canvas.setOnMouseReleased(event -> {
             if (event.getButton() == MouseButton.SECONDARY) {
                 panListener.panCanvasReleased(event);
+                updateViews();
             } else if (currentDrawer != null) currentDrawer.mouseReleased(asTranslated(event));
 
         });
 
-        canvas.setOnScroll(event -> panListener.onScroll(event));
+        canvas.setOnScroll(event -> {
+            panListener.onScroll(event);
+            updateViews();
+        });
         ChangeListener<Number> tChangeListener = (observable, oldValue, newValue) -> updateViews();
         canvas.widthProperty().addListener(tChangeListener);
         canvas.heightProperty().addListener(tChangeListener);
+        Platform.runLater(() -> updateViews());
 
     }
 
@@ -170,19 +175,27 @@ public class Controller implements Initializable  {
     }
 
     private void updateViews() {
-        System.out.println("Updated");
+        double centerX =0 ,centerY = 0;
         double width = canvas.getWidth();
         double height = canvas.getHeight();
+       // transGroup.getTransforms().forEach(System.out::println);
+        if(axis == null){
+            axis = new Axis();
+            canvas.getChildren().add(axis);
 
-        Rectangle rect = new Rectangle(width, height);
-        canvas.setClip(rect);
-        if(horLine == null){
-            horLine = getLine(0,height/2,width,height/2);
-            verLine = getLine(width/2,0,width/2,height);
-            canvas.getChildren().addAll(horLine,verLine);
+
+
+        }else{
+            Point2D point2D = new Point2D(width / 2, height / 2);
+            Transform localToParentTransform = transGroup.getLocalToParentTransform();
+            Point2D transform = localToParentTransform.transform(point2D);
+
+            axis.update(transform.getX(),transform.getY(),width,height);
         }
 
 
+        Rectangle rect = new Rectangle(width, height);
+            canvas.setClip(rect);
 
 
 
@@ -204,18 +217,14 @@ public class Controller implements Initializable  {
 
     private void initActions() {
         actions = new HashMap<>();
-        actions.put(Constants.ACTION_POLYGON, new PolygonDrawer(transGroup,models));
-        actions.put(Constants.ACTION_CIRCLE, new CircleDrawer(transGroup,models));
-        actions.put(Constants.ACTION_RECTANGLE, new RectangleDrawer(transGroup,models));
-        actions.put(Constants.ACTION_CHAIN, new LineDrawer(transGroup,models));
-        actions.put(Constants.ACTION_MOVE,new MoverAction(transGroup,models));
-        actions.put(Constants.ACTION_ROTATE,new RotateAction(transGroup,models));
-        actions.put(Constants.ACTION_EDIT,new EditAction(transGroup,models));
+        actions.put(Constants.ACTION_POLYGON, new PolygonDrawer(transGroup, models));
+        actions.put(Constants.ACTION_CIRCLE, new CircleDrawer(transGroup, models));
+        actions.put(Constants.ACTION_RECTANGLE, new RectangleDrawer(transGroup, models));
+        actions.put(Constants.ACTION_CHAIN, new LineDrawer(transGroup, models));
+        actions.put(Constants.ACTION_MOVE, new MoverAction(transGroup, models));
+        actions.put(Constants.ACTION_ROTATE, new RotateAction(transGroup, models));
+        actions.put(Constants.ACTION_EDIT, new EditAction(transGroup, models));
     }
-
-
-
-
 
 
     public void onSave(ActionEvent event) {
@@ -305,7 +314,6 @@ public class Controller implements Initializable  {
     public void onRun(ActionEvent actionEvent) {
 
 
-
         box2dDialog.show();
     }
 
@@ -345,7 +353,6 @@ public class Controller implements Initializable  {
     }
 
 
-
     public void onDistance(ActionEvent actionEvent) {
 
     }
@@ -355,10 +362,11 @@ public class Controller implements Initializable  {
     }
 
 
-     private void switchDrawer(String action){
-        if(currentDrawer !=null) currentDrawer.finishDrawing();
-         currentDrawer = actions.get(action);
-     }
+    private void switchDrawer(String action) {
+        if (currentDrawer != null) currentDrawer.finishDrawing();
+        currentDrawer = actions.get(action);
+        currentDrawer.init();
+    }
 
     public void onRotate(ActionEvent actionEvent) {
         switchDrawer(Constants.ACTION_ROTATE);

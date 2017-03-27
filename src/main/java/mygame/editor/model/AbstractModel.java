@@ -14,17 +14,21 @@ import java.util.List;
 public class AbstractModel extends Group {
 
     protected List<Circle> controlls;
-
+     private final Type type;
     protected Circle getHandler(Point2D point) {
         Circle circle = new Circle(point.getX(), point.getY(), 5);
         circle.setStroke(Constants.WHITE);
         circle.setFill(Constants.LIGHT_GREY);
         return circle;
     }
-    protected AbstractModel(){
+    protected AbstractModel(Type type){
+        this.type = type;
         controlls = new ArrayList<>();
     }
 
+    public Type getType() {
+        return type;
+    }
 
     public List<Circle> getControlls() {
         return controlls;
@@ -33,5 +37,10 @@ public class AbstractModel extends Group {
     public void addControl(Circle circle){
         controlls.add(circle);
         getChildren().add(circle);
+    }
+
+
+    public enum Type{
+        POLYGON,LINE,CIRCLE,RECTANGLE
     }
 }

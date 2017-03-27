@@ -13,8 +13,8 @@ public class CircleModel extends AbstractModel {
     Circle handler;
 
     public CircleModel(Point2D pos){
-        super();
-        circle = new Circle(pos.getX(),pos.getY(),1, Constants.GREEN.deriveColor(1,1,1,.25));
+        super(Type.CIRCLE);
+        circle = new Circle(pos.getX(),pos.getY(),5, Constants.GREEN.deriveColor(1,1,1,.25));
             circle.setStroke(Constants.GREEN);
             getChildren().add(circle);
 
@@ -25,6 +25,7 @@ public class CircleModel extends AbstractModel {
     public void updateRadius(Point2D radius){
         if(handler == null) {
             handler = getHandler(radius);
+            handler.setUserData(circle);
             addControl(handler);
         }else{
             handler.setCenterY(radius.getY());
