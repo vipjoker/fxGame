@@ -43,8 +43,9 @@ import java.util.*;
 
 
 public class Controller implements Initializable {
+    public VBox vbInfo;
     private PanListener panListener;
-    //    public Pane pnGrid;
+
     public TilePane tilePane;
     public Button btnRun;
     public Label tvStatus;
@@ -217,6 +218,7 @@ public class Controller implements Initializable {
 
     private void initActions() {
         actions = new HashMap<>();
+        actions.put(Constants.ACTION_SELECT,new SelectAction(vbInfo,transGroup,models));
         actions.put(Constants.ACTION_POLYGON, new PolygonDrawer(transGroup, models));
         actions.put(Constants.ACTION_CIRCLE, new CircleDrawer(transGroup, models));
         actions.put(Constants.ACTION_RECTANGLE, new RectangleDrawer(transGroup, models));
@@ -374,5 +376,9 @@ public class Controller implements Initializable {
 
     public void onEdit(ActionEvent actionEvent) {
         switchDrawer(Constants.ACTION_EDIT);
+    }
+
+    public void onSelect(ActionEvent actionEvent) {
+        switchDrawer(Constants.ACTION_SELECT);
     }
 }

@@ -21,6 +21,7 @@ public class Constants {
     public static final String ACTION_RECTANGLE = "rectangle";
     public static final String ACTION_CHAIN = "chain";
 
+    public static final String ACTION_SELECT = "select";
     public static final String ACTION_MOVE = "move";
     public static final String ACTION_ROTATE = "rotate";
     public static final String ACTION_EDIT = "edit";

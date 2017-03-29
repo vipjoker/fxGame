@@ -46,7 +46,7 @@ public class HelloWorld extends Application{
         camera.setTranslateZ(-2000);
         camera.setNearClip(0.1);
         camera.setFarClip(2000);
-        camera.setFieldOfView(35);
+        camera.setFieldOfView(90);
         scene.setCamera(camera);
     }
 
@@ -125,9 +125,7 @@ public class HelloWorld extends Application{
 
 
 
-    private void startThreads(Text text){
-        new Thread(new Cinema(text)).start();
-    }
+
 
 
 }

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<GridPane fx:id="gpInfo" hgap="5.0" prefHeight="333.0" prefWidth="250.0" stylesheets="style.css" vgap="5.0" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mygame.editor.InfoController">
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="130.0" minWidth="10.0" prefWidth="108.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="207.0" minWidth="10.0" prefWidth="150.0" />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints maxHeight="136.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="136.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="136.0" minHeight="0.0" prefHeight="40.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="282.0" minHeight="9.0" prefHeight="40.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="358.0" minHeight="7.0" prefHeight="40.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+    </rowConstraints>
+    <children>
+        <Label text="Type" GridPane.halignment="LEFT" GridPane.rowIndex="3" />
+        <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+            <GridPane.margin>
+                <Insets />
+            </GridPane.margin>
+        </ComboBox>
+        <Label text="Color" GridPane.halignment="LEFT" GridPane.rowIndex="4" />
+        <Label text="x " GridPane.columnSpan="2" GridPane.rowIndex="1" />
+        <Label text="Label" GridPane.rowIndex="5" />
+        <Separator prefWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="6" />
+        <Label text="Physics" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="7" />
+        <Label text="Name" />
+        <Label text="Friction" GridPane.rowIndex="9" />
+        <TextField GridPane.columnIndex="1" GridPane.rowIndex="9" />
+        <Label text="Restitution" GridPane.rowIndex="8" />
+        <Label text="Density" GridPane.rowIndex="10" />
+        <TextField GridPane.columnIndex="1" GridPane.rowIndex="10" />
+        <TextField GridPane.columnIndex="1" GridPane.rowIndex="8" />
+      <Label text="y" GridPane.rowIndex="2" />
+      <TextField fx:id="etName" GridPane.columnIndex="1" />
+      <TextField fx:id="etX" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <TextField fx:id="etY" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+    </children>
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+    </padding>
+</GridPane>
