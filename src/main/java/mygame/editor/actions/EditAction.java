@@ -1,27 +1,21 @@
 package mygame.editor.actions;
 
 import javafx.geometry.Point2D;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.effect.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import mygame.editor.DragHelper;
 import mygame.editor.delegate.CircleEditDelegate;
 import mygame.editor.delegate.LineEditDelegate;
 import mygame.editor.delegate.PolygonEditDelegate;
 import mygame.editor.delegate.RectangleEditDelegate;
+import mygame.editor.kotlin.CustonPane;
 import mygame.editor.model.*;
-import mygame.editor.views.CustomRegion;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 /**
  * Created by oleh on 3/21/17.
@@ -29,7 +23,7 @@ import java.util.function.Consumer;
 public class EditAction extends Action {
     List<DragHelper> helpers;
 
-    public EditAction(CustomRegion parent, List<AbstractModel> models) {
+    public EditAction(CustonPane parent, List<AbstractModel> models) {
         super(parent, models);
         helpers = new ArrayList<>();
     }
@@ -51,10 +45,12 @@ public class EditAction extends Action {
                 AbstractModel mod = ((AbstractModel) event.getSource());
 
 
-                for (Circle circle : mod.getControlls()) {
+                for (Point point : mod.getPoints()) {
+                    HandlerPoint handlerPoint =new  HandlerPoint(point,mod);
+                    parent.addItem(handlerPoint);
                     DragHelper helper = new DragHelper(getDelegateHandler(model));
                     helpers.add(helper);
-                    helper.setDrag(circle);
+                    helper.setDrag(handlerPoint);
 
                 }
                 Shadow shadow = new Shadow(0, Color.GOLD);
@@ -90,17 +86,17 @@ public class EditAction extends Action {
     }
 
     @Override
-    public void mouseMoved(Point2D position) {
+    public void mouseMoved(Point position) {
 
     }
 
     @Override
-    public void mousePressed(Point2D position) {
+    public void mousePressed(Point position) {
 
     }
 
     @Override
-    public void mouseReleased(Point2D position) {
+    public void mouseReleased(Point position) {
 
     }
 

@@ -6,50 +6,38 @@ import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.StrokeTransition;
 import javafx.geometry.Point2D;
-import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 import mygame.Constants;
 import mygame.editor.DragHelper;
+import mygame.editor.kotlin.CustonPane;
 import mygame.editor.model.AbstractModel;
-import mygame.editor.views.CustomRegion;
+import mygame.editor.model.Point;
 
 import java.util.List;
 
-/**
- * Created by oleh on 3/18/17.
- */
+
 public abstract class Action {
-    protected CustomRegion parent;
+    protected CustonPane parent;
     protected final List<AbstractModel> models;
-    protected Action(CustomRegion parent, List<AbstractModel> models) {
+    protected Action(CustonPane parent, List<AbstractModel> models) {
         this.parent = parent;
         this.models = models;
     }
 
     public void init(){}
 
-    public abstract void mouseMoved(Point2D position);
+    public abstract void mouseMoved(Point position);
 
-    public abstract void mousePressed(Point2D position);
+    public abstract void mousePressed(Point position);
 
-    public abstract void mouseReleased(Point2D position);
+    public abstract void mouseReleased(Point position);
 
     public abstract void finishDrawing();
 
-    protected Circle getHandler(Point2D point) {
-        Circle circle = new Circle(point.getX(), point.getY(), 5);
-        circle.setStroke(Constants.WHITE);
-        circle.setFill(Constants.LIGHT_GREY);
-        parent.addChild(circle);
-        setScaleListeners(circle);
 
-        new DragHelper().setDrag(circle);
-        return circle;
-    }
 
     protected void setScaleListeners(Node node) {
 

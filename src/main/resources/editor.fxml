@@ -13,6 +13,7 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
+<?import mygame.editor.kotlin.CustonPane?>
 <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="545.0" prefWidth="855.0" stylesheets="style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mygame.editor.Controller">
   <children>
     <MenuBar VBox.vgrow="NEVER">
@@ -91,11 +92,11 @@
       </HBox>
       <BorderPane VBox.vgrow="ALWAYS">
          <center>
-            <Pane fx:id="canvas" layoutX="100.0" layoutY="100.0" prefHeight="422.0" prefWidth="495.0">
+            <CustonPane fx:id="canvas" layoutX="100.0" layoutY="100.0" prefHeight="422.0" prefWidth="495.0">
                <padding>
                   <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
                </padding>
-            </Pane>
+            </CustonPane>
          </center>
          <left>
             <FlowPane fx:id="buttonLayout" hgap="10.0" prefWidth="100.0" vgap="10.0" BorderPane.alignment="CENTER">

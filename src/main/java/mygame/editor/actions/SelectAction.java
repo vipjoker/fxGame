@@ -4,16 +4,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.effect.Shadow;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import mygame.editor.InfoController;
+import mygame.editor.kotlin.CustonPane;
 import mygame.editor.model.*;
 import mygame.editor.model.Point;
-import mygame.editor.views.CustomRegion;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 
@@ -24,7 +22,7 @@ public class SelectAction extends Action {
 
     private VBox pane;
 
-    public SelectAction(VBox pane, CustomRegion transGroup, List<AbstractModel> models) {
+    public SelectAction(VBox pane, CustonPane transGroup, List<AbstractModel> models) {
         super(transGroup,models);
         this.pane = pane;
     }
@@ -70,17 +68,17 @@ public class SelectAction extends Action {
     }
 
     @Override
-    public void mouseMoved(Point2D position) {
+    public void mouseMoved(Point position) {
 
     }
 
     @Override
-    public void mousePressed(Point2D position) {
+    public void mousePressed(Point position) {
 
     }
 
     @Override
-    public void mouseReleased(Point2D position) {
+    public void mouseReleased(Point position) {
 
     }
 

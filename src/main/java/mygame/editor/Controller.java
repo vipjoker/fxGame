@@ -1,13 +1,9 @@
 package mygame.editor;
 
-import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
-import javafx.scene.Cursor;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -16,24 +12,19 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
-import javafx.scene.transform.Transform;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import mygame.Constants;
 import mygame.editor.actions.*;
+import mygame.editor.kotlin.ActionListenerDelegate;
+import mygame.editor.kotlin.CustonPane;
 import mygame.editor.model.AbstractModel;
+import mygame.editor.model.Point;
 import mygame.editor.model.TileModel;
-import mygame.editor.views.CustomRegion;
 import mygame.util.LevelParser;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -41,27 +32,26 @@ import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.*;
 
+import static mygame.Constants.*;
 
-public class Controller implements Initializable {
+
+public class Controller implements Initializable ,ActionListenerDelegate{
     public VBox vbInfo;
-    private PanListener panListener;
+
 
     public TilePane tilePane;
     public Button btnRun;
     public Label tvStatus;
-    public Pane canvas;
+    public CustonPane canvas;
     public FlowPane buttonLayout;
     ToggleGroup group;
-    Axis axis;
     Box2dDialog box2dDialog;
 
     private StackPane mPane;
 
-    private Line horLine, verLine;
-
     private Action currentDrawer;
     private Map<String, Action> actions;
-    private CustomRegion transGroup;
+
     private List<AbstractModel> models;
 
     @Override
@@ -74,40 +64,10 @@ public class Controller implements Initializable {
         }
 
 
-        transGroup = new CustomRegion();
+        canvas.setListenerDelegate(this);
 
 
-        canvas.getChildren().add(transGroup);
-
-
-        panListener = new PanListener((x, y) -> {
-
-
-            double scaleMult = 1 / transGroup.getScaleX();
-
-            System.out.println(scaleMult + " " + transGroup.getScaleX());
-            transGroup.setTranslateX(transGroup.getTranslateX() + x);
-            transGroup.setTranslateY(transGroup.getTranslateY() + y);
-//            transGroup.getTransforms().add(Transform.translate(x,y));
-
-            // transGroup.getTransforms().addAll(Transform.translate(scaleMult*x,scaleMult*y));
-
-        }, (s) -> {
-            double scale = transGroup.getScaleX() + s / 100;
-            //child.getTransforms().add(Transform.translate(x,y));
-            if (scale < 0.1 || scale > 10) return;
-
-            transGroup.setScaleY(scale);
-            transGroup.setScaleX(scale);
-        }
-
-
-        );
-
-
-        canvas.setBackground(new Background(new BackgroundFill(Constants.BACKGROUND, null, null)));
         setListeners();
-//        setGrid();
         initActions();
 
 
@@ -124,108 +84,32 @@ public class Controller implements Initializable {
             });
         });
 
-
-        canvas.setCursor(Cursor.CROSSHAIR);
-
         canvas.prefWidthProperty().bind(((BorderPane) canvas.getParent()).widthProperty());
         canvas.prefHeightProperty().bind(((BorderPane) canvas.getParent()).heightProperty());
 
-
-        canvas.setOnMouseDragged(event -> {
-            if (event.getButton() == MouseButton.SECONDARY) {
-                panListener.panCanvasDragged(event);
-                updateViews();
-
-            } else if (currentDrawer != null) currentDrawer.mouseMoved(asTranslated(event));
-        });
-
-        canvas.setOnMousePressed(event -> {
-            if (event.getButton() == MouseButton.SECONDARY) {
-                panListener.panCanvasPressed(event);
-                updateViews();
-
-            } else if (currentDrawer != null) currentDrawer.mousePressed(asTranslated(event));
-        });
-
-
-        canvas.setOnMouseReleased(event -> {
-            if (event.getButton() == MouseButton.SECONDARY) {
-                panListener.panCanvasReleased(event);
-                updateViews();
-            } else if (currentDrawer != null) currentDrawer.mouseReleased(asTranslated(event));
-
-        });
-
-        canvas.setOnScroll(event -> {
-            panListener.onScroll(event);
-            updateViews();
-        });
-        ChangeListener<Number> tChangeListener = (observable, oldValue, newValue) -> updateViews();
-        canvas.widthProperty().addListener(tChangeListener);
-        canvas.heightProperty().addListener(tChangeListener);
-        Platform.runLater(() -> updateViews());
+//
+//        ChangeListener<Number> tChangeListener = (observable, oldValue, newValue) -> updateViews();
+//        canvas.widthProperty().addListener(tChangeListener);
+//        canvas.heightProperty().addListener(tChangeListener);
+//        Platform.runLater(() -> updateViews());
 
     }
 
 
-    private Point2D asTranslated(MouseEvent event) {
 
 
-        return transGroup.screenToLocal(event.getScreenX(), event.getScreenY());
-
-    }
-
-    private void updateViews() {
-        double centerX =0 ,centerY = 0;
-        double width = canvas.getWidth();
-        double height = canvas.getHeight();
-       // transGroup.getTransforms().forEach(System.out::println);
-        if(axis == null){
-            axis = new Axis();
-            canvas.getChildren().add(axis);
-
-
-
-        }else{
-            Point2D point2D = new Point2D(width / 2, height / 2);
-            Transform localToParentTransform = transGroup.getLocalToParentTransform();
-            Point2D transform = localToParentTransform.transform(point2D);
-
-            axis.update(transform.getX(),transform.getY(),width,height);
-        }
-
-
-        Rectangle rect = new Rectangle(width, height);
-            canvas.setClip(rect);
-
-
-
-    }
-
-    private Text getText(double x, double y, String message) {
-        Text text = new Text(x, y, message);
-        text.setFill(Color.WHITE.deriveColor(1, 1, 1, .5));
-        return text;
-    }
-
-    private Line getLine(double x, double y, double x2, double y2) {
-        Line line = new Line(x, y, x2, y2);
-        line.setStroke(Constants.LIGHT_GREY);
-        line.setStrokeWidth(1);
-        return line;
-    }
 
 
     private void initActions() {
         actions = new HashMap<>();
-        actions.put(Constants.ACTION_SELECT,new SelectAction(vbInfo,transGroup,models));
-        actions.put(Constants.ACTION_POLYGON, new PolygonDrawer(transGroup, models));
-        actions.put(Constants.ACTION_CIRCLE, new CircleDrawer(transGroup, models));
-        actions.put(Constants.ACTION_RECTANGLE, new RectangleDrawer(transGroup, models));
-        actions.put(Constants.ACTION_CHAIN, new LineDrawer(transGroup, models));
-        actions.put(Constants.ACTION_MOVE, new MoverAction(transGroup, models));
-        actions.put(Constants.ACTION_ROTATE, new RotateAction(transGroup, models));
-        actions.put(Constants.ACTION_EDIT, new EditAction(transGroup, models));
+        actions.put(ACTION_SELECT,new SelectAction(vbInfo,canvas,models));
+        actions.put(ACTION_POLYGON, new PolygonDrawer(canvas, models));
+        actions.put(ACTION_CIRCLE, new CircleDrawer(canvas, models));
+        actions.put(ACTION_RECTANGLE, new RectangleDrawer(canvas, models));
+        actions.put(ACTION_CHAIN, new LineDrawer(canvas, models));
+        actions.put(ACTION_MOVE, new MoverAction(canvas, models));
+        actions.put(ACTION_ROTATE, new RotateAction(canvas, models));
+        actions.put(ACTION_EDIT, new EditAction(canvas, models));
     }
 
 
@@ -321,7 +205,7 @@ public class Controller implements Initializable {
 
     public void onMove(ActionEvent actionEvent) {
 
-        switchDrawer(Constants.ACTION_MOVE);
+        switchDrawer(ACTION_MOVE);
     }
 
 
@@ -339,19 +223,19 @@ public class Controller implements Initializable {
     }
 
     public void onPolygon(ActionEvent actionEvent) {
-        switchDrawer(Constants.ACTION_POLYGON);
+        switchDrawer(ACTION_POLYGON);
     }
 
     public void onChain(ActionEvent actionEvent) {
-        switchDrawer(Constants.ACTION_CHAIN);
+        switchDrawer(ACTION_CHAIN);
     }
 
     public void onRectangle(ActionEvent actionEvent) {
-        switchDrawer(Constants.ACTION_RECTANGLE);
+        switchDrawer(ACTION_RECTANGLE);
     }
 
     public void onCircle(ActionEvent actionEvent) {
-        switchDrawer(Constants.ACTION_CIRCLE);
+        switchDrawer(ACTION_CIRCLE);
     }
 
 
@@ -371,14 +255,29 @@ public class Controller implements Initializable {
     }
 
     public void onRotate(ActionEvent actionEvent) {
-        switchDrawer(Constants.ACTION_ROTATE);
+        switchDrawer(ACTION_ROTATE);
     }
 
     public void onEdit(ActionEvent actionEvent) {
-        switchDrawer(Constants.ACTION_EDIT);
+        switchDrawer(ACTION_EDIT);
     }
 
     public void onSelect(ActionEvent actionEvent) {
-        switchDrawer(Constants.ACTION_SELECT);
+        switchDrawer(ACTION_SELECT);
+    }
+
+    @Override
+    public void onMousePressed(@NotNull Point point) {
+        if (currentDrawer != null) currentDrawer.mousePressed(point);
+    }
+
+    @Override
+    public void onMouseReleased(@NotNull Point point) {
+        if (currentDrawer != null) currentDrawer.mouseReleased(point);
+    }
+
+    @Override
+    public void onMouseDragged(@NotNull Point point) {
+        if (currentDrawer != null) currentDrawer.mouseMoved(point);
     }
 }

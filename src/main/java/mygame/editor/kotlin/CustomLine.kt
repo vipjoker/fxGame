@@ -1,4 +1,4 @@
-package mygame.demo.kotlin;
+package mygame.editor.kotlin;
 
 import javafx.geometry.Point2D
 import javafx.scene.shape.Path

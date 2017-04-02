@@ -2,23 +2,14 @@ package mygame.demo;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
 import javafx.geometry.Side;
-import javafx.scene.Group;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
-import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
-import javafx.scene.control.Spinner;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.transform.Transform;
 import javafx.stage.Stage;
-import mygame.editor.views.CustomRegion;
 
 /**
  * Created by oleh on 3/22/17.

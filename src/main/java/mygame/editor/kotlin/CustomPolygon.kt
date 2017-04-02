@@ -1,12 +1,13 @@
-package mygame.demo.kotlin;
+package mygame.editor.kotlin;
 
 import javafx.geometry.Point2D
 import javafx.scene.paint.Color
 import javafx.scene.shape.Polygon
 import javafx.scene.transform.Affine
+import mygame.editor.model.CustonAffine
 
 
-class CustomPolygon(x:Double,y:Double) :Polygon(){
+class CustomPolygon(x:Double,y:Double) :Polygon(),Transformable{
     val DEFAULT_SIZE:Double = 10.0
     val mutablePoints:MutableList<Point2D>
 
@@ -31,10 +32,10 @@ class CustomPolygon(x:Double,y:Double) :Polygon(){
     }
 
 
-    fun transform(transfo:Affine){
+   override fun transform(trans:CustonAffine){
         updatePoints(
         mutablePoints.map {
-           transfo.transform(it)
+           trans.transform(it)
         }.toMutableList()
         )
     }

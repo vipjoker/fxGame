@@ -24,13 +24,8 @@ public class PolygonEditDelegate implements BiConsumer<Node,Point> {
     @Override
     public void accept(Node node,Point point) {
 
-        Circle circle = (Circle)node;
-        Point oldPoint = (Point) circle.getUserData();
 
-        Transform localToParentTransform = circle.getLocalToParentTransform();
-        Point2D transform = localToParentTransform.transform(new Point2D(point.getX(), point.getY()));
-        oldPoint.set(transform.getX(),transform.getY());
-        model.updatePolygon();
+        model.update();
 
 
     }

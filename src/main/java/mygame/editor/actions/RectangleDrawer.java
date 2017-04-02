@@ -1,22 +1,15 @@
 package mygame.editor.actions;
 
-import javafx.geometry.Point2D;
-import javafx.scene.Group;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import mygame.Constants;
+import mygame.editor.kotlin.CustonPane;
 import mygame.editor.model.AbstractModel;
+import mygame.editor.model.Point;
 import mygame.editor.model.RectangleModel;
-import mygame.editor.views.CustomRegion;
 
 import java.util.List;
 
-/**
- * Created by oleh on 3/18/17.
- */
 public class RectangleDrawer extends Action {
 
-    public RectangleDrawer(CustomRegion parent, List<AbstractModel> models) {
+    public RectangleDrawer(CustonPane parent, List<AbstractModel> models) {
         super(parent,models);
     }
 
@@ -24,7 +17,7 @@ public class RectangleDrawer extends Action {
     RectangleModel model;
 
     @Override
-    public void mouseMoved(Point2D pos) {
+    public void mouseMoved(Point pos) {
 
         if(model != null)model.updatePoint(pos);
 
@@ -33,16 +26,16 @@ public class RectangleDrawer extends Action {
 
 
     @Override
-    public void mousePressed(Point2D position) {
+    public void mousePressed(Point position) {
 
         if(model == null){
             model = new RectangleModel(position);
-            parent.addChild(model);
+            parent.addItem(model);
         }
     }
 
     @Override
-    public void mouseReleased(Point2D position) {
+    public void mouseReleased(Point position) {
         if(model!= null) models.add(model);
         model = null;
 

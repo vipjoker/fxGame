@@ -1,10 +1,10 @@
 package mygame.editor.actions;
 
 import javafx.geometry.Point2D;
-import javafx.scene.Group;
 import mygame.editor.DragHelper;
+import mygame.editor.kotlin.CustonPane;
 import mygame.editor.model.AbstractModel;
-import mygame.editor.views.CustomRegion;
+import mygame.editor.model.Point;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class MoverAction extends Action {
     List<DragHelper> helpers;
-    public MoverAction(CustomRegion parent, List<AbstractModel> models) {
+    public MoverAction(CustonPane parent, List<AbstractModel> models) {
         super(parent, models);
 
     }
@@ -35,17 +35,17 @@ public class MoverAction extends Action {
     }
 
     @Override
-    public void mouseMoved(Point2D position) {
+    public void mouseMoved(Point position) {
 
     }
 
     @Override
-    public void mousePressed(Point2D position) {
+    public void mousePressed(Point position) {
 
     }
 
     @Override
-    public void mouseReleased(Point2D position) {
+    public void mouseReleased(Point position) {
 
     }
 
