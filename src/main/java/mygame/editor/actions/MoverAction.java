@@ -13,7 +13,7 @@ import java.util.List;
  * Created by oleh on 3/21/17.
  */
 public class MoverAction extends Action {
-    List<DragHelper> helpers;
+
     public MoverAction(CustonPane parent, List<AbstractModel> models) {
         super(parent, models);
 
@@ -21,17 +21,7 @@ public class MoverAction extends Action {
 
     @Override
     public void init() {
-        if(helpers == null || helpers.isEmpty()){
-            helpers = new ArrayList<>();
 
-            for(AbstractModel model : models){
-
-                DragHelper helper = new DragHelper();
-
-                helper.setDrag(model);
-                helpers.add(helper);
-            }
-        }
     }
 
     @Override
@@ -51,7 +41,6 @@ public class MoverAction extends Action {
 
     @Override
     public void finishDrawing() {
-        for(DragHelper helper :helpers)helper.removeDrag();
-        helpers.clear();
+
     }
 }

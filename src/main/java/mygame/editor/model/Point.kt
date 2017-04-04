@@ -24,6 +24,11 @@ class Point {
         return this
     }
 
+    fun set(point:Point){
+        this.x = point.x
+        this.y = point.y
+    }
+
     fun distance(point:Point):Double{
         val deltaX  = point.x - x
         val deltaY = point.y - y

@@ -1,9 +1,11 @@
 package mygame.editor;
 
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.JointDef;
+import com.google.gson.Gson;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
-import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -22,6 +24,7 @@ import mygame.editor.kotlin.ActionListenerDelegate;
 import mygame.editor.kotlin.CustonPane;
 import mygame.editor.model.AbstractModel;
 import mygame.editor.model.Point;
+import mygame.editor.parser.RootModel;
 import mygame.editor.model.TileModel;
 import mygame.util.LevelParser;
 import org.jetbrains.annotations.NotNull;
@@ -101,7 +104,29 @@ public class Controller implements Initializable ,ActionListenerDelegate{
 
 
     private void initActions() {
+
+
+        RootModel model = new RootModel();
+
+        JointDef def = new JointDef();
+        def.type = JointDef.JointType.WheelJoint;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        model.getJoints().add(def);
+        model.getBodies().add(bodyDef);
+        System.out.println(new Gson().toJson(model));
+
+
+
+
+
+
+
+
         actions = new HashMap<>();
+
+
+
         actions.put(ACTION_SELECT,new SelectAction(vbInfo,canvas,models));
         actions.put(ACTION_POLYGON, new PolygonDrawer(canvas, models));
         actions.put(ACTION_CIRCLE, new CircleDrawer(canvas, models));
@@ -110,6 +135,8 @@ public class Controller implements Initializable ,ActionListenerDelegate{
         actions.put(ACTION_MOVE, new MoverAction(canvas, models));
         actions.put(ACTION_ROTATE, new RotateAction(canvas, models));
         actions.put(ACTION_EDIT, new EditAction(canvas, models));
+        actions.put(ACTION_CREATE_BODY, new CraeteBodyAction(canvas, models));
+        actions.put(ACTION_CREATE_JOINT, new CreateJointAction(canvas, models));
     }
 
 
@@ -266,6 +293,14 @@ public class Controller implements Initializable ,ActionListenerDelegate{
         switchDrawer(ACTION_SELECT);
     }
 
+    public void onCreateBody(ActionEvent actionEvent) {
+
+    }
+
+    public void onCreateJoint(ActionEvent actionEvent) {
+
+    }
+
     @Override
     public void onMousePressed(@NotNull Point point) {
         if (currentDrawer != null) currentDrawer.mousePressed(point);
@@ -280,4 +315,6 @@ public class Controller implements Initializable ,ActionListenerDelegate{
     public void onMouseDragged(@NotNull Point point) {
         if (currentDrawer != null) currentDrawer.mouseMoved(point);
     }
+
+
 }

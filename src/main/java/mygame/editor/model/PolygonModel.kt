@@ -13,7 +13,7 @@ class PolygonModel constructor(startPoint: Point) : AbstractModel(Type.POLYGON) 
         polygon.fill = Constants.ORANGE.deriveColor(1.0, 1.0, 1.0, .25)
         polygon.stroke = Constants.ORANGE
         children.add(polygon)
-        polygon.points.addAll(startPoint.x, startPoint.y)
+
 
 
     }
@@ -31,15 +31,16 @@ class PolygonModel constructor(startPoint: Point) : AbstractModel(Type.POLYGON) 
     }
 
     override fun transform(trans: CustonAffine) {
-
-    }
-
-    override fun update(vararg points: Point) {
         polygon.points.clear()
         if (points.size > 2)
             for (point in points) {
-                polygon.points.add(point.x)
-                polygon.points.add(point.y)
+                val p  = trans.transformPoint(point)
+                polygon.points.add(p.x)
+                polygon.points.add(p.y)
             }
+    }
+
+    override fun update(vararg points: Point) {
+
     }
 }

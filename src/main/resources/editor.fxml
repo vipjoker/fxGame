@@ -101,6 +101,8 @@
          <left>
             <FlowPane fx:id="buttonLayout" hgap="10.0" prefWidth="100.0" vgap="10.0" BorderPane.alignment="CENTER">
                <children>
+                  <ToggleButton layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#onCreateBody" text="Create body" />
+                  <ToggleButton layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#onCreateJoint" text="Create joint" />
                   <ToggleButton layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#onSelect" text="Select" />
                   <ToggleButton layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#onMove" text="Move" />
                   <ToggleButton layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#onRotate" text="Rotate" />

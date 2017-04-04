@@ -5,8 +5,8 @@ import mygame.editor.kotlin.Transformable
 
 abstract class AbstractModel(val type:Type):Group(),Transformable{
 
-     var points:MutableList<Point>  = mutableListOf()
-
+    var points:MutableList<Point>  = mutableListOf()
+    get
     fun  appendPoint(point:Point){
        points.add(point)
     }

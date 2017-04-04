@@ -22,7 +22,9 @@ class CustonPane : Pane() {
     private var delegate: ActionListenerDelegate by Delegates.notNull<ActionListenerDelegate>()
 
 
-    var transform: CustonAffine = CustonAffine()
+    var transform :  CustonAffine = CustonAffine()
+    get
+
     var infoText: Text
 
 
@@ -34,8 +36,6 @@ class CustonPane : Pane() {
         background = Background(BackgroundFill(BACKGROUND, null, null))
         cursor = Cursor.CROSSHAIR
 
-        addItem(CustomCircle(-10.0, 10.0, 10.0))
-        addItem(CustomPolygon(40.0, 40.0))
 
         infoText = Text("Info")
         with(infoText) {
@@ -62,7 +62,7 @@ class CustonPane : Pane() {
             transform.setToIdentity()
             transform.appendTranslation(width / 2, height / 2)
             transform.appendScale(1.0, -1.0)
-            updateAxis()
+            updateAll()
         }
 
         setListeners()
@@ -74,7 +74,7 @@ class CustonPane : Pane() {
         this.delegate = delegate
     }
 
-    fun updateAxis() {
+    fun updateAll() {
 
 
         val point = transform.transformPoint(Point(0.0, 0.0))
@@ -99,6 +99,10 @@ class CustonPane : Pane() {
         children.add(item as Node)
     }
 
+    fun removeItem(item:Transformable){
+        children.remove(item as Node)
+    }
+
     fun addChildren(vararg nodes: Node) {
         children.addAll(nodes)
     }
@@ -115,12 +119,12 @@ class CustonPane : Pane() {
 
                 transform.appendScale(1.05, 1.05, point)
 
-                updateAxis()
+                updateAll()
                 it.consume()
             } else {
                 if (transform.mxx > 0.1) {
                     transform.appendScale(.95, .95, point)
-                    updateAxis()
+                    updateAll()
                     it.consume()
                 }
 
@@ -136,27 +140,32 @@ class CustonPane : Pane() {
                 delegate.onMousePressed(point)
                 infoText.text = "lastX  ${point.x} transY ${point.y}  +  \n $transform"
             }
+            updateAll()
         }
 
         setOnMouseDragged {
 
             if (it.button == SECONDARY && lastPoint != null) {
                 val trans = transform.inverseDeltaTransformPoint(it.x, it.y)
-                val deltaX = trans.x - (lastPoint as Point).x
-                val deltaY = trans.y - (lastPoint as Point).y
-                transform.appendTranslation(deltaX, deltaY)
-                updateAxis()
+                    val deltaX = trans.x - (lastPoint as Point).x
+                    val deltaY = trans.y - (lastPoint as Point).y
+                    transform.appendTranslation(deltaX, deltaY)
+
                 lastPoint = trans
                 it.consume()
 
             } else {
                 delegate.onMouseDragged(transform.inverseTransformPoint(it.x, it.y))
+
             }
+            updateAll()
         }
 
         setOnMouseReleased {
             if (it.button == SECONDARY) lastPoint = null
             else delegate.onMouseReleased(transform.inverseTransformPoint(it.x, it.y))
+
+            updateAll()
         }
     }
 

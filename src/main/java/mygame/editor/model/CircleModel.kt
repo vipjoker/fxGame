@@ -7,17 +7,20 @@ import mygame.Constants
 class CircleModel(pos: Point) : AbstractModel(Type.CIRCLE) {
 
     var circle:Circle
-    var center:Point = pos
-    var radiusPoint:Point = pos.clone().add(10.0,0.0)
+    val center:Point = pos
+    val radiusPoint:Point = pos.clone().add(10.0,0.0)
 
     init{
         circle =  Circle(pos.x,pos.y,center.distance(radiusPoint), Constants.GREEN.deriveColor(1.0,1.0,1.0,.25))
         circle.stroke = Constants.GREEN
+        appendPoint(pos)
+        appendPoint(radiusPoint)
         children.add(circle)
     }
 
     fun updateRadius(radius:Point){
-        radiusPoint = radius
+        radiusPoint.set(radius)
+
         circle.radius = center.distance(radiusPoint)
     }
 

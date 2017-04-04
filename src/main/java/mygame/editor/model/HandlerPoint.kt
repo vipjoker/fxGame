@@ -1,22 +1,51 @@
 package mygame.editor.model
 
+import javafx.scene.control.Tooltip
 import javafx.scene.shape.Circle
 import mygame.Constants
 import mygame.editor.kotlin.Transformable
+import mygame.editor.model.AbstractModel.Type.*
 
-class HandlerPoint(point:Point,model:AbstractModel):Circle(point.x,point.y,5.0),Transformable{
+class HandlerPoint(centerPoint:Point,model:AbstractModel,affine: CustonAffine):Circle( centerPoint.x,centerPoint.y,5.0),Transformable{
     val model:AbstractModel
     val point:Point
+
+    val affine:CustonAffine
     init {
+        this.affine = affine
         this.model = model
-        this.point = point
+        this.point = centerPoint
 
         stroke = Constants.WHITE
         fill = Constants.LIGHT_GREY
         update(point)
+
+
+        setListeners()
     }
 
-    fun update(point:Point){
+
+    fun setListeners(){
+
+         val t = Tooltip("${getModelName()}\nx = ${point.x}\ny = ${point.y}")
+         Tooltip.install(this, t)
+    }
+
+    fun updatePoint(point: Point){
+        this.point.set(point)
+    }
+
+    fun getModelName():String{
+        return when(model.type){
+            CIRCLE ->"Circle "
+            RECTANGLE ->"Rectangle "
+            POLYGON ->"Polygon "
+            LINE ->"Line "
+            else ->"Unknown"
+        }
+    }
+
+    private fun update(point:Point){
         centerX = point.x
         centerY = point.y
     }

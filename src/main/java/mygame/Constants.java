@@ -25,6 +25,8 @@ public class Constants {
     public static final String ACTION_MOVE = "move";
     public static final String ACTION_ROTATE = "rotate";
     public static final String ACTION_EDIT = "edit";
+    public static final String ACTION_CREATE_BODY = "create_body";
+    public static final String ACTION_CREATE_JOINT = "create_joint";
 
     public static final String ACTION_DYNAMIC = "dynamic";
     public static final String ACTION_KINEMATIC = "kinematic";

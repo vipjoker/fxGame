@@ -21,6 +21,7 @@ class CustomPolygon(x:Double,y:Double) :Polygon(),Transformable{
             Point2D(x - DEFAULT_SIZE,y + DEFAULT_SIZE)
         )
         updatePoints(mutablePoints)
+
     }
 
     fun updatePoints(list:MutableList<Point2D>){
