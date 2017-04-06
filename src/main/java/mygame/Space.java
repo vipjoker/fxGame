@@ -30,7 +30,7 @@ public class Space extends Application {
         GraphicsContext graphicsContext2D = canvas.getGraphicsContext2D();
         final long nanotime = System.nanoTime();
 
-        Image space = new Image("/earth.jpg");
+        Image space = new Image("/yabloko.jpg");
 
         Image rocket = new Image("/rocket.png");
 

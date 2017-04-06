@@ -2,6 +2,7 @@ package mygame.editor.model
 
 import javafx.scene.shape.Polygon
 import mygame.Constants
+import mygame.editor.model.CustonAffine
 
 class PolygonModel constructor(startPoint: Point) : AbstractModel(Type.POLYGON) {
     var polygon: Polygon

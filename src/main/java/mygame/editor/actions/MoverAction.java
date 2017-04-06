@@ -1,12 +1,9 @@
 package mygame.editor.actions;
 
-import javafx.geometry.Point2D;
-import mygame.editor.DragHelper;
-import mygame.editor.kotlin.CustonPane;
+import mygame.editor.ui.CustonPane;
 import mygame.editor.model.AbstractModel;
 import mygame.editor.model.Point;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

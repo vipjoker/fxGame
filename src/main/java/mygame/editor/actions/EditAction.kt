@@ -4,7 +4,7 @@ import javafx.scene.Node
 import javafx.scene.effect.*
 import javafx.scene.paint.Color
 
-import mygame.editor.kotlin.CustonPane
+import mygame.editor.ui.CustonPane
 import mygame.editor.model.*
 import mygame.editor.model.AbstractModel.Type.*
 import java.util.function.BiConsumer

@@ -5,12 +5,13 @@ import javafx.scene.shape.Circle
 import mygame.Constants
 import mygame.editor.kotlin.Transformable
 import mygame.editor.model.AbstractModel.Type.*
+import mygame.editor.model.CustonAffine
 
 class HandlerPoint(centerPoint:Point,model:AbstractModel,affine: CustonAffine):Circle( centerPoint.x,centerPoint.y,5.0),Transformable{
     val model:AbstractModel
     val point:Point
 
-    val affine:CustonAffine
+    val affine: CustonAffine
     init {
         this.affine = affine
         this.model = model

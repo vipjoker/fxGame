@@ -4,6 +4,7 @@ import javafx.scene.shape.LineTo
 import javafx.scene.shape.MoveTo
 import javafx.scene.shape.Path
 import mygame.Constants
+import mygame.editor.model.CustonAffine
 
 class LineModel(startPoint: Point) : AbstractModel(Type.LINE) {
     val path:Path = Path()
@@ -28,7 +29,7 @@ class LineModel(startPoint: Point) : AbstractModel(Type.LINE) {
     }
 
 
-    override fun transform(trans:CustonAffine ) {
+    override fun transform(trans: CustonAffine) {
         path.elements.clear()
         for(index in 0..points.lastIndex){
             val p:Point = trans.transformPoint(points[index])

@@ -2,6 +2,7 @@ package mygame.editor.model
 
 import javafx.scene.shape.Circle
 import mygame.Constants
+import mygame.editor.model.CustonAffine
 
 
 class CircleModel(pos: Point) : AbstractModel(Type.CIRCLE) {

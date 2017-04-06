@@ -5,14 +5,11 @@ import javafx.animation.FillTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.StrokeTransition;
-import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 import mygame.Constants;
-import mygame.editor.DragHelper;
-import mygame.editor.kotlin.CustonPane;
+import mygame.editor.ui.CustonPane;
 import mygame.editor.model.AbstractModel;
 import mygame.editor.model.Point;
 

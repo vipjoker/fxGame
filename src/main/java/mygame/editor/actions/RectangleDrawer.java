@@ -1,6 +1,6 @@
 package mygame.editor.actions;
 
-import mygame.editor.kotlin.CustonPane;
+import mygame.editor.ui.CustonPane;
 import mygame.editor.model.AbstractModel;
 import mygame.editor.model.Point;
 import mygame.editor.model.RectangleModel;

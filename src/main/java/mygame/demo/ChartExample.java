@@ -1,85 +1,171 @@
 package mygame.demo;
+
+import javafx.animation.TranslateTransition;
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.geometry.Side;
+import javafx.application.Platform;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.chart.*;
-import javafx.scene.control.Slider;
+import javafx.scene.control.Button;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+import mygame.editor.DrawerPane;
 
-/**
- * Created by oleh on 3/22/17.
- */
+
 public class ChartExample extends Application {
 
 
+    boolean isOpen = true;
+    boolean rightIsOpen = true;
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+
+DrawerPane pane444 = new DrawerPane();
+        Pane root = new Pane();
+
+
+        Pane pane = new Pane();
+        pane.prefWidth(100);
+        pane.prefHeight(50);
+        pane.setBackground(new Background(new BackgroundFill(Color.GREEN, null, null)));
+
+
+        root.setBackground(new Background(new BackgroundFill(Color.RED, null, null)));
+
+
+        VBox lef = new VBox();
+
+        lef.alignmentProperty().setValue(Pos.CENTER);
+        lef.spacingProperty().setValue(10);
+        lef.setBackground(new Background(new BackgroundFill(Color.BLACK.deriveColor(1, 1, 1, .5f), null, null)));
+
+
+        VBox right = new VBox();
+
+        right.alignmentProperty().setValue(Pos.CENTER);
+        right.spacingProperty().setValue(10);
+        right.setPadding(new Insets(0,0,0,20));
+        right.setBackground(new Background(new BackgroundFill(Color.BLACK.deriveColor(1, 1, 1, .5f), null, null)));
+        right.setPrefWidth(200);
+        right.alignmentProperty().setValue(Pos.CENTER);
+
+
+        TreeItem<String> tree = new TreeItem<>("Root");
+        tree.setExpanded(true);
+
+        TreeItem<String> item = new TreeItem<>("Body");
+        item.getChildren().addAll(new TreeItem<String>("Fi"));
+
+
+        TreeItem<String> item2 =  new TreeItem<>("Joint");
+
+
+
+        tree.getChildren().addAll(item,item2);
+
+
+        TreeView<String> treeView = new TreeView<>(tree);
 
 
 
 
+        right.getChildren().addAll(
 
-        @Override public void start(Stage primaryStage) throws Exception {
-
-
-            NumberAxis yAxis=new NumberAxis("yyyyy",0,10,50);
-            NumberAxis xAxis=new NumberAxis("xxxxx",0,10,50);
-
-            yAxis.setSide(Side.RIGHT);
-            xAxis.setSide(Side.BOTTOM);
-
-            Circle rectangle = new Circle(100, 100, 10,Color.BLUE.deriveColor(1,1,1,.5));
-
-            Pane group = new Pane(rectangle);
-            group.setBackground(new Background(new BackgroundFill(Color.GREEN,null,null)));
+                new Button("One"),
+                new Button("Two"),
+                new Button("Three")
+                , treeView
+        );
 
 
-            Pane root = new Pane(xAxis,yAxis);
-            group.setBackground(new Background(new BackgroundFill(Color.RED.deriveColor(1,1,1,.25),null,null)));
-
-            Scene scene = new Scene(root, 500, 500);
-
-            root.getChildren().add(group);
-
-            xAxis.upperBoundProperty().bind(group.widthProperty());
-            yAxis.upperBoundProperty().bind(group.heightProperty());
+        AnchorPane center = new AnchorPane();
 
 
+        Button leftButton = new Button("texone wfwf");
+        Button rightButton = new Button("texone wfwf");
 
-            xAxis.prefWidthProperty().bind(root.widthProperty());
-            yAxis.prefHeightProperty().bind(root.heightProperty());
-            primaryStage.setScene(scene);
+        AnchorPane.setRightAnchor(leftButton, 0.0);
+        AnchorPane.setLeftAnchor(rightButton, 0.0);
+        center.getChildren().addAll(
+                leftButton, rightButton);
 
-            Slider spinner = new Slider(.2,10,1);
-            group.scaleXProperty().bind(spinner.valueProperty());
-            group.scaleYProperty().bind(spinner.valueProperty());
-            group.scaleXProperty().addListener(new ChangeListener<Number>() {
-                @Override
-                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                    double x = observable.getValue().doubleValue();
-                    xAxis.setLowerBound(group.screenToLocal(0, 0).getX());
-                    xAxis.setUpperBound(group.screenToLocal(root.getWidth(), 0).getX());
 
-                }
-            });
-            spinner.setLayoutX(20);
-            spinner.setLayoutY(100);
-            root.getChildren().add(spinner);
+        center.setBackground(new Background(new BackgroundFill(Color.WHEAT.deriveColor(1, 1, 1, .25f), null, null)));
+
+
+        center.setPrefHeight(100);
+
+
+        root.widthProperty().addListener((observable, oldValue, newValue) -> {
+            double l = lef.getWidth();
+            double r = right.getWidth();
+            if(!isOpen) l -= 180;
+            if(!rightIsOpen)r -= 180;
+            center.setPrefWidth(newValue.doubleValue() - l - r);
 
 
 
+            right.setLayoutX(root.getWidth() - right.getWidth());
+        });
 
-            primaryStage.show();
-        }
 
-        /**
-         * Java main for when running without JavaFX launcher
-         */
-        public static void main(String[] args) {
-            launch(args);
-        }
+        lef.translateXProperty().addListener((observable, oldValue, newValue) -> {
+            double width = newValue.doubleValue() - oldValue.doubleValue();
+            center.setLayoutX(center.getLayoutX() + width);
+            center.setPrefWidth((center.getWidth() - width));
+        });
+
+        right.translateXProperty().addListener(((observable, oldValue, newValue) -> {
+            double width = newValue.doubleValue() - oldValue.doubleValue();
+            center.setPrefWidth(center.getWidth() + width);
+
+        }));
+
+
+        lef.getChildren().addAll(
+                new Button("Button one"),
+                new Button("Button two"),
+                new Button("Button three"),
+                new Button("Button four"));
+        lef.setPrefWidth(200);
+        lef.prefHeightProperty().bind(root.heightProperty());
+        right.prefHeightProperty().bind(root.heightProperty());
+        root.getChildren().addAll(lef, center, right);
+
+
+        lef.setOnMouseClicked(event -> {
+            TranslateTransition translateTransition = new TranslateTransition(Duration.millis(500), lef);
+            translateTransition.setToX(isOpen ? -180 : 0);
+            translateTransition.play();
+            isOpen = !isOpen;
+        });
+
+        right.setOnMouseClicked(event -> {
+            TranslateTransition translateTransition = new TranslateTransition(Duration.millis(500),right);
+            translateTransition.setToX(rightIsOpen ? 180 : 0);
+            translateTransition.play();
+            rightIsOpen = !rightIsOpen;
+        });
+
+        primaryStage.setScene(new Scene(pane444, 600, 600));
+
+        Platform.runLater(() -> {
+            center.setLayoutX(lef.getWidth());
+            center.setPrefWidth((root.getWidth() - lef.getWidth() - right.getWidth()));
+            right.setLayoutX(root.getWidth() - right.getWidth());
+
+        });
+
+        primaryStage.show();
     }
+
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}
 

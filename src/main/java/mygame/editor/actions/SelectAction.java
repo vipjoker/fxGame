@@ -1,14 +1,13 @@
 package mygame.editor.actions;
 
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.effect.Shadow;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import mygame.editor.InfoController;
-import mygame.editor.kotlin.CustonPane;
+import mygame.editor.ui.CustonPane;
 import mygame.editor.model.*;
 import mygame.editor.model.Point;
 
@@ -35,18 +34,13 @@ public class SelectAction extends Action {
         for (AbstractModel model : models) {
             model.setOnMouseClicked(event -> {
                 clearEffects();
-
                 pane.getChildren().clear();
-
-
                 try {
-
                     FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/info.fxml"));
                     Parent load = loader.load();
                     InfoController controller = loader.getController();
                     controller.setNameInfo(model.toString());
                     controller.setPositionInfo(new Point(model.getLayoutX(),model.getLayoutY()));
-
                     pane.getChildren().add(load);
                 } catch (IOException e) {
                         e.printStackTrace();
@@ -56,8 +50,6 @@ public class SelectAction extends Action {
                 model.setEffect(new Shadow(0, Color.SALMON));
                 event.consume();
             });
-
-
         }
     }
 

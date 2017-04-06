@@ -23,7 +23,7 @@ class CustomCircle(x:Double ,y:Double, rad:Double) : Circle(x,y,rad),Transformab
 
     }
 
-   override fun transform(trans:CustonAffine){
+   override fun transform(trans: CustonAffine){
         val newCenter = trans.transform(center)
         val newRadius = trans.transform(radiusPoint)
         radius = newCenter.distance(newRadius)

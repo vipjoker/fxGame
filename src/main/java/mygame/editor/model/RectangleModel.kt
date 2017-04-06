@@ -5,6 +5,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.shape.Rectangle;
 
 import mygame.Constants
+import mygame.editor.model.CustonAffine
 
 class RectangleModel(startPoint:Point) : AbstractModel(Type.RECTANGLE) {
 
@@ -53,7 +54,7 @@ class RectangleModel(startPoint:Point) : AbstractModel(Type.RECTANGLE) {
 
     }
 
-    override fun  transform(trans:CustonAffine) {
+    override fun  transform(trans: CustonAffine) {
 
     }
 }

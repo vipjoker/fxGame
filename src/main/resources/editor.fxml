@@ -1,161 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import javafx.scene.*?>
 <?import javafx.geometry.*?>
-<?import javafx.scene.chart.*?>
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.shape.*?>
-<?import java.lang.*?>
-<?import java.net.*?>
-<?import java.util.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.paint.*?>
-<?import javafx.scene.text.*?>
 
-<?import mygame.editor.kotlin.CustonPane?>
-<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="545.0" prefWidth="855.0" stylesheets="style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mygame.editor.Controller">
-  <children>
-    <MenuBar VBox.vgrow="NEVER">
-      <menus>
-        <Menu mnemonicParsing="false" text="GAMED">
-          <items>
-            <MenuItem mnemonicParsing="false" text="Prefferences" />
-            <MenuItem mnemonicParsing="false" onAction="#onAbout" text="About" />
-            <Menu mnemonicParsing="false" onAction="#onAdd" text="Open folder" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Close" />
-            <MenuItem mnemonicParsing="false" onAction="#onLoad" text="Load" />
-            <MenuItem mnemonicParsing="false" onAction="#onSave" text="Save" />
-            <MenuItem mnemonicParsing="false" text="Revert" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Preferences…" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Quit" />
-          </items>
-        </Menu>
-        <Menu mnemonicParsing="false" text="Edit">
-          <items>
-            <MenuItem mnemonicParsing="false" text="Undo" />
-            <MenuItem mnemonicParsing="false" text="Redo" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Cut" />
-            <MenuItem mnemonicParsing="false" text="Copy" />
-            <MenuItem mnemonicParsing="false" text="Paste" />
-            <MenuItem mnemonicParsing="false" text="Delete" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Select All" />
-            <MenuItem mnemonicParsing="false" text="Unselect All" />
-          </items>
-        </Menu>
-            <Menu mnemonicParsing="false" text="Level">
-              <items>
-                <MenuItem mnemonicParsing="false" text="Level properties" />
-                  <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" text="New Level" />
-                  <MenuItem mnemonicParsing="false" text="Open Level" />
-                  <MenuItem mnemonicParsing="false" text="Save Level" />
-                  <MenuItem mnemonicParsing="false" text="Save Level As" />
-                  <MenuItem mnemonicParsing="false" text="Close Level" />
-              </items>
-            </Menu>
-        <Menu mnemonicParsing="false" text="View">
-          <items>
-                  <CheckMenuItem mnemonicParsing="false" text="Editing Grid" />
-                  <CheckMenuItem mnemonicParsing="false" text="Center View" />
-                  <CheckMenuItem mnemonicParsing="false" text="Zoom out" />
-                  <CheckMenuItem mnemonicParsing="false" text="Zoom in" />
-                  <SeparatorMenuItem mnemonicParsing="false" />
-                  <CheckMenuItem mnemonicParsing="false" text="Layers" />
-                  <CheckMenuItem mnemonicParsing="false" text="Tools" />
-                  <CheckMenuItem mnemonicParsing="false" text="Tile Palette" />
-                  <CheckMenuItem mnemonicParsing="false" text="Entities" />
-          </items>
-        </Menu>
-            <Menu mnemonicParsing="false" text="Utilities">
-               <items>
-                  <MenuItem mnemonicParsing="false" text="FileRenamer" />
-               </items>
-            </Menu>
-      </menus>
-    </MenuBar>
-      <HBox alignment="CENTER_LEFT" spacing="10.0">
-         <children>
-            <Label fx:id="tvStatus" prefWidth="200.0" text="Label" />
-            <Button fx:id="btnRun" mnemonicParsing="false" onAction="#onRun" styleClass="button" text="" />
-
-            <ChoiceBox prefWidth="150.0" />
-         </children>
-         <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </padding>
-      </HBox>
-      <BorderPane VBox.vgrow="ALWAYS">
-         <center>
-            <CustonPane fx:id="canvas" layoutX="100.0" layoutY="100.0" prefHeight="422.0" prefWidth="495.0">
-               <padding>
-                  <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
-               </padding>
-            </CustonPane>
-         </center>
-         <left>
-            <FlowPane fx:id="buttonLayout" hgap="10.0" prefWidth="100.0" vgap="10.0" BorderPane.alignment="CENTER">
-               <children>
-                  <ToggleButton layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#onCreateBody" text="Create body" />
-                  <ToggleButton layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#onCreateJoint" text="Create joint" />
-                  <ToggleButton layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#onSelect" text="Select" />
-                  <ToggleButton layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#onMove" text="Move" />
-                  <ToggleButton layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#onRotate" text="Rotate" />
-                  <ToggleButton layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#onEdit" text="Edit" />
-                  <ToggleButton layoutX="10.0" layoutY="37.0" mnemonicParsing="false" onAction="#onPolygon" text="Polygon" />
-                  <ToggleButton layoutX="10.0" layoutY="84.0" mnemonicParsing="false" onAction="#onChain" text="Chain" />
-                  <ToggleButton layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#onRectangle" text="Rectangle" />
-                  <ToggleButton mnemonicParsing="false" onAction="#onCircle" text="Circle" />
-                  <ToggleButton mnemonicParsing="false" onAction="#onDistance" text="Distance" />
-                  <ToggleButton layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#onRevolute" text="Revolute" />
-                  <ToggleButton layoutX="57.0" layoutY="112.0" mnemonicParsing="false" onAction="#onStatic" prefHeight="27.0" prefWidth="74.0" text="Static" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0" />
-                  <ToggleButton layoutX="10.0" layoutY="57.0" mnemonicParsing="false" onAction="#onKinematic" text="Kinematic" />
-                  <ToggleButton layoutX="49.0" layoutY="44.0" mnemonicParsing="false" onAction="#onDynamic" text="Dynamic" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0" />
-               </children>
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
-            </FlowPane>
-         </left>
-         <right>
-            <ScrollPane prefHeight="447.0" prefViewportHeight="422.0" prefViewportWidth="282.0" prefWidth="250.0">
-               <content>
-                  <VBox fx:id="vbInfo">
-                  </VBox>
-               </content>
-            </ScrollPane>
-         </right>
-      </BorderPane>
-      <HBox prefHeight="43.0" prefWidth="855.0">
-         <children>
-            <Button mnemonicParsing="false" onAction="#onAddH" text="+" />
-            <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#onRemoveH" text="-">
-               <HBox.margin>
-                  <Insets left="20.0" />
-               </HBox.margin>
-            </Button>
-            <ColorPicker>
-               <HBox.margin>
-                  <Insets left="20.0" />
-               </HBox.margin>
-            </ColorPicker>
-            <Label text="Label">
-               <HBox.margin>
-                  <Insets left="20.0" top="5.0" />
-               </HBox.margin>
-            </Label>
-         </children>
-         <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </padding>
-      </HBox>
-  </children>
-  <!--<stylesheets>-->
-    <!--<URL value="@../BasicApplication_css/BasicApplication.css" />-->
-  <!--</stylesheets>-->
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="545.0" prefWidth="855.0"
+      stylesheets="style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="mygame.editor.Controller">
+    <children>
+        <MenuBar VBox.vgrow="NEVER">
+            <menus>
+                <Menu mnemonicParsing="false" text="GAMED">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Prefferences"/>
+                        <MenuItem mnemonicParsing="false" onAction="#onAbout" text="About"/>
+                        <Menu mnemonicParsing="false" onAction="#onAdd" text="Open folder"/>
+                        <SeparatorMenuItem mnemonicParsing="false"/>
+                        <MenuItem mnemonicParsing="false" text="Close"/>
+                        <MenuItem mnemonicParsing="false" onAction="#onLoad" text="Load"/>
+                        <MenuItem mnemonicParsing="false" onAction="#onSave" text="Save"/>
+                        <MenuItem mnemonicParsing="false" text="Revert"/>
+                        <SeparatorMenuItem mnemonicParsing="false"/>
+                        <MenuItem mnemonicParsing="false" text="Preferences…"/>
+                        <SeparatorMenuItem mnemonicParsing="false"/>
+                        <MenuItem mnemonicParsing="false" text="Quit"/>
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Edit">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Undo"/>
+                        <MenuItem mnemonicParsing="false" text="Redo"/>
+                        <SeparatorMenuItem mnemonicParsing="false"/>
+                        <MenuItem mnemonicParsing="false" text="Cut"/>
+                        <MenuItem mnemonicParsing="false" text="Copy"/>
+                        <MenuItem mnemonicParsing="false" text="Paste"/>
+                        <MenuItem mnemonicParsing="false" text="Delete"/>
+                        <SeparatorMenuItem mnemonicParsing="false"/>
+                        <MenuItem mnemonicParsing="false" text="Select All"/>
+                        <MenuItem mnemonicParsing="false" text="Unselect All"/>
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Level">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Level properties"/>
+                        <SeparatorMenuItem mnemonicParsing="false"/>
+                        <MenuItem mnemonicParsing="false" text="New Level"/>
+                        <MenuItem mnemonicParsing="false" text="Open Level"/>
+                        <MenuItem mnemonicParsing="false" text="Save Level"/>
+                        <MenuItem mnemonicParsing="false" text="Save Level As"/>
+                        <MenuItem mnemonicParsing="false" text="Close Level"/>
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="View">
+                    <items>
+                        <CheckMenuItem mnemonicParsing="false" text="Editing Grid"/>
+                        <CheckMenuItem mnemonicParsing="false" text="Center View"/>
+                        <CheckMenuItem mnemonicParsing="false" text="Zoom out"/>
+                        <CheckMenuItem mnemonicParsing="false" text="Zoom in"/>
+                        <SeparatorMenuItem mnemonicParsing="false"/>
+                        <CheckMenuItem mnemonicParsing="false" text="Layers"/>
+                        <CheckMenuItem mnemonicParsing="false" text="Tools"/>
+                        <CheckMenuItem mnemonicParsing="false" text="Tile Palette"/>
+                        <CheckMenuItem mnemonicParsing="false" text="Entities"/>
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Utilities">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="FileRenamer"/>
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+        <HBox alignment="CENTER_LEFT" spacing="10.0">
+            <children>
+                <Button fx:id="btnRun" mnemonicParsing="false" onAction="#onRun" prefWidth="40.0" styleClass="my_button"/>
+            </children>
+            <padding>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+            </padding>
+        </HBox>
+            <SplitPane fx:id="root"  VBox.vgrow="ALWAYS"/>
+    </children>
 </VBox>

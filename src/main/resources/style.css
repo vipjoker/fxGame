@@ -3,7 +3,7 @@
     -fx-background: rgb(50, 50, 50);
     -fx-control-inner-background:  rgb(50, 50, 50);
 }
-.button {
+.my_button {
 -fx-background-image: url(play.png);
 -fx-background-repeat:no-repeat;
 -fx-background-position:center;

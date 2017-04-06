@@ -33,7 +33,7 @@ class CustomPolygon(x:Double,y:Double) :Polygon(),Transformable{
     }
 
 
-   override fun transform(trans:CustonAffine){
+   override fun transform(trans: CustonAffine){
         updatePoints(
         mutablePoints.map {
            trans.transform(it)

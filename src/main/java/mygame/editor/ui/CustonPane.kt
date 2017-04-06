@@ -1,4 +1,4 @@
-package mygame.editor.kotlin
+package mygame.editor.ui
 
 import javafx.application.Platform
 import javafx.scene.Cursor
@@ -12,17 +12,19 @@ import javafx.scene.shape.Line
 import javafx.scene.shape.Rectangle
 import javafx.scene.text.Text
 import mygame.Constants.*
+import mygame.editor.kotlin.ActionListenerDelegate
+import mygame.editor.kotlin.Transformable
 import mygame.editor.model.CustonAffine
 import mygame.editor.model.Point
 import kotlin.properties.Delegates
 
 
-class CustonPane : Pane() {
+class CustonPane(width:Double,height:Double) : Pane() {
 
     private var delegate: ActionListenerDelegate by Delegates.notNull<ActionListenerDelegate>()
 
 
-    var transform :  CustonAffine = CustonAffine()
+    var transform : CustonAffine = CustonAffine()
     get
 
     var infoText: Text
@@ -33,6 +35,8 @@ class CustonPane : Pane() {
     val verLine: Line
 
     init {
+        prefWidth = width
+        prefHeight =height
         background = Background(BackgroundFill(BACKGROUND, null, null))
         cursor = Cursor.CROSSHAIR
 
@@ -57,7 +61,7 @@ class CustonPane : Pane() {
 
 
         Platform.runLater {
-            clip = Rectangle(width, height)
+//            clip = Rectangle(width, height)
 
             transform.setToIdentity()
             transform.appendTranslation(width / 2, height / 2)
@@ -99,7 +103,7 @@ class CustonPane : Pane() {
         children.add(item as Node)
     }
 
-    fun removeItem(item:Transformable){
+    fun removeItem(item: Transformable){
         children.remove(item as Node)
     }
 

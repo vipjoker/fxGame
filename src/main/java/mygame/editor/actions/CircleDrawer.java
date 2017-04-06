@@ -1,7 +1,6 @@
 package mygame.editor.actions;
 
-import javafx.geometry.Point2D;
-import mygame.editor.kotlin.CustonPane;
+import mygame.editor.ui.CustonPane;
 import mygame.editor.model.AbstractModel;
 import mygame.editor.model.CircleModel;
 import mygame.editor.model.Point;
