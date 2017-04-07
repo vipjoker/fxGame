@@ -1,10 +1,13 @@
-package mygame.editor.model
+package mygame.editor.view
 
 import javafx.scene.shape.Polygon
 import mygame.Constants
 import mygame.editor.model.CustonAffine
+import mygame.editor.model.Point
+import mygame.editor.model.PolygonFixtureModel
+import mygame.editor.view.AbstractView
 
-class PolygonModel constructor(startPoint: Point) : AbstractModel(Type.POLYGON) {
+class PolygonModel constructor(startPoint: Point) : AbstractView(PolygonFixtureModel(startPoint)) {
     var polygon: Polygon
 
     init {
@@ -17,9 +20,10 @@ class PolygonModel constructor(startPoint: Point) : AbstractModel(Type.POLYGON) 
 
 
 
+
     }
 
-    fun addPoint(newPoint:Point) {
+    fun addPoint(newPoint: Point) {
         points.add(newPoint)
         update()
     }

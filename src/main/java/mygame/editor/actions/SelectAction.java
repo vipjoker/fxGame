@@ -8,8 +8,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import mygame.editor.InfoController;
 import mygame.editor.ui.CustonPane;
-import mygame.editor.model.*;
 import mygame.editor.model.Point;
+import mygame.editor.view.AbstractView;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,7 +21,7 @@ public class SelectAction extends Action {
 
     private VBox pane;
 
-    public SelectAction(VBox pane, CustonPane transGroup, List<AbstractModel> models) {
+    public SelectAction(VBox pane, CustonPane transGroup, List<AbstractView> models) {
         super(transGroup,models);
         this.pane = pane;
     }
@@ -31,7 +31,7 @@ public class SelectAction extends Action {
 
 
         parent.getParent().setOnMouseClicked(event -> clearEffects());
-        for (AbstractModel model : models) {
+        for (AbstractView model : models) {
             model.setOnMouseClicked(event -> {
                 clearEffects();
                 pane.getChildren().clear();
@@ -54,7 +54,7 @@ public class SelectAction extends Action {
     }
 
     private void clearEffects(){
-        for (AbstractModel model : models){
+        for (AbstractView model : models){
             model.setEffect(null);
         }
     }

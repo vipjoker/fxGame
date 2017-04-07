@@ -1,5 +1,6 @@
 package mygame.editor.model;
 
+import com.badlogic.gdx.math.Vector2
 import javafx.geometry.Point2D
 
 
@@ -41,5 +42,9 @@ class Point {
 
     fun toPoint2D():Point2D{
         return Point2D(x,y);
+    }
+
+    fun toVector2d():Vector2{
+        return Vector2(x.toFloat(),y.toFloat())
     }
 }

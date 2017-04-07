@@ -1,19 +1,19 @@
 package mygame.editor.parser;
 
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import mygame.editor.model.AbstractModel;
+import mygame.editor.view.AbstractView;
 
 /**
  * Created by oleh on 4/3/17.
  */
 public class FixtureWithShape extends FixtureDef{
-    AbstractModel shape;
+    AbstractView shape;
 
-    public AbstractModel getShape() {
+    public AbstractView getShape() {
         return shape;
     }
 
-    public void setShape(AbstractModel shape) {
+    public void setShape(AbstractView shape) {
         this.shape = shape;
     }
 }

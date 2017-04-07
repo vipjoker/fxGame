@@ -19,7 +19,7 @@ import javafx.stage.Stage
 import mygame.editor.actions.*
 import mygame.editor.kotlin.ActionListenerDelegate
 import mygame.editor.ui.CustonPane
-import mygame.editor.model.AbstractModel
+import mygame.editor.view.AbstractView
 import mygame.editor.model.Point
 
 
@@ -34,7 +34,6 @@ import mygame.Constants.*
 
 class Controller : Initializable, ActionListenerDelegate {
 
-    @FXML var vbInfo: VBox? = null
     @FXML var tilePane: TilePane? = null
     @FXML var btnRun: Button? = null
     @FXML var tvStatus: Label? = null
@@ -50,7 +49,7 @@ class Controller : Initializable, ActionListenerDelegate {
     var currentDrawer: Action? = null
     var actions: MutableMap<String, Action> = mutableMapOf()
 
-    var models: MutableList<AbstractModel> = mutableListOf()
+    var views: MutableList<AbstractView> = mutableListOf()
 
 
     override fun initialize(location: URL?, resources: ResourceBundle?) {
@@ -88,7 +87,7 @@ class Controller : Initializable, ActionListenerDelegate {
             root.prefHeightProperty()?.bind(AppHolder.instance?.stage?.heightProperty())
 
             root.items.addAll(leftPane,canvas,rightPane)
-           root.setDividerPositions(.1,.8)
+            root.setDividerPositions(.1,.8)
             setLeftPane()
 
 
@@ -126,9 +125,19 @@ class Controller : Initializable, ActionListenerDelegate {
         titled.isAnimated = true
         titled.text = "Edit"
 
-        var vbox = VBox( Button("Select"),
-                Button("Move"),
-                Button("Edit"))
+
+        val btnSelect = Button("Select")
+        val btnEdit = Button("Edit")
+        val btnMove = Button("Move")
+        val btnRotate = Button("Rotate")
+
+        btnEdit.setOnMouseClicked { onEdit() }
+        btnSelect.setOnMouseClicked { onSelect() }
+        btnMove.setOnMouseClicked { onMove() }
+        btnRotate.setOnMouseClicked { onRotate() }
+
+
+        var vbox = VBox( btnSelect,btnMove,btnEdit)
 
         vbox.spacing = 10.0
         titled.content = vbox
@@ -156,16 +165,16 @@ class Controller : Initializable, ActionListenerDelegate {
 
     fun initActions() {
         actions = mutableMapOf(
-                Pair(ACTION_SELECT, SelectAction(vbInfo, canvas, models)),
-                Pair(ACTION_POLYGON, PolygonDrawer(canvas, models)),
-                Pair(ACTION_CIRCLE, CircleDrawer(canvas, models)),
-                Pair(ACTION_RECTANGLE, RectangleDrawer(canvas, models)),
-                Pair(ACTION_CHAIN, LineDrawer(canvas, models)),
-                Pair(ACTION_MOVE, MoverAction(canvas, models)),
-                Pair(ACTION_ROTATE, RotateAction(canvas, models)),
-                Pair(ACTION_EDIT, EditAction(canvas!!, models)),
-                Pair(ACTION_CREATE_BODY, CreateBodyAction(canvas!!, models)),
-                Pair(ACTION_CREATE_JOINT, CreateJointAction(canvas!!, models))
+                Pair(ACTION_SELECT, SelectAction(rightPane, canvas, views)),
+                Pair(ACTION_POLYGON, PolygonDrawer(canvas, views)),
+                Pair(ACTION_CIRCLE, CircleDrawer(canvas, views)),
+                Pair(ACTION_RECTANGLE, RectangleDrawer(canvas, views)),
+                Pair(ACTION_CHAIN, LineDrawer(canvas, views)),
+                Pair(ACTION_MOVE, MoverAction(canvas, views)),
+                Pair(ACTION_ROTATE, RotateAction(canvas, views)),
+                Pair(ACTION_EDIT, EditAction(canvas!!, views)),
+                Pair(ACTION_CREATE_BODY, CreateBodyAction(canvas!!, views)),
+                Pair(ACTION_CREATE_JOINT, CreateJointAction(canvas!!, views))
         )
     }
 
@@ -262,7 +271,7 @@ class Controller : Initializable, ActionListenerDelegate {
         box2dDialog.show()
     }
 
-    fun onMove(actionEvent: ActionEvent) {
+    fun onMove() {
 
         switchDrawer(ACTION_MOVE);
     }
@@ -313,15 +322,15 @@ class Controller : Initializable, ActionListenerDelegate {
         currentDrawer?.init()
     }
 
-    fun onRotate(actionEvent: ActionEvent) {
+    fun onRotate() {
         switchDrawer(ACTION_ROTATE)
     }
 
-    fun onEdit(actionEvent: ActionEvent) {
+    fun onEdit() {
         switchDrawer(ACTION_EDIT)
     }
 
-    fun onSelect(actionEvent: ActionEvent) {
+    fun onSelect() {
         switchDrawer(ACTION_SELECT)
     }
 

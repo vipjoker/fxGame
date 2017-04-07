@@ -1,8 +1,8 @@
 package mygame.editor.actions;
 
 import mygame.editor.ui.CustonPane;
-import mygame.editor.model.AbstractModel;
-import mygame.editor.model.CircleModel;
+import mygame.editor.view.AbstractView;
+import mygame.editor.view.CircleModel;
 import mygame.editor.model.Point;
 
 import java.util.List;
@@ -14,7 +14,7 @@ public class CircleDrawer extends Action {
 
 
    CircleModel model ;
-    public CircleDrawer(CustonPane parent, List<AbstractModel> model) {
+    public CircleDrawer(CustonPane parent, List<AbstractView> model) {
         super(parent,model);
     }
 

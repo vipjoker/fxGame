@@ -1,14 +1,17 @@
 package mygame.editor.util;
 
-import javafx.scene.shape.Circle;
 import mygame.editor.model.*;
+import mygame.editor.view.AbstractView;
+import mygame.editor.view.CircleModel;
+import mygame.editor.view.LineModel;
+import mygame.editor.view.PolygonModel;
 
 /**
  * Created by oleh on 3/27/17.
  */
 public class Box2dMapper {
 
-    public static Point toBox2d(AbstractModel model){
+    public static Point toBox2d(AbstractView model){
 
         double layoutY = model.getLayoutY();
         double layoutX = model.getLayoutX();
@@ -17,11 +20,11 @@ public class Box2dMapper {
     }
 
 
-    private Point getPosition (AbstractModel model){
-        switch (model.getType()){
-            case LINE: return getLinePosition((LineModel)model);
-            case CIRCLE: return getCirclePosition((CircleModel)model);
-            case POLYGON: return getPolygonPosition((PolygonModel)model);
+    private Point getPosition (AbstractView model){
+        switch (model.getModel().getType()){
+            case BODY: return getLinePosition((LineModel)model);
+            case JOINT: return getCirclePosition((CircleModel)model);
+
 
 
         }

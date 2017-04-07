@@ -2,13 +2,9 @@ package mygame.editor;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-import javafx.scene.shape.Circle;
-import mygame.editor.model.AbstractModel;
 import mygame.editor.model.Point;
 
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 /**
  * Created by oleh on 3/21/17.

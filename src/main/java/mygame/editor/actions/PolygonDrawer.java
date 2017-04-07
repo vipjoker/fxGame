@@ -1,9 +1,9 @@
 package mygame.editor.actions;
 
 import mygame.editor.ui.CustonPane;
-import mygame.editor.model.AbstractModel;
+import mygame.editor.view.AbstractView;
 import mygame.editor.model.Point;
-import mygame.editor.model.PolygonModel;
+import mygame.editor.view.PolygonModel;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ public class PolygonDrawer extends Action {
 
     PolygonModel polygonModel;
 
-    public PolygonDrawer(CustonPane parent, List<AbstractModel> models) {
+    public PolygonDrawer(CustonPane parent, List<AbstractView> models) {
         super(parent,models);
     }
 

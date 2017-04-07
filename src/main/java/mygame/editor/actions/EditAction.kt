@@ -6,12 +6,14 @@ import javafx.scene.paint.Color
 
 import mygame.editor.ui.CustonPane
 import mygame.editor.model.*
-import mygame.editor.model.AbstractModel.Type.*
+import mygame.editor.view.AbstractView
+import mygame.editor.view.AbstractView.Type.*
+import mygame.editor.view.HandlerPoint
 import java.util.function.BiConsumer
 
 
-class EditAction(parent: CustonPane, models: List<AbstractModel>) : Action(parent, models) {
-    var activeHandlerPoint:HandlerPoint? = null
+class EditAction(parent: CustonPane, views: List<AbstractView>) : Action(parent, views) {
+    var activeHandlerPoint: HandlerPoint? = null
 
     val handlers: MutableList<HandlerPoint> = mutableListOf()
     override fun init() {
@@ -27,7 +29,7 @@ class EditAction(parent: CustonPane, models: List<AbstractModel>) : Action(paren
 
                 if (!it.isControlDown) removeEffects()
 
-                val mod: AbstractModel = it.source as AbstractModel
+                val mod: AbstractView = it.source as AbstractView
 
 
                 mod.points.forEach {

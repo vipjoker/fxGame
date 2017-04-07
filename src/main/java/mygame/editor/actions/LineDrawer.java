@@ -1,8 +1,8 @@
 package mygame.editor.actions;
 
 import mygame.editor.ui.CustonPane;
-import mygame.editor.model.AbstractModel;
-import mygame.editor.model.LineModel;
+import mygame.editor.view.AbstractView;
+import mygame.editor.view.LineModel;
 import mygame.editor.model.Point;
 
 import java.util.List;
@@ -12,7 +12,7 @@ public class LineDrawer extends Action {
 
     private LineModel model;
 
-    public LineDrawer(CustonPane parent, List<AbstractModel> list) {
+    public LineDrawer(CustonPane parent, List<AbstractView> list) {
         super(parent, list);
     }
 

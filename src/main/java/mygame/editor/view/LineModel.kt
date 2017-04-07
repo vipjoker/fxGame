@@ -1,13 +1,16 @@
-package mygame.editor.model
+package mygame.editor.view
 
 import javafx.scene.shape.LineTo
 import javafx.scene.shape.MoveTo
 import javafx.scene.shape.Path
 import mygame.Constants
 import mygame.editor.model.CustonAffine
+import mygame.editor.model.LineFixtureModel
+import mygame.editor.model.Point
+import mygame.editor.view.AbstractView
 
-class LineModel(startPoint: Point) : AbstractModel(Type.LINE) {
-    val path:Path = Path()
+class LineModel(startPoint: Point) : AbstractView(LineFixtureModel(startPoint)) {
+    val path: Path = Path()
     init{
 
         path.toBack()
@@ -17,11 +20,11 @@ class LineModel(startPoint: Point) : AbstractModel(Type.LINE) {
         children.add(path)
     }
 
-    fun addPoint(pos:Point){
+    fun addPoint(pos: Point){
         appendPoint(pos)
     }
 
-    fun updateLine(pos:Point){
+    fun updateLine(pos: Point){
 
         if(!points.isEmpty()){
             points.last().set(pos)
@@ -32,7 +35,7 @@ class LineModel(startPoint: Point) : AbstractModel(Type.LINE) {
     override fun transform(trans: CustonAffine) {
         path.elements.clear()
         for(index in 0..points.lastIndex){
-            val p:Point = trans.transformPoint(points[index])
+            val p: Point = trans.transformPoint(points[index])
             if(index == 0 ){
                 path.elements.add(MoveTo(p.x,p.y))
             }else{

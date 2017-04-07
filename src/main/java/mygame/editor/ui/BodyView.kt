@@ -6,14 +6,15 @@ import javafx.scene.shape.Line
 import javafx.scene.shape.Rectangle
 import mygame.Constants
 import mygame.editor.kotlin.Transformable
+import mygame.editor.model.BodyModel
 import mygame.editor.model.CustonAffine
 import mygame.editor.model.Point
+import mygame.editor.view.AbstractView
 
-class BodyView(center: Point) : Group(), Transformable {
+class BodyView(model: BodyModel) :AbstractView(model){
     var hor: Line = Line()
     var ver: Line = Line()
     var rect: Rectangle = Rectangle()
-
     var center: Point
     var left: Point
     var up: Point
@@ -21,7 +22,8 @@ class BodyView(center: Point) : Group(), Transformable {
     var STROKE_WIDTH: Double = 1.0
 
     init {
-        this.center = center
+        this.model = model
+        this.center = model.position
         this.left = center.clone().add(HALF_LENGTH, 0.0)
         this.up = center.clone().add(0.0, HALF_LENGTH)
         hor.stroke = Constants.GREEN
@@ -54,6 +56,10 @@ class BodyView(center: Point) : Group(), Transformable {
         rect.width = center.distance(left)*2
         rect.height = center.distance(up)*2
 
+
+    }
+
+    override fun update(vararg points: Point) {
 
     }
 }
