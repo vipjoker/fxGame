@@ -40,7 +40,8 @@ public class SelectAction extends Action {
                     Parent load = loader.load();
                     InfoController controller = loader.getController();
                     controller.setNameInfo(model.toString());
-                    controller.setPositionInfo(new Point(model.getLayoutX(),model.getLayoutY()));
+                    controller.setPositionInfo(new Point(model.getModel().getPosition().getX(),
+                            model.getModel().getPosition().getY()));
                     pane.getChildren().add(load);
                 } catch (IOException e) {
                         e.printStackTrace();

@@ -1,5 +1,6 @@
-package mygame.editor.actions;
+package mygame.editor.actions.shapes;
 
+import mygame.editor.actions.Action;
 import mygame.editor.ui.CustonPane;
 import mygame.editor.view.AbstractView;
 import mygame.editor.view.CircleModel;
