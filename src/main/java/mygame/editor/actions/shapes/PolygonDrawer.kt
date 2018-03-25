@@ -6,43 +6,35 @@ import mygame.editor.view.AbstractView;
 import mygame.editor.model.Point;
 import mygame.editor.view.PolygonModel;
 
-import java.util.List;
 
 /**
  * Created by oleh on 3/18/17.
  */
-public class PolygonDrawer extends Action {
+class PolygonDrawer (pane:CustonPane,models:List<AbstractView>): Action(pane,models) {
 
-    PolygonModel polygonModel;
+    var polygonModel:PolygonModel? = null
 
-    public PolygonDrawer(CustonPane parent, List<AbstractView> models) {
-        super(parent,models);
+
+    override fun mouseMoved(pos:Point) {
+        polygonModel?.updateLastPoint(pos);
     }
 
-    @Override
-    public void mouseMoved(Point pos) {
-        if(polygonModel != null)polygonModel.updateLastPoint(pos);
-    }
-
-    @Override
-    public void mousePressed(Point pos) {
+    override fun mousePressed(pos:Point) {
         if(polygonModel == null){
-            polygonModel = new PolygonModel(pos);
-            parent.addItem(polygonModel);
+            polygonModel = PolygonModel(pos)
+            parent.addItem(polygonModel!!)
         }else{
-            polygonModel.addPoint(pos);
+            polygonModel?.addPoint(pos)
         }
     }
 
-    @Override
-    public void mouseReleased(Point pos) {
+    override fun mouseReleased(pos:Point) {
 
     }
 
-    @Override
-    public void finishDrawing() {
-        if(polygonModel != null)models.add(polygonModel);
-        polygonModel=null;
+    override fun finishDrawing() {
+        if(polygonModel != null)models.add(polygonModel)
+        polygonModel=null
     }
 
 

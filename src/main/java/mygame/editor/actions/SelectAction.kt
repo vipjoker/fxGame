@@ -1,82 +1,70 @@
 package mygame.editor.actions;
 
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.effect.Shadow;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
-import mygame.editor.InfoController;
-import mygame.editor.ui.CustonPane;
-import mygame.editor.model.Point;
-import mygame.editor.view.AbstractView;
-
-import java.io.IOException;
-import java.util.List;
+import javafx.fxml.FXMLLoader
+import javafx.scene.Parent
+import javafx.scene.effect.Shadow
+import javafx.scene.layout.VBox
+import javafx.scene.paint.Color
+import javafx.scene.text.Text
+import mygame.editor.InfoController
+import mygame.editor.model.Point
+import mygame.editor.ui.CustonPane
+import mygame.editor.view.AbstractView
+import java.io.IOException
 
 /**
  * Created by oleh on 3/27/17.
  */
-public class SelectAction extends Action {
+class SelectAction(val pane: VBox, transGroup: CustonPane, models: List<AbstractView>) : Action(transGroup, models) {
 
-    private VBox pane;
+    init {
 
-    public SelectAction(VBox pane, CustonPane transGroup, List<AbstractView> models) {
-        super(transGroup,models);
-        this.pane = pane;
-    }
-
-    @Override
-    public void init() {
-
-
-        parent.getParent().setOnMouseClicked(event -> clearEffects());
-        for (AbstractView model : models) {
-            model.setOnMouseClicked(event -> {
-                clearEffects();
-                pane.getChildren().clear();
+        parent.parent.setOnMouseClicked { clearEffects() }
+        for (model in models) {
+            model.setOnMouseClicked({
+                clearEffects()
+                pane.children.clear()
                 try {
-                    FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/info.fxml"));
-                    Parent load = loader.load();
-                    InfoController controller = loader.getController();
-                    controller.setNameInfo(model.toString());
-                    controller.setPositionInfo(new Point(model.getModel().getPosition().getX(),
-                            model.getModel().getPosition().getY()));
-                    pane.getChildren().add(load);
-                } catch (IOException e) {
-                        e.printStackTrace();
+                    val loader = FXMLLoader(this.javaClass.getResource("/info.fxml"));
+                    val load: Parent = loader.load()
+                    val controller: InfoController = loader.getController();
+                    controller.setNameInfo(model.toString())
+
+//            controller.setPositionInfo(Point (model.getModel().getPosition().getX(),
+//                    model.getModel().getPosition().getY()));
+                    pane.children.add(load)
+                } catch (e: IOException) {
+                    e.printStackTrace();
                 }
-                pane.getChildren().add(new Text(event.getSource().toString()));
+                pane.children.add(Text(it.source.toString()))
 
-                model.setEffect(new Shadow(0, Color.SALMON));
-                event.consume();
-            });
+                model.effect = Shadow(0.0, Color.SALMON)
+                it.consume()
+            })
         }
     }
 
-    private void clearEffects(){
-        for (AbstractView model : models){
-            model.setEffect(null);
+    private fun clearEffects() {
+        for (model in models) {
+            model.effect = null
         }
     }
 
-    @Override
-    public void mouseMoved(Point position) {
+
+    override fun mouseMoved(position: Point) {
 
     }
 
-    @Override
-    public void mousePressed(Point position) {
+
+    override fun mousePressed(position: Point) {
 
     }
 
-    @Override
-    public void mouseReleased(Point position) {
+    override fun mouseReleased(position: Point) {
 
     }
 
-    @Override
-    public void finishDrawing() {
+    override fun finishDrawing() {
 
     }
 }

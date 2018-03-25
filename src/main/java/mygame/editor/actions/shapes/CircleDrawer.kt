@@ -1,48 +1,41 @@
 package mygame.editor.actions.shapes;
 
-import mygame.editor.actions.Action;
+import mygame.editor.actions.Action
 import mygame.editor.ui.CustonPane;
 import mygame.editor.view.AbstractView;
 import mygame.editor.view.CircleModel;
 import mygame.editor.model.Point;
 
-import java.util.List;
 
 /**
  * Created by oleh on 3/18/17.
  */
-public class CircleDrawer extends Action {
+class CircleDrawer (val pane:CustonPane, model:List<AbstractView>) : Action(pane,model){
 
 
-   CircleModel model ;
-    public CircleDrawer(CustonPane parent, List<AbstractView> model) {
-        super(parent,model);
+   var model:CircleModel? = null
+
+
+    override fun mouseMoved(pos:Point) {
+        model?.updateRadius(pos)
     }
 
-    @Override
-    public void mouseMoved(Point pos) {
-        if(model != null) model.updateRadius(pos);
 
-    }
-
-    @Override
-    public void mousePressed(Point pos) {
+    override fun mousePressed(pos:Point ) {
         if(model == null) {
-            model = new CircleModel(pos);
+            model = CircleModel(pos);
 
-            parent.addItem(model);
+            pane.addItem(model!!)
         }
 
     }
 
-    @Override
-    public void mouseReleased(Point pos) {
+    override fun mouseReleased(pos: Point) {
         if (model != null)models.add(model);
-        model = null;
+        model = null
     }
 
-    @Override
-    public void finishDrawing() {
+    override fun finishDrawing() {
 
     }
 }

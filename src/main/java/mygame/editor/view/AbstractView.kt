@@ -9,7 +9,7 @@ abstract class AbstractView(var model:AbstractModel): Group(), Transformable {
 
 
     var points:MutableList<Point>  = mutableListOf()
-    get
+
     fun  appendPoint(point: Point){
        points.add(point)
     }

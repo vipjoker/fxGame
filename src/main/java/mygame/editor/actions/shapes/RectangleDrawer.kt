@@ -4,47 +4,30 @@ import mygame.editor.actions.Action;
 import mygame.editor.ui.CustonPane;
 import mygame.editor.view.AbstractView;
 import mygame.editor.model.Point;
-import mygame.editor.view.RectangleView;
+import mygame.editor.view.RectangleView
 
-import java.util.List;
 
-public class RectangleDrawer extends Action {
+class RectangleDrawer(pane:CustonPane,models:List<AbstractView>) :Action(pane,models) {
 
-    public RectangleDrawer(CustonPane parent, List<AbstractView> models) {
-        super(parent,models);
+    var model: RectangleView? = null
+
+    override fun mouseMoved(pos:Point) {
+        model?.updatePoint(pos);
     }
 
-
-    RectangleView model;
-
-    @Override
-    public void mouseMoved(Point pos) {
-
-        if(model != null)model.updatePoint(pos);
-
-    }
-
-
-
-    @Override
-    public void mousePressed(Point position) {
-
+    override fun mousePressed(position:Point ) {
         if(model == null){
-            model = new RectangleView(position);
-            parent.addItem(model);
+            model = RectangleView(position)
+            parent.addItem(model!!)
         }
     }
 
-    @Override
-    public void mouseReleased(Point position) {
-        if(model!= null) models.add(model);
-        model = null;
-
-
+    override fun mouseReleased(position:Point) {
+        if(model!= null) models.add(model)
+        model = null
     }
 
-    @Override
-    public void finishDrawing() {
+    override fun finishDrawing() {
 
     }
 }

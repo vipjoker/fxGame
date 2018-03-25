@@ -4,40 +4,26 @@ import mygame.editor.ui.CustonPane;
 import mygame.editor.view.AbstractView;
 import mygame.editor.model.Point;
 
-import java.util.List;
 
 /**
  * Created by oleh on 3/21/17.
  */
-public class MoverAction extends Action {
+class MoverAction(parent: CustonPane, models: List<AbstractView>) : Action(parent, models) {
 
-    public MoverAction(CustonPane parent, List<AbstractView> models) {
-        super(parent, models);
 
-    }
-
-    @Override
-    public void init() {
+    override fun mouseMoved(position: Point) {
 
     }
 
-    @Override
-    public void mouseMoved(Point position) {
+    override fun mousePressed(position: Point) {
 
     }
 
-    @Override
-    public void mousePressed(Point position) {
+    override fun mouseReleased(position: Point) {
 
     }
 
-    @Override
-    public void mouseReleased(Point position) {
-
-    }
-
-    @Override
-    public void finishDrawing() {
+    override fun finishDrawing() {
 
     }
 }

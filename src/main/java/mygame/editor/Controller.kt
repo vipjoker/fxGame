@@ -30,6 +30,10 @@ import java.net.URL
 import java.util.*
 
 import mygame.Constants.*
+import mygame.editor.actions.shapes.CircleDrawer
+import mygame.editor.actions.shapes.LineDrawer
+import mygame.editor.actions.shapes.PolygonDrawer
+import mygame.editor.actions.shapes.RectangleDrawer
 
 
 class Controller : Initializable, ActionListenerDelegate {
@@ -165,12 +169,12 @@ class Controller : Initializable, ActionListenerDelegate {
 
     fun initActions() {
         actions = mutableMapOf(
-                Pair(ACTION_SELECT, SelectAction(rightPane, canvas, views)),
-                Pair(ACTION_POLYGON, PolygonDrawer(canvas, views)),
-                Pair(ACTION_CIRCLE, CircleDrawer(canvas, views)),
-                Pair(ACTION_RECTANGLE, RectangleDrawer(canvas, views)),
-                Pair(ACTION_CHAIN, LineDrawer(canvas, views)),
-                Pair(ACTION_MOVE, MoverAction(canvas, views)),
+                Pair(ACTION_SELECT, SelectAction(rightPane, canvas!!, views)),
+                Pair(ACTION_POLYGON, PolygonDrawer(canvas!!, views)),
+                Pair(ACTION_CIRCLE, CircleDrawer(canvas!!, views)),
+                Pair(ACTION_RECTANGLE, RectangleDrawer(canvas!!, views)),
+                Pair(ACTION_CHAIN, LineDrawer(canvas!!, views)),
+                Pair(ACTION_MOVE, MoverAction(canvas!!, views)),
                 Pair(ACTION_ROTATE, RotateAction(canvas, views)),
                 Pair(ACTION_EDIT, EditAction(canvas!!, views)),
                 Pair(ACTION_CREATE_BODY, CreateBodyAction(canvas!!, views)),

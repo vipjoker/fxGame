@@ -15,7 +15,7 @@ fun main(args: Array<String>) {
 }
 
 object AppHolder{
-    var instance:App?=null ;get
+    var instance:App?=null
 }
 
 class App : Application() {

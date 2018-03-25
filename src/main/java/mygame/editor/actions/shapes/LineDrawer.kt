@@ -6,43 +6,30 @@ import mygame.editor.view.AbstractView;
 import mygame.editor.view.LineModel;
 import mygame.editor.model.Point;
 
-import java.util.List;
 
+class LineDrawer(pane: CustonPane, list: List<AbstractView>) : Action(pane, list) {
 
-public class LineDrawer extends Action {
+    var model: LineModel? = null
 
-    private LineModel model;
-
-    public LineDrawer(CustonPane parent, List<AbstractView> list) {
-        super(parent, list);
-    }
-
-
-    @Override
-    public void mousePressed(Point pos) {
+    override fun mousePressed(pos: Point) {
         if (model == null) {
-            model = new LineModel(pos);
-            parent.addItem(model);
+            model = LineModel(pos)
+            parent.addItem(model!!)
         } else {
-            model.addPoint(pos);
+            model?.addPoint(pos);
         }
     }
 
-    @Override
-    public void mouseMoved(Point pos) {
-        if (model != null) model.updateLine(pos);
+    override fun mouseMoved(pos: Point) {
+        model?.updateLine(pos)
     }
 
-
-
-    @Override
-    public void mouseReleased(Point pos) {
+    override fun mouseReleased(pos: Point) {
 
     }
 
-    @Override
-    public void finishDrawing() {
-        models.add(model);
-        model = null;
+    override fun finishDrawing() {
+        models.add(model)
+        model = null
     }
 }
