@@ -3,9 +3,11 @@ package mygame.editor
 import javafx.application.Platform
 import javafx.event.ActionEvent
 import javafx.fxml.FXML
+import javafx.fxml.FXMLLoader
 import javafx.fxml.Initializable
 import javafx.geometry.Insets
 import javafx.geometry.Pos
+import javafx.scene.Parent
 import javafx.scene.control.*
 
 import javafx.scene.image.Image
@@ -34,26 +36,42 @@ import mygame.editor.actions.shapes.CircleDrawer
 import mygame.editor.actions.shapes.LineDrawer
 import mygame.editor.actions.shapes.PolygonDrawer
 import mygame.editor.actions.shapes.RectangleDrawer
+import javafx.scene.control.TreeView
+import javafx.scene.control.TreeItem
+import javafx.util.Callback
+import mygame.editor.ui.TreeItemPath
+import sun.net.www.http.HttpClient
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
+import java.util.Arrays
 
 
 class Controller : Initializable, ActionListenerDelegate {
-
-    @FXML var tilePane: TilePane? = null
-    @FXML var btnRun: Button? = null
-    @FXML var tvStatus: Label? = null
+//    https://www.iconfinder.com/icons/299098/cogs_icon#size=128
+    @FXML
+    var tilePane: TilePane? = null
+    @FXML
+    var btnRun: Button? = null
+    @FXML
+    var tvStatus: Label? = null
 
     @FXML lateinit var root: SplitPane
-    @FXML var group: ToggleGroup? = null
+    @FXML
+    var group: ToggleGroup? = null
     var box2dDialog: Box2dDialog = Box2dDialog()
-    var  canvas: CustonPane? =null
+    var canvas: CustonPane? = null
 
-    val leftPane:VBox = VBox()
-    val rightPane:VBox = VBox()
+    val leftPane: VBox = VBox()
+    val rightPane: VBox = VBox()
 
     var currentDrawer: Action? = null
     var actions: MutableMap<String, Action> = mutableMapOf()
 
     var views: MutableList<AbstractView> = mutableListOf()
+
+    val imageIcon = Image(javaClass.getResourceAsStream("/icons/image.png"))
+    val folderIcon = Image(javaClass.getResourceAsStream("/icons/foder_basic.png"))
 
 
     override fun initialize(location: URL?, resources: ResourceBundle?) {
@@ -65,14 +83,13 @@ class Controller : Initializable, ActionListenerDelegate {
 //
 
 
-
         setListeners()
 
     }
 
     fun setListeners() {
 
-        Platform.runLater{
+        Platform.runLater {
             canvas = CustonPane(
                     AppHolder.instance?.stage!!.width,
                     AppHolder.instance?.stage!!.height)
@@ -90,10 +107,10 @@ class Controller : Initializable, ActionListenerDelegate {
 
             root.prefHeightProperty()?.bind(AppHolder.instance?.stage?.heightProperty())
 
-            root.items.addAll(leftPane,canvas,rightPane)
-            root.setDividerPositions(.1,.8)
+            root.items.addAll(leftPane, canvas, rightPane)
+            root.setDividerPositions(.1, .8)
             setLeftPane()
-
+            setRightPane();
 
 //            canvas.prefWidthProperty().bind(root.getCenterPane().widthProperty())
 //            canvas.prefHeightProperty().bind(root.getCenterPane().heightProperty())
@@ -103,8 +120,23 @@ class Controller : Initializable, ActionListenerDelegate {
         }
     }
 
+    private fun setRightPane() {
 
-    fun setLeftPane(){
+
+        val loader = FXMLLoader(this.javaClass.getResource("/info.fxml"));
+        val load: Parent = loader.load()
+        val controller: InfoController = loader.getController();
+        controller.setNameInfo("Test message")
+
+
+        rightPane.children.add(load)
+    }
+
+
+    fun setLeftPane() {
+        leftPane.minWidth =300.0
+
+
 //        leftPane.spacing = 10.0
 //        leftPane.padding = Insets(10.0)
 //        leftPane.alignment = Pos.TOP_CENTER
@@ -118,11 +150,11 @@ class Controller : Initializable, ActionListenerDelegate {
         craeateBox.spacing = 10.0
         createPane.content = craeateBox
         var createBody = Button("Create body")
-        createBody.setOnMouseClicked {onCreateBody()}
+        createBody.setOnMouseClicked { onCreateBody() }
         var createJoint = Button("Create joint")
         createJoint.setOnMouseClicked { onCreateJoint() }
 
-        craeateBox.children.addAll(createBody,createJoint)
+        craeateBox.children.addAll(createBody, createJoint)
 
 
         var titled = TitledPane()
@@ -141,30 +173,56 @@ class Controller : Initializable, ActionListenerDelegate {
         btnRotate.setOnMouseClicked { onRotate() }
 
 
-        var vbox = VBox( btnSelect,btnMove,btnEdit)
+        var vbox = VBox(btnSelect, btnMove, btnEdit)
 
         vbox.spacing = 10.0
         titled.content = vbox
-
 
 
         var titled2 = TitledPane()
 
         titled2.text = "Fixtures"
         var btnLine = Button("Line")
-        btnLine.setOnMouseClicked {onChain()}
+        btnLine.setOnMouseClicked { onChain() }
         var btnCircle = Button("Circle")
         btnCircle.setOnMouseClicked { onCircle() }
         var btnPolygon = Button("Polygon")
         btnPolygon.setOnMouseClicked { onPolygon() }
 
-        var vbox2 = VBox(btnLine,btnCircle,btnPolygon)
+        var vbox2 = VBox(btnLine, btnCircle, btnPolygon)
         vbox2.spacing = 10.0
 
         titled2.content = vbox2
+        accordion.children.addAll(titled, createPane, titled2)
 
-        accordion.children.addAll(titled,createPane,titled2)
-        leftPane.children.addAll(accordion)
+
+
+
+        val path = Paths.get("")
+        val files = Files.list(path)
+        files.forEach({ print(it.fileName) })
+
+        val treeRoot = TreeItem(Paths.get("resources"))
+
+        fillTreeView(Paths.get(javaClass.getResource("/").toURI()), treeRoot)
+
+
+        val treeView = TreeView<Path>()
+        treeView.isShowRoot = true
+        treeView.root = treeRoot
+        treeRoot.isExpanded = true
+
+        treeView.setCellFactory ({TreeItemPath() })
+
+
+        treeView.setOnMouseClicked {
+            val selected = treeView.selectionModel.selectedItem;
+            if (selected != null && selected.isLeaf) {
+                Dialog.showDialog(selected.value)
+            }
+        }
+
+        leftPane.children.addAll(accordion, treeView)
     }
 
     fun initActions() {
@@ -180,6 +238,32 @@ class Controller : Initializable, ActionListenerDelegate {
                 Pair(ACTION_CREATE_BODY, CreateBodyAction(canvas!!, views)),
                 Pair(ACTION_CREATE_JOINT, CreateJointAction(canvas!!, views))
         )
+    }
+
+    fun fillTreeView(dir: Path, root: TreeItem<Path>) {
+
+
+        Files.list(dir).forEach({
+            if (!it.toFile().isDirectory) {
+                val treeItem2 = TreeItem<Path>(it)
+                root.children.add(treeItem2)
+                val folderIcon = ImageView(imageIcon);
+                folderIcon.fitHeight = 20.0
+                folderIcon.fitWidth = 20.0
+                treeItem2.graphic = folderIcon
+            } else {
+                val newRoot = TreeItem<Path>(it)
+                root.children.add(newRoot)
+//                if(it.toFile().name.endsWith(".png") || it.toFile().name.endsWith(".jpg")){
+                    val folderIcon = ImageView(folderIcon);
+                    folderIcon.fitWidth = 20.0
+                    folderIcon.fitHeight = 20.0
+                    newRoot.graphic = folderIcon
+//                }
+                fillTreeView(it, newRoot)
+
+            }
+        })
     }
 
 
@@ -201,9 +285,6 @@ class Controller : Initializable, ActionListenerDelegate {
 
     }
 
-    fun onAbout(event: ActionEvent) {
-        Dialog.showDialog("Tile builder editor by vipjoker");
-    }
 
     fun onAdd(event: ActionEvent) {
 

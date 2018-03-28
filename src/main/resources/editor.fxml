@@ -12,7 +12,7 @@
                 <Menu mnemonicParsing="false" text="GAMED">
                     <items>
                         <MenuItem mnemonicParsing="false" text="Prefferences"/>
-                        <MenuItem mnemonicParsing="false" onAction="#onAbout" text="About"/>
+                        <MenuItem mnemonicParsing="false"  text="About"/>
                         <Menu mnemonicParsing="false" onAction="#onAdd" text="Open folder"/>
                         <SeparatorMenuItem mnemonicParsing="false"/>
                         <MenuItem mnemonicParsing="false" text="Close"/>

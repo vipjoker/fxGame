@@ -1,5 +1,7 @@
 package mygame.editor;
 
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -16,7 +18,7 @@ public class InfoController implements Initializable {
     public TextField etName;
     public TextField etX;
     public TextField etY;
-
+    DoubleProperty property = new SimpleDoubleProperty(10);
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 

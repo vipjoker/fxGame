@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
@@ -14,6 +15,9 @@
         <RowConstraints maxHeight="136.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="136.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="136.0" minHeight="0.0" prefHeight="40.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="282.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="282.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="282.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="282.0" minHeight="9.0" prefHeight="40.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="358.0" minHeight="7.0" prefHeight="40.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
@@ -24,28 +28,35 @@
         <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
     </rowConstraints>
     <children>
-        <Label text="Type" GridPane.halignment="LEFT" GridPane.rowIndex="3" />
-        <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+        <Label text="Type" GridPane.halignment="LEFT" GridPane.rowIndex="6" />
+        <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="6">
             <GridPane.margin>
                 <Insets />
             </GridPane.margin>
         </ComboBox>
-        <Label text="Color" GridPane.halignment="LEFT" GridPane.rowIndex="4" />
+        <Label text="Color" GridPane.halignment="LEFT" GridPane.rowIndex="7" />
         <Label text="x " GridPane.columnSpan="2" GridPane.rowIndex="1" />
-        <Label text="Label" GridPane.rowIndex="5" />
-        <Separator prefWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="6" />
-        <Label text="Physics" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="7" />
+        <Label text="Label" GridPane.rowIndex="8" />
+        <Separator prefWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="9" />
+        <Label text="Physics" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="10" />
         <Label text="Name" />
-        <Label text="Friction" GridPane.rowIndex="9" />
-        <TextField GridPane.columnIndex="1" GridPane.rowIndex="9" />
-        <Label text="Restitution" GridPane.rowIndex="8" />
-        <Label text="Density" GridPane.rowIndex="10" />
-        <TextField GridPane.columnIndex="1" GridPane.rowIndex="10" />
-        <TextField GridPane.columnIndex="1" GridPane.rowIndex="8" />
+        <Label text="Friction" GridPane.rowIndex="12" />
+        <TextField GridPane.columnIndex="1" GridPane.rowIndex="12" />
+        <Label text="Restitution" GridPane.rowIndex="11" />
+        <Label text="Density" GridPane.rowIndex="13" />
+        <TextField GridPane.columnIndex="1" GridPane.rowIndex="13" />
+        <TextField GridPane.columnIndex="1" GridPane.rowIndex="11" />
       <Label text="y" GridPane.rowIndex="2" />
       <TextField fx:id="etName" GridPane.columnIndex="1" />
       <TextField fx:id="etX" GridPane.columnIndex="1" GridPane.rowIndex="1" />
       <TextField fx:id="etY" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" />
+      <Label text="width" GridPane.rowIndex="3" />
+      <Label text="height" GridPane.rowIndex="4" />
+      <TextField GridPane.columnIndex="1" GridPane.rowIndex="4" />
+      <ColorPicker prefHeight="50.0" prefWidth="134.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+      <Label text="Rotation" GridPane.rowIndex="5" />
+      <TextField GridPane.columnIndex="1" GridPane.rowIndex="5" />
     </children>
     <padding>
         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
