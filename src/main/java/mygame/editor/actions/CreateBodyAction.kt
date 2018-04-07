@@ -1,12 +1,12 @@
 package mygame.editor.actions;
 
 import mygame.editor.model.BodyModel
-import mygame.editor.ui.CustonPane
+import mygame.editor.ui.CustomPane
 import mygame.editor.view.AbstractView
 import mygame.editor.model.Point
 import mygame.editor.ui.BodyView
 
-class CreateBodyAction(pane: CustonPane,val views:MutableList<AbstractView>):Action(pane, views){
+class CreateBodyAction(pane: CustomPane, val views:MutableList<AbstractView>):Action(pane, views){
 
 
     override fun mouseMoved(position: Point) {

@@ -1,13 +1,13 @@
 package mygame.editor.actions.shapes;
 
 import mygame.editor.actions.Action;
-import mygame.editor.ui.CustonPane;
+import mygame.editor.ui.CustomPane;
 import mygame.editor.view.AbstractView;
 import mygame.editor.view.LineModel;
 import mygame.editor.model.Point;
 
 
-class LineDrawer(pane: CustonPane, list: List<AbstractView>) : Action(pane, list) {
+class LineDrawer(pane: CustomPane, list: List<AbstractView>) : Action(pane, list) {
 
     var model: LineModel? = null
 

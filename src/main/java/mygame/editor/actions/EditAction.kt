@@ -1,18 +1,15 @@
 package mygame.editor.actions
 
-import javafx.scene.Node
 import javafx.scene.effect.*
 import javafx.scene.paint.Color
 
-import mygame.editor.ui.CustonPane
+import mygame.editor.ui.CustomPane
 import mygame.editor.model.*
 import mygame.editor.view.AbstractView
-import mygame.editor.view.AbstractView.Type.*
 import mygame.editor.view.HandlerPoint
-import java.util.function.BiConsumer
 
 
-class EditAction(parent: CustonPane, views: List<AbstractView>) : Action(parent, views) {
+class EditAction(parent: CustomPane, views: List<AbstractView>) : Action(parent, views) {
     var activeHandlerPoint: HandlerPoint? = null
 
     val handlers: MutableList<HandlerPoint> = mutableListOf()
@@ -33,14 +30,16 @@ class EditAction(parent: CustonPane, views: List<AbstractView>) : Action(parent,
 
 
                 mod.points.forEach {
-                    var handlerPoint: HandlerPoint = HandlerPoint(it, mod,parent.transform)
-                    parent.addItem(handlerPoint)
-                    handlers.add(handlerPoint)
-                    handlerPoint.setOnMousePressed {
-                        print("CLICKED")
-                        activeHandlerPoint = it.source as HandlerPoint
-                        it.consume()
-                    }
+
+                    //var handlerPoint = HandlerPoint(it, mod,parent.transform)
+
+//                    parent.addItem(handlerPoint)
+//                    handlers.add(handlerPoint)
+//                    handlerPoint.setOnMousePressed {
+//                        print("CLICKED")
+//                        activeHandlerPoint = it.source as HandlerPoint
+//                        it.consume()
+//                    }
                 }
                 var shadow: Shadow = Shadow(0.0, Color.GOLD)
                 mod.setEffect(shadow)

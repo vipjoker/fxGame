@@ -1,13 +1,13 @@
 package mygame.editor.actions.shapes;
 
 import mygame.editor.actions.Action;
-import mygame.editor.ui.CustonPane;
+import mygame.editor.ui.CustomPane;
 import mygame.editor.view.AbstractView;
 import mygame.editor.model.Point;
 import mygame.editor.view.RectangleView
 
 
-class RectangleDrawer(pane:CustonPane,models:List<AbstractView>) :Action(pane,models) {
+class RectangleDrawer(pane:CustomPane, models:List<AbstractView>) :Action(pane,models) {
 
     var model: RectangleView? = null
 

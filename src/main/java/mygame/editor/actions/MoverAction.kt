@@ -1,6 +1,6 @@
 package mygame.editor.actions;
 
-import mygame.editor.ui.CustonPane;
+import mygame.editor.ui.CustomPane;
 import mygame.editor.view.AbstractView;
 import mygame.editor.model.Point;
 
@@ -8,7 +8,7 @@ import mygame.editor.model.Point;
 /**
  * Created by oleh on 3/21/17.
  */
-class MoverAction(parent: CustonPane, models: List<AbstractView>) : Action(parent, models) {
+class MoverAction(parent: CustomPane, models: List<AbstractView>) : Action(parent, models) {
 
 
     override fun mouseMoved(position: Point) {

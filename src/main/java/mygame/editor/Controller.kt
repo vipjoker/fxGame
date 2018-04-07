@@ -5,8 +5,6 @@ import javafx.event.ActionEvent
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
 import javafx.fxml.Initializable
-import javafx.geometry.Insets
-import javafx.geometry.Pos
 import javafx.scene.Parent
 import javafx.scene.control.*
 
@@ -20,7 +18,7 @@ import javafx.stage.FileChooser
 import javafx.stage.Stage
 import mygame.editor.actions.*
 import mygame.editor.kotlin.ActionListenerDelegate
-import mygame.editor.ui.CustonPane
+import mygame.editor.ui.CustomPane
 import mygame.editor.view.AbstractView
 import mygame.editor.model.Point
 
@@ -38,13 +36,10 @@ import mygame.editor.actions.shapes.PolygonDrawer
 import mygame.editor.actions.shapes.RectangleDrawer
 import javafx.scene.control.TreeView
 import javafx.scene.control.TreeItem
-import javafx.util.Callback
 import mygame.editor.ui.TreeItemPath
-import sun.net.www.http.HttpClient
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
-import java.util.Arrays
 
 
 class Controller : Initializable, ActionListenerDelegate {
@@ -60,8 +55,7 @@ class Controller : Initializable, ActionListenerDelegate {
     @FXML
     var group: ToggleGroup? = null
     var box2dDialog: Box2dDialog = Box2dDialog()
-    var canvas: CustonPane? = null
-
+    var canvas: CustomPane? = null
     val leftPane: VBox = VBox()
     val rightPane: VBox = VBox()
 
@@ -87,10 +81,10 @@ class Controller : Initializable, ActionListenerDelegate {
 
     }
 
-    fun setListeners() {
+    private fun setListeners() {
 
         Platform.runLater {
-            canvas = CustonPane(
+            canvas = CustomPane(
                     AppHolder.instance?.stage!!.width,
                     AppHolder.instance?.stage!!.height)
 
@@ -179,12 +173,12 @@ class Controller : Initializable, ActionListenerDelegate {
         titled.content = vbox
 
 
-        var titled2 = TitledPane()
+        val titled2 = TitledPane()
 
         titled2.text = "Fixtures"
-        var btnLine = Button("Line")
+        val btnLine = Button("Line")
         btnLine.setOnMouseClicked { onChain() }
-        var btnCircle = Button("Circle")
+        val btnCircle = Button("Circle")
         btnCircle.setOnMouseClicked { onCircle() }
         var btnPolygon = Button("Polygon")
         btnPolygon.setOnMouseClicked { onPolygon() }
@@ -214,18 +208,23 @@ class Controller : Initializable, ActionListenerDelegate {
 
         treeView.setCellFactory ({TreeItemPath() })
 
-
         treeView.setOnMouseClicked {
             val selected = treeView.selectionModel.selectedItem;
             if (selected != null && selected.isLeaf) {
-                Dialog.showDialog(selected.value)
+
+
+                val image = Image(selected.value.toUri().toString())
+
+                val imageView = ImageView(image)
+                canvas?.root?.children?.add(imageView)
+               // Dialog.showDialog(selected.value)
             }
         }
 
         leftPane.children.addAll(accordion, treeView)
     }
 
-    fun initActions() {
+    private fun initActions() {
         actions = mutableMapOf(
                 Pair(ACTION_SELECT, SelectAction(rightPane, canvas!!, views)),
                 Pair(ACTION_POLYGON, PolygonDrawer(canvas!!, views)),

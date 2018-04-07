@@ -8,14 +8,14 @@ import javafx.scene.paint.Color
 import javafx.scene.text.Text
 import mygame.editor.InfoController
 import mygame.editor.model.Point
-import mygame.editor.ui.CustonPane
+import mygame.editor.ui.CustomPane
 import mygame.editor.view.AbstractView
 import java.io.IOException
 
 /**
  * Created by oleh on 3/27/17.
  */
-class SelectAction(val pane: VBox, transGroup: CustonPane, models: List<AbstractView>) : Action(transGroup, models) {
+class SelectAction(val pane: VBox, transGroup: CustomPane, models: List<AbstractView>) : Action(transGroup, models) {
 
     init {
 

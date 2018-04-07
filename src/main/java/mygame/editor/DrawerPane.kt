@@ -19,11 +19,11 @@ import javafx.util.Duration
 
 class DrawerPane : Pane() {
 
-    var rightContent = VBox()
-    var leftContent = VBox()
+    private var rightContent = VBox()
+    private var leftContent = VBox()
     val center:StackPane = StackPane()
-    internal var isOpen = true
-    internal var rightIsOpen = true
+    private var isOpen = true
+    private var rightIsOpen = true
 
     init {
 
@@ -32,8 +32,6 @@ class DrawerPane : Pane() {
         pane.prefHeight(50.0)
         pane.background = Background(BackgroundFill(Color.GREEN, null, null))
 
-
-//        background = Background(BackgroundFill(Color.RED, null, null))
 
 
 
@@ -73,16 +71,15 @@ class DrawerPane : Pane() {
         }
 
 
-        left.translateXProperty().addListener { observable, oldValue, newValue ->
+        left.translateXProperty().addListener { _, oldValue, newValue ->
             val width = newValue.toDouble() - oldValue.toDouble()
             center.layoutX = center.layoutX + width
             center.prefWidth = center.width - width
         }
 
-        right.translateXProperty().addListener { observable, oldValue, newValue ->
+        right.translateXProperty().addListener { _, oldValue, newValue ->
             val width = newValue.toDouble() - oldValue.toDouble()
             center.prefWidth = center.width + width
-
         }
 
 

@@ -1,7 +1,7 @@
 package mygame.editor.actions.shapes;
 
 import mygame.editor.actions.Action;
-import mygame.editor.ui.CustonPane;
+import mygame.editor.ui.CustomPane;
 import mygame.editor.view.AbstractView;
 import mygame.editor.model.Point;
 import mygame.editor.view.PolygonModel;
@@ -10,7 +10,7 @@ import mygame.editor.view.PolygonModel;
 /**
  * Created by oleh on 3/18/17.
  */
-class PolygonDrawer (pane:CustonPane,models:List<AbstractView>): Action(pane,models) {
+class PolygonDrawer (pane:CustomPane, models:List<AbstractView>): Action(pane,models) {
 
     var polygonModel:PolygonModel? = null
 

@@ -9,7 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import mygame.Constants;
-import mygame.editor.ui.CustonPane;
+import mygame.editor.ui.CustomPane;
 import mygame.editor.view.AbstractView;
 import mygame.editor.model.Point;
 
@@ -17,9 +17,9 @@ import java.util.List;
 
 
 public abstract class Action {
-    protected CustonPane parent;
+    protected CustomPane parent;
     protected final List<AbstractView> models;
-    protected Action(CustonPane parent, List<AbstractView> models) {
+    protected Action(CustomPane parent, List<AbstractView> models) {
         this.parent = parent;
         this.models = models;
     }
