@@ -5,6 +5,7 @@ import javafx.event.ActionEvent
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
 import javafx.fxml.Initializable
+import javafx.scene.Node
 import javafx.scene.Parent
 import javafx.scene.control.*
 
@@ -44,37 +45,32 @@ import java.nio.file.Paths
 
 class Controller : Initializable, ActionListenerDelegate {
 //    https://www.iconfinder.com/icons/299098/cogs_icon#size=128
-    @FXML
-    var tilePane: TilePane? = null
-    @FXML
+    private var tilePane: TilePane? = null
     var btnRun: Button? = null
-    @FXML
-    var tvStatus: Label? = null
 
-    @FXML lateinit var root: SplitPane
-    @FXML
+    lateinit var root: SplitPane
     var group: ToggleGroup? = null
-    var box2dDialog: Box2dDialog = Box2dDialog()
+    private var box2dDialog: Box2dDialog = Box2dDialog()
     var canvas: CustomPane? = null
-    val leftPane: VBox = VBox()
-    val rightPane: VBox = VBox()
 
-    var currentDrawer: Action? = null
+    lateinit var leftPane:VBox
+
+    lateinit var rightPane: VBox
+
+    lateinit var centerPane:AnchorPane
+
+    lateinit var resourcesTreeview:TreeView<Path>
+
+    private var currentDrawer: Action? = null
     var actions: MutableMap<String, Action> = mutableMapOf()
 
-    var views: MutableList<AbstractView> = mutableListOf()
+    private var views: MutableList<AbstractView> = mutableListOf()
 
-    val imageIcon = Image(javaClass.getResourceAsStream("/icons/image.png"))
-    val folderIcon = Image(javaClass.getResourceAsStream("/icons/foder_basic.png"))
+    private val imageIcon = Image(javaClass.getResourceAsStream("/icons/image.png"))
+    private val folderIcon = Image(javaClass.getResourceAsStream("/icons/foder_basic.png"))
 
 
     override fun initialize(location: URL?, resources: ResourceBundle?) {
-
-//        if (buttonLayout != null)
-//            for (node in (buttonLayout as FlowPane).children) {
-//                group?.toggles?.add(node as ToggleButton)
-//            }
-//
 
 
         setListeners()
@@ -97,18 +93,15 @@ class Controller : Initializable, ActionListenerDelegate {
                     currentDrawer?.finishDrawing()
             }
             root.prefWidthProperty().bind(AppHolder.instance?.stage?.widthProperty())
-
-
             root.prefHeightProperty()?.bind(AppHolder.instance?.stage?.heightProperty())
-
-            root.items.addAll(leftPane, canvas, rightPane)
+            centerPane.children.add(canvas)
+            AnchorPane.setTopAnchor(canvas,0.0)
+            AnchorPane.setBottomAnchor(canvas,0.0)
+            AnchorPane.setLeftAnchor(canvas,0.0)
+            AnchorPane.setRightAnchor(canvas,0.0)
             root.setDividerPositions(.1, .8)
             setLeftPane()
-            setRightPane();
-
-//            canvas.prefWidthProperty().bind(root.getCenterPane().widthProperty())
-//            canvas.prefHeightProperty().bind(root.getCenterPane().heightProperty())
-
+            setRightPane()
             initActions()
 
         }
@@ -128,101 +121,38 @@ class Controller : Initializable, ActionListenerDelegate {
 
 
     fun setLeftPane() {
-        leftPane.minWidth =300.0
-
-
-//        leftPane.spacing = 10.0
-//        leftPane.padding = Insets(10.0)
-//        leftPane.alignment = Pos.TOP_CENTER
-
-        var accordion = VBox()
-
-        var createPane = TitledPane()
-        createPane.isAnimated = true
-        createPane.text = "Create"
-        var craeateBox = VBox()
-        craeateBox.spacing = 10.0
-        createPane.content = craeateBox
-        var createBody = Button("Create body")
-        createBody.setOnMouseClicked { onCreateBody() }
-        var createJoint = Button("Create joint")
-        createJoint.setOnMouseClicked { onCreateJoint() }
-
-        craeateBox.children.addAll(createBody, createJoint)
-
-
-        var titled = TitledPane()
-        titled.isAnimated = true
-        titled.text = "Edit"
-
-
-        val btnSelect = Button("Select")
-        val btnEdit = Button("Edit")
-        val btnMove = Button("Move")
-        val btnRotate = Button("Rotate")
-
-        btnEdit.setOnMouseClicked { onEdit() }
-        btnSelect.setOnMouseClicked { onSelect() }
-        btnMove.setOnMouseClicked { onMove() }
-        btnRotate.setOnMouseClicked { onRotate() }
-
-
-        var vbox = VBox(btnSelect, btnMove, btnEdit)
-
-        vbox.spacing = 10.0
-        titled.content = vbox
-
-
-        val titled2 = TitledPane()
-
-        titled2.text = "Fixtures"
-        val btnLine = Button("Line")
-        btnLine.setOnMouseClicked { onChain() }
-        val btnCircle = Button("Circle")
-        btnCircle.setOnMouseClicked { onCircle() }
-        var btnPolygon = Button("Polygon")
-        btnPolygon.setOnMouseClicked { onPolygon() }
-
-        var vbox2 = VBox(btnLine, btnCircle, btnPolygon)
-        vbox2.spacing = 10.0
-
-        titled2.content = vbox2
-        accordion.children.addAll(titled, createPane, titled2)
 
 
 
-
-        val path = Paths.get("")
-        val files = Files.list(path)
-        files.forEach({ print(it.fileName) })
 
         val treeRoot = TreeItem(Paths.get("resources"))
 
         fillTreeView(Paths.get(javaClass.getResource("/").toURI()), treeRoot)
 
 
-        val treeView = TreeView<Path>()
-        treeView.isShowRoot = true
-        treeView.root = treeRoot
-        treeRoot.isExpanded = true
 
-        treeView.setCellFactory ({TreeItemPath() })
+        resourcesTreeview.isShowRoot = true
+        resourcesTreeview.root = treeRoot
 
-        treeView.setOnMouseClicked {
-            val selected = treeView.selectionModel.selectedItem;
+        resourcesTreeview.setCellFactory ({TreeItemPath() })
+
+        resourcesTreeview.setOnMouseClicked {
+            val selected = resourcesTreeview.selectionModel.selectedItem
             if (selected != null && selected.isLeaf) {
 
 
                 val image = Image(selected.value.toUri().toString())
 
                 val imageView = ImageView(image)
-                canvas?.root?.children?.add(imageView)
-               // Dialog.showDialog(selected.value)
+                canvas?.addItem(imageView)
             }
         }
 
-        leftPane.children.addAll(accordion, treeView)
     }
+
+
+
+
 
     private fun initActions() {
         actions = mutableMapOf(
@@ -239,7 +169,7 @@ class Controller : Initializable, ActionListenerDelegate {
         )
     }
 
-    fun fillTreeView(dir: Path, root: TreeItem<Path>) {
+    private fun fillTreeView(dir: Path, root: TreeItem<Path>) {
 
 
         Files.list(dir).forEach({
@@ -268,7 +198,7 @@ class Controller : Initializable, ActionListenerDelegate {
 
     fun onSave(event: ActionEvent) {
 
-        val fileChooser: FileChooser = FileChooser()
+        val fileChooser = FileChooser()
         fileChooser.setSelectedExtensionFilter(FileChooser.ExtensionFilter("Level files", ".level"));
         var file = fileChooser.showSaveDialog(AppHolder.instance?.window);
 
@@ -286,11 +216,11 @@ class Controller : Initializable, ActionListenerDelegate {
 
 
     fun onAdd(event: ActionEvent) {
-
-        var directoryChooser = DirectoryChooser();
-        directoryChooser.setTitle("Open Resource File");
-        var window: Stage = AppHolder.instance?.stage!!
-        var imageDir: File = directoryChooser.showDialog(window);
+        val node = event.target as Node
+        val window = node.scene.window
+        val directoryChooser = DirectoryChooser()
+        directoryChooser.title = "Open Resource File"
+        val imageDir: File = directoryChooser.showDialog(window)
         if (imageDir != null) {
 
             for (file in imageDir.listFiles())
@@ -341,13 +271,6 @@ class Controller : Initializable, ActionListenerDelegate {
     }
 
 
-    fun onAddH(event: ActionEvent) {
-
-    }
-
-    fun onRemoveH(event: ActionEvent) {
-
-    }
 
 
     fun onRun(actionEvent: ActionEvent) {
@@ -355,74 +278,52 @@ class Controller : Initializable, ActionListenerDelegate {
         box2dDialog.show()
     }
 
-    fun onMove() {
+    fun onMove(actionEvent: ActionEvent) {
 
-        switchDrawer(ACTION_MOVE);
+        switchDrawer(ACTION_MOVE)
     }
 
 
-    //buttons
-    fun onStatic(actionEvent: ActionEvent) {
 
-    }
 
-    fun onKinematic(actionEvent: ActionEvent) {
-
-    }
-
-    fun onDynamic(actionEvent: ActionEvent) {
-
-    }
-
-    fun onPolygon() {
+    fun onPolygon(event: ActionEvent) {
         switchDrawer(ACTION_POLYGON)
     }
 
-    fun onChain() {
+    fun onChain(event: ActionEvent) {
         switchDrawer(ACTION_CHAIN)
     }
 
-    fun onRectangle(actionEvent: ActionEvent) {
-        switchDrawer(ACTION_RECTANGLE);
-    }
-
-    fun onCircle() {
+    fun onCircle(event: ActionEvent) {
         switchDrawer(ACTION_CIRCLE)
     }
 
 
-    fun onDistance(actionEvent: ActionEvent) {
-
-    }
-
-    fun onRevolute(actionEvent: ActionEvent) {
-
-    }
 
 
-    fun switchDrawer(action: String) {
+    private fun switchDrawer(action: String) {
         if (currentDrawer != null) currentDrawer?.finishDrawing();
         currentDrawer = actions[action] as Action
         currentDrawer?.init()
     }
 
-    fun onRotate() {
+    fun onRotate(event: ActionEvent) {
         switchDrawer(ACTION_ROTATE)
     }
 
-    fun onEdit() {
+    fun onEdit(event: ActionEvent) {
         switchDrawer(ACTION_EDIT)
     }
 
-    fun onSelect() {
+    fun onSelect(event: ActionEvent) {
         switchDrawer(ACTION_SELECT)
     }
 
-    fun onCreateBody() {
+    fun onCreateBody(event: ActionEvent) {
         switchDrawer(ACTION_CREATE_BODY)
     }
 
-    fun onCreateJoint() {
+    fun onCreateJoint(event: ActionEvent) {
         switchDrawer(ACTION_CREATE_JOINT)
     }
 

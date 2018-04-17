@@ -1,7 +1,10 @@
 package mygame.editor.actions;
 
 import javafx.fxml.FXMLLoader
+import javafx.scene.Node
 import javafx.scene.Parent
+import javafx.scene.effect.Effect
+import javafx.scene.effect.Glow
 import javafx.scene.effect.Shadow
 import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
@@ -19,30 +22,43 @@ class SelectAction(val pane: VBox, transGroup: CustomPane, models: List<Abstract
 
     init {
 
-        parent.parent.setOnMouseClicked { clearEffects() }
-        for (model in models) {
-            model.setOnMouseClicked({
-                clearEffects()
-                pane.children.clear()
-                try {
-                    val loader = FXMLLoader(this.javaClass.getResource("/info.fxml"));
-                    val load: Parent = loader.load()
-                    val controller: InfoController = loader.getController();
-                    controller.setNameInfo(model.toString())
 
-//            controller.setPositionInfo(Point (model.getModel().getPosition().getX(),
-//                    model.getModel().getPosition().getY()));
-                    pane.children.add(load)
-                } catch (e: IOException) {
-                    e.printStackTrace();
-                }
-                pane.children.add(Text(it.source.toString()))
-
-                model.effect = Shadow(0.0, Color.SALMON)
-                it.consume()
-            })
-        }
     }
+
+    override fun init(){
+        parent.parent.setOnMouseClicked { clearEffects() }
+        for(child in parent.root.children){
+            child.setOnMouseClicked {
+                var n = it.target as Node
+                n.effect = Glow(.4)
+            }
+
+        }
+//        for (model in models) {
+//            model.setOnMouseClicked({
+//                clearEffects()
+//                pane.children.clear()
+//                try {
+//                    val loader = FXMLLoader(this.javaClass.getResource("/info.fxml"));
+//                    val load: Parent = loader.load()
+//                    val controller: InfoController = loader.getController();
+//                    controller.setNameInfo(model.toString())
+//
+////            controller.setPositionInfo(Point (model.getModel().getPosition().getX(),
+////                    model.getModel().getPosition().getY()));
+//
+//                    pane.children.add(load)
+//                } catch (e: IOException) {
+//                    e.printStackTrace();
+//                }
+//                pane.children.add(Text(it.source.toString()))
+//
+//                model.effect = Shadow(0.0, Color.SALMON)
+//                it.consume()
+//            })
+//        }
+    }
+
 
     private fun clearEffects() {
         for (model in models) {

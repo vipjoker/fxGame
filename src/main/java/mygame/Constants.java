@@ -12,6 +12,7 @@ public class Constants {
     public static final Color ORANGE = Color.valueOf("#B57E48");
     public static final Color BACKGROUND = Color.valueOf("#1F2228");
     public static final Color LIGHT_GREY = Color.valueOf("#37414B");
+    public static final Color WHITE = Color.valueOf("#BDBDBD") ;
     public static final Color DARK = Color.valueOf("#111418");
     public static final Color RED = Color.valueOf("#C54D58");
 
@@ -36,5 +37,4 @@ public class Constants {
     public static final String ACTION_DISTANCE = "distance";
 
 
-    public static final Color WHITE = Color.valueOf("#BDBDBD") ;
 }
