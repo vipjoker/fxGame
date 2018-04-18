@@ -28,7 +28,11 @@ public class Polygon implements Drawable {
                 yPoints[i] = point.getY() *32;
             }
         }
+        context.save();
+        context.rotate(40);
+
         context.fillPolygon(xPoints,yPoints,points.size());
+        context.restore();
     }
 
 

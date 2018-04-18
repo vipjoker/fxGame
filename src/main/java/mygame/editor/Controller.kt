@@ -37,6 +37,8 @@ import mygame.editor.actions.shapes.PolygonDrawer
 import mygame.editor.actions.shapes.RectangleDrawer
 import javafx.scene.control.TreeView
 import javafx.scene.control.TreeItem
+import javafx.scene.input.MouseEvent
+import mygame.editor.model.PhysicsNode
 import mygame.editor.ui.TreeItemPath
 import java.nio.file.Files
 import java.nio.file.Path
@@ -44,27 +46,32 @@ import java.nio.file.Paths
 
 
 class Controller : Initializable, ActionListenerDelegate {
-//    https://www.iconfinder.com/icons/299098/cogs_icon#size=128
-    private var tilePane: TilePane? = null
+    var tilePane: TilePane? = null
+    @FXML
     var btnRun: Button? = null
 
     lateinit var root: SplitPane
     var group: ToggleGroup? = null
-    private var box2dDialog: Box2dDialog = Box2dDialog()
+    var box2dDialog: Box2dDialog = Box2dDialog()
     var canvas: CustomPane? = null
 
-    lateinit var leftPane:VBox
+    lateinit var leftPane: VBox
 
     lateinit var rightPane: VBox
 
-    lateinit var centerPane:AnchorPane
+    lateinit var centerPane: AnchorPane
 
-    lateinit var resourcesTreeview:TreeView<Path>
+    lateinit var resourcesTreeview: TreeView<Path>
 
     private var currentDrawer: Action? = null
     var actions: MutableMap<String, Action> = mutableMapOf()
 
     private var views: MutableList<AbstractView> = mutableListOf()
+
+    lateinit var toolbar:HBox
+
+    @FXML
+    private var infoController: InfoController? = null
 
     private val imageIcon = Image(javaClass.getResourceAsStream("/icons/image.png"))
     private val folderIcon = Image(javaClass.getResourceAsStream("/icons/foder_basic.png"))
@@ -80,49 +87,57 @@ class Controller : Initializable, ActionListenerDelegate {
     private fun setListeners() {
 
         Platform.runLater {
-            canvas = CustomPane(
-                    AppHolder.instance?.stage!!.width,
-                    AppHolder.instance?.stage!!.height)
-
+            canvas = CustomPane(centerPane.width, centerPane.height)
 
 
             canvas?.setListenerDelegate(this)
-            AppHolder.instance?.scene!!.setOnKeyPressed {
+            App.instance?.scene!!.setOnKeyPressed {
 
                 if (it.code == KeyCode.ENTER)
                     currentDrawer?.finishDrawing()
             }
-            root.prefWidthProperty().bind(AppHolder.instance?.stage?.widthProperty())
-            root.prefHeightProperty()?.bind(AppHolder.instance?.stage?.heightProperty())
+            root.prefWidthProperty().bind(App.instance?.stage?.widthProperty())
+            root.prefHeightProperty()?.bind(App.instance?.stage?.heightProperty())
             centerPane.children.add(canvas)
-            AnchorPane.setTopAnchor(canvas,0.0)
-            AnchorPane.setBottomAnchor(canvas,0.0)
-            AnchorPane.setLeftAnchor(canvas,0.0)
-            AnchorPane.setRightAnchor(canvas,0.0)
+            AnchorPane.setTopAnchor(canvas, 0.0)
+            AnchorPane.setBottomAnchor(canvas, 0.0)
+            AnchorPane.setLeftAnchor(canvas, 0.0)
+            AnchorPane.setRightAnchor(canvas, 0.0)
             root.setDividerPositions(.1, .8)
             setLeftPane()
             setRightPane()
             initActions()
+            setupMenu()
 
         }
     }
 
+    private fun setupMenu(){
+         var tb1 = ToggleButton("Select");
+        tb1.setOnMouseClicked { onSelect() }
+        tb1.setPrefSize(76.0, 45.0);
+        var tb2 = ToggleButton("Move");
+        tb2.setOnMouseClicked { onMove() }
+        tb2.setPrefSize(76.0, 45.0);
+        var tb3 = ToggleButton("Rotate");
+        tb3.setPrefSize(76.0, 45.0);
+        tb3.setOnMouseClicked { onRotate() }
+        val group = ToggleGroup()
+        tb1.toggleGroup= group
+        tb2.toggleGroup= group
+        tb3.toggleGroup= group
+        group.selectToggle(tb1);
+        toolbar.children.addAll(tb1,tb2,tb3)
+
+
+    }
+
     private fun setRightPane() {
-
-
-        val loader = FXMLLoader(this.javaClass.getResource("/info.fxml"));
-        val load: Parent = loader.load()
-        val controller: InfoController = loader.getController();
-        controller.setNameInfo("Test message")
-
-
-        rightPane.children.add(load)
+        infoController!!.setNameInfo("Test message")
     }
 
 
-    fun setLeftPane() {
-
-
+    private fun setLeftPane() {
 
 
         val treeRoot = TreeItem(Paths.get("resources"))
@@ -134,7 +149,7 @@ class Controller : Initializable, ActionListenerDelegate {
         resourcesTreeview.isShowRoot = true
         resourcesTreeview.root = treeRoot
 
-        resourcesTreeview.setCellFactory ({TreeItemPath() })
+        resourcesTreeview.setCellFactory({ TreeItemPath() })
 
         resourcesTreeview.setOnMouseClicked {
             val selected = resourcesTreeview.selectionModel.selectedItem
@@ -144,14 +159,16 @@ class Controller : Initializable, ActionListenerDelegate {
                 val image = Image(selected.value.toUri().toString())
 
                 val imageView = ImageView(image)
-                canvas?.addItem(imageView)
+
+
+                val pane = PhysicsNode(this)
+
+                pane.children.addAll(imageView)
+                canvas?.addItem(pane)
             }
         }
 
     }
-
-
-
 
 
     private fun initActions() {
@@ -167,6 +184,7 @@ class Controller : Initializable, ActionListenerDelegate {
                 Pair(ACTION_CREATE_BODY, CreateBodyAction(canvas!!, views)),
                 Pair(ACTION_CREATE_JOINT, CreateJointAction(canvas!!, views))
         )
+        switchDrawer(ACTION_SELECT)
     }
 
     private fun fillTreeView(dir: Path, root: TreeItem<Path>) {
@@ -184,10 +202,10 @@ class Controller : Initializable, ActionListenerDelegate {
                 val newRoot = TreeItem<Path>(it)
                 root.children.add(newRoot)
 //                if(it.toFile().name.endsWith(".png") || it.toFile().name.endsWith(".jpg")){
-                    val folderIcon = ImageView(folderIcon);
-                    folderIcon.fitWidth = 20.0
-                    folderIcon.fitHeight = 20.0
-                    newRoot.graphic = folderIcon
+                val folderIcon = ImageView(folderIcon);
+                folderIcon.fitWidth = 20.0
+                folderIcon.fitHeight = 20.0
+                newRoot.graphic = folderIcon
 //                }
                 fillTreeView(it, newRoot)
 
@@ -197,19 +215,23 @@ class Controller : Initializable, ActionListenerDelegate {
 
 
     fun onSave(event: ActionEvent) {
-
+        val node = event.target as Node
+        val window = node.scene.window
         val fileChooser = FileChooser()
         fileChooser.setSelectedExtensionFilter(FileChooser.ExtensionFilter("Level files", ".level"));
-        var file = fileChooser.showSaveDialog(AppHolder.instance?.window);
+        var file = fileChooser.showSaveDialog(window);
 
 
     }
 
     fun onLoad(event: ActionEvent) {
+        val node = event.target as Node
+        val window = node.scene.window
+
         val fileChooser = FileChooser();
         fileChooser.setTitle("Open level");
 
-        var file = fileChooser.showOpenDialog(AppHolder.instance?.window)
+        var file = fileChooser.showOpenDialog(window)
 
 
     }
@@ -221,11 +243,9 @@ class Controller : Initializable, ActionListenerDelegate {
         val directoryChooser = DirectoryChooser()
         directoryChooser.title = "Open Resource File"
         val imageDir: File = directoryChooser.showDialog(window)
-        if (imageDir != null) {
 
-            for (file in imageDir.listFiles())
-                addTile(file)
-        }
+        for (file in imageDir.listFiles())
+            addTile(file)
     }
 
     fun addTile(file: File) {
@@ -237,9 +257,9 @@ class Controller : Initializable, ActionListenerDelegate {
         } catch (e: FileNotFoundException) {
             e.printStackTrace()
         }
-        val pane: StackPane = StackPane()
+        val pane= StackPane()
 
-        val imageView: ImageView = ImageView(image)
+        val imageView= ImageView(image)
 
 
         imageView.fitWidth = 50.0
@@ -271,19 +291,15 @@ class Controller : Initializable, ActionListenerDelegate {
     }
 
 
-
-
     fun onRun(actionEvent: ActionEvent) {
 
         box2dDialog.show()
     }
 
-    fun onMove(actionEvent: ActionEvent) {
+    fun onMove() {
 
         switchDrawer(ACTION_MOVE)
     }
-
-
 
 
     fun onPolygon(event: ActionEvent) {
@@ -299,15 +315,13 @@ class Controller : Initializable, ActionListenerDelegate {
     }
 
 
-
-
     private fun switchDrawer(action: String) {
         if (currentDrawer != null) currentDrawer?.finishDrawing();
         currentDrawer = actions[action] as Action
         currentDrawer?.init()
     }
 
-    fun onRotate(event: ActionEvent) {
+    fun onRotate() {
         switchDrawer(ACTION_ROTATE)
     }
 
@@ -315,7 +329,7 @@ class Controller : Initializable, ActionListenerDelegate {
         switchDrawer(ACTION_EDIT)
     }
 
-    fun onSelect(event: ActionEvent) {
+    fun onSelect() {
         switchDrawer(ACTION_SELECT)
     }
 

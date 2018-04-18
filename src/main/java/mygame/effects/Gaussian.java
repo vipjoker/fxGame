@@ -9,7 +9,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import mygame.util.ImageUtil;
+import mygame.editor.util.ImageUtil;
 
 public class Gaussian  extends Application {
         private static final Image ICON_48 = ImageUtil.getImage("earth.jpg");

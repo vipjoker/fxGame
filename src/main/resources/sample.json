@@ -44,7 +44,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.003981250338256359,
       "massData-center" :
       {
@@ -101,7 +101,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.003981430083513260,
       "massData-center" :
       {
@@ -158,7 +158,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.001779905171133578,
       "massData-center" :
       {
@@ -215,7 +215,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.001780077465809882,
       "massData-center" :
       {
@@ -272,7 +272,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.001779964426532388,
       "massData-center" :
       {
@@ -329,7 +329,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.001779960817657411,
       "massData-center" :
       {
@@ -441,7 +441,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.05209907889366150,
       "massData-center" :
       {
@@ -498,7 +498,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.01076998189091682,
       "massData-center" :
       {
@@ -555,7 +555,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.003981323447078466,
       "massData-center" :
       {
@@ -612,7 +612,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.2154167890548706,
       "massData-center" :
       {
@@ -671,7 +671,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.1223291531205177,
       "massData-center" :
       {
@@ -728,7 +728,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.009130835533142090,
       "massData-center" :
       {
@@ -785,7 +785,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.02409154921770096,
       "massData-center" :
       {
@@ -842,7 +842,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.009130541235208511,
       "massData-center" :
       {
@@ -899,7 +899,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.003981355577707291,
       "massData-center" :
       {
@@ -956,7 +956,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.009130455553531647,
       "massData-center" :
       {
@@ -1013,7 +1013,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.003981207497417927,
       "massData-center" :
       {
@@ -1070,7 +1070,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.09630440175533295,
       "massData-center" :
       {
@@ -1127,7 +1127,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.01035296451300383,
       "massData-center" :
       {
@@ -1154,7 +1154,7 @@
         {
           "circle" :
           {
-            "center" : 0,
+            "center" : null,
             "radius" : 0.4923748672008514
           },
           "density" : 0.05000000074505806,
@@ -1219,7 +1219,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.02042617835104465,
       "massData-center" :
       {
@@ -1414,7 +1414,7 @@
         {
           "circle" :
           {
-            "center" : 0,
+            "center" : null,
             "radius" : 0.4501315653324127
           },
           "density" : 0.1000000014901161,
@@ -1484,7 +1484,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.04262153804302216,
       "massData-center" :
       {
@@ -1541,7 +1541,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.003981250338256359,
       "massData-center" :
       {
@@ -1598,7 +1598,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.02409185096621513,
       "massData-center" :
       {
@@ -1655,7 +1655,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.001779938233084977,
       "massData-center" :
       {
@@ -1712,7 +1712,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.003981739282608032,
       "massData-center" :
       {
@@ -1769,7 +1769,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.01035229209810495,
       "massData-center" :
       {
@@ -1828,7 +1828,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.05468376353383064,
       "massData-center" :
       {
@@ -2138,7 +2138,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.09534467011690140,
       "massData-center" :
       {
@@ -2195,7 +2195,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.02315733581781387,
       "massData-center" :
       {
@@ -2252,7 +2252,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.001779964659363031,
       "massData-center" :
       {
@@ -2309,7 +2309,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.01076994184404612,
       "massData-center" :
       {
@@ -2366,7 +2366,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.01076993066817522,
       "massData-center" :
       {
@@ -2423,7 +2423,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.09630198776721954,
       "massData-center" :
       {
@@ -2482,7 +2482,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.05468595772981644,
       "massData-center" :
       {
@@ -2539,7 +2539,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.007018082309514284,
       "massData-center" :
       {
@@ -2598,7 +2598,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.05468432232737541,
       "massData-center" :
       {
@@ -2655,7 +2655,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.01107137091457844,
       "massData-center" :
       {
@@ -2712,7 +2712,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.01035273913294077,
       "massData-center" :
       {
@@ -2769,7 +2769,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.01035296916961670,
       "massData-center" :
       {
@@ -2826,7 +2826,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.02409197390079498,
       "massData-center" :
       {
@@ -2883,7 +2883,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.001779760583303869,
       "massData-center" :
       {
@@ -2940,7 +2940,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.001779964659363031,
       "massData-center" :
       {
@@ -2997,7 +2997,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.003137765917927027,
       "massData-center" :
       {
@@ -3054,7 +3054,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.001780010294169188,
       "massData-center" :
       {
@@ -3111,7 +3111,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.01107059419155121,
       "massData-center" :
       {
@@ -3168,7 +3168,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.001780077465809882,
       "massData-center" :
       {
@@ -3225,7 +3225,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.09630475938320160,
       "massData-center" :
       {
@@ -3282,7 +3282,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.003981430083513260,
       "massData-center" :
       {
@@ -3339,7 +3339,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.02042495645582676,
       "massData-center" :
       {
@@ -3396,7 +3396,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.003981086891144514,
       "massData-center" :
       {
@@ -3453,7 +3453,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.001779963262379169,
       "massData-center" :
       {
@@ -3510,7 +3510,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.1165418624877930,
       "massData-center" :
       {
@@ -3567,7 +3567,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.001779934042133391,
       "massData-center" :
       {
@@ -3624,7 +3624,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.01077039260417223,
       "massData-center" :
       {
@@ -3681,7 +3681,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.02476573176681995,
       "massData-center" :
       {
@@ -3738,7 +3738,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.02476350776851177,
       "massData-center" :
       {
@@ -3795,7 +3795,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.2154197841882706,
       "massData-center" :
       {
@@ -3852,7 +3852,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.01077009923756123,
       "massData-center" :
       {
@@ -3909,7 +3909,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.02315595000982285,
       "massData-center" :
       {
@@ -3966,7 +3966,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.001779940095730126,
       "massData-center" :
       {
@@ -4023,7 +4023,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.001780004939064384,
       "massData-center" :
       {
@@ -4080,7 +4080,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.01076994184404612,
       "massData-center" :
       {
@@ -4137,7 +4137,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.05209826678037643,
       "massData-center" :
       {
@@ -4175,7 +4175,7 @@
           }
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.08333333581686020,
       "massData-mass" : 0.50,
       "name" : "dynamicbody1",
@@ -4208,7 +4208,7 @@
           }
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.08333333581686020,
       "massData-mass" : 0.50,
       "name" : "dynamicbody2",
@@ -4241,7 +4241,7 @@
           }
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.08333333581686020,
       "massData-mass" : 0.50,
       "name" : "dynamicbody4",
@@ -4274,7 +4274,7 @@
           }
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.1692708283662796,
       "massData-mass" : 0.50,
       "name" : "dynamicbody39",
@@ -4307,7 +4307,7 @@
           }
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.1692708283662796,
       "massData-mass" : 0.50,
       "name" : "dynamicbody47",
@@ -4359,7 +4359,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.04262384772300720,
       "massData-center" :
       {
@@ -4416,7 +4416,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.003981564193964005,
       "massData-center" :
       {
@@ -4473,7 +4473,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.09630329906940460,
       "massData-center" :
       {
@@ -4530,7 +4530,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.001779954764060676,
       "massData-center" :
       {
@@ -4589,7 +4589,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.1223189309239388,
       "massData-center" :
       {
@@ -4646,7 +4646,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.01107055880129337,
       "massData-center" :
       {
@@ -4684,7 +4684,7 @@
           }
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.1692708283662796,
       "massData-mass" : 0.50,
       "name" : "dynamicbody45",
@@ -4717,7 +4717,7 @@
           }
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.1692708283662796,
       "massData-mass" : 0.50,
       "name" : "dynamicbody34",
@@ -4750,7 +4750,7 @@
           }
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.1692708283662796,
       "massData-mass" : 0.50,
       "name" : "dynamicbody36",
@@ -4783,7 +4783,7 @@
           }
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 333.5416564941406,
       "massData-mass" : 10.0,
       "name" : "dynamicbody27",
@@ -4816,7 +4816,7 @@
           }
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.1692708283662796,
       "massData-mass" : 0.50,
       "name" : "dynamicbody29",
@@ -4849,7 +4849,7 @@
           }
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.1692708283662796,
       "massData-mass" : 0.50,
       "name" : "dynamicbody28",
@@ -4882,7 +4882,7 @@
           }
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.08333333581686020,
       "massData-mass" : 0.50,
       "name" : "dynamicbody0",
@@ -4915,7 +4915,7 @@
           }
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.08333333581686020,
       "massData-mass" : 0.50,
       "name" : "dynamicbody48",
@@ -4948,7 +4948,7 @@
           }
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.08333333581686020,
       "massData-mass" : 0.50,
       "name" : "dynamicbody50",
@@ -4981,7 +4981,7 @@
           }
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.08333333581686020,
       "massData-mass" : 0.50,
       "name" : "dynamicbody49",
@@ -6193,7 +6193,7 @@
           }
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "name" : "staticbody2",
       "position" :
       {
@@ -6224,7 +6224,7 @@
           }
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.08333333581686020,
       "massData-mass" : 0.50,
       "name" : "dynamicbody51",
@@ -6257,7 +6257,7 @@
           }
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.1692708283662796,
       "massData-mass" : 0.50,
       "name" : "dynamicbody30",
@@ -6290,7 +6290,7 @@
           }
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.08333333581686020,
       "massData-mass" : 0.50,
       "name" : "dynamicbody52",
@@ -6323,7 +6323,7 @@
           }
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.1692708283662796,
       "massData-mass" : 0.50,
       "name" : "dynamicbody44",
@@ -6356,7 +6356,7 @@
           }
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.1692708283662796,
       "massData-mass" : 0.50,
       "name" : "dynamicbody31",
@@ -6389,7 +6389,7 @@
           }
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.1692708283662796,
       "massData-mass" : 0.50,
       "name" : "dynamicbody40",
@@ -6422,7 +6422,7 @@
           }
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.1692708283662796,
       "massData-mass" : 0.50,
       "name" : "dynamicbody41",
@@ -6455,7 +6455,7 @@
           }
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.1692708283662796,
       "massData-mass" : 0.50,
       "name" : "dynamicbody43",
@@ -6488,7 +6488,7 @@
           }
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.1692708283662796,
       "massData-mass" : 0.50,
       "name" : "dynamicbody42",
@@ -6521,7 +6521,7 @@
           }
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.1692708283662796,
       "massData-mass" : 0.50,
       "name" : "dynamicbody32",
@@ -6554,7 +6554,7 @@
           }
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.1692708283662796,
       "massData-mass" : 0.50,
       "name" : "dynamicbody46",
@@ -6587,7 +6587,7 @@
           }
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.1692708283662796,
       "massData-mass" : 0.50,
       "name" : "dynamicbody33",
@@ -6620,7 +6620,7 @@
           }
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.08333333581686020,
       "massData-mass" : 0.50,
       "name" : "dynamicbody9",
@@ -6653,7 +6653,7 @@
           }
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.1692708283662796,
       "massData-mass" : 0.50,
       "name" : "dynamicbody38",
@@ -6686,7 +6686,7 @@
           }
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.1692708283662796,
       "massData-mass" : 0.50,
       "name" : "dynamicbody35",
@@ -6738,7 +6738,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.003137686988338828,
       "massData-center" :
       {
@@ -6795,7 +6795,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.001780079328455031,
       "massData-center" :
       {
@@ -6852,7 +6852,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.009131231345236301,
       "massData-center" :
       {
@@ -6909,7 +6909,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.001779918675310910,
       "massData-center" :
       {
@@ -6966,7 +6966,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.001779905171133578,
       "massData-center" :
       {
@@ -7004,7 +7004,7 @@
           }
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.08333333581686020,
       "massData-mass" : 0.50,
       "name" : "dynamicbody5",
@@ -7037,7 +7037,7 @@
           }
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.08333333581686020,
       "massData-mass" : 0.50,
       "name" : "dynamicbody6",
@@ -7070,7 +7070,7 @@
           }
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.08333333581686020,
       "massData-mass" : 0.50,
       "name" : "dynamicbody8",
@@ -7103,7 +7103,7 @@
           }
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.08333333581686020,
       "massData-mass" : 0.50,
       "name" : "dynamicbody7",
@@ -7136,7 +7136,7 @@
           }
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.08333333581686020,
       "massData-mass" : 0.50,
       "name" : "dynamicbody3",
@@ -7169,7 +7169,7 @@
           }
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.1692708283662796,
       "massData-mass" : 0.50,
       "name" : "dynamicbody37",
@@ -7221,7 +7221,7 @@
           "restitution" : 0.1000000014901161
         }
       ],
-      "linearVelocity" : 0,
+      "linearVelocity" : null,
       "massData-I" : 0.01107033435255289,
       "massData-center" :
       {

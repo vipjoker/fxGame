@@ -1,4 +1,4 @@
-package mygame.util;
+package mygame.editor.util;
 
 import javafx.scene.image.Image;
 

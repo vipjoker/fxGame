@@ -7,7 +7,7 @@ import javafx.scene.effect.SepiaTone;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import mygame.util.ImageUtil;
+import mygame.editor.util.ImageUtil;
 
 /**
  * Created by Admin on 07.06.2016.

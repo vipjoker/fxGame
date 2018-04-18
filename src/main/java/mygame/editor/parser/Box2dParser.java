@@ -1,8 +1,10 @@
 package mygame.editor.parser;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
+import mygame.editor.customShapes.Chain;
 import mygame.editor.customShapes.Circle;
 import mygame.editor.customShapes.Drawable;
 import mygame.editor.customShapes.Polygon;
@@ -16,29 +18,29 @@ import java.util.List;
  */
 public class Box2dParser {
 
-    public static List<Drawable> parseBox2d(World world){
+    public static List<Drawable> parseBox2d(World world) {
         List<Drawable> list = new ArrayList<>();
         Array<Body> bodies = new Array<>();
         world.getBodies(bodies);
         for (Body body : bodies)
-           for (Fixture fixture : body.getFixtureList())
+            for (Fixture fixture : body.getFixtureList())
                 list.add(getDrawableFromFixture(fixture));
 
 
         return list;
     }
 
-    private static Drawable getDrawableFromFixture(Fixture fixture){
-        Shape shape  = fixture.getShape();
+    private static Drawable getDrawableFromFixture(Fixture fixture) {
+        Shape shape = fixture.getShape();
 
-        switch (shape.getType()){
+        switch (shape.getType()) {
             case Circle:
-                return createCircle(fixture.getBody(),(CircleShape) shape);
+                return createCircle(fixture.getBody(), (CircleShape) shape);
             case Polygon:
-                return createPolygon(fixture.getBody(),(PolygonShape)shape);
+                return createPolygon(fixture.getBody(), (PolygonShape) shape);
             case Chain:
-                break;
 
+                return createChain(fixture.getBody(), (ChainShape) shape);
             case Edge:
                 break;
 
@@ -48,23 +50,41 @@ public class Box2dParser {
 
     }
 
-    private static Circle createCircle(Body body , CircleShape circleShape){
+    private static Circle createCircle(Body body, CircleShape circleShape) {
         float radius = circleShape.getRadius();
         float x = body.getPosition().x;
         float y = body.getPosition().y;
-        return new Circle(x,y,radius);
+        return new Circle(x, y, radius);
     }
 
-    private static Polygon createPolygon(Body body , PolygonShape polygonShape){
+    private static Polygon createPolygon(Body body, PolygonShape polygonShape) {
         List<Point> points = new ArrayList<>();
-        for(int i = 0 ; i < polygonShape.getVertexCount();i++){
+        for (int i = 0; i < polygonShape.getVertexCount(); i++) {
             Vector2 vector = new Vector2();
-            polygonShape.getVertex(i,vector);
-            points.add(new Point(vector.x + body.getPosition().x,vector.y + body.getPosition().y));
+            polygonShape.getVertex(i, vector);
+            points.add(new Point(vector.x + body.getPosition().x, vector.y + body.getPosition().y));
         }
         return new Polygon(points);
     }
 
+    private static Chain createChain(Body body, ChainShape chainShape) {
+
+        float angle = body.getAngle() * MathUtils.radiansToDegrees ;
+
+
+        Point[] points = new Point[chainShape.getVertexCount()];
+        for(int i = 0; i < chainShape.getVertexCount(); i++){
+
+            Vector2 vector = new Vector2();
+            chainShape.getVertex(i,vector);
+            vector.rotate(angle);
+            points[i] = new Point(vector.x + body.getPosition().x, vector.y + body.getPosition().y);
+        }
+
+
+        return new Chain(points);
+
+    }
 
 
 }

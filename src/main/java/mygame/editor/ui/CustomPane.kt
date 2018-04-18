@@ -160,11 +160,6 @@ class CustomPane(width: Double, height: Double) : Pane() {
         if (event.button == SECONDARY) {
 
             lastPoint = Point(event.x, event.y)
-        }else if(event.button == PRIMARY){
-            val p = root.parentToLocal(event.x,event.y)
-            val c = Circle(p.x,p.y,10.0)
-            c.fill = RED
-            root.children.add(c)
         }
         updateAll()
     }

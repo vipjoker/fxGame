@@ -10,7 +10,7 @@
     <packaging>jar</packaging>
 
     <properties>
-        <kotlin.version>1.1.2</kotlin.version>
+        <kotlin.version>1.2.31</kotlin.version>
     </properties>
 
     <dependencies>
@@ -39,11 +39,22 @@
             <version>1.9.1</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.google.flatbuffers/flatbuffers-java -->
         <dependency>
             <groupId>com.google.flatbuffers</groupId>
             <artifactId>flatbuffers-java</artifactId>
             <version>1.8.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>3.21.0.1</version>
         </dependency>
 
     </dependencies>
@@ -112,11 +123,6 @@
             </plugin>
         </plugins>
     </build>
-
-
-
-
-
 
 
 </project>

@@ -1,4 +1,4 @@
-package mygame.demo;
+package mygame.editor;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
@@ -13,7 +13,7 @@ public class TimerCounter extends AnimationTimer{
     long lastSecond = 0;
     long lastMillis = 0;
     long lastFrame = 0;
-    TimerCounter(FrameRateCallback callback) {
+    public TimerCounter(FrameRateCallback callback) {
         this.mCallback = callback;
     }
     @Override
@@ -49,7 +49,7 @@ public class TimerCounter extends AnimationTimer{
 
     }
 
-    interface FrameRateCallback{
+    public interface FrameRateCallback{
         void update(long delta);
         default void seconds(long seconds){}
         default void millis(long millis){}

@@ -6,7 +6,7 @@ import javafx.scene.input.KeyCode;
 import mygame.Main;
 import mygame.Renderable;
 import mygame.util.Constants;
-import mygame.util.ImageUtil;
+import mygame.editor.util.ImageUtil;
 
 /**
  * Created by Makhobey Oleh on 6/7/16.

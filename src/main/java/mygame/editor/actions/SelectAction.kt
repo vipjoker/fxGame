@@ -10,6 +10,7 @@ import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
 import javafx.scene.text.Text
 import mygame.editor.InfoController
+import mygame.editor.model.PhysicsNode
 import mygame.editor.model.Point
 import mygame.editor.ui.CustomPane
 import mygame.editor.view.AbstractView
@@ -29,8 +30,8 @@ class SelectAction(val pane: VBox, transGroup: CustomPane, models: List<Abstract
         parent.parent.setOnMouseClicked { clearEffects() }
         for(child in parent.root.children){
             child.setOnMouseClicked {
-                var n = it.target as Node
-                n.effect = Glow(.4)
+                var n = it.source as PhysicsNode
+                n.toggleActive()
             }
 
         }

@@ -30,6 +30,11 @@ class Point {
         this.y = point.y
     }
 
+    fun set(x: Double,y:Double){
+        this.x = x;
+        this.y = y;
+    }
+
     fun distance(point:Point):Double{
         val deltaX  = point.x - x
         val deltaY = point.y - y
@@ -47,4 +52,9 @@ class Point {
     fun toVector2d():Vector2{
         return Vector2(x.toFloat(),y.toFloat())
     }
+
+    override fun toString(): String {
+        return "Point(${x} , ${y})"
+    }
+
 }

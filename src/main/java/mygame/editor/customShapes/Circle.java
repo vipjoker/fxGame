@@ -23,7 +23,7 @@ public class Circle implements Drawable,OnDragListener{
         this.x = x;
         this.y = y;
         this.radius = radius;
-        paint = Color.BLACK;
+        paint = Color.rgb(0,100,0,.6);
     }
 
     @Override

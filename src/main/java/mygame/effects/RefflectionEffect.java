@@ -7,7 +7,7 @@ import javafx.scene.effect.Reflection;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import mygame.util.ImageUtil;
+import mygame.editor.util.ImageUtil;
 
 public class RefflectionEffect extends Application {
     private static final Image BOAT = ImageUtil.getImage("earth.jpg");
