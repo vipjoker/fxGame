@@ -38,6 +38,7 @@ import mygame.editor.actions.shapes.RectangleDrawer
 import javafx.scene.control.TreeView
 import javafx.scene.control.TreeItem
 import javafx.scene.input.MouseEvent
+import javafx.scene.shape.Circle
 import mygame.editor.model.PhysicsNode
 import mygame.editor.ui.TreeItemPath
 import java.nio.file.Files
@@ -311,6 +312,17 @@ class Controller : Initializable, ActionListenerDelegate {
     }
 
     fun onCircle(event: ActionEvent) {
+
+
+        var physicsNode = PhysicsNode(this)
+        physicsNode.children.add(Circle(10.0,10.0,5.0))
+        physicsNode.children.add(Circle(-10.0,-10.0,5.0))
+        physicsNode.children.add(Circle(10.0,-10.0,5.0))
+        canvas?.addItem(physicsNode)
+
+
+
+
         switchDrawer(ACTION_CIRCLE)
     }
 

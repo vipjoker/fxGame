@@ -24,6 +24,7 @@ import mygame.editor.TimerCounter;
 import mygame.editor.customShapes.Circle;
 import mygame.editor.customShapes.Drawable;
 import mygame.editor.customShapes.OnDragListener;
+import mygame.editor.model.PhysicsNode;
 import mygame.editor.model.Point;
 import mygame.editor.parser.Box2dParser;
 
@@ -41,7 +42,7 @@ public class Box2dDialog implements TimerCounter.FrameRateCallback {
     private Pane pane;
     GraphicsContext context;
     Canvas canvas;
-
+    List<PhysicsNode> nodes = new ArrayList<>();
     private AnimationTimer animationTimer;
 
 
