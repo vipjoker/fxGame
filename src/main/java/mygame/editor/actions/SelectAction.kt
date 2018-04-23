@@ -1,20 +1,10 @@
 package mygame.editor.actions;
 
-import javafx.fxml.FXMLLoader
-import javafx.scene.Node
-import javafx.scene.Parent
-import javafx.scene.effect.Effect
-import javafx.scene.effect.Glow
-import javafx.scene.effect.Shadow
 import javafx.scene.layout.VBox
-import javafx.scene.paint.Color
-import javafx.scene.text.Text
-import mygame.editor.InfoController
-import mygame.editor.model.PhysicsNode
+import mygame.editor.ui.PhysicsNode
 import mygame.editor.model.Point
 import mygame.editor.ui.CustomPane
 import mygame.editor.view.AbstractView
-import java.io.IOException
 
 /**
  * Created by oleh on 3/27/17.

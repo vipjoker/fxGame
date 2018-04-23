@@ -2,15 +2,10 @@ package mygame.editor.actions;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
-import com.badlogic.gdx.utils.Array;
 import javafx.animation.AnimationTimer;
-import javafx.application.Platform;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
@@ -19,14 +14,14 @@ import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import mygame.Constants;
-import mygame.editor.DragHelper;
+import mygame.editor.Controller;
 import mygame.editor.TimerCounter;
-import mygame.editor.customShapes.Circle;
 import mygame.editor.customShapes.Drawable;
-import mygame.editor.customShapes.OnDragListener;
-import mygame.editor.model.PhysicsNode;
-import mygame.editor.model.Point;
+import mygame.editor.ui.ChainFixture;
+import mygame.editor.ui.CircleFixture;
+import mygame.editor.ui.PhysicsNode;
 import mygame.editor.parser.Box2dParser;
+import mygame.editor.ui.PolygonFixture;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,14 +32,17 @@ import java.util.List;
 public class Box2dDialog implements TimerCounter.FrameRateCallback {
 
     private World world;
-    private Body body;
     boolean started;
     private Pane pane;
     GraphicsContext context;
     Canvas canvas;
     List<PhysicsNode> nodes = new ArrayList<>();
     private AnimationTimer animationTimer;
+    Controller controller;
 
+    public Box2dDialog(Controller controller) {
+        this.controller = controller;
+    }
 
     public void show() {
 
@@ -77,41 +75,39 @@ public class Box2dDialog implements TimerCounter.FrameRateCallback {
 
     private void initBox2d() {
         world = new World(new Vector2(0, 1), false);
+        PhysicsNode node = new PhysicsNode(controller);
+        node.setActive();
+
+        node.setPosition(40,0);
+        PolygonFixture fixture = new PolygonFixture();
+        fixture.setRect(50,50);
+        node.addFixture(fixture);
 
 
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(7, 0);
-
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(.5f, .5f);
-
-        CircleShape circleShape = new CircleShape();
+        PhysicsNode node2 = new PhysicsNode(controller);
+        CircleFixture circleShape = new CircleFixture();
+        circleShape.setFixtureRadius(1);
         circleShape.setRadius(1);
+        node.addFixture(circleShape);
+
+        ChainFixture chainFixture = new ChainFixture();
 
 
-        ChainShape chainShape = new ChainShape();
-        chainShape.createChain(new Vector2[]{
+        chainFixture.setPoints(
                         new Vector2(0, 0),
                         new Vector2(0, 15),
                         new Vector2(10, 10),
                         new Vector2(17, 12),
-                        new Vector2(17, 0),
-                }
+                        new Vector2(17, 0)
 
         );
 
-        BodyDef ground = new BodyDef();
-        ground.type = BodyDef.BodyType.StaticBody;
-        world.createBody(ground).createFixture(chainShape,1);
+        PhysicsNode node3 = new PhysicsNode(controller);
+        node.addFixture(chainFixture);
+        node3.setPosition(15,30);
 
 
-        body = world.createBody(bodyDef);
 
-        body.applyTorque(30, true);
-        bodyDef.position.set(15, 10);
-        body.createFixture(shape, .1f);
-        world.createBody(bodyDef).createFixture(circleShape, 1);
 
     }
 

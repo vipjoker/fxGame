@@ -1,6 +1,5 @@
 package mygame.editor.actions;
 
-import mygame.editor.model.PhysicsNode
 import mygame.editor.ui.CustomPane;
 import mygame.editor.view.AbstractView;
 import mygame.editor.model.Point;

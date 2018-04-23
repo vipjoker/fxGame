@@ -3,10 +3,8 @@ package mygame.editor
 import javafx.application.Platform
 import javafx.event.ActionEvent
 import javafx.fxml.FXML
-import javafx.fxml.FXMLLoader
 import javafx.fxml.Initializable
 import javafx.scene.Node
-import javafx.scene.Parent
 import javafx.scene.control.*
 
 import javafx.scene.image.Image
@@ -16,7 +14,6 @@ import javafx.scene.input.KeyCode
 import javafx.scene.layout.*
 import javafx.stage.DirectoryChooser
 import javafx.stage.FileChooser
-import javafx.stage.Stage
 import mygame.editor.actions.*
 import mygame.editor.kotlin.ActionListenerDelegate
 import mygame.editor.ui.CustomPane
@@ -37,9 +34,8 @@ import mygame.editor.actions.shapes.PolygonDrawer
 import mygame.editor.actions.shapes.RectangleDrawer
 import javafx.scene.control.TreeView
 import javafx.scene.control.TreeItem
-import javafx.scene.input.MouseEvent
 import javafx.scene.shape.Circle
-import mygame.editor.model.PhysicsNode
+import mygame.editor.ui.PhysicsNode
 import mygame.editor.ui.TreeItemPath
 import java.nio.file.Files
 import java.nio.file.Path
@@ -53,7 +49,7 @@ class Controller : Initializable, ActionListenerDelegate {
 
     lateinit var root: SplitPane
     var group: ToggleGroup? = null
-    var box2dDialog: Box2dDialog = Box2dDialog()
+    var box2dDialog: Box2dDialog = Box2dDialog(this)
     var canvas: CustomPane? = null
 
     lateinit var leftPane: VBox
