@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
+import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import mygame.editor.Controller;
 
@@ -35,7 +36,7 @@ public class PhysicsNode extends Pane implements Bodyeable {
     }
 
     public void setActive() {
-        setStyle("-fx-border-color: #f0f; -fx-border-width: 5px;-fx-border-radius: 5px;");
+        setStyle("-fx-border-color: #b8fff8; -fx-border-width: 1px;-fx-border-radius: 5px;");
     }
 
     public void setNonActive() {
@@ -48,6 +49,10 @@ public class PhysicsNode extends Pane implements Bodyeable {
         setLayoutY(y);
     }
 
+    public void setType(BodyDef.BodyType type){
+        bodyDef.type = type;
+    }
+
     public void addFixture(Fixtureable fixtureable){
         fixtures.add(fixtureable);
     }
@@ -58,6 +63,7 @@ public class PhysicsNode extends Pane implements Bodyeable {
 
         for (Fixtureable fixtureable : fixtures) {
             fixtureable.create(body);
+            getChildren().add((Node)fixtureable);
         }
 
         return body;

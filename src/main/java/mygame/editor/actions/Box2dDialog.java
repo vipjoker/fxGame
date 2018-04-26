@@ -3,6 +3,7 @@ package mygame.editor.actions;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import javafx.animation.AnimationTimer;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -68,45 +69,57 @@ public class Box2dDialog implements TimerCounter.FrameRateCallback {
         });
 
         stage.show();
-        initBox2d();
+        initBox2d(group);
         startTimer();
     }
 
 
-    private void initBox2d() {
+    private void initBox2d(Pane group) {
         world = new World(new Vector2(0, 1), false);
+        //first
         PhysicsNode node = new PhysicsNode(controller);
         node.setActive();
 
-        node.setPosition(40,0);
+        node.setPosition(100, 0);
         PolygonFixture fixture = new PolygonFixture();
-        fixture.setRect(50,50);
+        fixture.setRect(50, 50);
         node.addFixture(fixture);
 
-
-        PhysicsNode node2 = new PhysicsNode(controller);
+        //second
+        PhysicsNode second = new PhysicsNode(controller);
+        second.setPosition(50,0);
         CircleFixture circleShape = new CircleFixture();
         circleShape.setFixtureRadius(1);
-        circleShape.setRadius(1);
-        node.addFixture(circleShape);
+
+        second.addFixture(circleShape);
+
+        //third
+        PhysicsNode node3 = new PhysicsNode(controller);
+
 
         ChainFixture chainFixture = new ChainFixture();
 
 
         chainFixture.setPoints(
-                        new Vector2(0, 0),
-                        new Vector2(0, 15),
-                        new Vector2(10, 10),
-                        new Vector2(17, 12),
-                        new Vector2(17, 0)
+                new Vector2(0, 0),
+                new Vector2(0, 15),
+                new Vector2(10, 10),
+                new Vector2(17, 12),
+                new Vector2(17, 0)
 
         );
 
-        PhysicsNode node3 = new PhysicsNode(controller);
-        node.addFixture(chainFixture);
-        node3.setPosition(15,30);
-
-
+        node3.addFixture(chainFixture);
+        node3.setType(BodyDef.BodyType.StaticBody);
+        node3.setPosition(15, 30);
+        group.getChildren().addAll(node, second, node3);
+        nodes.add(node);
+        nodes.add(second);
+        nodes.add(node3);
+        nodes.forEach(n -> {
+            n.setActive();
+            n.create(world);
+        });
 
 
     }
@@ -129,12 +142,8 @@ public class Box2dDialog implements TimerCounter.FrameRateCallback {
         context.setFill(Color.rgb(255, 0, 0, .6));
         context.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
-        for (Drawable drawable : Box2dParser.parseBox2d(world))
-            drawable.draw(context, now);
-
+        nodes.forEach(PhysicsNode::update);
 
 
     }
-
-
 }

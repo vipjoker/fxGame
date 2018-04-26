@@ -1,5 +1,6 @@
 package mygame.editor.ui;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
@@ -11,7 +12,7 @@ public class PolygonFixture extends Polygon implements Fixtureable {
     PolygonShape shape = new PolygonShape();
     FixtureDef fixtureDef;
     public PolygonFixture(){
-        setFill(Color.valueOf("#ff00ff"));
+        setFill(Color.RED);
 
         fixtureDef = new FixtureDef();
         Material material = Material.DEFAULT();
@@ -26,7 +27,15 @@ public class PolygonFixture extends Polygon implements Fixtureable {
     }
 
     public void setRect(float width,float height){
-        shape.setAsBox(width/(2*32) ,height/(2*32));
+        shape.setAsBox(width/(32) ,height/(32));
+        for(int i= 0; i < shape.getVertexCount();i++){
+            Vector2 vector2 = new Vector2();
+            shape.getVertex(i,vector2);
+            getPoints().addAll((double)vector2.x *32 ,(double)vector2.y *32);
+        }
+
+
+
     }
 
 
