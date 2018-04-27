@@ -44,7 +44,7 @@ class SelectAction(val pane: VBox, transGroup: CustomPane, models: List<Abstract
 //                }
 //                pane.children.add(Text(it.source.toString()))
 //
-//                model.effect = Shadow(0.0, Color.SALMON)
+//                model.effect = Grid(0.0, Color.SALMON)
 //                it.consume()
 //            })
 //        }
