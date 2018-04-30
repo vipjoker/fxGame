@@ -5,9 +5,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import mygame.editor.Controller;
+import mygame.editor.InfoController;
+import mygame.editor.model.Point;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +30,10 @@ public class PhysicsNode extends Pane implements Bodyeable {
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         setWidth(50);
         setHeight(50);
+        layoutXProperty().addListener(this::onLayoutChange);
+        layoutYProperty().addListener(this::onLayoutChange);
+        widthProperty().addListener(this::onLayoutChange);
+        heightProperty().addListener(this::onLayoutChange);
     }
 
     public void toggleActive() {
@@ -47,7 +54,17 @@ public class PhysicsNode extends Pane implements Bodyeable {
         bodyDef.position.set(x/32f,y/32f);
         setLayoutX(x);
         setLayoutY(y);
+
     }
+
+
+    private void onLayoutChange(ObservableValue<? extends Number> observable,Number oldValue,Number newValue){
+        InfoController infoController = controller.getInfoController();
+        infoController.setPositionInfo(new Point(getLayoutX(),getLayoutX()));
+        infoController.setWidthInfo(getWidth());
+        infoController.setHeightInfo(getHeight());
+    }
+
 
     public void setType(BodyDef.BodyType type){
         bodyDef.type = type;
