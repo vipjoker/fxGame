@@ -11,6 +11,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.Rectangle;
@@ -30,6 +31,8 @@ import java.util.List;
 public class ColorCube extends Application {
     private Image crate = new Image(getClass().getResourceAsStream("/background/Object/Crate.png"));
     private Scene scene;
+    private double scale = 1;
+    GraphicsContext graphicsContext;
     public static void main(String[] args) {
         launch(args);
     }
@@ -38,7 +41,7 @@ public class ColorCube extends Application {
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Cube java.sample");
         Canvas canvas = new Canvas(800,800);
-        GraphicsContext graphicsContext2D = canvas.getGraphicsContext2D();
+        graphicsContext = canvas.getGraphicsContext2D();
 
 
         Group root = new Group(canvas);
@@ -46,12 +49,19 @@ public class ColorCube extends Application {
         scene = new Scene(root,800,800,true, SceneAntialiasing.BALANCED);
         scene.setCamera(new PerspectiveCamera());
         primaryStage.setScene(scene);
-        draw(graphicsContext2D,800,800);
+        draw(graphicsContext,800,800);
 
         scene.widthProperty().addListener(this::onChangeWidth);
         scene.heightProperty().addListener(this::onChangeHeight);
+        scene.setOnScroll(this::onScroll);
         primaryStage.show();
 
+    }
+
+    private void onScroll(ScrollEvent scrollEvent) {
+        scale += (scrollEvent.getDeltaY()/1000);
+        System.out.println(scale);
+        draw(graphicsContext,800,800);
     }
 
 
@@ -64,54 +74,43 @@ public class ColorCube extends Application {
     }
 
     private void draw(GraphicsContext g,double width,double height) {
+        g.clearRect(0,height,width,height);
+
+        g.save();
+        g.scale(scale,scale);
         g.setLineWidth(1);
 
-        g.translate(20,20);
+        g.translate(20,height);
 
         for(int i = 20; i < 500; i+= 20){
 
-                g.moveTo(0,i);
-                g.lineTo(500,i);
+                g.moveTo(0,-i);
+                g.lineTo(500,-i);
                 g.moveTo(i,0);
-                g.lineTo(i,500);
+                g.lineTo(i,-500);
                 g.setFont(Font.font(10));
                 g.setTextAlign(TextAlignment.CENTER);
                 g.setTextBaseline(VPos.CENTER);
-                g.fillText(String.valueOf(i),-10,i);
-                g.fillText(String.valueOf(i),i,515);
+                g.fillText(String.valueOf(i),-10,-i);
+                g.fillText(String.valueOf(i),i,-515);
             }
         g.stroke();
 
 
 
-      new Circle(0,0,20).draw(g,0);
-      new Circle(0,50,20).draw(g,0);
         CcSprite ccSprite = new CcSprite(crate,40,40);
+
         ccSprite.draw(g,0);
+
 
         CcSprite ccSprite2 = new CcSprite(crate,60,60);
         ccSprite2.x = 100;
-
+        ccSprite.y = 50;
         ccSprite2.draw(g,0);
+        g.restore();
     }
 
-    class Circle implements Drawable{
-        private final double radius;
-        private final double y;
-        private final double x  ;
 
-        public Circle(double x, double y, double radius){
-            this.x = x;
-            this.y = y;
-            this.radius = radius;
-        }
-
-       public  void draw(GraphicsContext context,long time){
-            context.fillOval(x,y,radius,radius);
-            context.fill();
-            context.fillText("1",0,0);
-        }
-    }
 
     class CcNode implements Drawable{
 
@@ -159,7 +158,7 @@ public class ColorCube extends Application {
 
         @Override
         public void rasterize(GraphicsContext context) {
-            context.drawImage(image,0,0,width,height);
+            context.drawImage(image,0,- (height + y),width,height);
         }
     }
     class Grid implements Drawable{
