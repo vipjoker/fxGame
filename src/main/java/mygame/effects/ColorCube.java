@@ -43,6 +43,10 @@ public class ColorCube extends Application implements TimerCounter.FrameRateCall
     private double scrolly = 400;
     private double translatex = 0;
     private double translatey = 0;
+
+
+    private double width = 0;
+    private double heigth = 0;
     private GraphicsContext graphicsContext;
     private TimerCounter counter;
     private Point2D lastPoint;
@@ -56,6 +60,9 @@ public class ColorCube extends Application implements TimerCounter.FrameRateCall
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Cube java.sample");
         Canvas canvas = new Canvas(800, 800);
+
+
+
         graphicsContext = canvas.getGraphicsContext2D();
 
         graphicsContext.setLineWidth(.5);
@@ -63,7 +70,8 @@ public class ColorCube extends Application implements TimerCounter.FrameRateCall
 
         scene = new Scene(root, 800, 800);
 
-
+        canvas.widthProperty().bind(scene.widthProperty());
+        canvas.heightProperty().bind(scene.heightProperty());
         primaryStage.setScene(scene);
 
 
@@ -119,26 +127,32 @@ public class ColorCube extends Application implements TimerCounter.FrameRateCall
             Point2D subtract = lastPoint.subtract(p);
             translatex -= subtract.getX();
             translatey -= subtract.getY();
-            draw(graphicsContext, 800, 800);
+            draw(graphicsContext, width, heigth);
         }
 
         lastPoint = p;
     }
 
     private void onScroll(ScrollEvent scrollEvent) {
+        if(scrollEvent.getDeltaY() < 0 && scale < 0.2)return;
+        if(scrollEvent.getDeltaY() > 0 && scale > 5)return;
         scale += (scrollEvent.getDeltaY() / 1000);
         scrollx= scrollEvent.getX();
         scrolly= scrollEvent.getY();
-        draw(graphicsContext, 800, 800);
+        draw(graphicsContext, width, heigth);
+
+
     }
 
 
     private void onChangeWidth(ObservableValue<? extends Number> observable, Number old, Number newValue) {
-
+        width = (double)newValue;
+        draw(graphicsContext,width,heigth);
     }
 
     private void onChangeHeight(ObservableValue<? extends Number> observable, Number old, Number newValue) {
-
+        heigth = (double)newValue;
+        draw(graphicsContext,width,heigth);
     }
 
     private void draw(GraphicsContext g, double width, double height) {
@@ -239,25 +253,31 @@ public class ColorCube extends Application implements TimerCounter.FrameRateCall
             try {
 
                 Point2D zero = new Point2D(0, 0);
-                Point2D leftUp = new Point2D(800, 800);
+                Point2D leftUp = new Point2D(width, heigth);
 
                 Point2D begin = transform.inverseTransform(zero);
                 Point2D end = transform.inverseTransform(leftUp);
 
-                double scale =  begin.distance(end) / zero.distance(leftUp) ;
-                System.out.println(scale);
+                double scale =  begin.distance(end) / zero.distance(leftUp);
+                int scaleFactor = (int)(scale*5);
+                System.out.println(scale + " " + scaleFactor);
+
                 g.setFont(Font.font(10 * scale));
-                double beginx = begin.getX() - begin.getX()%gridStep;
-                double beginy = begin.getY() - begin.getY()%gridStep;
+                int step = gridStep * scaleFactor;
+                step = 10;
+                System.out.println(step);
+                double beginx = begin.getX() - begin.getX()%step ;
+                double beginy = begin.getY() - begin.getY()%step;
                 g.beginPath();
-                for (int i = (int)beginy ; i < end.getY(); i += gridStep) {
+                //horizontal
+                for (int i = (int)beginy + 40; i < end.getY() -40; i += step) {
 
                     g.beginPath();
 
                     if(i == 0){
                         g.setStroke(Color.RED);
                     }else{
-                        g.setStroke(Color.BLACK);
+                        g.setStroke(Constants.WHITE);
                     }
 
                     if(i % 100 == 0){
@@ -268,19 +288,19 @@ public class ColorCube extends Application implements TimerCounter.FrameRateCall
                     }
 
                     g.moveTo( 40 + begin.getX(), i);
-                    g.lineTo(end.getX() -40, i);
+                    g.lineTo(end.getX() , i);
                     g.closePath();
                     g.stroke();
 
 
                 }
-
-                for(int i = (int)beginx;i< end.getX(); i += gridStep){
+                //vertical
+                for(int i = (int)beginx + 40;i< end.getX(); i += step){
                     g.beginPath();
                     if(i == 0){
                         g.setStroke(Color.RED);
                     }else{
-                        g.setStroke(Color.BLACK);
+                        g.setStroke(Constants.WHITE);
                     }
 
 
@@ -291,15 +311,14 @@ public class ColorCube extends Application implements TimerCounter.FrameRateCall
                         g.setLineWidth(.2);
                     }
 
-                    g.moveTo(i, begin.getY() );
-                    g.lineTo(i,  end.getY() );
+                    g.moveTo(i, begin.getY()  );
+                    g.lineTo(i,  end.getY() - 40);
                     g.closePath();
                     g.stroke();
 
                 }
 
 
-                g.stroke();
 
             } catch (NonInvertibleTransformException e) {
                 e.printStackTrace();
