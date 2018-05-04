@@ -12,6 +12,7 @@ import javafx.scene.SceneAntialiasing;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.*;
@@ -24,9 +25,10 @@ import javafx.stage.Stage;
 import mygame.Constants;
 import mygame.editor.TimerCounter;
 import mygame.editor.customShapes.Drawable;
+import mygame.editor.model.*;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
 
 /**
@@ -35,7 +37,7 @@ import java.util.List;
 public class ColorCube extends Application implements TimerCounter.FrameRateCallback{
     private Image crate = new Image(getClass().getResourceAsStream("/background/Object/Crate.png"));
     private Image mushroom = new Image(getClass().getResourceAsStream("/background/Object/Mushroom_1.png"));
-    private Image background = new Image(getClass().getResourceAsStream("/background/BG/BG.png"));
+//    private Image background = new Image(getClass().getResourceAsStream("/background/BG/BG.png"));
 
     private Scene scene;
     private double scale = 1;
@@ -83,10 +85,42 @@ public class ColorCube extends Application implements TimerCounter.FrameRateCall
         scene.setOnScroll(this::onScroll);
         canvas.setOnMouseDragged(this::onDrag);
         canvas.setOnMouseReleased(this::onMouseReleased);
+        canvas.setOnMouseClicked(this::onMouseClicked);
         initNodes();
         draw(graphicsContext, 800, 800);
         primaryStage.show();
 
+    }
+
+    private void onMouseClicked(MouseEvent event) {
+
+
+        Deque<List<CcNode>> lists = new LinkedList<>();
+
+        lists.push(nodes);
+
+        boolean isPressed = false;
+        while (lists.peek()!=null){
+            List<CcNode> pop = lists.pop();
+            for(CcNode n : pop){
+                if(!n.children.isEmpty()){
+                    lists.push(n.children);
+                }
+                if(n.contains(event.getX(),event.getY()) && !isPressed) {
+                    n.setActive(true);
+                    isPressed = true;
+                }else{
+                    n.setActive(false);
+                }
+
+            }
+        }
+
+
+
+
+
+        draw(graphicsContext,width,heigth);
     }
 
     private void initNodes(){
@@ -94,7 +128,7 @@ public class ColorCube extends Application implements TimerCounter.FrameRateCall
         CcSprite small = new CcSprite(crate);
         CcSprite mush = new CcSprite(mushroom, 20, 20);
         CcSprite mush2 = new CcSprite(mushroom);
-
+        CcCircle circle = new CcCircle(0, 0, 100);
         mush2.x = crate.getWidth();
 
         CcSprite ccSprite2 = new CcSprite(crate, 60, 60);
@@ -103,9 +137,10 @@ public class ColorCube extends Application implements TimerCounter.FrameRateCall
 
         ccSprite2.addChild(mush);
         ccSprite2.addChild(mush2);
-        nodes.add(new CcSprite(background));
+//        nodes.add(new CcSprite(background));
         nodes.add(small);
         nodes.add(ccSprite2);
+        nodes.add(circle);
     }
 
     @Override
@@ -120,6 +155,7 @@ public class ColorCube extends Application implements TimerCounter.FrameRateCall
 
 
     private void onDrag(MouseEvent event) {
+        if(event.getButton() != MouseButton.SECONDARY)return;
         double x = event.getX();
         double y = event.getY();
         Point2D p = new Point2D(x,y);
@@ -195,6 +231,8 @@ public class ColorCube extends Application implements TimerCounter.FrameRateCall
         double scaleX = 1;
         double scaleY = 1;
         double angle;
+        Affine transform;
+        boolean active;
         List<CcNode> children = new ArrayList<>();
 
         public void addChild(CcNode node) {
@@ -214,6 +252,15 @@ public class ColorCube extends Application implements TimerCounter.FrameRateCall
         }
 
         public void rasterize(GraphicsContext context) {
+            transform = context.getTransform();
+
+        }
+
+        public boolean contains(double x,double y){
+            return false;
+        }
+
+        public void setActive(boolean isActive){
 
         }
     }
@@ -235,7 +282,70 @@ public class ColorCube extends Application implements TimerCounter.FrameRateCall
 
         @Override
         public void rasterize(GraphicsContext context) {
+            transform = context.getTransform();
             context.drawImage(image, 0, -(height ), width, height);
+
+            if(active){
+                context.setLineWidth(2);
+                context.setStroke(Constants.GREEN);
+                context.strokeRect(0, -(height ), width, height);
+            }
+        }
+        @Override
+        public boolean contains(double x,double y){
+            try {
+                Point2D point2D = this.transform.inverseTransform(x, y);
+                Bounds bounds = new BoundingBox(0, -(height), width, height);
+                return bounds.contains(point2D);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            return false;
+        }
+
+        public void setActive(boolean isActive){
+            this.active = isActive;
+        }
+    }
+
+    class CcCircle extends CcNode{
+
+        private double radius;
+        public CcCircle(double x,double y,double radius){
+            this.x = x;
+            this.y = y;
+
+            this.radius = radius;
+
+        }
+
+        @Override
+        public void rasterize(GraphicsContext context) {
+            transform = context.getTransform();
+            context.setFill(Constants.RED);
+            context.fillOval(this.x - radius,this.y - radius,radius*2,radius*2);
+            if(active){
+                context.setLineWidth(2);
+                context.setStroke(Constants.GREEN);
+                context.strokeOval(this.x - radius,this.y - radius,radius*2,radius*2);
+            }
+        }
+        @Override
+        public boolean contains(double x,double y){
+            try {
+                Point2D transform = this.transform.inverseTransform(x, y);
+                Point2D center = new Point2D(this.x, this.y);
+                double distance = transform.distance(center);
+                return distance < radius;
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            return false;
+        }
+
+        @Override
+        public void setActive(boolean active){
+            this.active = active;
         }
     }
 
