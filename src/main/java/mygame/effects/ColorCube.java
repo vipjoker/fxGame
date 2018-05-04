@@ -98,9 +98,9 @@ public class ColorCube extends Application implements TimerCounter.FrameRateCall
         Deque<List<CcNode>> lists = new LinkedList<>();
 
         lists.push(nodes);
-
         boolean isPressed = false;
         while (lists.peek()!=null){
+
             List<CcNode> pop = lists.pop();
             for(CcNode n : pop){
                 if(!n.children.isEmpty()){
@@ -223,16 +223,17 @@ public class ColorCube extends Application implements TimerCounter.FrameRateCall
     }
 
     class CcNode implements Drawable {
+        public int layer  = 0;
+        public double x;
+        public double y;
+        public double width;
+        public double height;
+        public double scaleX = 1;
+        public double scaleY = 1;
+        public double angle;
+        public Affine transform;
+        public boolean active;
 
-        double x;
-        double y;
-        double width;
-        double height;
-        double scaleX = 1;
-        double scaleY = 1;
-        double angle;
-        Affine transform;
-        boolean active;
         List<CcNode> children = new ArrayList<>();
 
         public void addChild(CcNode node) {
