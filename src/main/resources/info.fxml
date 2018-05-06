@@ -6,7 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane fx:id="gpInfo" hgap="10.0" prefHeight="333.0" prefWidth="250.0" stylesheets="style.css" vgap="10.0" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mygame.editor.InfoController">
+<GridPane fx:id="gpInfo" hgap="10.0" prefHeight="333.0" prefWidth="250.0" stylesheets="style.css" vgap="10.0" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mygame.editor.controlers.InfoController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="130.0" minWidth="10.0" prefWidth="108.0" />
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="207.0" minWidth="10.0" prefWidth="150.0" />
@@ -29,7 +29,7 @@
     </rowConstraints>
     <children>
         <Label text="Type" GridPane.halignment="LEFT" GridPane.rowIndex="6" />
-        <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="6">
+        <ComboBox fx:id="comboType" prefWidth="150.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="6">
             <GridPane.margin>
                 <Insets />
             </GridPane.margin>
@@ -41,11 +41,11 @@
         <Label text="Physics" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="10" />
         <Label text="Name" />
         <Label text="Friction" GridPane.rowIndex="12" />
-        <TextField GridPane.columnIndex="1" GridPane.rowIndex="12" />
         <Label text="Restitution" GridPane.rowIndex="11" />
         <Label text="Density" GridPane.rowIndex="13" />
-        <TextField GridPane.columnIndex="1" GridPane.rowIndex="13" />
-        <TextField GridPane.columnIndex="1" GridPane.rowIndex="11" />
+        <Spinner fx:id="spFriction"  GridPane.columnIndex="1" GridPane.rowIndex="11" />
+        <Spinner fx:id="spRestitution" GridPane.columnIndex="1" GridPane.rowIndex="12" />
+        <Spinner fx:id="spDensity" GridPane.columnIndex="1" GridPane.rowIndex="13" />
         <Label text="y" GridPane.rowIndex="2" />
         <TextField fx:id="etName" GridPane.columnIndex="1" />
         <TextField fx:id="etX" GridPane.columnIndex="1" GridPane.rowIndex="1" />
@@ -54,9 +54,9 @@
         <Label text="width" GridPane.rowIndex="3" />
         <Label text="height" GridPane.rowIndex="4" />
         <TextField fx:id="etHeight" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-        <ColorPicker prefHeight="50.0" prefWidth="134.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+        <ColorPicker prefHeight="70.0" prefWidth="134.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
         <Label text="Rotation" GridPane.rowIndex="5" />
-        <TextField GridPane.columnIndex="1" GridPane.rowIndex="5" />
+        <TextField fx:id="etRotation" GridPane.columnIndex="1" GridPane.rowIndex="5" />
     </children>
     <padding>
         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

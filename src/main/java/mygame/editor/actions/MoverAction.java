@@ -1,13 +1,8 @@
 package mygame.editor.actions;
 
-import javafx.scene.Node;
-import mygame.editor.ui.CustomPane;
-import mygame.editor.view.AbstractView;
+
 import mygame.editor.model.Point;
-import mygame.editor.util.DragNDrop;
-
-import java.util.List;
-
+import mygame.editor.render.CanvasRenderer;
 
 /**
  * Created by oleh on 3/21/17.
@@ -15,19 +10,13 @@ import java.util.List;
 public class MoverAction extends Action {
 
 
-    public MoverAction(CustomPane parent, List<AbstractView> models) {
-        super(parent, models);
+    public MoverAction(CanvasRenderer renderer) {
+        super(renderer);
     }
 
     @Override
     public void init() {
 
-        for (Node child : parent.getRoot().getChildren()) {
-            DragNDrop listener = new DragNDrop();
-            child.setOnMouseDragged(listener.getOnMoveListener());
-            child.setOnMousePressed(listener.getOnStartListener());
-
-        }
     }
 
     @Override
@@ -40,7 +29,6 @@ public class MoverAction extends Action {
 
     }
 
-
     @Override
     public void mouseReleased(Point position) {
 
@@ -48,10 +36,6 @@ public class MoverAction extends Action {
 
     @Override
     public void finishDrawing() {
-        for (Node child : parent.getRoot().getChildren()) {
-            child.setOnMouseDragged(null);
-            child.setOnMousePressed(null);
 
-        }
     }
 }

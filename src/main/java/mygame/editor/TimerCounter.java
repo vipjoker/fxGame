@@ -8,11 +8,11 @@ import javafx.application.Platform;
  */
 public class TimerCounter extends AnimationTimer{
     private final FrameRateCallback mCallback;
-    long last = -1;
-    long counter = 0;
-    long lastSecond = 0;
-    long lastMillis = 0;
-    long lastFrame = 0;
+    private long last = -1;
+    private long counter = 0;
+    private long lastSecond = 0;
+    private long lastMillis = 0;
+    private long lastFrame = 0;
     public TimerCounter(FrameRateCallback callback) {
         this.mCallback = callback;
     }
@@ -50,7 +50,7 @@ public class TimerCounter extends AnimationTimer{
     }
 
     public interface FrameRateCallback{
-        void update(long delta);
+        default void update(long delta){}
         default void seconds(long seconds){}
         default void millis(long millis){}
     }

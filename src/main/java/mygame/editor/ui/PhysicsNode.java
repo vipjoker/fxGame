@@ -8,8 +8,8 @@ import com.badlogic.gdx.physics.box2d.World;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
-import mygame.editor.Controller;
-import mygame.editor.InfoController;
+import mygame.editor.controlers.Controller;
+import mygame.editor.controlers.InfoController;
 import mygame.editor.model.Point;
 
 import java.util.ArrayList;

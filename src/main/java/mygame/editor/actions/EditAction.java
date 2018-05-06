@@ -1,14 +1,12 @@
 package mygame.editor.actions;
 
+
 import mygame.editor.model.Point;
 import mygame.editor.render.CanvasRenderer;
 
-/**
- * Created by oleh on 3/21/17.
- */
-public class RotateAction extends Action {
+public class EditAction extends Action{
 
-    public RotateAction(CanvasRenderer renderer) {
+    public EditAction(CanvasRenderer renderer) {
         super(renderer);
     }
 

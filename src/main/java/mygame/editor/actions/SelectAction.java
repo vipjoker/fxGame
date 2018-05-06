@@ -4,11 +4,12 @@ import mygame.editor.model.Point;
 import mygame.editor.render.CanvasRenderer;
 
 /**
- * Created by oleh on 3/21/17.
+ * Created by oleh on 3/27/17.
  */
-public class RotateAction extends Action {
+public class SelectAction extends Action{
 
-    public RotateAction(CanvasRenderer renderer) {
+
+    public SelectAction(CanvasRenderer renderer) {
         super(renderer);
     }
 
