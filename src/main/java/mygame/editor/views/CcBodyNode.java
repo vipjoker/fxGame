@@ -9,18 +9,28 @@ import mygame.editor.customShapes.Chain;
 
 public class CcBodyNode extends CcNode {
     private Body body;
+    private BodyDef bodyDef;
+    private boolean isInSimulateMode;
 
     public CcBodyNode(Body body) {
         this.body = body;
-
+        isInSimulateMode = true;
     }
+
+    public CcBodyNode(BodyDef bodyDef) {
+        this.bodyDef = bodyDef;
+        isInSimulateMode = false;
+    }
+
+
+
+
 
     @Override
     public void rasterize(GraphicsContext context) {
 
-        x = body.getPosition().x * 32;
-        y = body.getPosition().y * 32;
-        angle = -body.getAngle() * MathUtils.radDeg;
+        update();
+
         context.setFill(Color.WHITE.deriveColor(1, 1, 1, 0.5));
         context.fillRect(-5, -5, 10, 10);
         context.fill();
@@ -38,6 +48,19 @@ public class CcBodyNode extends CcNode {
         context.closePath();
         context.stroke();
 
+    }
+
+    private void update(){
+
+        if(isInSimulateMode) {
+            x = body.getPosition().x * 32;
+            y = body.getPosition().y * 32;
+            angle = -body.getAngle() * MathUtils.radDeg;
+        }else{
+            x = bodyDef.position.x * 32;
+            y = bodyDef.position.y * 32;
+            angle = -bodyDef.angle * MathUtils.radDeg;
+        }
     }
 
 
