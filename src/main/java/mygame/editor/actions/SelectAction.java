@@ -15,7 +15,8 @@ public class SelectAction extends Action{
 
     @Override
     public void init() {
-
+        mRenderer.getNodes().clear();
+        mRenderer.update();
     }
 
     @Override

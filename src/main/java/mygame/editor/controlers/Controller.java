@@ -16,13 +16,11 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import mygame.editor.App;
-import mygame.editor.Box2dDialog;
 import mygame.editor.actions.*;
 import mygame.editor.render.TreeItemPath;
 import mygame.editor.util.Resources;
 import mygame.editor.views.CcSprite;
 import mygame.editor.render.CanvasRenderer;
-
 
 import java.io.File;
 import java.io.IOException;
@@ -34,8 +32,6 @@ import javafx.scene.control.TreeItem;
 import mygame.editor.data.DbConnection;
 import mygame.editor.data.NodeDao;
 import mygame.editor.data.entities.EntityNode;
-import mygame.editor.ui.PhysicsNode;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -45,14 +41,16 @@ import static mygame.editor.util.Constants.*;
 
 
 public class Controller implements Initializable {
-    @FXML
-    public Button btnRun;
+
     public  VBox leftPane;
     public VBox rightPane;
     public AnchorPane centerPane;
     public SplitPane root;
     public TreeView<Path> resourcesTreeview;
     public HBox toolbar;
+    public ToggleButton btnRun ;
+    public ToggleButton btnMove;
+    public ToggleButton btnEdit;
 
 
     private CanvasRenderer canvasRenderer;
@@ -118,23 +116,12 @@ public class Controller implements Initializable {
     }
 
     private void setupMenu() {
-        ToggleButton tb1 = new ToggleButton("Select");
-        tb1.setOnMouseClicked(e -> onSelect());
 
-        tb1.setPrefSize(76.0, 45.0);
-        ToggleButton tb2 = new ToggleButton("Move");
-        tb2.setOnMouseClicked((e) -> onMove());
-        tb2.setPrefSize(76.0, 45.0);
-        ToggleButton tb3 = new ToggleButton("Rotate");
-        tb3.setPrefSize(76.0, 45.0);
-        tb3.setOnMouseClicked(e -> onRotate());
         ToggleGroup group = new ToggleGroup();
-        tb1.setToggleGroup(group);
-        tb2.setToggleGroup(group);
-        tb3.setToggleGroup(group);
-        group.selectToggle(tb1);
-        toolbar.getChildren().addAll(tb1, tb2, tb3);
-
+        btnRun.setToggleGroup(group);
+        btnMove.setToggleGroup(group);
+        btnEdit.setToggleGroup(group);
+        group.selectToggle(btnMove);
 
     }
 
@@ -293,7 +280,8 @@ public class Controller implements Initializable {
         switchDrawer(ACTION_ROTATE);
     }
 
-    void onEdit(ActionEvent event) {
+
+    public void onEdit(ActionEvent event) {
         switchDrawer(ACTION_EDIT);
     }
 
