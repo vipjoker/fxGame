@@ -3,6 +3,7 @@ package mygame.editor.actions;
 
 import mygame.editor.model.Point;
 import mygame.editor.render.CanvasRenderer;
+import mygame.editor.repository.NodeRepository;
 
 /**
  * Created by oleh on 3/21/17.
@@ -10,8 +11,8 @@ import mygame.editor.render.CanvasRenderer;
 public class MoverAction extends Action {
 
 
-    public MoverAction(CanvasRenderer renderer) {
-        super(renderer);
+    public MoverAction(CanvasRenderer renderer, NodeRepository repository) {
+        super(renderer,repository);
     }
 
     @Override

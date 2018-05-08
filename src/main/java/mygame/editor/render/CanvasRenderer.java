@@ -1,6 +1,7 @@
 package mygame.editor.render;
 
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.BoundingBox;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -9,6 +10,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
 import mygame.editor.util.Constants;
 import mygame.editor.TimerCounter;
@@ -29,6 +31,10 @@ public class CanvasRenderer {
     private GraphicsContext graphicsContext;
     private TimerCounter counter;
     private Point2D lastPoint;
+
+    private Point2D beginRect;
+    private Point2D endRect;
+
     private Grid grid = new Grid();
     private List<CcNode> nodes = new ArrayList<>();
 
@@ -64,6 +70,8 @@ public class CanvasRenderer {
 
 
     private void onMouseClicked(MouseEvent event) {
+
+
 
 
         Deque<List<CcNode>> lists = new LinkedList<>();
@@ -102,11 +110,30 @@ public class CanvasRenderer {
 
     private void onMouseReleased(MouseEvent event) {
         lastPoint = null;
+        beginRect = null;
+        endRect = null;
     }
 
 
     private void onDrag(MouseEvent event) {
-        if (event.getButton() != MouseButton.SECONDARY) return;
+
+        if (beginRect == null) {
+
+            beginRect = new Point2D(event.getX(), event.getY());
+        } else {
+            endRect = new Point2D(event.getX(), event.getY());
+        }
+
+
+
+
+        if (event.getButton() != MouseButton.SECONDARY) {
+            update();
+            return;
+        }
+
+
+
         double x = event.getX();
         double y = event.getY();
         Point2D p = new Point2D(x, y);
@@ -114,7 +141,7 @@ public class CanvasRenderer {
             Point2D subtract = lastPoint.subtract(p);
             translatex -= subtract.getX();
             translatey -= subtract.getY();
-            draw(graphicsContext, Global.getWidth(), Global.getHeight());
+            update();
         }
 
         lastPoint = p;
@@ -158,6 +185,28 @@ public class CanvasRenderer {
         }
         grid.draw(g, 0);
         g.restore();
+        handleSelectionRect(g);
+    }
+
+    private void handleSelectionRect(GraphicsContext g) {
+
+        System.out.println("Begin " + beginRect + " end " + endRect);
+        if(beginRect != null && endRect != null){
+
+            g.setFill(Color.ALICEBLUE.deriveColor(1,1,1,0.3));
+            g.setStroke(Color.ALICEBLUE.deriveColor(1,1,1,0.5));
+
+            double x = beginRect.getX();
+            double y = beginRect.getY();
+            double width = Math.abs(beginRect.getX() - endRect.getX());
+
+            double height = Math.abs(beginRect.getY() - endRect.getY());
+            System.out.printf("RECT %f %f %f %f\n",x,y,width,height);
+            g.fillRect(x,y,width,height);
+            g.strokeRect(x,y,width,height);
+            g.fill();
+        }
+
     }
 
 
@@ -171,5 +220,13 @@ public class CanvasRenderer {
 
     public List<CcNode> getNodes(){
         return nodes;
+    }
+
+    public interface OnSelectedNodesListener{
+        void onNodesSelected(List<CcNode> nodes);
+    }
+
+    public interface OnCanvasClickListener{
+        void onClick(double x,double y);
     }
 }

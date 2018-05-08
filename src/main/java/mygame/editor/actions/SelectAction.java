@@ -2,6 +2,7 @@ package mygame.editor.actions;
 
 import mygame.editor.model.Point;
 import mygame.editor.render.CanvasRenderer;
+import mygame.editor.repository.NodeRepository;
 
 /**
  * Created by oleh on 3/27/17.
@@ -9,8 +10,8 @@ import mygame.editor.render.CanvasRenderer;
 public class SelectAction extends Action{
 
 
-    public SelectAction(CanvasRenderer renderer) {
-        super(renderer);
+    public SelectAction(CanvasRenderer renderer, NodeRepository repository) {
+        super(renderer,repository);
     }
 
     @Override

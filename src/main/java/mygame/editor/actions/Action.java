@@ -9,6 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import mygame.editor.render.CanvasRenderer;
+import mygame.editor.repository.NodeRepository;
 import mygame.editor.util.Constants;
 import mygame.editor.model.Point;
 
@@ -18,9 +19,10 @@ import java.util.List;
 public abstract class Action {
 
     protected final CanvasRenderer mRenderer;
-
-    protected Action(CanvasRenderer renderer) {
+    protected final NodeRepository mRepository;
+    protected Action(CanvasRenderer renderer,NodeRepository repository) {
         this.mRenderer = renderer;
+        this.mRepository = repository;
     }
 
     public abstract void init();

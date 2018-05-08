@@ -5,6 +5,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import mygame.editor.TimerCounter;
 import mygame.editor.model.Point;
 import mygame.editor.render.CanvasRenderer;
+import mygame.editor.repository.NodeRepository;
 import mygame.editor.ui.ChainFixture;
 import mygame.editor.views.CcBodyNode;
 
@@ -12,8 +13,8 @@ public class Box2dAction extends Action implements TimerCounter.FrameRateCallbac
     private TimerCounter counter;
     private World world;
 
-    public Box2dAction(CanvasRenderer renderer) {
-        super(renderer);
+    public Box2dAction(CanvasRenderer renderer, NodeRepository repository) {
+        super(renderer,repository);
 
 
     }
@@ -138,5 +139,6 @@ public class Box2dAction extends Action implements TimerCounter.FrameRateCallbac
         world = null;
         counter.stop();
         mRenderer.getNodes().clear();
+        mRenderer.update();
     }
 }

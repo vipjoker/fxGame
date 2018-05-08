@@ -18,6 +18,8 @@ import javafx.stage.Window;
 import mygame.editor.App;
 import mygame.editor.actions.*;
 import mygame.editor.render.TreeItemPath;
+import mygame.editor.repository.NodeRepository;
+import mygame.editor.repository.SqlNodeRepository;
 import mygame.editor.util.Resources;
 import mygame.editor.views.CcSprite;
 import mygame.editor.render.CanvasRenderer;
@@ -52,41 +54,19 @@ public class Controller implements Initializable {
     public ToggleButton btnMove;
     public ToggleButton btnEdit;
 
-
     private CanvasRenderer canvasRenderer;
     private Action currentDrawer;
     private Map<String, Action> actions = new HashMap<>();
 
-
     @FXML
-    private InfoController infoController;
-
-
+    public InfoController infoController;
 
     public void initialize(URL location, ResourceBundle resources) {
         setListeners();
-
-
     }
 
     public InfoController getInfoController() {
         return infoController;
-    }
-
-    private void initNodesFromDb() {
-
-        try (Connection con = DbConnection.getDbConnection()) {
-
-            NodeDao nodeDao = new NodeDao(con);
-            for (EntityNode n : nodeDao.getAll()) {
-
-            }
-            con.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
     }
 
     private void setListeners() {
@@ -164,18 +144,17 @@ public class Controller implements Initializable {
 
     }
 
-
     private void initActions() {
+        NodeRepository repository = new SqlNodeRepository();
+        actions.put(ACTION_EDIT, new EditAction(canvasRenderer,repository));
+        actions.put(ACTION_MOVE, new MoverAction(canvasRenderer,repository));
+        actions.put(ACTION_BOX_2D, new Box2dAction(canvasRenderer,repository));
 
-        actions.put(ACTION_SELECT, new SelectAction(canvasRenderer));
-        actions.put(ACTION_MOVE, new MoverAction(canvasRenderer));
-        actions.put(ACTION_ROTATE, new RotateAction(canvasRenderer));
-        actions.put(ACTION_EDIT, new EditAction(canvasRenderer));
+        actions.put(ACTION_SELECT, new SelectAction(canvasRenderer,repository));
+        actions.put(ACTION_ROTATE, new RotateAction(canvasRenderer,repository));
+        actions.put(ACTION_CREATE_BODY, new CreateBodyAction(canvasRenderer,repository));
+        actions.put(ACTION_CREATE_JOINT, new CreateJointAction(canvasRenderer,repository));
 
-        actions.put(ACTION_CREATE_BODY, new CreateBodyAction(canvasRenderer));
-        actions.put(ACTION_CREATE_JOINT, new CreateJointAction(canvasRenderer));
-
-        actions.put(ACTION_BOX_2D, new Box2dAction(canvasRenderer));
         switchDrawer(ACTION_SELECT);
     }
 
@@ -251,20 +230,10 @@ public class Controller implements Initializable {
 
     }
 
-
-
-
-
     public void onRun(ActionEvent actionEvent) {
 
         switchDrawer(ACTION_BOX_2D);
     }
-
-
-
-
-
-
 
     private void switchDrawer(String action) {
         if (currentDrawer != null) currentDrawer.finishDrawing();
@@ -276,16 +245,16 @@ public class Controller implements Initializable {
         switchDrawer(ACTION_MOVE);
     }
 
-    void onRotate() {
-        switchDrawer(ACTION_ROTATE);
-    }
-
 
     public void onEdit(ActionEvent event) {
         switchDrawer(ACTION_EDIT);
     }
 
-    void onSelect() {
+    public void onRotate() {
+        switchDrawer(ACTION_ROTATE);
+    }
+
+    public void onSelect() {
         switchDrawer(ACTION_SELECT);
     }
 
