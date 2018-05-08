@@ -3,6 +3,7 @@ package mygame.editor.render;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Point2D;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseButton;
@@ -37,10 +38,10 @@ public class CanvasRenderer {
 
     private Grid grid = new Grid();
     private List<CcNode> nodes = new ArrayList<>();
+    private OnCanvasClickListener mOnCanvasClickListener;
 
 
-
-    public CanvasRenderer(Pane pane){
+    public CanvasRenderer(Pane pane) {
         Canvas canvas = new Canvas();
         Global.setHeight(800);
         Global.setWidth(800);
@@ -64,15 +65,18 @@ public class CanvasRenderer {
         canvas.setOnMouseDragged(this::onDrag);
         canvas.setOnMouseReleased(this::onMouseReleased);
         canvas.setOnMouseClicked(this::onMouseClicked);
+
         draw(graphicsContext, Global.getWidth(), Global.getHeight());
 
     }
 
 
+
     private void onMouseClicked(MouseEvent event) {
-
-
-
+        if(mOnCanvasClickListener != null){
+            Point2D point2D = grid.transformPoint(event);
+            mOnCanvasClickListener.onClick(point2D);
+        }
 
         Deque<List<CcNode>> lists = new LinkedList<>();
         List<CcNode> sortedNodes = new ArrayList<>();
@@ -117,34 +121,28 @@ public class CanvasRenderer {
 
     private void onDrag(MouseEvent event) {
 
-        if (beginRect == null) {
+        if (event.getButton() == MouseButton.SECONDARY) {
+            double x = event.getX();
+            double y = event.getY();
+            Point2D p = new Point2D(x, y);
+            if (lastPoint != null) {
+                Point2D subtract = lastPoint.subtract(p);
+                translatex -= subtract.getX();
+                translatey -= subtract.getY();
 
-            beginRect = new Point2D(event.getX(), event.getY());
+            }
+
+            lastPoint = p;
         } else {
-            endRect = new Point2D(event.getX(), event.getY());
+            if (beginRect == null) {
+
+                beginRect = new Point2D(event.getX(), event.getY());
+            } else {
+                endRect = new Point2D(event.getX(), event.getY());
+            }
+
         }
-
-
-
-
-        if (event.getButton() != MouseButton.SECONDARY) {
-            update();
-            return;
-        }
-
-
-
-        double x = event.getX();
-        double y = event.getY();
-        Point2D p = new Point2D(x, y);
-        if (lastPoint != null) {
-            Point2D subtract = lastPoint.subtract(p);
-            translatex -= subtract.getX();
-            translatey -= subtract.getY();
-            update();
-        }
-
-        lastPoint = p;
+        update();
     }
 
     private void onScroll(ScrollEvent scrollEvent) {
@@ -166,7 +164,7 @@ public class CanvasRenderer {
 
     private void onChangeHeight(ObservableValue<? extends Number> observable, Number old, Number newValue) {
         Global.setWidth((double) newValue);
-          update();
+        update();
     }
 
     private void draw(GraphicsContext g, double width, double height) {
@@ -191,42 +189,51 @@ public class CanvasRenderer {
     private void handleSelectionRect(GraphicsContext g) {
 
         System.out.println("Begin " + beginRect + " end " + endRect);
-        if(beginRect != null && endRect != null){
+        if (beginRect != null && endRect != null) {
 
-            g.setFill(Color.ALICEBLUE.deriveColor(1,1,1,0.3));
-            g.setStroke(Color.ALICEBLUE.deriveColor(1,1,1,0.5));
+            g.setFill(Color.ALICEBLUE.deriveColor(1, 1, 1, 0.3));
+            g.setStroke(Color.ALICEBLUE.deriveColor(1, 1, 1, 0.5));
 
-            double x = beginRect.getX();
-            double y = beginRect.getY();
+            double x = beginRect.getX() < endRect.getX() ? beginRect.getX() : endRect.getX();
+            double y = beginRect.getY() < endRect.getY() ? beginRect.getY() : endRect.getY();
+
+
             double width = Math.abs(beginRect.getX() - endRect.getX());
 
             double height = Math.abs(beginRect.getY() - endRect.getY());
-            System.out.printf("RECT %f %f %f %f\n",x,y,width,height);
-            g.fillRect(x,y,width,height);
-            g.strokeRect(x,y,width,height);
+            System.out.printf("RECT %f %f %f %f\n", x, y, width, height);
+
+
+            g.fillRect(x, y, width, height);
+            g.strokeRect(x, y, width, height);
             g.fill();
         }
 
     }
 
 
-    public void update(){
+    public void update() {
         draw(graphicsContext, Global.getWidth(), Global.getHeight());
     }
 
-    public void addChild(CcNode node){
+    public void addChild(CcNode node) {
         nodes.add(node);
     }
 
-    public List<CcNode> getNodes(){
+    public List<CcNode> getNodes() {
         return nodes;
     }
 
-    public interface OnSelectedNodesListener{
+    public void setOnCanvasClickListener(OnCanvasClickListener canvasClickListener){
+        this.mOnCanvasClickListener = canvasClickListener;
+
+    }
+
+    public interface OnSelectedNodesListener {
         void onNodesSelected(List<CcNode> nodes);
     }
 
-    public interface OnCanvasClickListener{
-        void onClick(double x,double y);
+    public interface OnCanvasClickListener {
+        void onClick(Point2D point2D);
     }
 }

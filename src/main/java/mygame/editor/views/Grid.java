@@ -3,6 +3,7 @@ package mygame.editor.views;
 import javafx.geometry.Point2D;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
@@ -15,6 +16,7 @@ public class Grid implements Drawable {
 
     private int gridStep = 10;
     private int padding = 40;
+    private Affine lastTransform;
 
     @Override
     public void draw(GraphicsContext g, long time) {
@@ -24,6 +26,7 @@ public class Grid implements Drawable {
 
 
         Affine transform = g.getTransform();
+        lastTransform = transform.clone();
         try {
 
             Point2D zero = new Point2D(0, 0);
@@ -111,6 +114,16 @@ public class Grid implements Drawable {
         } catch (NonInvertibleTransformException e) {
             e.printStackTrace();
         }
+    }
+
+    public Point2D transformPoint(MouseEvent event){
+        Point2D point2D = null;
+        try {
+            point2D = lastTransform.inverseTransform(event.getX(), event.getY());
+        } catch (NonInvertibleTransformException e) {
+            e.printStackTrace();
+        }
+        return point2D;
     }
 }
 
