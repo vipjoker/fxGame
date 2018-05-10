@@ -21,7 +21,7 @@ public class Grid implements Drawable {
     @Override
     public void draw(GraphicsContext g, long time) {
         g.beginPath();
-        g.setTextAlign(TextAlignment.CENTER);
+        g.setTextAlign(TextAlignment.RIGHT);
         g.setTextBaseline(VPos.CENTER);
 
 
@@ -29,7 +29,7 @@ public class Grid implements Drawable {
         lastTransform = transform.clone();
         try {
 
-            Point2D zero = new Point2D(0, 0);
+            Point2D zero = new Point2D(50, -50);
             Point2D leftUp = new Point2D(Global.getWidth(), Global.getHeight());
 
             Point2D begin = transform.inverseTransform(zero);
@@ -43,15 +43,15 @@ public class Grid implements Drawable {
             int step = gridStep * scaleFactor;
             step = 10;
 
-            if (scaleFactor < 2) {
-                step = 5;
-            } else if (scaleFactor < 5) {
-                step = 10;
-            } else if (scaleFactor < 10) {
-                step = 20;
-            } else if (scaleFactor < 15) {
-                step = 50;
-            }
+//            if (scaleFactor < 2) {
+//                step = 5;
+//            } else if (scaleFactor < 5) {
+//                step = 10;
+//            } else if (scaleFactor < 10) {
+//                step = 20;
+//            } else if (scaleFactor < 15) {
+//                step = 50;
+//            }
             padding = (int) (40 * scale);
             padding = 40;
             System.out.println(step);
@@ -62,7 +62,7 @@ public class Grid implements Drawable {
 
             Color white = Constants.WHITE.deriveColor(1, 1, 1, 0.3);
 
-            for (int i = (int) beginy + padding; i < end.getY() - padding; i += step) {
+            for (int i = (int) beginy ; i < end.getY() ; i += step) {
 
                 g.beginPath();
 
@@ -74,12 +74,12 @@ public class Grid implements Drawable {
 
                 if (i % 100 == 0) {
                     g.setLineWidth(1);
-                    g.fillText(String.valueOf(-i), begin.getX() + 15, i);
+                    g.fillText(String.valueOf(-i), begin.getX() , i);
                 } else {
                     g.setLineWidth(.2);
                 }
 
-                g.moveTo(padding + begin.getX(), i);
+                g.moveTo( begin.getX(), i);
                 g.lineTo(end.getX(), i);
                 g.closePath();
                 g.stroke();
@@ -87,7 +87,7 @@ public class Grid implements Drawable {
 
             }
             //vertical
-            for (int i = (int) beginx + padding; i < end.getX(); i += step) {
+            for (int i = (int) beginx ; i < end.getX(); i += step) {
                 g.beginPath();
                 if (i == 0) {
                     g.setStroke(Color.RED);
@@ -104,7 +104,7 @@ public class Grid implements Drawable {
                 }
 
                 g.moveTo(i, begin.getY());
-                g.lineTo(i, end.getY() - padding);
+                g.lineTo(i, end.getY() );
                 g.closePath();
                 g.stroke();
 
@@ -117,9 +117,14 @@ public class Grid implements Drawable {
     }
 
     public Point2D transformPoint(MouseEvent event){
+
+        return transformPoint(event.getX(),event.getY());
+    }
+
+    public Point2D transformPoint(double x,double y){
         Point2D point2D = null;
         try {
-            point2D = lastTransform.inverseTransform(event.getX(), event.getY());
+            point2D = lastTransform.inverseTransform(x, y);
         } catch (NonInvertibleTransformException e) {
             e.printStackTrace();
         }

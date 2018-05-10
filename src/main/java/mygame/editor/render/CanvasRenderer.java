@@ -4,6 +4,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Cursor;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseButton;
@@ -13,6 +14,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
+import javafx.scene.transform.NonInvertibleTransformException;
 import mygame.editor.util.Constants;
 import mygame.editor.TimerCounter;
 import mygame.editor.views.CcNode;
@@ -28,7 +30,7 @@ public class CanvasRenderer {
     private double translatex = 400;
     private double translatey = -400;
 
-
+    Point2D mouseCursor = new Point2D(0,0);
     private GraphicsContext graphicsContext;
     private TimerCounter counter;
     private Point2D lastPoint;
@@ -65,7 +67,11 @@ public class CanvasRenderer {
         canvas.setOnMouseDragged(this::onDrag);
         canvas.setOnMouseReleased(this::onMouseReleased);
         canvas.setOnMouseClicked(this::onMouseClicked);
-
+        canvas.setCursor(Cursor.CROSSHAIR);
+        canvas.setOnMouseMoved(e-> {
+            mouseCursor=new Point2D(e.getX(),e.getY());
+            update();
+        });
         draw(graphicsContext, Global.getWidth(), Global.getHeight());
 
     }
@@ -75,7 +81,9 @@ public class CanvasRenderer {
     private void onMouseClicked(MouseEvent event) {
         if(mOnCanvasClickListener != null){
             Point2D point2D = grid.transformPoint(event);
-            mOnCanvasClickListener.onClick(point2D);
+            Point2D p = new Point2D(point2D.getX(),-point2D.getY());
+            mOnCanvasClickListener.onClick(p);
+
         }
 
         Deque<List<CcNode>> lists = new LinkedList<>();
@@ -146,9 +154,12 @@ public class CanvasRenderer {
     }
 
     private void onScroll(ScrollEvent scrollEvent) {
-        if (scrollEvent.getDeltaY() < 0 && scale < 0.2) return;
-        if (scrollEvent.getDeltaY() > 0 && scale > 5) return;
         scale += (scrollEvent.getDeltaY() / 1000);
+
+        if ( scale < 0.2) scale = 0.2;
+        if (scale > 5)scale = 5;
+
+
         scrollx = scrollEvent.getX();
         scrolly = scrollEvent.getY();
         update();
@@ -182,6 +193,7 @@ public class CanvasRenderer {
             node.draw(g, 0);
         }
         grid.draw(g, 0);
+        drawCursor(g);
         g.restore();
         handleSelectionRect(g);
     }
@@ -208,7 +220,34 @@ public class CanvasRenderer {
             g.strokeRect(x, y, width, height);
             g.fill();
         }
+    }
 
+    private void drawCursor(GraphicsContext g){
+
+        try {
+            grid.transformPoint(mouseCursor.getX(),mouseCursor.getY());//check grid method grid.transform
+
+            Point2D p = g.getTransform().inverseTransform(mouseCursor);
+            double y = p.getY() ;
+            double x = p.getX() ;
+
+
+
+        double cursorLength = 10;
+        g.beginPath();
+        g.setStroke(Color.PINK);
+        g.moveTo(x -cursorLength ,y);
+        g.lineTo(x +cursorLength ,y);
+        g.moveTo(x ,y -cursorLength );
+        g.lineTo(x  ,y +cursorLength);
+        g.fillText(String.format("%f\n%f",x,y),x + 10,y + 10);
+
+
+        g.stroke();
+        g.closePath();
+        } catch (NonInvertibleTransformException e) {
+            e.printStackTrace();
+        }
     }
 
 

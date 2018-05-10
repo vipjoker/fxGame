@@ -25,6 +25,7 @@ public class MoverAction extends Action {
             def.position.y = (float) point2D.getY()/32;
             CcBodyNode bodyNode= new CcBodyNode(def);
             mRenderer.addChild(bodyNode);
+            mRenderer.update();
         });
     }
 
