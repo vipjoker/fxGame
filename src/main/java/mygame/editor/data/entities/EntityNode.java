@@ -9,6 +9,8 @@ public class EntityNode {
     private float y;
     private float width;
     private float height;
+    private float rotation;
+    private String spriteUrl;
 
 
     public int getId() {
@@ -49,5 +51,21 @@ public class EntityNode {
 
     public void setHeight(float height) {
         this.height = height;
+    }
+
+    public float getRotation() {
+        return rotation;
+    }
+
+    public String getSpriteUrl() {
+        return spriteUrl;
+    }
+
+    public void setRotation(float rotation) {
+        this.rotation = rotation;
+    }
+
+    public void setSpriteUrl(String spriteUrl) {
+        this.spriteUrl = spriteUrl;
     }
 }

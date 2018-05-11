@@ -21,6 +21,11 @@ public class SqlNodeRepository implements NodeRepository{
     }
 
     @Override
+    public CcNode getNodeById(long id) {
+        return null;
+    }
+
+    @Override
     public List<CcNode> getAllNodes() {
         return null;
     }

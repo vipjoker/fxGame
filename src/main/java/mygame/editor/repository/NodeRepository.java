@@ -6,8 +6,13 @@ import java.util.List;
 
 public interface NodeRepository {
 
-    public List<CcNode> getAllNodes();
-    public void save(CcNode node);
-    public void delete(CcNode node);
-    public void update(CcNode node);
+    List<CcNode> getAllNodes();
+
+    CcNode getNodeById(long id);
+
+    void save(CcNode node);
+
+    void delete(CcNode node);
+
+    void update(CcNode node);
 }
