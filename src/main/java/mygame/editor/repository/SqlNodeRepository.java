@@ -2,6 +2,7 @@ package mygame.editor.repository;
 
 import mygame.editor.data.DbConnection;
 import mygame.editor.data.NodeDao;
+import mygame.editor.mapper.EntityNodeMapper;
 import mygame.editor.views.CcNode;
 
 import java.sql.Connection;
@@ -32,7 +33,11 @@ public class SqlNodeRepository implements NodeRepository{
 
     @Override
     public void save(CcNode node) {
-
+        try {
+            nodeDao.insert(EntityNodeMapper.map(node));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -43,5 +48,17 @@ public class SqlNodeRepository implements NodeRepository{
     @Override
     public void update(CcNode node) {
 
+    }
+
+    public static void main(String[] args) {
+        SqlNodeRepository repository = new SqlNodeRepository();
+
+
+        CcNode node = new CcNode() ;
+        node.x = 32;
+        node.y = 21;
+        node.setActive(false);
+
+        repository.save(node);
     }
 }
