@@ -22,7 +22,7 @@ public class FlatBuffersRepository implements NodeRepository {
     }
 
     @Override
-    public List<CcNode> getAllNodes() {
+    public CcNode getRootNode() {
         return null;
     }
 
@@ -156,6 +156,11 @@ public class FlatBuffersRepository implements NodeRepository {
 
     @Override
     public void delete(CcNode node) {
+
+    }
+
+    @Override
+    public void deleteAll() {
 
     }
 

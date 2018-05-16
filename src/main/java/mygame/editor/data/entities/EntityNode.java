@@ -1,5 +1,7 @@
 package mygame.editor.data.entities;
 
+import java.util.List;
+
 /**
  * Created by oleh on 30.04.18.
  */
@@ -7,10 +9,14 @@ public class EntityNode {
     private int id;
     private float x;
     private float y;
+    private String name;
     private float width;
     private float height;
     private float rotation;
+    private int parentId;
     private String spriteUrl;
+    private EntityBody body;
+    private List<EntityFixture> fixtures;
 
 
     public int getId() {
@@ -19,6 +25,15 @@ public class EntityNode {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+
+    public String getName() {
+        return name;
     }
 
     public float getX() {
@@ -67,5 +82,29 @@ public class EntityNode {
 
     public void setSpriteUrl(String spriteUrl) {
         this.spriteUrl = spriteUrl;
+    }
+
+    public int getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(int parentId) {
+        this.parentId = parentId;
+    }
+
+    public EntityBody getBody() {
+        return body;
+    }
+
+    public void setBody(EntityBody body) {
+        this.body = body;
+    }
+
+    public List<EntityFixture> getFixtures() {
+        return fixtures;
+    }
+
+    public void setFixtures(List<EntityFixture> fixtures) {
+        this.fixtures = fixtures;
     }
 }

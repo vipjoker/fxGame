@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CcNode implements Drawable {
+    public int id;
     public int layer;
     public double x;
     public double y;
@@ -18,6 +19,7 @@ public class CcNode implements Drawable {
     public double scaleY = 1;
     public double angle;
     public Affine transform;
+    public String name;
     protected BoundingBox bBox;
     public boolean active;
 
