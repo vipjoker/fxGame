@@ -3,10 +3,13 @@ package mygame.editor.views;
 import javafx.geometry.BoundingBox;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.transform.Affine;
+import mygame.editor.component.Component;
 import mygame.editor.customShapes.Drawable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CcNode implements Drawable {
     public int id;
@@ -22,6 +25,8 @@ public class CcNode implements Drawable {
     public String name;
     protected BoundingBox bBox;
     public boolean active;
+    private Map<Class,Component> components = new HashMap<>();
+
 
     private List<CcNode> children = new ArrayList<>();
 
@@ -46,6 +51,10 @@ public class CcNode implements Drawable {
     }
 
     public void rasterize(GraphicsContext context) {
+        components.forEach((k,v)->{
+            v.update();
+            v.draw(context);
+        });
         transform = context.getTransform();
 
     }
@@ -58,6 +67,19 @@ public class CcNode implements Drawable {
 
     }
 
+    public void addComponent(Component component) {
+        Class<? extends Component> aClass = component.getClass();
+        components.put(aClass, component);
+    }
+
+    public <T extends Component> T getCompnent(Class<T> clazz){
+        Component component = components.get(clazz);
+        if(component!= null){
+            return (T)component;
+        }else{
+            return null;
+        }
+    }
 
     public void setAnchor(Anchor anchor) {
         switch (anchor) {

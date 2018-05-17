@@ -67,7 +67,7 @@ public class Grid implements Drawable {
                 g.beginPath();
 
                 if (i == 0) {
-                    g.setStroke(Color.RED);
+                    g.setStroke(Color.WHITE);
                 } else {
                     g.setStroke(white);
                 }
@@ -90,7 +90,7 @@ public class Grid implements Drawable {
             for (int i = (int) beginx ; i < end.getX(); i += step) {
                 g.beginPath();
                 if (i == 0) {
-                    g.setStroke(Color.RED);
+                    g.setStroke(Color.WHITE);
                 } else {
                     g.setStroke(white);
                 }

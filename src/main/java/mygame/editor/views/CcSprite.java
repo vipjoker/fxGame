@@ -34,7 +34,7 @@ public class CcSprite extends CcNode {
         if (active) {
             context.setLineWidth(2);
             context.setStroke(Constants.GREEN);
-            context.strokeRect(bBox.getMinX(), bBox.getMinY(), bBox.getWidth(), bBox.getHeight());
+            context.strokeRect(bBox.getMinX() -5, bBox.getMinY() -5, bBox.getWidth() +10, bBox.getHeight()+10);
             context.setFill(Color.RED);
 
             context.fillOval(-2.5, -2.5, 5, 5);
