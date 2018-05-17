@@ -21,6 +21,7 @@ public class EntityBody {
     private float linearVelocityX;
     private float linearVelocityY;
     private float linearDamping;
+    private int nodeId;
 
     public int getId() {
         return id;
@@ -148,5 +149,13 @@ public class EntityBody {
 
     public void setLinearDamping(float linearDamping) {
         this.linearDamping = linearDamping;
+    }
+
+    public int getNodeId() {
+        return nodeId;
+    }
+
+    public void setNodeId(int nodeId) {
+        this.nodeId = nodeId;
     }
 }

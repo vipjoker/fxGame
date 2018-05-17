@@ -54,17 +54,34 @@ public class NodeDao {
             nodes.add(node);
         }
         return nodes;
-
-
     }
+
+    public EntityNode getById(int id) throws Exception {
+        String sql = "SELECT * FROM Node WHERE id = " + id + ";";
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+        if(resultSet.next()) {
+            EntityNode node = new EntityNode();
+            node.setId(resultSet.getInt("id"));
+            node.setX(resultSet.getFloat("x"));
+            node.setY(resultSet.getFloat("y"));
+            node.setName(resultSet.getString("name"));
+            node.setWidth(resultSet.getFloat("width"));
+            node.setHeight(resultSet.getFloat("height"));
+            node.setParentId(resultSet.getInt("parent_id"));
+            return node;
+        }else{
+            return null;
+        }
+}
 
     public void insert(EntityNode node) throws Exception {
         String sql = "INSERT INTO Node (id,name,x,y,width,height,parent_id) " +
                 "VALUES (?,?,?,?,?,?,?);";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         int column = 1;
-        preparedStatement.setInt(column++,node.getId());
-        preparedStatement.setString(column++,node.getName());
+        preparedStatement.setInt(column++, node.getId());
+        preparedStatement.setString(column++, node.getName());
         preparedStatement.setDouble(column++, node.getX());
         preparedStatement.setDouble(column++, node.getY());
         preparedStatement.setDouble(column++, node.getWidth());
@@ -95,7 +112,7 @@ public class NodeDao {
         preparedStatement.execute();
     }
 
-    public void deleteAll() throws Exception{
+    public void deleteAll() throws Exception {
         connection.createStatement().execute("DELETE FROM Node");
     }
 

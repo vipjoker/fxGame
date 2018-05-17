@@ -15,8 +15,6 @@ public class EntityNode {
     private float rotation;
     private int parentId;
     private String spriteUrl;
-    private EntityBody body;
-    private List<EntityFixture> fixtures;
 
 
     public int getId() {
@@ -92,19 +90,5 @@ public class EntityNode {
         this.parentId = parentId;
     }
 
-    public EntityBody getBody() {
-        return body;
-    }
 
-    public void setBody(EntityBody body) {
-        this.body = body;
-    }
-
-    public List<EntityFixture> getFixtures() {
-        return fixtures;
-    }
-
-    public void setFixtures(List<EntityFixture> fixtures) {
-        this.fixtures = fixtures;
-    }
 }
