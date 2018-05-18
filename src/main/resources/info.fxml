@@ -35,7 +35,7 @@
             </GridPane.margin>
         </ComboBox>
         <Label text="Color" GridPane.halignment="LEFT" GridPane.rowIndex="7" />
-        <Label text="x " GridPane.columnSpan="2" GridPane.rowIndex="1" />
+        <Label fx:id="tvX" text="x " GridPane.columnSpan="2" GridPane.rowIndex="1" />
         <Label text="Label" GridPane.rowIndex="8" />
         <Separator prefWidth="200.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="9" />
         <Label text="Physics" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="10" />
@@ -46,13 +46,13 @@
         <Spinner fx:id="spFriction"  GridPane.columnIndex="1" GridPane.rowIndex="11" />
         <Spinner fx:id="spRestitution" GridPane.columnIndex="1" GridPane.rowIndex="12" />
         <Spinner fx:id="spDensity" GridPane.columnIndex="1" GridPane.rowIndex="13" />
-        <Label text="y" GridPane.rowIndex="2" />
+        <Label fx:id="tvY" text="y" GridPane.rowIndex="2" />
         <TextField fx:id="etName" GridPane.columnIndex="1" />
         <TextField fx:id="etX" GridPane.columnIndex="1" GridPane.rowIndex="1" />
         <TextField fx:id="etY" GridPane.columnIndex="1" GridPane.rowIndex="2" />
         <TextField fx:id="etWidth" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-        <Label text="width" GridPane.rowIndex="3" />
-        <Label text="height" GridPane.rowIndex="4" />
+        <Label fx:id="tvWidth" text="width" GridPane.rowIndex="3" />
+        <Label fx:id="tvHeight" text="height" GridPane.rowIndex="4" />
         <TextField fx:id="etHeight" GridPane.columnIndex="1" GridPane.rowIndex="4" />
         <ColorPicker prefHeight="70.0" prefWidth="134.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
         <Label text="Rotation" GridPane.rowIndex="5" />
