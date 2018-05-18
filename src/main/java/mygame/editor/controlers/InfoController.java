@@ -13,6 +13,7 @@ import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.SwipeEvent;
 import javafx.scene.layout.GridPane;
 import mygame.editor.model.Point;
+import mygame.editor.views.CcNode;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -32,7 +33,8 @@ public class InfoController implements Initializable {
     public Spinner<Double> spFriction;
     public Spinner<Double> spRestitution;
     public Spinner<Double> spDensity;
-
+    private CcNode ccNode;
+    private Runnable mCallback;
     DoubleProperty property = new SimpleDoubleProperty(10);
 
     @Override
@@ -45,6 +47,18 @@ public class InfoController implements Initializable {
         initSpinners();
     }
 
+    public void setNode(CcNode node,Runnable runnable){
+        System.out.println(node);
+        this.ccNode = node;
+        System.out.println(node.x);
+        this.mCallback = runnable;
+
+        etX.setText(String.valueOf(node.x));
+        etY.setText(String.valueOf(node.y));
+        etWidth.setText(String.valueOf(node.width));
+        etHeight.setText(String.valueOf(node.height));
+    }
+
     private void initSpinners() {
         spFriction.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0,1,0.5,0.1));
         spDensity.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0,1,0.5,0.1));
@@ -54,36 +68,28 @@ public class InfoController implements Initializable {
     private void setListeners() {
         etX.textProperty().addListener((observable, oldValue, newValue) -> {
 
-            if (!newValue.matches("\\d*")) {
-                etX.setText(newValue.replaceAll("[^\\d]", ""));
-            }
+            ccNode.x = Double.parseDouble(newValue);
+            mCallback.run();
         });
         etY.textProperty().addListener((observable, oldValue, newValue) -> {
-
-            if (!newValue.matches("\\d*")) {
-                etY.setText(newValue.replaceAll("[^\\d]", ""));
-            }
+            ccNode.y = Double.parseDouble(newValue);
+            mCallback.run();
         });
 
         etWidth.textProperty().addListener((observable, oldValue, newValue) -> {
-
-            if (!newValue.matches("\\d*")) {
-                etWidth.setText(newValue.replaceAll("[^\\d]", ""));
-            }
+            ccNode.width = Double.parseDouble(newValue);
+            mCallback.run();
         });
 
         etHeight.textProperty().addListener((observable, oldValue, newValue) -> {
+            ccNode.height = Double.parseDouble(newValue);
+            mCallback.run();
 
-            if (!newValue.matches("\\d*")) {
-                etHeight.setText(newValue.replaceAll("[^\\d]", ""));
-            }
         });
 
         etRotation.textProperty().addListener((observable, oldValue, newValue) -> {
-
-            if (!newValue.matches("\\d*")) {
-                etRotation.setText(newValue.replaceAll("[^\\d]", ""));
-            }
+            ccNode.angle = Double.parseDouble(newValue);
+            mCallback.run();
         });
 
     }

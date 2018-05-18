@@ -1,6 +1,7 @@
 package mygame.editor.actions;
 
 
+import javafx.geometry.Point2D;
 import mygame.editor.model.Point;
 import mygame.editor.render.CanvasRenderer;
 import mygame.editor.repository.NodeRepository;
@@ -15,7 +16,12 @@ public class CreateJointAction extends Action{
 
     @Override
     public void init() {
-
+        mRenderer.setOnCanvasClickListener(new CanvasRenderer.OnCanvasClickListener() {
+            @Override
+            public void onClick(Point2D point2D) {
+                System.out.println("Create joint " + point2D);
+            }
+        });
     }
 
     @Override

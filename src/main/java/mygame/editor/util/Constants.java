@@ -20,6 +20,7 @@ public class Constants {
 
     public static final String ACTION_POLYGON = "polygon";
     public static final String ACTION_CIRCLE = "circle";
+    public static final String ACTION_SPRITE = "sprite";
     public static final String ACTION_RECTANGLE = "rectangle";
     public static final String ACTION_CHAIN = "chain";
 

@@ -111,6 +111,31 @@ public class CcNode implements Drawable {
         BOTTOM_LEFT,
         BOTTOM_RIGHT
     }
+
+    public void updateBoundingBox(){
+
+    }
+
+    @Override
+    public String toString() {
+        return "CcNode{" +
+                "id=" + id +
+                ", layer=" + layer +
+                ", x=" + x +
+                ", y=" + y +
+                ", width=" + width +
+                ", height=" + height +
+                ", scaleX=" + scaleX +
+                ", scaleY=" + scaleY +
+                ", angle=" + angle +
+                ", transform=" + transform +
+                ", name='" + name + '\'' +
+                ", bBox=" + bBox +
+                ", active=" + active +
+                ", components=" + components +
+                ", children=" + children +
+                '}';
+    }
 }
 
 

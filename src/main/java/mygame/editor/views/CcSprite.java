@@ -14,7 +14,7 @@ public class CcSprite extends CcNode {
         this.image = image;
         width = image.getWidth();
         height = image.getHeight();
-        bBox = new BoundingBox(0, -height, width, height);
+        updateBoundingBox();
 
     }
 
@@ -22,7 +22,7 @@ public class CcSprite extends CcNode {
         this.image = image;
         this.width = width;
         this.height = height;
-        bBox = new BoundingBox(0, -height, width, height);
+        updateBoundingBox();
     }
 
 
@@ -39,6 +39,10 @@ public class CcSprite extends CcNode {
 
             context.fillOval(-2.5, -2.5, 5, 5);
         }
+    }
+    @Override
+    public void updateBoundingBox(){
+        bBox = new BoundingBox(0, -height, width, height);
     }
 
     @Override
