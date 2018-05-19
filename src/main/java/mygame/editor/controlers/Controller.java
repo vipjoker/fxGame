@@ -50,9 +50,9 @@ public class Controller implements Initializable {
     public SplitPane root;
     public TreeView<Path> resourcesTreeview;
     public HBox toolbar;
-    public ToggleButton btnRun ;
-    public ToggleButton btnMove;
-    public ToggleButton btnEdit;
+    public Button btnRun ;
+    public Button btnMove;
+    public Button btnEdit;
 
     private CanvasRenderer canvasRenderer;
     private Action currentDrawer;
@@ -90,20 +90,11 @@ public class Controller implements Initializable {
             setLeftPane();
             setRightPane();
             initActions();
-            setupMenu();
+
 
         });
     }
 
-    private void setupMenu() {
-
-        ToggleGroup group = new ToggleGroup();
-        btnRun.setToggleGroup(group);
-        btnMove.setToggleGroup(group);
-        btnEdit.setToggleGroup(group);
-        group.selectToggle(btnMove);
-
-    }
 
     private void setRightPane() {
         infoController.setNameInfo("Test message");
@@ -150,11 +141,11 @@ public class Controller implements Initializable {
         actions.put(ACTION_MOVE, new MoverAction(canvasRenderer,repository));
         actions.put(ACTION_BOX_2D, new Box2dAction(canvasRenderer,repository));
 
-        actions.put(ACTION_SELECT, new SelectAction(canvasRenderer,repository));
+        actions.put(ACTION_SELECT, new SelectAction(canvasRenderer,repository,infoController));
         actions.put(ACTION_ROTATE, new RotateAction(canvasRenderer,repository));
         actions.put(ACTION_CREATE_BODY, new CreateBodyAction(canvasRenderer,repository));
         actions.put(ACTION_CREATE_JOINT, new CreateJointAction(canvasRenderer,repository));
-
+        actions.put(ACTION_SPRITE, new CreateSpriteAction(canvasRenderer, repository));
         switchDrawer(ACTION_SELECT);
     }
 
@@ -275,5 +266,9 @@ public class Controller implements Initializable {
     }
 
     public void onCircle(ActionEvent event) { switchDrawer(ACTION_CIRCLE);
+    }
+
+    public void onCreateSprite(ActionEvent event) {
+        switchDrawer(ACTION_SPRITE);
     }
 }

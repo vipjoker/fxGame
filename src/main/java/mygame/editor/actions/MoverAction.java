@@ -20,12 +20,7 @@ public class MoverAction extends Action {
     @Override
     public void init() {
         mRenderer.setOnCanvasClickListener(point2D -> {
-            BodyDef def = new BodyDef();
-            def.position.x = (float) point2D.getX()/32;
-            def.position.y = (float) point2D.getY()/32;
-            CcBodyNode bodyNode= new CcBodyNode(def);
-            mRenderer.addChild(bodyNode);
-            mRenderer.update();
+
         });
     }
 

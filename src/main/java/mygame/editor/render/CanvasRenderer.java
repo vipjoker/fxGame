@@ -79,9 +79,10 @@ public class CanvasRenderer {
 
 
     private void onMouseClicked(MouseEvent event) {
-        if(mOnCanvasClickListener != null){
+        if(mOnCanvasClickListener != null && event.getButton() == MouseButton.PRIMARY){
             Point2D point2D = grid.transformPoint(event);
             Point2D p = new Point2D(point2D.getX(),-point2D.getY());
+
             mOnCanvasClickListener.onClick(p);
 
         }
