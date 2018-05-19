@@ -45,16 +45,17 @@ public class CcNode implements Drawable {
         context.rotate(angle);
         context.scale(scaleX, scaleY);
         rasterize(context);
+        components.forEach((k,v)->{
+            v.update();
+            v.draw(context);
+        });
         children.forEach(n -> n.draw(context, time));
         context.restore();
 
     }
 
     public void rasterize(GraphicsContext context) {
-        components.forEach((k,v)->{
-            v.update();
-            v.draw(context);
-        });
+
         transform = context.getTransform();
 
     }

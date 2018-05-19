@@ -1,6 +1,7 @@
 package mygame.editor.component;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import mygame.editor.views.CcNode;
 
 /**
@@ -18,6 +19,9 @@ public class EditComponent extends Component {
 
     @Override
     public void draw(GraphicsContext g) {
-
+        g.setFill(Color.FIREBRICK);
+        g.fillRect(owner.x,owner.y,owner.width,owner.height);
+        System.out.printf("COMPONENET WORKS %f %f %f %f \n", owner.x,owner.y,owner.height,owner.width);
+        g.fill();
     }
 }

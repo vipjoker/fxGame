@@ -3,6 +3,7 @@ package mygame.editor.actions;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import mygame.editor.TimerCounter;
+import mygame.editor.component.EditComponent;
 import mygame.editor.model.Point;
 import mygame.editor.render.CanvasRenderer;
 import mygame.editor.repository.NodeRepository;
@@ -55,7 +56,7 @@ public class Box2dAction extends Action implements TimerCounter.FrameRateCallbac
 
         fixtureDef2.shape = circleShape;
         bodyNode.addFixture(fixtureDef2);
-
+        bodyNode.addComponent(new EditComponent(bodyNode));
         mRenderer.addChild(bodyNode);
 
 
