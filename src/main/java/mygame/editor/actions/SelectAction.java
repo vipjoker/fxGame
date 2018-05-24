@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 public class SelectAction extends Action{
 
     private InfoController mController;
+    private CcNode root;
     public SelectAction(CanvasRenderer renderer, NodeRepository repository, InfoController controller) {
         super(renderer,repository);
         this.mController = controller;
@@ -23,8 +24,9 @@ public class SelectAction extends Action{
 
     @Override
     public void init() {
+        root = mRepository.getRootNode();
+        mRenderer.getNodes().clear();
 
-        //mRenderer.getNodes().clear();
         mRenderer.update();
 
         mRenderer.setOnCanvasClickListener(this::onCanvasClicked);
@@ -59,6 +61,6 @@ public class SelectAction extends Action{
 
     @Override
     public void finishDrawing() {
-
+        mRepository.save(root);
     }
 }
