@@ -1,5 +1,6 @@
 package mygame.editor.repository;
 
+import mygame.editor.component.SpriteComponent;
 import mygame.editor.data.*;
 import mygame.editor.data.entities.EntityBody;
 import mygame.editor.data.entities.EntityNode;
@@ -24,6 +25,9 @@ public class SqlNodeRepository implements NodeRepository {
 
         try {
             nodeDao = new NodeDao(con);
+            bodyDefDao = new BodyDefDao(con);
+            fixtureDefDao = new FixtureDefDao(con);
+            spriteDao = new SpriteDao(con);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -52,7 +56,15 @@ public class SqlNodeRepository implements NodeRepository {
 
     private void addComponents(CcNode root) {
         try {
+
             EntitySprite spriteEntity = spriteDao.getByParentId(root.id);
+            if(spriteEntity != null){
+                SpriteComponent component = new SpriteComponent(root);
+                component.setId(spriteEntity.getId());
+                component.setName(spriteEntity.getName());
+                component.setUrl(spriteEntity.getUrl());
+
+            }
             EntityBody bodyEntity = bodyDefDao.getByParentId(root.id);
             if(bodyEntity!= null) {
                 fixtureDefDao.getAllByParentId(bodyEntity.getId());
