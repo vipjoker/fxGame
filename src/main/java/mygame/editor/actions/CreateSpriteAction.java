@@ -7,6 +7,7 @@ import mygame.editor.render.CanvasRenderer;
 import mygame.editor.repository.NodeRepository;
 import mygame.editor.util.Resources;
 import mygame.editor.views.CcBodyNode;
+import mygame.editor.views.CcNode;
 import mygame.editor.views.CcSprite;
 
 /**
@@ -17,10 +18,16 @@ public class CreateSpriteAction extends Action {
     public CreateSpriteAction(CanvasRenderer renderer, NodeRepository repository) {
         super(renderer, repository);
     }
-
+    private CcNode rootNode;
     @Override
     public void init() {
         mRenderer.setOnCanvasClickListener(this::onCanvasClick);
+
+        rootNode = mRepository.getRootNode();
+        if(rootNode == null){
+            rootNode = new CcNode();
+            mRenderer.addChild(rootNode);
+        }
     }
 
     private void onCanvasClick(Point2D point2D) {
@@ -28,7 +35,7 @@ public class CreateSpriteAction extends Action {
         CcSprite bodyNode = new CcSprite(Resources.no_image);
         bodyNode.x = point2D.getX();
         bodyNode.y = point2D.getY();
-        mRenderer.addChild(bodyNode);
+        rootNode.addChild(bodyNode);
         mRenderer.update();
     }
 
@@ -49,6 +56,6 @@ public class CreateSpriteAction extends Action {
 
     @Override
     public void finishDrawing() {
-
+        mRepository.save(rootNode);
     }
 }
