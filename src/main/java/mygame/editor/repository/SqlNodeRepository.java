@@ -54,6 +54,9 @@ public class SqlNodeRepository implements NodeRepository {
         try {
             EntitySprite spriteEntity = spriteDao.getByParentId(root.id);
             EntityBody bodyEntity = bodyDefDao.getByParentId(root.id);
+            if(bodyEntity!= null) {
+                fixtureDefDao.getAllByParentId(bodyEntity.getId());
+            }
 
         } catch (Exception e) {
             e.printStackTrace();

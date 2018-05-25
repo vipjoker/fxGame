@@ -1,7 +1,5 @@
 package mygame.editor.data.entities;
 
-import com.badlogic.gdx.physics.box2d.Filter;
-import com.badlogic.gdx.physics.box2d.Shape;
 
 /**
  * Created by oleh on 11.05.18.

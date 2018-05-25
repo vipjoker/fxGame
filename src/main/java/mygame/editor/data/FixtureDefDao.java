@@ -57,6 +57,7 @@ public class FixtureDefDao {
             node.setRestitution(resultSet.getFloat("restitution"));
             node.setDensity(resultSet.getFloat("density"));
             node.setSensor(resultSet.getBoolean("is_sensor") );
+            node.setParentId(resultSet.getInt("parent_id") );
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -65,7 +66,7 @@ public class FixtureDefDao {
     }
 
     public List<EntityFixture> getAllByParentId(long parentId) throws Exception {
-        String sql = "SELECT * FROM Fixture WHERE ;";
+        String sql = "SELECT * FROM Fixture WHERE parent_id = " + parentId +";";
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(sql);
         List<EntityFixture> nodes = new ArrayList<>();
@@ -83,14 +84,15 @@ public class FixtureDefDao {
                 "friction," +
                 "restitution," +
                 "density," +
-                "is_sensor ) " +
-                "VALUES (?,?,?,?,?);";
+                "is_sensor, parent_id ) " +
+                "VALUES (?,?,?,?,?,?);";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setInt(1, body.getShape());
         preparedStatement.setFloat(2, body.getFriction());
         preparedStatement.setFloat(3, body.getRestitution());
         preparedStatement.setFloat(4, body.getDensity());
         preparedStatement.setBoolean(5,body.isSensor());
+        preparedStatement.setInt(6,body.getParentId());
         preparedStatement.execute();
     }
 
@@ -101,7 +103,8 @@ public class FixtureDefDao {
                 "friction = ? ," +
                 "restitution = ?," +
                 "density = ?," +
-                "is_sensor = ? " +
+                "is_sensor = ?, " +
+                "parent_id = ? " +
                 "WHERE ID = ?;";
 
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -110,7 +113,8 @@ public class FixtureDefDao {
         preparedStatement.setFloat(3, body.getRestitution());
         preparedStatement.setFloat(4, body.getDensity());
         preparedStatement.setBoolean(5,body.isSensor());
-        preparedStatement.setInt(6,body.getId());
+        preparedStatement.setInt(6,body.getParentId());
+        preparedStatement.setInt(7,body.getId());
         preparedStatement.executeUpdate();
     }
 
