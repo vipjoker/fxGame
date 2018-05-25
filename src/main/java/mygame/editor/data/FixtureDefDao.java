@@ -2,10 +2,7 @@ package mygame.editor.data;
 
 import mygame.editor.data.entities.EntityFixture;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +23,7 @@ public class FixtureDefDao {
         Statement stmt = connection.createStatement();
         String sql = "CREATE TABLE IF NOT EXISTS Fixture " +
                 "(id                INTEGER  PRIMARY KEY   AUTOINCREMENT ," +
+                "parent_id          INTEGER  ," +
                 "shape              INTEGER  ," +
                 "friction           REAL ," +
                 "restitution        REAL ," +
@@ -42,13 +40,37 @@ public class FixtureDefDao {
         ResultSet resultSet = statement.executeQuery(sql);
         List<EntityFixture> nodes = new ArrayList<>();
         while (resultSet.next()) {
-            EntityFixture node = new EntityFixture();
+            EntityFixture node = createEntity(resultSet);
+            nodes.add(node);
+        }
+        return nodes;
+
+
+    }
+
+    private EntityFixture createEntity(ResultSet resultSet){
+        EntityFixture node = new EntityFixture();
+        try {
             node.setId(resultSet.getInt("id"));
             node.setShape(resultSet.getInt("shape"));
             node.setFriction(resultSet.getFloat("friction"));
             node.setRestitution(resultSet.getFloat("restitution"));
             node.setDensity(resultSet.getFloat("density"));
             node.setSensor(resultSet.getBoolean("is_sensor") );
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return node;
+    }
+
+    public List<EntityFixture> getAllByParentId(long parentId) throws Exception {
+        String sql = "SELECT * FROM Fixture WHERE ;";
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+        List<EntityFixture> nodes = new ArrayList<>();
+        while (resultSet.next()) {
+            EntityFixture node = createEntity(resultSet);
             nodes.add(node);
         }
         return nodes;

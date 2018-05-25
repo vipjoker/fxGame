@@ -7,18 +7,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.IntSupplier;
 import java.util.stream.Collectors;
 
 /**
  * Created by oleh on 16.05.18.
  */
 public class CcNodeUtil {
-
-    private static int ID = 1;
-    public static List<EntityNode> flat(CcNode root) {
-        ID = 1;
+    private static int ID;
+    public static List<EntityNode> flat(CcNode root, IntSupplier idGenerator) {
         List<EntityNode> entityNodes = new ArrayList<>();
-
+        ID = idGenerator.getAsInt();
         traverseNodes(0,entityNodes,root);
         return entityNodes;
 
@@ -28,7 +27,7 @@ public class CcNodeUtil {
     public static void traverseNodes(int parentId ,List<EntityNode> nodes,CcNode root){
 
         EntityNode parent = EntityNodeMapper.map(root);
-        parent.setId(generateId());
+        parent.setId(ID++);
         parent.setParentId(parentId);
         nodes.add(parent);
         for (CcNode ccNode : root.getChildren()) traverseNodes(parent.getId(),nodes,ccNode);
@@ -57,7 +56,4 @@ public class CcNodeUtil {
         return root;
     }
 
-    public static int generateId(){
-        return ID++;
-    }
 }

@@ -13,7 +13,10 @@ public class EntityFixture {
     private float restitution;
     private float density;
     private boolean isSensor;
-    private int nodeId;
+
+
+
+    private int parentId;
 
     public int getId() {
         return id;
@@ -63,11 +66,11 @@ public class EntityFixture {
         isSensor = sensor;
     }
 
-    public int getNodeId() {
-        return nodeId;
+    public int getParentId() {
+        return parentId;
     }
 
-    public void setNodeId(int nodeId) {
-        this.nodeId = nodeId;
+    public void setParentId(int parentId) {
+        this.parentId = parentId;
     }
 }

@@ -1,10 +1,9 @@
 package mygame.editor.repository;
 
-import mygame.editor.data.BodyDefDao;
-import mygame.editor.data.DbConnection;
-import mygame.editor.data.FixtureDefDao;
-import mygame.editor.data.NodeDao;
+import mygame.editor.data.*;
+import mygame.editor.data.entities.EntityBody;
 import mygame.editor.data.entities.EntityNode;
+import mygame.editor.data.entities.EntitySprite;
 import mygame.editor.mapper.CcNodeUtil;
 import mygame.editor.mapper.EntityNodeMapper;
 import mygame.editor.views.CcNode;
@@ -17,6 +16,7 @@ public class SqlNodeRepository implements NodeRepository {
     NodeDao nodeDao;
     BodyDefDao bodyDefDao;
     FixtureDefDao fixtureDefDao;
+    SpriteDao spriteDao;
 
     public SqlNodeRepository() {
 
@@ -39,7 +39,10 @@ public class SqlNodeRepository implements NodeRepository {
         CcNode root = null;
 
         try {
-            root = CcNodeUtil.unflat(nodeDao.getAll());
+            List<EntityNode> all = nodeDao.getAll();
+
+            root = CcNodeUtil.unflat(all);
+            addComponents(root);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -47,10 +50,25 @@ public class SqlNodeRepository implements NodeRepository {
         return root;
     }
 
+    private void addComponents(CcNode root) {
+        try {
+            EntitySprite spriteEntity = spriteDao.getByParentId(root.id);
+            EntityBody bodyEntity = bodyDefDao.getByParentId(root.id);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        for (CcNode ccNode : root.getChildren()) {
+            addComponents(ccNode);
+        }
+    }
+
     @Override
     public void save(CcNode node) {
 
-        CcNodeUtil.flat(node).forEach(n -> {
+        CcNodeUtil.flat(node,this::count).forEach(n -> {
 
             try {
                 nodeDao.insert(n);
@@ -63,6 +81,11 @@ public class SqlNodeRepository implements NodeRepository {
     @Override
     public void delete(CcNode node) {
 
+    }
+
+    @Override
+    public int count(){
+        return nodeDao.count();
     }
 
 
@@ -91,7 +114,9 @@ public class SqlNodeRepository implements NodeRepository {
         grandParent.addChild(createParent("parent3"));
 
         repository.deleteAll();
+        System.out.println(repository.count());
         repository.save(grandParent);
+        System.out.println(repository.count());
 
         CcNode rootNode = repository.getRootNode();
 

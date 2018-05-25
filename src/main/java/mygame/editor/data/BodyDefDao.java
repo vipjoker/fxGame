@@ -27,14 +27,15 @@ public class BodyDefDao {
         Statement stmt = connection.createStatement();
         String sql = "CREATE TABLE IF NOT EXISTS Body " +
                 "(id                INTEGER  PRIMARY KEY   AUTOINCREMENT ," +
+                "parent_id          INTEGER  ," +
                 "type               INTEGER  ," +
                 "position_x         REAL ," +
                 "position_y         REAL ," +
                 "active             INTEGER ," +
-                "allow_sleep         INTEGER, " +
+                "allow_sleep        INTEGER, " +
                 "awake              INTEGER," +
                 "bullet             INTEGER," +
-                "fixed_rotation      INTEGER," +
+                "fixed_rotation     INTEGER," +
                 "angle              REAL," +
                 "angular_damping    REAL," +
                 "angular_velocity   REAL," +
@@ -53,14 +54,34 @@ public class BodyDefDao {
         ResultSet resultSet = statement.executeQuery(sql);
         List<EntityBody> nodes = new ArrayList<>();
         while (resultSet.next()) {
-            EntityBody node = new EntityBody();
+            EntityBody node = createEntity(resultSet);
+            nodes.add(node);
+        }
+        return nodes;
+    }
 
+    public EntityBody getByParentId(long parendId) throws Exception {
+        String sql = "SELECT * FROM Body WHERE parent_id = " + parendId + ";";
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+        if (resultSet.next()) {
+            EntityBody node = createEntity(resultSet);
+            return node;
+        }else{
+            return null;
+        }
+    }
+
+    private EntityBody createEntity(ResultSet resultSet){
+        EntityBody node = new EntityBody();
+        try {
             node.setId(resultSet.getInt("id"));
+            node.setId(resultSet.getInt("parent_id"));
             node.setType(resultSet.getInt("type"));
             node.setPositionX(resultSet.getFloat("position_x"));
             node.setPositionY(resultSet.getFloat("position_y"));
             node.setActive(resultSet.getBoolean("active"));
-            node.setAllowSleep(resultSet.getBoolean("allow_sleep") );
+            node.setAllowSleep(resultSet.getBoolean("allow_sleep"));
             node.setAwake(resultSet.getBoolean("awake"));
             node.setBullet(resultSet.getBoolean("bullet"));
             node.setFixedRotation(resultSet.getBoolean("fixed_rotation"));
@@ -71,12 +92,12 @@ public class BodyDefDao {
             node.setLinearVelocityX(resultSet.getFloat("linear_velocity_x"));
             node.setLinearVelocityY(resultSet.getFloat("linear_velocity_y"));
             node.setLinearDamping(resultSet.getFloat("linear_damping"));
-            nodes.add(node);
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        return nodes;
-
-
+        return node;
     }
+
 
     public void insert(EntityBody body) throws Exception {
         String sql = "INSERT INTO Body (type," +

@@ -2,11 +2,7 @@ package mygame.editor.data;
 
 import mygame.editor.data.entities.EntityNode;
 
-import javax.xml.soap.Node;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +49,9 @@ public class NodeDao {
             node.setParentId(resultSet.getInt("parent_id"));
             nodes.add(node);
         }
+
+
+
         return nodes;
     }
 
@@ -114,6 +113,20 @@ public class NodeDao {
 
     public void deleteAll() throws Exception {
         connection.createStatement().execute("DELETE FROM Node");
+    }
+
+    public int count(){
+        int count = 0;
+        try {
+            ResultSet resultSet = connection.createStatement().executeQuery("SELECT count(*) FROM Node");
+            if(resultSet.next()){
+                count = resultSet.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return count;
     }
 
 }

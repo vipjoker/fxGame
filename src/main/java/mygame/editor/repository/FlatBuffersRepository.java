@@ -169,7 +169,13 @@ public class FlatBuffersRepository implements NodeRepository {
 
     }
 
-    private void saveByteBuffer(ByteBuffer buff,File file) {
+
+    @Override
+    public int count() {
+        return 0;
+    }
+
+    private void saveByteBuffer(ByteBuffer buff, File file) {
 
 
         boolean append = false;

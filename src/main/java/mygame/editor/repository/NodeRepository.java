@@ -17,4 +17,6 @@ public interface NodeRepository {
     void deleteAll();
 
     void update(CcNode node);
+
+    int count();
 }
