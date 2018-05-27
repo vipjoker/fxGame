@@ -7,6 +7,7 @@ import mygame.editor.data.entities.EntityNode;
 import mygame.editor.data.entities.EntitySprite;
 import mygame.editor.mapper.CcNodeUtil;
 import mygame.editor.mapper.EntityNodeMapper;
+import mygame.editor.util.ImageUtil;
 import mygame.editor.views.CcNode;
 
 import java.sql.Connection;
@@ -59,7 +60,8 @@ public class SqlNodeRepository implements NodeRepository {
 
             EntitySprite spriteEntity = spriteDao.getByParentId(root.id);
             if(spriteEntity != null){
-                SpriteComponent component = new SpriteComponent(root);
+
+                SpriteComponent component = new SpriteComponent(spriteEntity.getUrl());
                 component.setId(spriteEntity.getId());
                 component.setName(spriteEntity.getName());
                 component.setUrl(spriteEntity.getUrl());
@@ -83,9 +85,12 @@ public class SqlNodeRepository implements NodeRepository {
     @Override
     public void save(CcNode node) {
 
-        CcNodeUtil.flat(node,this::count).forEach(n -> {
+        CcNodeUtil.flat(node).forEach(n -> {
 
             try {
+
+
+
                 nodeDao.insert(n);
             } catch (Exception e) {
                 e.printStackTrace();

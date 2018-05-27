@@ -14,10 +14,8 @@ import java.util.stream.Collectors;
  * Created by oleh on 16.05.18.
  */
 public class CcNodeUtil {
-    private static int ID;
-    public static List<EntityNode> flat(CcNode root, IntSupplier idGenerator) {
+    public static List<EntityNode> flat(CcNode root) {
         List<EntityNode> entityNodes = new ArrayList<>();
-        ID = idGenerator.getAsInt();
         traverseNodes(0,entityNodes,root);
         return entityNodes;
 
@@ -27,10 +25,11 @@ public class CcNodeUtil {
     public static void traverseNodes(int parentId ,List<EntityNode> nodes,CcNode root){
 
         EntityNode parent = EntityNodeMapper.map(root);
-        parent.setId(ID++);
+        parent.setId(root.id);
         parent.setParentId(parentId);
         nodes.add(parent);
-        for (CcNode ccNode : root.getChildren()) traverseNodes(parent.getId(),nodes,ccNode);
+        for (CcNode ccNode : root.getChildren())
+            traverseNodes(parent.getId(),nodes,ccNode);
 
     }
 

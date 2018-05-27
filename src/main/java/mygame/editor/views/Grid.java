@@ -14,7 +14,7 @@ import mygame.editor.customShapes.Drawable;
 
 public class Grid implements Drawable {
 
-    private int gridStep = 10;
+    private int gridStep = 100;
     private int padding = 40;
     private Affine lastTransform;
 
@@ -41,7 +41,7 @@ public class Grid implements Drawable {
 
             g.setFont(Font.font(10 * scale));
             int step = gridStep * scaleFactor;
-            step = 10;
+            step = 100;
 
 //            if (scaleFactor < 2) {
 //                step = 5;

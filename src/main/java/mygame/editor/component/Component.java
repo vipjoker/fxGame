@@ -8,9 +8,11 @@ import mygame.editor.views.CcNode;
  */
 public abstract class Component {
     protected CcNode owner;
-    protected Component(CcNode owner){
-        this.owner = owner;
+    protected Component(){
+
     }
+
+    public abstract void setNode(CcNode node);
     public abstract void update();
 
     public abstract void draw(GraphicsContext g);

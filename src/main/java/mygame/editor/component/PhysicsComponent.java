@@ -8,8 +8,13 @@ import mygame.editor.views.CcNode;
  */
 public class PhysicsComponent extends Component {
 
-    public PhysicsComponent(CcNode owner) {
-        super(owner);
+    public PhysicsComponent() {
+
+    }
+
+    @Override
+    public void setNode(CcNode node) {
+        this.owner = node;
     }
 
     @Override

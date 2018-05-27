@@ -66,6 +66,7 @@ public class SelectAction extends Action{
 
     @Override
     public void finishDrawing() {
-        mRepository.save(root);
+//        mRepository.deleteAll();
+//        mRepository.save(root);
     }
 }

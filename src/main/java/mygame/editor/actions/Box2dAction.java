@@ -56,7 +56,7 @@ public class Box2dAction extends Action implements TimerCounter.FrameRateCallbac
 
         fixtureDef2.shape = circleShape;
         bodyNode.addFixture(fixtureDef2);
-        bodyNode.addComponent(new EditComponent(bodyNode));
+        bodyNode.addComponent(new EditComponent());
         mRenderer.addChild(bodyNode);
 
 

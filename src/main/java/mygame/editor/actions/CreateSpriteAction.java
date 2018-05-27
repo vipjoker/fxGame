@@ -2,6 +2,7 @@ package mygame.editor.actions;
 
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import javafx.geometry.Point2D;
+import mygame.editor.component.SpriteComponent;
 import mygame.editor.model.Point;
 import mygame.editor.render.CanvasRenderer;
 import mygame.editor.repository.NodeRepository;
@@ -23,18 +24,27 @@ public class CreateSpriteAction extends Action {
     public void init() {
         mRenderer.setOnCanvasClickListener(this::onCanvasClick);
 
-        rootNode = mRepository.getRootNode();
-        if(rootNode == null){
+//        CcNode с  = mRepository.getRootNode();
+//        if(rootNode == null){
             rootNode = new CcNode();
+            rootNode.id = 1;
             mRenderer.addChild(rootNode);
-        }
+//        }
     }
 
     private void onCanvasClick(Point2D point2D) {
 
-        CcSprite bodyNode = new CcSprite(Resources.no_image);
+        CcNode bodyNode = new CcNode();
+
+//        CcSprite bodyNode = new CcSprite(Resources.no_image);
+        SpriteComponent component = new SpriteComponent(Resources.NO_IMAGE);
+
+        bodyNode.addComponent(component);
+        bodyNode.id = getNextId(rootNode);
         bodyNode.x = point2D.getX();
         bodyNode.y = point2D.getY();
+        bodyNode.width = 100;
+        bodyNode.height = 100;
         rootNode.addChild(bodyNode);
         mRenderer.update();
     }
@@ -54,8 +64,18 @@ public class CreateSpriteAction extends Action {
 
     }
 
+
+    private int getNextId(CcNode node){
+        int id = 1;
+        while(node.findViewById(id) != null){
+            id++;
+        }
+        return id;
+    }
+
     @Override
     public void finishDrawing() {
+        mRepository.deleteAll();
         mRepository.save(rootNode);
     }
 }

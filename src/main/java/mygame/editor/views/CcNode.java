@@ -70,6 +70,7 @@ public class CcNode implements Drawable {
 
     public void addComponent(Component component) {
         Class<? extends Component> aClass = component.getClass();
+        component.setNode(this);
         components.put(aClass, component);
     }
 
@@ -80,6 +81,24 @@ public class CcNode implements Drawable {
         }else{
             return null;
         }
+    }
+
+
+
+    public CcNode findViewById(int id){
+        return findViewById(this,id);
+    }
+
+    private CcNode findViewById(CcNode root, int id){
+        if(root.id == id)return root;
+
+        for (CcNode ccNode : root.getChildren()) {
+
+            CcNode n = findViewById(ccNode,id);
+                if(n != null)return n;
+
+        }
+        return null;
     }
 
     public void setAnchor(Anchor anchor) {

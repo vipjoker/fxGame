@@ -1,6 +1,9 @@
 package mygame.editor.component;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import mygame.editor.util.ImageUtil;
+import mygame.editor.util.Resources;
 import mygame.editor.views.CcNode;
 
 /**
@@ -12,8 +15,11 @@ public class SpriteComponent extends Component {
     private int id;
     private String name;
     private String url;
-    public SpriteComponent(CcNode owner) {
-        super(owner);
+    private Image mImage;
+
+    public SpriteComponent(String path) {
+        this.url = path;
+        this.mImage = Resources.initImage(path);
     }
 
     @Override
@@ -23,7 +29,12 @@ public class SpriteComponent extends Component {
 
     @Override
     public void draw(GraphicsContext g) {
+        g.drawImage(mImage, 0, -owner.height, owner.width, owner.height);
+    }
 
+    @Override
+    public void setNode(CcNode node) {
+        this.owner = node;
     }
 
     public int getId() {
