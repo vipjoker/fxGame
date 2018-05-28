@@ -1,5 +1,6 @@
 package mygame.editor.repository;
 
+import mygame.editor.component.Component;
 import mygame.editor.component.SpriteComponent;
 import mygame.editor.data.*;
 import mygame.editor.data.entities.EntityBody;
@@ -7,6 +8,7 @@ import mygame.editor.data.entities.EntityNode;
 import mygame.editor.data.entities.EntitySprite;
 import mygame.editor.mapper.CcNodeUtil;
 import mygame.editor.mapper.EntityNodeMapper;
+import mygame.editor.mapper.SpriteComponentMapper;
 import mygame.editor.util.ImageUtil;
 import mygame.editor.views.CcNode;
 
@@ -36,6 +38,12 @@ public class SqlNodeRepository implements NodeRepository {
 
     @Override
     public CcNode getNodeById(long id) {
+        try {
+            EntityNode node = nodeDao.getById((int) id);
+            return EntityNodeMapper.map(node);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
@@ -45,8 +53,10 @@ public class SqlNodeRepository implements NodeRepository {
 
         try {
             List<EntityNode> all = nodeDao.getAll();
+            List<CcNode> ccNodes = CcNodeUtil.toCcNodesList(all);
+            loadComponents(ccNodes);
 
-            root = CcNodeUtil.unflat(all);
+            root = CcNodeUtil.buildNodeTree(all, ccNodes);
             addComponents(root);
         } catch (Exception e) {
             e.printStackTrace();
@@ -55,11 +65,26 @@ public class SqlNodeRepository implements NodeRepository {
         return root;
     }
 
+    private void loadComponents(List<CcNode> nodes) {
+        for (CcNode node : nodes) {
+            try {
+                EntitySprite entitySprite = spriteDao.getByParentId(node.id);
+                if(entitySprite!= null){
+                    SpriteComponent spriteComponent = SpriteComponentMapper.map(entitySprite);
+                    node.addComponent(spriteComponent);
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     private void addComponents(CcNode root) {
         try {
 
             EntitySprite spriteEntity = spriteDao.getByParentId(root.id);
-            if(spriteEntity != null){
+            if (spriteEntity != null) {
 
                 SpriteComponent component = new SpriteComponent(spriteEntity.getUrl());
                 component.setId(spriteEntity.getId());
@@ -68,7 +93,7 @@ public class SqlNodeRepository implements NodeRepository {
 
             }
             EntityBody bodyEntity = bodyDefDao.getByParentId(root.id);
-            if(bodyEntity!= null) {
+            if (bodyEntity != null) {
                 fixtureDefDao.getAllByParentId(bodyEntity.getId());
             }
 
@@ -84,10 +109,11 @@ public class SqlNodeRepository implements NodeRepository {
 
     @Override
     public void save(CcNode node) {
-
-        CcNodeUtil.flat(node).forEach(n -> {
+        List<CcNode> nodes = new ArrayList<>();
+        CcNodeUtil.flat(node,nodes).forEach(n -> {
 
             try {
+
 
 
 
@@ -96,15 +122,33 @@ public class SqlNodeRepository implements NodeRepository {
                 e.printStackTrace();
             }
         });
+
+        for (CcNode ccNode : nodes) {
+            SpriteComponent compnent = ccNode.getCompnent(Component.Type.SPRITE);
+            if(compnent != null){
+                EntitySprite entitySprite = SpriteComponentMapper.map(compnent, ccNode.id);
+
+                try {
+                    spriteDao.insert(entitySprite);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
     }
 
     @Override
     public void delete(CcNode node) {
-
+        try {
+            nodeDao.delete(EntityNodeMapper.map(node));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public int count(){
+    public int count() {
         return nodeDao.count();
     }
 
@@ -128,7 +172,7 @@ public class SqlNodeRepository implements NodeRepository {
 
 
         CcNode grandParent = new CcNode();
-        grandParent.name= "grandparent";
+        grandParent.name = "grandparent";
         grandParent.addChild(createParent("parent1"));
         grandParent.addChild(createParent("parent2"));
         grandParent.addChild(createParent("parent3"));
@@ -139,8 +183,6 @@ public class SqlNodeRepository implements NodeRepository {
         System.out.println(repository.count());
 
         CcNode rootNode = repository.getRootNode();
-
-
 
 
     }

@@ -6,10 +6,7 @@ import javafx.scene.transform.Affine;
 import mygame.editor.component.Component;
 import mygame.editor.customShapes.Drawable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CcNode implements Drawable {
     public int id;
@@ -25,7 +22,8 @@ public class CcNode implements Drawable {
     public String name;
     protected BoundingBox bBox;
     public boolean active;
-    private Map<Class,Component> components = new HashMap<>();
+    private CcNode parent;
+    private List<Component> components = new ArrayList<>();
 
 
     private List<CcNode> children = new ArrayList<>();
@@ -35,7 +33,16 @@ public class CcNode implements Drawable {
     }
 
     public void addChild(CcNode node) {
+        node.setParent(this);
         children.add(node);
+    }
+
+    public void setParent(CcNode node){
+        this.parent = node;
+    }
+
+    public CcNode getParent() {
+        return parent;
     }
 
     @Override
@@ -45,9 +52,11 @@ public class CcNode implements Drawable {
         context.rotate(angle);
         context.scale(scaleX, scaleY);
         rasterize(context);
-        components.forEach((k,v)->{
-            v.update();
-            v.draw(context);
+        components.sort(Comparator.comparingInt(Component::getZorder));
+
+        components.forEach(c->{
+            c.update();
+            c.draw(context);
         });
         children.forEach(n -> n.draw(context, time));
         context.restore();
@@ -69,15 +78,16 @@ public class CcNode implements Drawable {
     }
 
     public void addComponent(Component component) {
-        Class<? extends Component> aClass = component.getClass();
         component.setNode(this);
-        components.put(aClass, component);
+        components.add(component);
     }
 
-    public <T extends Component> T getCompnent(Class<T> clazz){
-        Component component = components.get(clazz);
-        if(component!= null){
-            return (T)component;
+    public <T extends Component> T getCompnent(Component.Type type){
+        Optional<Component> component = components.stream().filter(e -> e.getType() == type).findFirst();
+
+
+        if(component.isPresent()){
+            return (T)component.get();
         }else{
             return null;
         }

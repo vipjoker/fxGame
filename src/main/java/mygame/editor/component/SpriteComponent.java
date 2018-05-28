@@ -60,4 +60,16 @@ public class SpriteComponent extends Component {
     public void setUrl(String url) {
         this.url = url;
     }
+
+
+
+    @Override
+    public int getZorder() {
+        return 0;
+    }
+
+    @Override
+    public Type getType() {
+        return Type.SPRITE;
+    }
 }

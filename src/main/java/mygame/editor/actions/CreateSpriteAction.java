@@ -24,12 +24,15 @@ public class CreateSpriteAction extends Action {
     public void init() {
         mRenderer.setOnCanvasClickListener(this::onCanvasClick);
 
-//        CcNode с  = mRepository.getRootNode();
-//        if(rootNode == null){
+        rootNode  = mRepository.getRootNode();
+        if(rootNode == null){
             rootNode = new CcNode();
             rootNode.id = 1;
-            mRenderer.addChild(rootNode);
-//        }
+
+        }
+        mRenderer.addChild(rootNode);
+
+        mRenderer.update();
     }
 
     private void onCanvasClick(Point2D point2D) {

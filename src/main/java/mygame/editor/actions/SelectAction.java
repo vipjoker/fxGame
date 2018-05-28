@@ -1,7 +1,9 @@
 package mygame.editor.actions;
 
 import javafx.geometry.Point2D;
+import mygame.editor.component.SelectComponent;
 import mygame.editor.controlers.InfoController;
+import mygame.editor.mapper.EntityNodeMapper;
 import mygame.editor.model.Point;
 import mygame.editor.render.CanvasRenderer;
 import mygame.editor.repository.NodeRepository;
@@ -27,11 +29,16 @@ public class SelectAction extends Action{
         root = mRepository.getRootNode();
         mRenderer.getNodes().clear();
 
-        //mRenderer.getNodes().clear();
+
+        for (CcNode ccNode : root.getChildren()) {
+            ccNode.addComponent(new SelectComponent());
+        }
+
+        mRenderer.addChild(root);
         mRenderer.update();
 
 
-        CcNode rootNode = mRepository.getRootNode();
+
 
 
         mRenderer.setOnCanvasClickListener(this::onCanvasClicked);
@@ -66,6 +73,7 @@ public class SelectAction extends Action{
 
     @Override
     public void finishDrawing() {
+        mRenderer.getNodes().clear();
 //        mRepository.deleteAll();
 //        mRepository.save(root);
     }

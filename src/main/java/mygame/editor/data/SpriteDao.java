@@ -20,7 +20,7 @@ public class SpriteDao {
     private void init(Connection connection) throws Exception {
         Statement stmt = connection.createStatement();
         String sql = "CREATE TABLE IF NOT EXISTS Sprite " +
-                "(id INTEGER  PRIMARY KEY ," +
+                "(id INTEGER  PRIMARY KEY AUTOINCREMENT," +
                 "name      TEXT  ," +
                 "url    TEXT," +
                 "parent_id INTEGER," +
@@ -76,11 +76,10 @@ public class SpriteDao {
     }
 
     public void insert(EntitySprite node) throws Exception {
-        String sql = "INSERT INTO Sprite (id,name,url,parent_id) " +
-                "VALUES (?,?,?,?);";
+        String sql = "INSERT INTO Sprite (name,url,parent_id) " +
+                "VALUES (?,?,?);";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         int column = 1;
-        preparedStatement.setInt(column++, node.getId());
         preparedStatement.setString(column++, node.getName());
         preparedStatement.setString(column++, node.getUrl());
         preparedStatement.setInt(column++, node.getParentId());
