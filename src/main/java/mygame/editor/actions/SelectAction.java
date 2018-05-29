@@ -34,6 +34,7 @@ public class SelectAction extends Action{
             ccNode.addComponent(new SelectComponent());
         }
 
+
         mRenderer.addChild(root);
         mRenderer.update();
 

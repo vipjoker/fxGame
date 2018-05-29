@@ -1,6 +1,11 @@
 package mygame.editor.controlers;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableDoubleValue;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -68,12 +73,35 @@ public class Controller implements Initializable {
     public InfoController getInfoController() {
         return infoController;
     }
-
     private void setListeners() {
 
         Platform.runLater(()-> {
 
             canvasRenderer = new CanvasRenderer(centerPane);
+
+
+            leftPane.widthProperty().addListener(new ChangeListener<Number>() {
+                @Override
+                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                    System.out.println("LEFT " +newValue);
+                }
+            });
+
+
+
+            centerPane.widthProperty().addListener(new ChangeListener<Number>() {
+                @Override
+                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                    System.out.println("CENTER " +newValue);
+                }
+            });
+            rightPane.widthProperty().addListener(new ChangeListener<Number>() {
+                @Override
+                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                    System.out.println("RIGHT " +newValue);
+                }
+            });
+
 
 
             App.instance .scene.setOnKeyPressed (it->{

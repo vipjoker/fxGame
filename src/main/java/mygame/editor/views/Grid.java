@@ -37,7 +37,6 @@ public class Grid implements Drawable {
 
             double scale = begin.distance(end) / zero.distance(leftUp);
             int scaleFactor = (int) (scale * 5);
-            System.out.println(scale + " " + scaleFactor);
 
             g.setFont(Font.font(10 * scale));
             int step = gridStep * scaleFactor;
@@ -54,7 +53,6 @@ public class Grid implements Drawable {
 //            }
             padding = (int) (40 * scale);
             padding = 40;
-            System.out.println(step);
             double beginx = begin.getX() - begin.getX() % step;
             double beginy = begin.getY() - begin.getY() % step;
             g.beginPath();

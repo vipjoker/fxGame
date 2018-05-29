@@ -44,10 +44,10 @@ public class CreateSpriteAction extends Action {
 
         bodyNode.addComponent(component);
         bodyNode.id = getNextId(rootNode);
-        bodyNode.x = point2D.getX();
-        bodyNode.y = point2D.getY();
-        bodyNode.width = 100;
-        bodyNode.height = 100;
+        bodyNode.setX(point2D.getX());
+        bodyNode.setY(point2D.getY());
+        bodyNode.setWidth(100);
+        bodyNode.setHeight(100);
         rootNode.addChild(bodyNode);
         mRenderer.update();
     }

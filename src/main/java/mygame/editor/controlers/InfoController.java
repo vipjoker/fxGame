@@ -78,13 +78,13 @@ public class InfoController implements Initializable {
     public void setNode(CcNode node, Runnable runnable) {
         System.out.println(node);
         this.ccNode = node;
-        System.out.println(node.x);
+        System.out.println(node.getX());
         this.mCallback = runnable;
 
-        etX.setText(String.valueOf(node.x));
-        etY.setText(String.valueOf(node.y));
-        etWidth.setText(String.valueOf(node.width));
-        etHeight.setText(String.valueOf(node.height));
+        etX.setText(String.valueOf(node.getX()));
+        etY.setText(String.valueOf(node.getY()));
+        etWidth.setText(String.valueOf(node.getWidth()));
+        etHeight.setText(String.valueOf(node.getHeight()));
     }
 
     private void initSpinners() {
@@ -98,7 +98,7 @@ public class InfoController implements Initializable {
 
 
           if(validateNumberField(oldValue,newValue,etX)) {
-                ccNode.x = Double.parseDouble(newValue);
+                ccNode.setX(Double.parseDouble(newValue));
                 mCallback.run();
             }
 
@@ -106,7 +106,7 @@ public class InfoController implements Initializable {
         });
         etY.textProperty().addListener((observable, oldValue, newValue) -> {
             if(validateNumberField(oldValue,newValue,etY)) {
-                ccNode.y = Double.parseDouble(newValue);
+                ccNode.setY(Double.parseDouble(newValue));
                 mCallback.run();
             }
         });
@@ -114,14 +114,14 @@ public class InfoController implements Initializable {
         etWidth.textProperty().addListener((observable, oldValue, newValue) -> {
 
             if(validateNumberField(oldValue,newValue,etWidth)) {
-                ccNode.width = Double.parseDouble(newValue);
+                ccNode.setWidth(Double.parseDouble(newValue));
                 mCallback.run();
             }
         });
 
         etHeight.textProperty().addListener((observable, oldValue, newValue) -> {
             if(validateNumberField(oldValue,newValue,etHeight)) {
-                ccNode.height = Double.parseDouble(newValue);
+                ccNode.setHeight(Double.parseDouble(newValue));
                 mCallback.run();
             }
 

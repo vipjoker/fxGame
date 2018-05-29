@@ -32,9 +32,9 @@ public class EditComponent extends Component {
     public void draw(GraphicsContext g) {
         g.setFill(Color.RED);
         drawCircle(g,0,0);
-        drawCircle(g,0,-owner.height);
-        drawCircle(g,owner.width,0);
-        drawCircle(g,owner.width,-owner.height);
+        drawCircle(g,0,-owner.getHeight());
+        drawCircle(g,owner.getWidth(),0);
+        drawCircle(g,owner.getWidth(),-owner.getHeight());
 
         g.fill();
     }

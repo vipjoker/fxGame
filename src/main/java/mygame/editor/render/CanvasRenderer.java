@@ -1,5 +1,6 @@
 package mygame.editor.render;
 
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Point2D;
@@ -7,6 +8,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.SplitPane;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
@@ -50,12 +52,27 @@ public class CanvasRenderer {
         pane.getChildren().add(canvas);
 
 
-        AnchorPane.setTopAnchor(canvas, 0.0);
-        AnchorPane.setBottomAnchor(canvas, 0.0);
-        AnchorPane.setLeftAnchor(canvas, 0.0);
-        AnchorPane.setRightAnchor(canvas, 0.0);
+//        AnchorPane.setTopAnchor(canvas, 0.0);
+//        AnchorPane.setBottomAnchor(canvas, 0.0);
+//        AnchorPane.setLeftAnchor(canvas, 0.0);
+//        AnchorPane.setRightAnchor(canvas, 0.0);
 
         graphicsContext = canvas.getGraphicsContext2D();
+        pane.widthProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                Global.setWidth(newValue.doubleValue());
+                update();
+            }
+        });
+        pane.heightProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                Global.setHeight(newValue.doubleValue());
+                update();
+            }
+        });
+
 
         canvas.widthProperty().bind(pane.widthProperty());
         canvas.heightProperty().bind(pane.heightProperty());
@@ -63,6 +80,7 @@ public class CanvasRenderer {
 
         canvas.widthProperty().addListener(this::onChangeWidth);
         canvas.heightProperty().addListener(this::onChangeHeight);
+
         canvas.setOnScroll(this::onScroll);
         canvas.setOnMouseDragged(this::onDrag);
         canvas.setOnMouseReleased(this::onMouseReleased);
@@ -75,6 +93,7 @@ public class CanvasRenderer {
         draw(graphicsContext, Global.getWidth(), Global.getHeight());
 
     }
+
 
 
 
@@ -201,7 +220,6 @@ public class CanvasRenderer {
 
     private void handleSelectionRect(GraphicsContext g) {
 
-        System.out.println("Begin " + beginRect + " end " + endRect);
         if (beginRect != null && endRect != null) {
 
             g.setFill(Color.ALICEBLUE.deriveColor(1, 1, 1, 0.3));
@@ -214,7 +232,6 @@ public class CanvasRenderer {
             double width = Math.abs(beginRect.getX() - endRect.getX());
 
             double height = Math.abs(beginRect.getY() - endRect.getY());
-            System.out.printf("RECT %f %f %f %f\n", x, y, width, height);
 
 
             g.fillRect(x, y, width, height);

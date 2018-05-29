@@ -23,9 +23,11 @@ public class SelectComponent extends Component {
 
     @Override
     public void draw(GraphicsContext g) {
-        g.setStroke(Color.CYAN);
-        g.strokeRect(-5,-owner.height -5,owner.width +10 ,owner.height+10);
-        g.stroke();
+        if(owner.active) {
+            g.setStroke(Color.CYAN);
+            g.strokeRect(-5, -owner.getHeight() - 5, owner.getWidth()+ 10, owner.getHeight()+ 10);
+            g.stroke();
+        }
     }
 
 

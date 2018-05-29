@@ -11,10 +11,10 @@ import java.util.*;
 public class CcNode implements Drawable {
     public int id;
     public int layer;
-    public double x;
-    public double y;
-    public double width;
-    public double height;
+    protected double x;
+    protected double y;
+    protected double width;
+    protected double height;
     public double scaleX = 1;
     public double scaleY = 1;
     public double angle;
@@ -24,7 +24,7 @@ public class CcNode implements Drawable {
     public boolean active;
     private CcNode parent;
     private List<Component> components = new ArrayList<>();
-
+    private Anchor anchor = Anchor.BOTTOM_LEFT;
 
     private List<CcNode> children = new ArrayList<>();
 
@@ -70,7 +70,7 @@ public class CcNode implements Drawable {
     }
 
     public boolean contains(double x, double y) {
-        return false;
+        return bBox.contains(x,y);
     }
 
     public void setActive(boolean isActive) {
@@ -143,7 +143,43 @@ public class CcNode implements Drawable {
     }
 
     public void updateBoundingBox(){
+        setAnchor(anchor);
+    }
 
+    public double getX() {
+        return x;
+    }
+
+    public void setX(double x) {
+        this.x = x;
+        updateBoundingBox();
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+        updateBoundingBox();
+    }
+
+    public double getWidth() {
+        return width;
+    }
+
+    public void setWidth(double width) {
+        this.width = width;
+        updateBoundingBox();
+    }
+
+    public double getHeight() {
+        return height;
+    }
+
+    public void setHeight(double height) {
+        this.height = height;
+        updateBoundingBox();
     }
 
     @Override

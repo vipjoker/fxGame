@@ -29,7 +29,7 @@ public class SpriteComponent extends Component {
 
     @Override
     public void draw(GraphicsContext g) {
-        g.drawImage(mImage, 0, -owner.height, owner.width, owner.height);
+        g.drawImage(mImage, 0, -owner.getHeight(), owner.getWidth(), owner.getHeight());
     }
 
     @Override
