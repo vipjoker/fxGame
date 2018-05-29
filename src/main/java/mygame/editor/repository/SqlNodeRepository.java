@@ -116,7 +116,6 @@ public class SqlNodeRepository implements NodeRepository {
 
 
 
-
                 nodeDao.insert(n);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -124,9 +123,9 @@ public class SqlNodeRepository implements NodeRepository {
         });
 
         for (CcNode ccNode : nodes) {
-            SpriteComponent compnent = ccNode.getCompnent(Component.Type.SPRITE);
-            if(compnent != null){
-                EntitySprite entitySprite = SpriteComponentMapper.map(compnent, ccNode.id);
+            SpriteComponent component = ccNode.getCompnent(Component.Type.SPRITE);
+            if(component != null){
+                EntitySprite entitySprite = SpriteComponentMapper.map(component, ccNode.id);
 
                 try {
                     spriteDao.insert(entitySprite);

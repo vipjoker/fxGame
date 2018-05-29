@@ -1,12 +1,19 @@
 package mygame.editor.views;
 
 import javafx.geometry.BoundingBox;
+import javafx.geometry.Point2D;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.transform.Affine;
+import javafx.scene.transform.NonInvertibleTransformException;
+import javafx.scene.transform.Transform;
 import mygame.editor.component.Component;
 import mygame.editor.customShapes.Drawable;
+import mygame.editor.model.Point;
 
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class CcNode implements Drawable {
     public int id;
@@ -19,6 +26,7 @@ public class CcNode implements Drawable {
     public double scaleY = 1;
     public double angle;
     public Affine transform;
+    public Affine localTransform = new Affine();
     public String name;
     protected BoundingBox bBox;
     public boolean active;
@@ -34,6 +42,12 @@ public class CcNode implements Drawable {
 
     public void addChild(CcNode node) {
         node.setParent(this);
+        Affine clone = localTransform.clone();
+        clone.append(Transform.translate(x,y));
+        clone.append(Transform.rotate(angle,0,0));
+        clone.append(Transform.scale(scaleX,scaleY));
+        node.setLocalTransform(clone);
+
         children.add(node);
     }
 
@@ -43,6 +57,10 @@ public class CcNode implements Drawable {
 
     public CcNode getParent() {
         return parent;
+    }
+
+    public void setLocalTransform(Affine affine){
+        this.localTransform = affine;
     }
 
     @Override
@@ -69,18 +87,30 @@ public class CcNode implements Drawable {
 
     }
 
+
+
     public boolean contains(double x, double y) {
         return bBox.contains(x,y);
     }
 
-    public void setActive(boolean isActive) {
-
+    public boolean contains(Point2D point2D){
+        System.out.println(bBox +" contains " + point2D);
+        Rectangle2D rectangle2D = new Rectangle2D(x,y,width,height);
+        return rectangle2D.contains(point2D);
     }
+
+    public void setActive(boolean isActive) {
+        this.active = isActive;
+    }
+
+
 
     public void addComponent(Component component) {
         component.setNode(this);
         components.add(component);
     }
+
+
 
     public <T extends Component> T getCompnent(Component.Type type){
         Optional<Component> component = components.stream().filter(e -> e.getType() == type).findFirst();
@@ -93,6 +123,41 @@ public class CcNode implements Drawable {
         }
     }
 
+    public Point2D convertToLocalSpace(Point2D point){
+        if(transform != null){
+            try {
+
+                return transform.inverseTransform(point);
+            } catch (NonInvertibleTransformException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }else{
+            return null;
+        }
+    }
+
+     public CcNode getSelected(Point2D point2D){
+         for (CcNode ccNode : getChildren()) {
+             CcNode selected = ccNode.getSelected(point2D);
+             if(selected != null){
+                 return selected;
+             }
+         }
+         Point2D localPoint = convertToLocalSpace(point2D);
+         if (contains(point2D)) {
+             setActive(true);
+             return this;
+         }else {
+             return null;
+         }
+     }
+     public void updateAll(Consumer<CcNode> function){
+         for (CcNode ccNode : getChildren()) {
+             ccNode.updateAll(function);
+         }
+         function.accept(this);
+     }
 
 
     public CcNode findViewById(int id){
@@ -143,7 +208,8 @@ public class CcNode implements Drawable {
     }
 
     public void updateBoundingBox(){
-        setAnchor(anchor);
+        bBox = new BoundingBox(0, -height, width, height);
+
     }
 
     public double getX() {

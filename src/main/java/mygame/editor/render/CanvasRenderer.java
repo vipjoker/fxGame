@@ -43,7 +43,7 @@ public class CanvasRenderer {
     private Grid grid = new Grid();
     private List<CcNode> nodes = new ArrayList<>();
     private OnCanvasClickListener mOnCanvasClickListener;
-
+    private OnCanvasDragListener mOnCanvasDragListener;
 
     public CanvasRenderer(Pane pane) {
         Canvas canvas = new Canvas();
@@ -129,10 +129,10 @@ public class CanvasRenderer {
         sortedNodes.sort(Collections.reverseOrder(Comparator.comparingInt(l -> l.layer)));
         for (CcNode n : sortedNodes) {
             if (n.contains(event.getX(), event.getY()) && !isPressed) {
-                n.setActive(true);
+//                n.setActive(true);
                 isPressed = true;
             } else {
-                n.setActive(false);
+//                n.setActive(false);
             }
         }
 
@@ -144,23 +144,31 @@ public class CanvasRenderer {
         lastPoint = null;
         beginRect = null;
         endRect = null;
+        if(mOnCanvasDragListener != null){
+            mOnCanvasDragListener.onDrag(0,0,true);
+        }
     }
 
 
     private void onDrag(MouseEvent event) {
-
+        double x = event.getX();
+        double y = event.getY();
+        Point2D p = new Point2D(x, y);
+        Point2D sub = null;
+        if (lastPoint != null) {
+            sub = lastPoint.subtract(p);
+        }
         if (event.getButton() == MouseButton.SECONDARY) {
-            double x = event.getX();
-            double y = event.getY();
-            Point2D p = new Point2D(x, y);
-            if (lastPoint != null) {
-                Point2D subtract = lastPoint.subtract(p);
-                translatex -= subtract.getX();
-                translatey -= subtract.getY();
+                if(sub!= null) {
+                    translatex -= sub.getX();
+                    translatey -= sub.getY();
+                }
 
+
+        }else if(mOnCanvasDragListener != null){
+            if(sub != null){
+                mOnCanvasDragListener.onDrag(sub.getX(),sub.getY(),false);
             }
-
-            lastPoint = p;
         } else {
             if (beginRect == null) {
 
@@ -170,6 +178,7 @@ public class CanvasRenderer {
             }
 
         }
+        lastPoint = p;
         update();
     }
 
@@ -283,14 +292,19 @@ public class CanvasRenderer {
 
     public void setOnCanvasClickListener(OnCanvasClickListener canvasClickListener){
         this.mOnCanvasClickListener = canvasClickListener;
-
     }
 
-    public interface OnSelectedNodesListener {
-        void onNodesSelected(List<CcNode> nodes);
+    public void setmOnCanvasDragListener(OnCanvasDragListener listener){
+        this.mOnCanvasDragListener = listener;
     }
+
+
 
     public interface OnCanvasClickListener {
         void onClick(Point2D point2D);
+    }
+
+    public interface OnCanvasDragListener{
+        void onDrag(double deltaX,double deltaY,boolean isEnd);
     }
 }
