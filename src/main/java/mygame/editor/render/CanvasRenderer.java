@@ -167,7 +167,8 @@ public class CanvasRenderer {
 
         }else if(mOnCanvasDragListener != null){
             if(sub != null){
-                mOnCanvasDragListener.onDrag(sub.getX(),sub.getY(),false);
+                double scalefactor = 1/scale;
+                mOnCanvasDragListener.onDrag(sub.getX() * scalefactor,sub.getY() * scalefactor,false);
             }
         } else {
             if (beginRect == null) {
