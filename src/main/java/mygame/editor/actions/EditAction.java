@@ -43,6 +43,7 @@ public class EditAction extends Action implements CanvasRenderer.OnCanvasDragLis
 
     @Override
     public void onStartMove(Point2D point) {
+
         if(selected!=null){
             System.out.println("From canvas " + point);
             Point2D convertToLocalSpace = selected.convertToLocalSpace(point);
@@ -74,18 +75,18 @@ public class EditAction extends Action implements CanvasRenderer.OnCanvasDragLis
 
     @Override
     public void onDrag(Point2D point) {
-//        if(selected != null && isResized){
-//            double width = selected.getWidth() + point.getX();
-//            double height = selected.getHeight() + point.getY();
-//            selected.setWidth(width);
-//            selected.setHeight(height);
-//            mRenderer.update();
-//        }
+        if(selected != null && isResized){
+            double width = selected.getWidth() - point.getX();
+            double height = selected.getHeight() + point.getY();
+            selected.setWidth(width);
+            selected.setHeight(height);
+            mRenderer.update();
+        }
     }
 
     @Override
     public void onStopMove(Point2D point) {
-        selected = null;
+
         isResized = false;
     }
 }
