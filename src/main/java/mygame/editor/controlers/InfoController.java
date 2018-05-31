@@ -127,7 +127,7 @@ public class InfoController implements Initializable {
 
         etRotation.textProperty().addListener((observable, oldValue, newValue) -> {
             if(validateNumberField(oldValue,newValue,etRotation)) {
-                ccNode.angle = Double.parseDouble(newValue);
+                ccNode.setAngle(Double.parseDouble(newValue));
                 mCallback.run();
             }
         });

@@ -24,7 +24,7 @@ public class CcNode implements Drawable {
     protected double height;
     public double scaleX = 1;
     public double scaleY = 1;
-    public double angle;
+    private double angle;
     public Affine transform;
     public Affine localTransform = new Affine();
     public String name;
@@ -49,6 +49,20 @@ public class CcNode implements Drawable {
         node.setLocalTransform(clone);
 
         children.add(node);
+    }
+
+    public double getAngle(){
+        return angle;
+    }
+
+    public void setAngle(double angle){
+
+        this.angle = angle;
+    }
+
+    public void appendAngle(double deltaAngle){
+        localTransform.appendRotation(deltaAngle);
+        angle -= deltaAngle;
     }
 
     public void setParent(CcNode node){
@@ -111,7 +125,7 @@ public class CcNode implements Drawable {
 
 
 
-    public <T extends Component> T getCompnent(Component.Type type){
+    public <T extends Component> T getComponent(Component.Type type){
         Optional<Component> component = components.stream().filter(e -> e.getType() == type).findFirst();
 
 
@@ -123,10 +137,10 @@ public class CcNode implements Drawable {
     }
 
     public Point2D convertToLocalSpace(Point2D point){
-        if(transform != null){
+        if(localTransform != null){
             try {
-
-                return localTransform.inverseTransform(point);
+                Point2D point2D = localTransform.inverseTransform(point);
+                return point2D;
             } catch (NonInvertibleTransformException e) {
                 e.printStackTrace();
                 return null;

@@ -4,7 +4,6 @@ package mygame.editor.actions;
 import javafx.geometry.Point2D;
 import mygame.editor.component.Component;
 import mygame.editor.component.EditComponent;
-import mygame.editor.model.Point;
 import mygame.editor.render.CanvasRenderer;
 import mygame.editor.repository.NodeRepository;
 import mygame.editor.views.CcNode;
@@ -14,6 +13,7 @@ public class EditAction extends Action implements CanvasRenderer.OnCanvasDragLis
     private CcNode rootNode;
     private CcNode selected;
     private boolean isResized = false;
+    private boolean isRotated = false;
     public EditAction(CanvasRenderer renderer, NodeRepository repository) {
         super(renderer,repository);
 
@@ -38,6 +38,8 @@ public class EditAction extends Action implements CanvasRenderer.OnCanvasDragLis
     public void finishDrawing() {
         mRenderer.setOnCanvasDragListener(null);
         rootNode.updateAll(n->n.setActive(false));
+        mRepository.deleteAll();
+        mRepository.save(rootNode);
         selected = null;
     }
 
@@ -45,16 +47,21 @@ public class EditAction extends Action implements CanvasRenderer.OnCanvasDragLis
     public void onStartMove(Point2D point) {
 
         if(selected!=null){
-            System.out.println("From canvas " + point);
             Point2D convertToLocalSpace = selected.convertToLocalSpace(point);
-            System.out.println("Converted " +  convertToLocalSpace);
-            EditComponent editComponent = selected.getCompnent(Component.Type.EDIT);
-            boolean contains = editComponent.contains(convertToLocalSpace);
 
+            EditComponent editComponent = selected.getComponent(Component.Type.EDIT);
+
+            boolean contains = editComponent.canBeResized(convertToLocalSpace);
+            isRotated = editComponent.canBeRotated(convertToLocalSpace);
 
             editComponent.setActive(contains);
-            mRenderer.update();
-            System.out.println(contains);
+
+
+            if(isRotated){
+                mRenderer.update();
+                return;
+            }
+
             if(contains){
                 isResized = true;
                 mRenderer.update();
@@ -75,12 +82,22 @@ public class EditAction extends Action implements CanvasRenderer.OnCanvasDragLis
 
     @Override
     public void onDrag(Point2D point) {
-        if(selected != null && isResized){
-            double width = selected.getWidth() - point.getX();
-            double height = selected.getHeight() + point.getY();
-            selected.setWidth(width);
-            selected.setHeight(height);
+        if(selected != null ){
+            if(isResized) {
+
+                double width = selected.getWidth() - point.getX();
+                double height = selected.getHeight() + point.getY();
+                selected.setWidth(width);
+                selected.setHeight(height);
+
+            }
+            if(isRotated){
+                selected.appendAngle(point.getX());
+
+            }
             mRenderer.update();
+
+
         }
     }
 
@@ -88,5 +105,6 @@ public class EditAction extends Action implements CanvasRenderer.OnCanvasDragLis
     public void onStopMove(Point2D point) {
 
         isResized = false;
+        isRotated = false;
     }
 }

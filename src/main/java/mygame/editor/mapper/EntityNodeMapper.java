@@ -17,13 +17,13 @@ public class EntityNodeMapper {
         entityNode.setWidth((float) node.getWidth());
         entityNode.setX((float) node.getX());
         entityNode.setY((float) node.getY());
-        entityNode.setRotation((float) node.angle);
+        entityNode.setRotation((float) node.getAngle());
         return entityNode;
     }
 
     public static CcNode map(EntityNode node){
         CcNode ccNode = new CcNode();
-        ccNode.angle = node.getRotation();
+        ccNode.setAngle(node.getRotation());
         ccNode.name = node.getName();
         ccNode.setX(node.getX());
         ccNode.setY(node.getY());

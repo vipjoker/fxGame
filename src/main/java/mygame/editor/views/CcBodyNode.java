@@ -55,11 +55,11 @@ public class CcBodyNode extends CcNode {
         if(isInSimulateMode) {
             x = body.getPosition().x * 32;
             y = body.getPosition().y * 32;
-            angle = -body.getAngle() * MathUtils.radDeg;
+            setAngle(-body.getAngle() * MathUtils.radDeg);
         }else{
             x = bodyDef.position.x * 32;
             y = bodyDef.position.y * 32;
-            angle = -bodyDef.angle * MathUtils.radDeg;
+            setAngle(-bodyDef.angle * MathUtils.radDeg);
         }
     }
 

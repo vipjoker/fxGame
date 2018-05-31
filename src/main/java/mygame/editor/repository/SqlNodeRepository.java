@@ -9,7 +9,6 @@ import mygame.editor.data.entities.EntitySprite;
 import mygame.editor.mapper.CcNodeUtil;
 import mygame.editor.mapper.EntityNodeMapper;
 import mygame.editor.mapper.SpriteComponentMapper;
-import mygame.editor.util.ImageUtil;
 import mygame.editor.views.CcNode;
 
 import java.sql.Connection;
@@ -123,7 +122,7 @@ public class SqlNodeRepository implements NodeRepository {
         });
 
         for (CcNode ccNode : nodes) {
-            SpriteComponent component = ccNode.getCompnent(Component.Type.SPRITE);
+            SpriteComponent component = ccNode.getComponent(Component.Type.SPRITE);
             if(component != null){
                 EntitySprite entitySprite = SpriteComponentMapper.map(component, ccNode.id);
 
