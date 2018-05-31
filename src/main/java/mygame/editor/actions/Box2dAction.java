@@ -122,21 +122,6 @@ public class Box2dAction extends Action implements TimerCounter.FrameRateCallbac
     }
 
     @Override
-    public void mouseMoved(Point position) {
-
-    }
-
-    @Override
-    public void mousePressed(Point position) {
-
-    }
-
-    @Override
-    public void mouseReleased(Point position) {
-
-    }
-
-    @Override
     public void finishDrawing() {
         world = null;
         counter.stop();

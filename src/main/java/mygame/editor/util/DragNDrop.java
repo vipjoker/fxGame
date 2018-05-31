@@ -40,7 +40,6 @@ public class DragNDrop  {
         Node source = (Node) mouseEvent.getSource();
         Point2D p = source.screenToLocal(mouseEvent.getScreenX(),mouseEvent.getScreenY());
         startPoint.set(p.getX(),p.getY());
-        System.out.println(startPoint);
     }
 
 }

@@ -59,7 +59,6 @@ public class  Box2dDialog implements TimerCounter.FrameRateCallback {
 
 
         canvas.setOnScroll(event -> {
-            System.out.println(event.getDeltaY());
 
             canvas.getGraphicsContext2D().fillText("Delta " + event.getDeltaY(), 10, 10);
         });

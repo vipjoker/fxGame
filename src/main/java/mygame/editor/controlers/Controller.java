@@ -83,7 +83,6 @@ public class Controller implements Initializable {
             leftPane.widthProperty().addListener(new ChangeListener<Number>() {
                 @Override
                 public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                    System.out.println("LEFT " +newValue);
                 }
             });
 
@@ -92,13 +91,11 @@ public class Controller implements Initializable {
             centerPane.widthProperty().addListener(new ChangeListener<Number>() {
                 @Override
                 public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                    System.out.println("CENTER " +newValue);
                 }
             });
             rightPane.widthProperty().addListener(new ChangeListener<Number>() {
                 @Override
                 public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                    System.out.println("RIGHT " +newValue);
                 }
             });
 

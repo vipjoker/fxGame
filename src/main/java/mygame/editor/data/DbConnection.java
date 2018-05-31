@@ -22,7 +22,6 @@ public class DbConnection {
         } catch ( Exception e ) {
             throw new RuntimeException("Cannot create connection");
         }
-        System.out.println("Opened database successfully");
         return connection;
     }
 }

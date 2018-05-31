@@ -27,12 +27,6 @@ public abstract class Action {
 
     public abstract void init();
 
-    public abstract void mouseMoved(Point position);
-
-    public abstract void mousePressed(Point position);
-
-    public abstract void mouseReleased(Point position);
-
     public abstract void finishDrawing();
 
 }

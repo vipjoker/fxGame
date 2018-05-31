@@ -10,46 +10,41 @@ import mygame.editor.util.Resources;
 import mygame.editor.views.CcBodyNode;
 import mygame.editor.views.CcSprite;
 
-public class CreateBodyAction extends Action {
+public class CreateBodyAction extends Action implements CanvasRenderer.OnCanvasDragListener{
 
     public CreateBodyAction(CanvasRenderer renderer, NodeRepository repository) {
         super(renderer,repository);
     }
 
-    @Override
-    public void mouseMoved(Point position) {
-
-    }
-
-    @Override
-    public void mousePressed(Point position) {
-
-    }
-
-    @Override
-    public void mouseReleased(Point position) {
-
-    }
 
     @Override
     public void init() {
-        mRenderer.setOnCanvasClickListener(this::onCanvasClicked);
-    }
-
-    private void onCanvasClicked(Point2D point2D){
-
-
-        BodyDef def = new BodyDef();
-        def.position.x = (float) point2D.getX()/32;
-        def.position.y = (float) point2D.getY()/32;
-        CcBodyNode bodyNode= new CcBodyNode(def);
-        mRenderer.addChild(bodyNode);
-        mRenderer.update();
-
+        mRenderer.setOnCanvasDragListener(this);
     }
 
     @Override
     public void finishDrawing() {
+
+    }
+
+    @Override
+    public void onStartMove(Point2D point) {
+
+        BodyDef def = new BodyDef();
+        def.position.x = (float) point.getX()/32;
+        def.position.y = (float) point.getY()/32;
+        CcBodyNode bodyNode= new CcBodyNode(def);
+        mRenderer.addChild(bodyNode);
+        mRenderer.update();
+    }
+
+    @Override
+    public void onDrag(Point2D point) {
+
+    }
+
+    @Override
+    public void onStopMove(Point2D point) {
 
     }
 }

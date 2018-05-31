@@ -76,9 +76,7 @@ public class InfoController implements Initializable {
     }
 
     public void setNode(CcNode node, Runnable runnable) {
-        System.out.println(node);
         this.ccNode = node;
-        System.out.println(node.getX());
         this.mCallback = runnable;
 
         etX.setText(String.valueOf(node.getX()));

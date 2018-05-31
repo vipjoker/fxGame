@@ -14,7 +14,7 @@ import mygame.editor.views.CcSprite;
 /**
  * Created by oleh on 18.05.18.
  */
-public class CreateSpriteAction extends Action {
+public class CreateSpriteAction extends Action implements CanvasRenderer.OnCanvasDragListener {
 
     public CreateSpriteAction(CanvasRenderer renderer, NodeRepository repository) {
         super(renderer, repository);
@@ -22,7 +22,7 @@ public class CreateSpriteAction extends Action {
     private CcNode rootNode;
     @Override
     public void init() {
-        mRenderer.setOnCanvasClickListener(this::onCanvasClick);
+        mRenderer.setOnCanvasDragListener(this);
 
         rootNode  = mRepository.getRootNode();
         if(rootNode == null){
@@ -35,37 +35,6 @@ public class CreateSpriteAction extends Action {
         mRenderer.update();
     }
 
-    private void onCanvasClick(Point2D point2D) {
-
-        CcNode bodyNode = new CcNode();
-
-//        CcSprite bodyNode = new CcSprite(Resources.no_image);
-        SpriteComponent component = new SpriteComponent(Resources.NO_IMAGE);
-
-        bodyNode.addComponent(component);
-        bodyNode.id = getNextId(rootNode);
-        bodyNode.setX(point2D.getX());
-        bodyNode.setY(point2D.getY());
-        bodyNode.setWidth(100);
-        bodyNode.setHeight(100);
-        rootNode.addChild(bodyNode);
-        mRenderer.update();
-    }
-
-    @Override
-    public void mouseMoved(Point position) {
-
-    }
-
-    @Override
-    public void mousePressed(Point position) {
-
-    }
-
-    @Override
-    public void mouseReleased(Point position) {
-
-    }
 
 
     private int getNextId(CcNode node){
@@ -80,5 +49,32 @@ public class CreateSpriteAction extends Action {
     public void finishDrawing() {
         mRepository.deleteAll();
         mRepository.save(rootNode);
+    }
+
+    @Override
+    public void onStartMove(Point2D point) {
+        CcNode bodyNode = new CcNode();
+
+//        CcSprite bodyNode = new CcSprite(Resources.no_image);
+        SpriteComponent component = new SpriteComponent(Resources.NO_IMAGE);
+
+        bodyNode.addComponent(component);
+        bodyNode.id = getNextId(rootNode);
+        bodyNode.setX(point.getX());
+        bodyNode.setY(point.getY());
+        bodyNode.setWidth(100);
+        bodyNode.setHeight(100);
+        rootNode.addChild(bodyNode);
+        mRenderer.update();
+    }
+
+    @Override
+    public void onDrag(Point2D point) {
+
+    }
+
+    @Override
+    public void onStopMove(Point2D point) {
+
     }
 }

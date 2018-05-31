@@ -116,7 +116,6 @@ public class FlatBuffersRepository implements NodeRepository {
 
         for (int i = 0; i < rootAsEditorRoot.nodesLength(); i++) {
             NodeTree nodes = rootAsEditorRoot.nodes(i);
-            System.out.println(nodes.name());
         }
 //        Monster monster = Monster.getRootAsMonster(buf);
 //
@@ -148,7 +147,6 @@ public class FlatBuffersRepository implements NodeRepository {
 //        assert equipped.name().equals("Axe");
 //        assert equipped.damage() == 5;
 //
-//        System.out.println("The FlatBuffer was successfully created and verified!");
 //    }
 
         return null;
@@ -194,7 +192,6 @@ public class FlatBuffersRepository implements NodeRepository {
         try(FileInputStream inFile = new FileInputStream(file)){
             FileChannel inChannel = inFile.getChannel();
             while (inChannel.read(buf) != -1) {
-                System.out.println("String read: " + ((ByteBuffer) (buf.flip())).asCharBuffer().get(0));
                 buf.clear();
             }
 

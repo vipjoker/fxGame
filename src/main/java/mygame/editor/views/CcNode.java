@@ -43,9 +43,9 @@ public class CcNode implements Drawable {
     public void addChild(CcNode node) {
         node.setParent(this);
         Affine clone = localTransform.clone();
-        clone.append(Transform.translate(x,y));
-        clone.append(Transform.rotate(angle,0,0));
-        clone.append(Transform.scale(scaleX,scaleY));
+        clone.append(Transform.translate(node.getX(),node.getY()));
+        clone.append(Transform.rotate(node.angle,0,0));
+        clone.append(Transform.scale(node.scaleX,node.scaleY));
         node.setLocalTransform(clone);
 
         children.add(node);
@@ -83,7 +83,7 @@ public class CcNode implements Drawable {
 
     public void rasterize(GraphicsContext context) {
 
-        transform = context.getTransform();
+        transform = context.getTransform().clone();
 
     }
 
@@ -94,7 +94,6 @@ public class CcNode implements Drawable {
     }
 
     public boolean contains(Point2D point2D){
-        System.out.println(bBox +" contains " + point2D);
         Rectangle2D rectangle2D = new Rectangle2D(x,y,width,height);
         return rectangle2D.contains(point2D);
     }
@@ -127,7 +126,7 @@ public class CcNode implements Drawable {
         if(transform != null){
             try {
 
-                return transform.inverseTransform(point);
+                return localTransform.inverseTransform(point);
             } catch (NonInvertibleTransformException e) {
                 e.printStackTrace();
                 return null;

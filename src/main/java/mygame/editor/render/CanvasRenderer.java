@@ -32,7 +32,7 @@ public class CanvasRenderer {
     private double translatex = 400;
     private double translatey = -400;
 
-    Point2D mouseCursor = new Point2D(0,0);
+    Point2D mouseCursor = new Point2D(0, 0);
     private GraphicsContext graphicsContext;
     private TimerCounter counter;
     private Point2D lastPoint;
@@ -42,7 +42,6 @@ public class CanvasRenderer {
 
     private Grid grid = new Grid();
     private List<CcNode> nodes = new ArrayList<>();
-    private OnCanvasClickListener mOnCanvasClickListener;
     private OnCanvasDragListener mOnCanvasDragListener;
 
     public CanvasRenderer(Pane pane) {
@@ -84,25 +83,23 @@ public class CanvasRenderer {
         canvas.setOnScroll(this::onScroll);
         canvas.setOnMouseDragged(this::onDrag);
         canvas.setOnMouseReleased(this::onMouseReleased);
-        canvas.setOnMouseClicked(this::onMouseClicked);
+        canvas.setOnMousePressed(this::onMouseClicked);
         canvas.setCursor(Cursor.CROSSHAIR);
-        canvas.setOnMouseMoved(e-> {
-            mouseCursor=new Point2D(e.getX(),e.getY());
-            update();
-        });
+        canvas.setOnMouseMoved(this::onMouseMoved);
         draw(graphicsContext, Global.getWidth(), Global.getHeight());
 
     }
-
-
-
+    private void onMouseMoved(MouseEvent event){
+        mouseCursor = new Point2D(event.getX(), event.getY());
+        update();
+    }
 
     private void onMouseClicked(MouseEvent event) {
-        if(mOnCanvasClickListener != null && event.getButton() == MouseButton.PRIMARY){
+        if (mOnCanvasDragListener != null && event.getButton() == MouseButton.PRIMARY) {
             Point2D point2D = grid.transformPoint(event);
-            Point2D p = new Point2D(point2D.getX(),-point2D.getY());
+            Point2D p = new Point2D(point2D.getX(), -point2D.getY());
 
-            mOnCanvasClickListener.onClick(p);
+            mOnCanvasDragListener.onStartMove(p);
 
         }
 
@@ -141,12 +138,13 @@ public class CanvasRenderer {
     }
 
     private void onMouseReleased(MouseEvent event) {
+
+        if (mOnCanvasDragListener != null) {
+            mOnCanvasDragListener.onStopMove(lastPoint);
+        }
         lastPoint = null;
         beginRect = null;
         endRect = null;
-        if(mOnCanvasDragListener != null){
-            mOnCanvasDragListener.onDrag(0,0,true);
-        }
     }
 
 
@@ -159,16 +157,17 @@ public class CanvasRenderer {
             sub = lastPoint.subtract(p);
         }
         if (event.getButton() == MouseButton.SECONDARY) {
-                if(sub!= null) {
-                    translatex -= sub.getX();
-                    translatey -= sub.getY();
-                }
+            if (sub != null) {
+                translatex -= sub.getX();
+                translatey -= sub.getY();
+            }
 
 
-        }else if(mOnCanvasDragListener != null){
-            if(sub != null){
-                double scalefactor = 1/scale;
-                mOnCanvasDragListener.onDrag(sub.getX() * scalefactor,sub.getY() * scalefactor,false);
+        } else if (mOnCanvasDragListener != null) {
+            if (sub != null) {
+                double scalefactor = 1 / scale;
+                Point2D scaled = sub.multiply(scalefactor);
+                mOnCanvasDragListener.onDrag(scaled);
             }
         } else {
             if (beginRect == null) {
@@ -186,8 +185,8 @@ public class CanvasRenderer {
     private void onScroll(ScrollEvent scrollEvent) {
         scale += (scrollEvent.getDeltaY() / 1000);
 
-        if ( scale < 0.2) scale = 0.2;
-        if (scale > 5)scale = 5;
+        if (scale < 0.2) scale = 0.2;
+        if (scale > 5) scale = 5;
 
 
         scrollx = scrollEvent.getX();
@@ -250,29 +249,16 @@ public class CanvasRenderer {
         }
     }
 
-    private void drawCursor(GraphicsContext g){
+    private void drawCursor(GraphicsContext g) {
 
         try {
-            grid.transformPoint(mouseCursor.getX(),mouseCursor.getY());//check grid method grid.transform
+            grid.transformPoint(mouseCursor.getX(), mouseCursor.getY());//check grid method grid.transform
 
             Point2D p = g.getTransform().inverseTransform(mouseCursor);
-            double y = p.getY() ;
-            double x = p.getX() ;
-
-
-
-        double cursorLength = 10;
-        g.beginPath();
-        g.setStroke(Color.PINK);
-        g.moveTo(x -cursorLength ,y);
-        g.lineTo(x +cursorLength ,y);
-        g.moveTo(x ,y -cursorLength );
-        g.lineTo(x  ,y +cursorLength);
-        g.fillText(String.format("%f\n%f",x,y),x + 10,y + 10);
-
-
-        g.stroke();
-        g.closePath();
+            double y = p.getY();
+            double x = p.getX();
+            g.fillText(String.format("%.0f\n%.0f", x, y), x + 20, y - 20);
+            g.fill();
         } catch (NonInvertibleTransformException e) {
             e.printStackTrace();
         }
@@ -291,21 +277,16 @@ public class CanvasRenderer {
         return nodes;
     }
 
-    public void setOnCanvasClickListener(OnCanvasClickListener canvasClickListener){
-        this.mOnCanvasClickListener = canvasClickListener;
-    }
-
-    public void setmOnCanvasDragListener(OnCanvasDragListener listener){
+    public void setOnCanvasDragListener(OnCanvasDragListener listener) {
         this.mOnCanvasDragListener = listener;
     }
 
 
 
-    public interface OnCanvasClickListener {
-        void onClick(Point2D point2D);
-    }
 
-    public interface OnCanvasDragListener{
-        void onDrag(double deltaX,double deltaY,boolean isEnd);
+    public interface OnCanvasDragListener {
+        void onStartMove(Point2D point);
+        void onDrag(Point2D point);
+        void onStopMove(Point2D point);
     }
 }

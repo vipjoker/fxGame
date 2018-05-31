@@ -1,5 +1,6 @@
 package mygame.editor.actions;
 
+import javafx.geometry.Point2D;
 import mygame.editor.model.Point;
 import mygame.editor.render.CanvasRenderer;
 import mygame.editor.repository.NodeRepository;
@@ -7,7 +8,7 @@ import mygame.editor.repository.NodeRepository;
 /**
  * Created by oleh on 3/21/17.
  */
-public class RotateAction extends Action {
+public class RotateAction extends Action implements CanvasRenderer.OnCanvasDragListener {
 
     public RotateAction(CanvasRenderer renderer, NodeRepository repository) {
         super(renderer,repository);
@@ -19,17 +20,17 @@ public class RotateAction extends Action {
     }
 
     @Override
-    public void mouseMoved(Point position) {
+    public void onStartMove(Point2D point) {
 
     }
 
     @Override
-    public void mousePressed(Point position) {
+    public void onDrag(Point2D point) {
 
     }
 
     @Override
-    public void mouseReleased(Point position) {
+    public void onStopMove(Point2D point) {
 
     }
 

@@ -13,7 +13,6 @@ public class Polygon implements Drawable {
     private double [] yPoints, xPoints;
     public Polygon(List<Point> points){
 
-        System.out.println("Polygon created x " + points);
         this.points = points;
     }
 

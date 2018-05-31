@@ -15,7 +15,6 @@ public class Circle implements Drawable,OnDragListener{
     Paint paint;
 
     public Circle(double x,double y,double radius){
-        System.out.println("Circle created x " + " y " + y + " radius " + radius);
         this.x = x;
         this.y = y;
         this.radius = radius;

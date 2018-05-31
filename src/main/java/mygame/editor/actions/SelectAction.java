@@ -11,7 +11,7 @@ import mygame.editor.views.CcNode;
 /**
  * Created by oleh on 3/27/17.
  */
-public class SelectAction extends Action{
+public class SelectAction extends Action implements CanvasRenderer.OnCanvasDragListener{
 
     private InfoController mController;
     private CcNode root;
@@ -34,29 +34,23 @@ public class SelectAction extends Action{
 
         mRenderer.addChild(root);
         mRenderer.update();
-        mRenderer.setOnCanvasClickListener(this::onCanvasClicked);
-        mRenderer.setmOnCanvasDragListener(this::onCanvasDragged);
+        mRenderer.setOnCanvasDragListener(this);
 
     }
 
-    private void onCanvasDragged(double deltaX, double deltaY, boolean isEnd) {
-        if(isEnd){
-
-            selected = null;
-            return ;
-        }
-
-        if(selected!=null){
-            double newX = selected.getX() - deltaX;
-            double newY = selected.getY() + deltaY;
-            selected.setX(newX);
-            selected.setY(newY);
-        }
+    @Override
+    public void finishDrawing() {
+        mRenderer.getNodes().clear();
+        mRenderer.setOnCanvasDragListener(null);
+        mRepository.deleteAll();
+        mRepository.save(root);
     }
 
-    private void onCanvasClicked(Point2D point2D) {
+    @Override
+    public void onStartMove(Point2D point) {
+
         root.updateAll(c->c.setActive(false));
-        selected = root.getSelected(point2D);
+        selected = root.getSelected(point);
         if(selected!= null){
 
 
@@ -65,38 +59,24 @@ public class SelectAction extends Action{
 
             mRenderer.update();
         }
-        System.out.println(point2D + " " +selected);
-
-//        List<CcNode> collect = mRenderer.getNodes().stream().filter(ccNode -> ccNode.active).collect(Collectors.toList());
-//        if(collect.size() == 1){
-//            CcNode ccNode = collect.get(0);
-//
-//        }
-    }
 
 
 
-    @Override
-    public void mouseMoved(Point position) {
 
     }
 
     @Override
-    public void mousePressed(Point position) {
-
+    public void onDrag(Point2D point) {
+        if(selected!=null){
+            double newX = selected.getX() - point.getX();
+            double newY = selected.getY() + point.getY();
+            selected.setX(newX);
+            selected.setY(newY);
+        }
     }
 
     @Override
-    public void mouseReleased(Point position) {
-
-    }
-
-    @Override
-    public void finishDrawing() {
-        mRenderer.getNodes().clear();
-        mRenderer.setOnCanvasClickListener(null);
-        mRenderer.setmOnCanvasDragListener(null);
-        mRepository.deleteAll();
-        mRepository.save(root);
+    public void onStopMove(Point2D point) {
+        selected = null;
     }
 }
