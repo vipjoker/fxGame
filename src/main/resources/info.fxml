@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 
-<GridPane fx:id="gpInfo" hgap="10.0" prefHeight="333.0" prefWidth="250.0" stylesheets="style.css" vgap="10.0" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mygame.editor.controlers.InfoController">
+<GridPane fx:id="gpInfo" hgap="10.0" prefHeight="534.0" prefWidth="250.0" stylesheets="style.css" vgap="10.0" BorderPane.alignment="CENTER" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mygame.editor.controlers.InfoController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="130.0" minWidth="10.0" prefWidth="108.0" />
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="207.0" minWidth="10.0" prefWidth="150.0" />
@@ -19,13 +26,13 @@
         <RowConstraints vgrow="SOMETIMES" />
         <RowConstraints vgrow="SOMETIMES" />
         <RowConstraints vgrow="SOMETIMES" />
-        <RowConstraints vgrow="ALWAYS" />
-        <RowConstraints vgrow="SOMETIMES" />
-        <RowConstraints vgrow="SOMETIMES" />
-        <RowConstraints vgrow="SOMETIMES" />
-        <RowConstraints vgrow="SOMETIMES" />
-        <RowConstraints vgrow="SOMETIMES" />
-        <RowConstraints vgrow="ALWAYS" />
+        <RowConstraints maxHeight="39.0" minHeight="24.0" prefHeight="30.0" vgrow="ALWAYS" />
+        <RowConstraints maxHeight="30.0" minHeight="0.0" prefHeight="27.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="63.0" minHeight="0.0" prefHeight="24.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="75.0" minHeight="3.0" prefHeight="24.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="91.0" minHeight="18.0" prefHeight="26.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="104.0" minHeight="19.0" prefHeight="32.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="90.0" minHeight="19.0" prefHeight="39.0" vgrow="ALWAYS" />
     </rowConstraints>
     <children>
         <Label text="Type" GridPane.halignment="LEFT" GridPane.rowIndex="6" />
@@ -43,7 +50,7 @@
         <Label text="Friction" GridPane.rowIndex="12" />
         <Label text="Restitution" GridPane.rowIndex="11" />
         <Label text="Density" GridPane.rowIndex="13" />
-        <Spinner fx:id="spFriction"  GridPane.columnIndex="1" GridPane.rowIndex="11" />
+        <Spinner fx:id="spFriction" GridPane.columnIndex="1" GridPane.rowIndex="11" />
         <Spinner fx:id="spRestitution" GridPane.columnIndex="1" GridPane.rowIndex="12" />
         <Spinner fx:id="spDensity" GridPane.columnIndex="1" GridPane.rowIndex="13" />
         <Label fx:id="tvY" text="y" GridPane.rowIndex="2" />
@@ -57,6 +64,8 @@
         <ColorPicker prefHeight="70.0" prefWidth="134.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
         <Label text="Rotation" GridPane.rowIndex="5" />
         <TextField fx:id="etRotation" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+      <CheckBox mnemonicParsing="false" text="CheckBox" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+      <Label text="Physics" GridPane.rowIndex="9" />
     </children>
     <padding>
         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
