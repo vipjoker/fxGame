@@ -82,8 +82,8 @@ public class CcBodyNode extends CcNode {
                 break;
             case Circle:
                 CircleShape circleShape = (CircleShape)fixtureDef.shape;
-                CcCircle ccCircle = new CcCircle(circleShape);
-                getChildren().add(ccCircle);
+                CcCircle ccCircle = new CcCircle(1);
+//                getChildren().add(ccCircle);
                 break;
         }
     }

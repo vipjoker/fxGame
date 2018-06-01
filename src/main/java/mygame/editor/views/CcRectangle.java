@@ -34,9 +34,9 @@ public class CcRectangle extends CcNode {
     }
 
     @Override
-    public boolean contains(double x, double y) {
+    public boolean contains(Point2D point) {
         try {
-            Point2D transform = this.transform.inverseTransform(x, y);
+            Point2D transform = this.transform.inverseTransform(point);
 
             return bBox.contains(transform);
         } catch (Exception e) {

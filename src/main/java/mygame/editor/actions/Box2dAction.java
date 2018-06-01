@@ -3,12 +3,8 @@ package mygame.editor.actions;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import mygame.editor.TimerCounter;
-import mygame.editor.component.SelectComponent;
-import mygame.editor.component.SelectComponent;
-import mygame.editor.model.Point;
 import mygame.editor.render.CanvasRenderer;
 import mygame.editor.repository.NodeRepository;
-import mygame.editor.ui.ChainFixture;
 import mygame.editor.views.CcBodyNode;
 
 public class Box2dAction extends Action implements TimerCounter.FrameRateCallback{

@@ -5,6 +5,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import mygame.editor.model.Point;
 import mygame.editor.util.Constants;
 
 public class CcSprite extends CcNode {
@@ -46,9 +47,9 @@ public class CcSprite extends CcNode {
     }
 
     @Override
-    public boolean contains(double x, double y) {
+    public boolean contains(Point2D point) {
         try {
-            Point2D point2D = this.transform.inverseTransform(x, y);
+            Point2D point2D = this.transform.inverseTransform(point);
 
             return bBox.contains(point2D);
         } catch (Exception e) {

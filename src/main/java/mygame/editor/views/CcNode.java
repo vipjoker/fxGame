@@ -102,11 +102,6 @@ public class CcNode implements Drawable {
     }
 
 
-
-    public boolean contains(double x, double y) {
-        return bBox.contains(x,y);
-    }
-
     public boolean contains(Point2D point2D){
         Rectangle2D rectangle2D = new Rectangle2D(x,y,width,height);
         return rectangle2D.contains(point2D);

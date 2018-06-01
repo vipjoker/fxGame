@@ -125,7 +125,8 @@ public class CanvasRenderer {
         }
         sortedNodes.sort(Collections.reverseOrder(Comparator.comparingInt(l -> l.layer)));
         for (CcNode n : sortedNodes) {
-            if (n.contains(event.getX(), event.getY()) && !isPressed) {
+            Point2D point2D = new Point2D(event.getX(), event.getY());
+            if (n.contains(point2D) && !isPressed) {
 //                n.setActive(true);
                 isPressed = true;
             } else {
@@ -203,7 +204,7 @@ public class CanvasRenderer {
     }
 
     private void onChangeHeight(ObservableValue<? extends Number> observable, Number old, Number newValue) {
-        Global.setWidth((double) newValue);
+        Global.setHeight((double) newValue);
         update();
     }
 

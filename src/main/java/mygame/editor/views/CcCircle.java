@@ -2,49 +2,52 @@ package mygame.editor.views;
 
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
+import mygame.editor.component.physics.FixtureDrawable;
 import mygame.editor.util.Constants;
 
-public class CcCircle extends CcNode {
-
-    private CircleShape mCircleShape;
+public class CcCircle implements FixtureDrawable{
+    FixtureDef fixtureDef ;
+    Fixture fixture;
     private double radius;
-
-    public CcCircle(CircleShape circleShape){
-        this.mCircleShape = circleShape;
-        this.x = circleShape.getPosition().x *32;
-        this.y = -circleShape.getPosition().y  * 32;
-
-        this.radius = circleShape.getRadius() * 32;
+    private boolean active;
+    public CcCircle(float radius){
+        fixtureDef = new FixtureDef();
+        fixtureDef.shape = new CircleShape();
+        fixtureDef.shape.setRadius(radius);
+        this.radius = radius * 32;
     }
 
-    public CcCircle(double x, double y, double radius) {
-        this.x = x;
-        this.y = y;
-
-        this.radius = radius;
-
+    private float getX(){
+        return CircleShape.class.cast(fixtureDef.shape).getPosition().x *32;
     }
+
+    private float getY(){
+
+        return CircleShape.class.cast(fixtureDef.shape).getPosition().y  * -32;
+    }
+
 
     @Override
-    public void rasterize(GraphicsContext context) {
-        transform = context.getTransform();
+    public void draw(GraphicsContext context) {
         context.setFill(Constants.RED.deriveColor(1, 1, 1, 0.5));
-        context.fillOval(this.x - radius, this.y - radius, radius * 2, radius * 2);
+        context.fillOval(getX() - radius, getY() - radius, radius * 2, radius * 2);
         if (active) {
             context.setLineWidth(2);
             context.setStroke(Constants.GREEN);
-            context.strokeOval(this.x - radius, this.y - radius, radius * 2, radius * 2);
+            context.strokeOval(getX()- radius,getY() - radius, radius * 2, radius * 2);
         }
     }
 
     @Override
-    public boolean contains(double x, double y) {
+    public boolean contains(Point2D point) {
         try {
-            Point2D transform = this.transform.inverseTransform(x, y);
-            Point2D center = new Point2D(this.x, this.y);
-            double distance = transform.distance(center);
+
+            Point2D center = new Point2D(getX(), getY());
+            double distance = point.distance(center);
             return distance < radius;
         } catch (Exception e) {
             e.printStackTrace();
