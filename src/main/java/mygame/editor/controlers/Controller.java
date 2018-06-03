@@ -22,15 +22,19 @@ import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import mygame.editor.App;
 import mygame.editor.actions.*;
+import mygame.editor.component.SpriteComponent;
+import mygame.editor.model.TreeFileHolder;
 import mygame.editor.render.TreeItemPath;
 import mygame.editor.repository.NodeRepository;
 import mygame.editor.repository.SqlNodeRepository;
 import mygame.editor.util.Resources;
+import mygame.editor.views.CcNode;
 import mygame.editor.views.CcSprite;
 import mygame.editor.render.CanvasRenderer;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 import java.util.*;
 
@@ -43,6 +47,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Connection;
+import java.util.stream.Stream;
 
 import static mygame.editor.util.Constants.*;
 
@@ -53,7 +58,7 @@ public class Controller implements Initializable {
     public VBox rightPane;
     public AnchorPane centerPane;
     public SplitPane root;
-    public TreeView<Path> resourcesTreeview;
+    public TreeView<TreeFileHolder> resourcesTreeview;
     public HBox toolbar;
     public Button btnRun ;
     public Button btnMove;
@@ -78,28 +83,6 @@ public class Controller implements Initializable {
         Platform.runLater(()-> {
 
             canvasRenderer = new CanvasRenderer(centerPane);
-
-
-            leftPane.widthProperty().addListener(new ChangeListener<Number>() {
-                @Override
-                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                }
-            });
-
-
-
-            centerPane.widthProperty().addListener(new ChangeListener<Number>() {
-                @Override
-                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                }
-            });
-            rightPane.widthProperty().addListener(new ChangeListener<Number>() {
-                @Override
-                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                }
-            });
-
-
 
             App.instance .scene.setOnKeyPressed (it->{
 
@@ -128,11 +111,12 @@ public class Controller implements Initializable {
 
     private void setLeftPane() {
 
-
-        TreeItem<Path> treeRoot = new TreeItem<>(Paths.get("resources"));
+        TreeItem<TreeFileHolder> treeRoot = new TreeItem<>(new TreeFileHolder("root","/"));
 
         try {
-            fillTreeView(Paths.get(getClass().getResource("/").toURI()), treeRoot);
+            URI uri = getClass().getResource("/").toURI();
+            File file = new File(uri);
+            fillTreeView("/",file, treeRoot);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -140,21 +124,20 @@ public class Controller implements Initializable {
 
         resourcesTreeview.setShowRoot(true);
         resourcesTreeview.setRoot(treeRoot);
-
         resourcesTreeview.setCellFactory(e -> new TreeItemPath());
-
         resourcesTreeview.setOnMouseClicked(e -> {
-            TreeItem<Path> selected = resourcesTreeview.getSelectionModel().getSelectedItem();
+            TreeItem<TreeFileHolder> selected = resourcesTreeview.getSelectionModel().getSelectedItem();
 
             if (selected != null && selected.isLeaf()) {
-
-
-                Image image = new Image(selected.getValue().toUri().toString());
-
-                CcSprite sprite = new CcSprite(image);
-                canvasRenderer.addChild(sprite);
+                String path = selected.getValue().getPath();
+                System.out.println(path);
+                CcNode node=  new CcNode();
+                node.setWidth(100);
+                node.setHeight(100);
+                SpriteComponent spriteComponent = new SpriteComponent(path);
+                node.addComponent(spriteComponent);
+                canvasRenderer.addChild(node);
                 canvasRenderer.update();
-
             }
         });
 
@@ -165,7 +148,6 @@ public class Controller implements Initializable {
         actions.put(ACTION_EDIT, new EditAction(canvasRenderer,repository));
         actions.put(ACTION_MOVE, new MoverAction(canvasRenderer,repository));
         actions.put(ACTION_BOX_2D, new Box2dAction(canvasRenderer,repository));
-
         actions.put(ACTION_SELECT, new SelectAction(canvasRenderer,repository,infoController));
         actions.put(ACTION_ROTATE, new RotateAction(canvasRenderer,repository));
         actions.put(ACTION_CREATE_BODY, new CreateBodyAction(canvasRenderer,repository));
@@ -174,35 +156,41 @@ public class Controller implements Initializable {
         switchDrawer(ACTION_SELECT);
     }
 
-    private void fillTreeView(Path dir, TreeItem<Path> root) throws IOException{
+    private void fillTreeView(String parent,File dir, TreeItem<TreeFileHolder> root) throws IOException{
+
+        File[] files = dir.listFiles();
+        if(files != null)
+        for (File file : files) {
+            String fullPath =parent + file.getName();
+            if (!file.isDirectory()) {
 
 
-        Files.list(dir).forEach(it -> {
-            if (!it.toFile().isDirectory()) {
-                TreeItem<Path> treeItem2 = new TreeItem<>(it);
+                TreeItem<TreeFileHolder> treeItem2 = new TreeItem<>(new TreeFileHolder(file.getName(),fullPath));
                 root.getChildren().add(treeItem2);
                 ImageView folderIcon = new ImageView(Resources.imageIcon);
 
                 folderIcon.setFitHeight(20);
-                treeItem2.setGraphic(folderIcon);
                 folderIcon.setFitWidth(20);
+                treeItem2.setGraphic(folderIcon);
             } else {
-                TreeItem <Path> newRoot = new TreeItem < > (it);
+                TreeItem <TreeFileHolder> newRoot = new TreeItem < > (new TreeFileHolder(file.getName(),fullPath));
                 root.getChildren().add(newRoot);
                 ImageView folderIcon = new ImageView(Resources.folderImage);
                 folderIcon.setFitWidth(20);
                 folderIcon.setFitHeight(20);
+
                 newRoot.setGraphic(folderIcon);
 
 
                 try {
-                    fillTreeView(it, newRoot);
+                    fillTreeView(fullPath + "/" , file, newRoot);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
 
             }
-        });
+        }
+
     }
 
 

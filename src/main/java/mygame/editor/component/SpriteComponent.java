@@ -22,6 +22,8 @@ public class SpriteComponent extends Component {
         this.mImage = Resources.initImage(path);
     }
 
+
+
     @Override
     public void update() {
 

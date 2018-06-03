@@ -55,7 +55,6 @@ public class CreateSpriteAction extends Action implements CanvasRenderer.OnCanva
     public void onStartMove(Point2D point) {
         CcNode bodyNode = new CcNode();
 
-//        CcSprite bodyNode = new CcSprite(Resources.no_image);
         SpriteComponent component = new SpriteComponent(Resources.NO_IMAGE);
 
         bodyNode.addComponent(component);

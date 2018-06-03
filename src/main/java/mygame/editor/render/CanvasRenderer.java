@@ -57,19 +57,13 @@ public class CanvasRenderer {
 //        AnchorPane.setRightAnchor(canvas, 0.0);
 
         graphicsContext = canvas.getGraphicsContext2D();
-        pane.widthProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                Global.setWidth(newValue.doubleValue());
-                update();
-            }
+        pane.widthProperty().addListener((observable, oldValue, newValue) -> {
+            Global.setWidth(newValue.doubleValue());
+            update();
         });
-        pane.heightProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                Global.setHeight(newValue.doubleValue());
-                update();
-            }
+        pane.heightProperty().addListener((observable, oldValue, newValue) -> {
+            Global.setHeight(newValue.doubleValue());
+            update();
         });
 
 
