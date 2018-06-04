@@ -61,6 +61,11 @@ public class SqlNodeRepository implements NodeRepository {
             e.printStackTrace();
         }
 
+
+        if(root == null){
+            root = new CcNode();
+            root.id = 1;
+        }
         return root;
     }
 

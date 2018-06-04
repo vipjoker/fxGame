@@ -24,6 +24,7 @@ public class SelectAction extends Action implements CanvasRenderer.OnCanvasDragL
     @Override
     public void init() {
         root = mRepository.getRootNode();
+
         mRenderer.getNodes().clear();
 
 

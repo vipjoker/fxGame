@@ -7,6 +7,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -17,6 +18,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
@@ -24,6 +26,7 @@ import mygame.editor.App;
 import mygame.editor.actions.*;
 import mygame.editor.component.SpriteComponent;
 import mygame.editor.model.TreeFileHolder;
+import mygame.editor.render.TreeItemCcNode;
 import mygame.editor.render.TreeItemPath;
 import mygame.editor.repository.NodeRepository;
 import mygame.editor.repository.SqlNodeRepository;
@@ -63,6 +66,7 @@ public class Controller implements Initializable {
     public Button btnRun ;
     public Button btnMove;
     public Button btnEdit;
+    public TreeView<CcNode> nodeTreeview;
 
     private CanvasRenderer canvasRenderer;
     private Action currentDrawer;
@@ -98,9 +102,50 @@ public class Controller implements Initializable {
             setLeftPane();
             setRightPane();
             initActions();
-
+            CcNode node1 = new CcNode();
+            node1.name = "FIRST";
+            CcNode node2 = new CcNode();
+            node2.name = "Second";
+            CcNode node3 = new CcNode();
+            node3.name = "Third";
+            CcNode node4 = new CcNode();
+            node4.name = "Fourth";
+            node1.addChild(node2);
+            node2.addChild(node3);
+            node2.addChild(node4);
+            updateNodeTreeView(node1);
 
         });
+    }
+
+    private void updateNodeTreeView(CcNode node) {
+
+        nodeTreeview.setCellFactory(e->new TreeItemCcNode());
+        TreeItem<CcNode> ccNodeTreeItem = new TreeItem<>(node);
+        nodeTreeview.setRoot(ccNodeTreeItem);
+        nodeTreeview.setOnMouseDragged(e->{
+            TreeItem<CcNode> ccNodeTreeItem1 = nodeTreeview.getSelectionModel().getSelectedItems().get(0);
+            ccNodeTreeItem1
+        });
+        fillNodeTreeView(ccNodeTreeItem,node);
+
+    }
+
+    private void fillNodeTreeView(TreeItem<CcNode> ccNodeTreeItem ,CcNode root) {
+        for (CcNode node : root.getChildren()) {
+            TreeItem<CcNode> item = new TreeItem<>(node);
+
+            ;
+
+
+
+            ccNodeTreeItem.getChildren().add(item);
+            if(!node.getChildren().isEmpty()){
+                fillNodeTreeView(item,node);
+            }
+
+
+        }
     }
 
 
