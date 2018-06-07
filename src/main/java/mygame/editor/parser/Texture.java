@@ -3,8 +3,8 @@ package mygame.editor.parser;
 public class Texture {
     private String uuID;
     private String path;
-    private int width;
-    private int height;
+    private double width;
+    private double height;
 
     public String getPath() {
         return path;
@@ -14,19 +14,19 @@ public class Texture {
         this.path = path;
     }
 
-    public int getWidth() {
+    public double getWidth() {
         return width;
     }
 
-    public void setWidth(int width) {
+    public void setWidth(double width) {
         this.width = width;
     }
 
-    public int getHeight() {
+    public double getHeight() {
         return height;
     }
 
-    public void setHeight(int height) {
+    public void setHeight(double height) {
         this.height = height;
     }
 

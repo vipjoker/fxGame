@@ -1,13 +1,13 @@
-package mygame.editor.parser;
+package mygame.editor.parser.json;
 
 import java.util.Arrays;
 import java.util.Map;
 
-public class BasicMeta {
+public class BasicMeta<T> {
     private String ver;
     private String uuid;
     private boolean isGroup;
-    private Map<String,String> subMetas;
+    private Map<String,T> subMetas;
 
     public String getVer() {
         return ver;
@@ -33,11 +33,11 @@ public class BasicMeta {
         isGroup = group;
     }
 
-    public Object getSubMetas() {
+    public Map<String,T> getSubMetas() {
         return subMetas;
     }
 
-    public void setSubMetas(Object subMetas) {
+    public void setSubMetas(Map<String ,T> subMetas) {
         this.subMetas = subMetas;
     }
 
