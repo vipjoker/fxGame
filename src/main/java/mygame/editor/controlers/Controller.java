@@ -125,7 +125,7 @@ public class Controller implements Initializable {
         nodeTreeview.setRoot(ccNodeTreeItem);
         nodeTreeview.setOnMouseDragged(e->{
             TreeItem<CcNode> ccNodeTreeItem1 = nodeTreeview.getSelectionModel().getSelectedItems().get(0);
-            ccNodeTreeItem1
+
         });
         fillNodeTreeView(ccNodeTreeItem,node);
 
