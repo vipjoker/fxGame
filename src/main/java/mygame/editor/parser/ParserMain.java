@@ -5,10 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import mygame.editor.parser.json.BasicMeta;
-import mygame.editor.parser.json.JsonNode;
-import mygame.editor.parser.json.JsonSprite;
-import mygame.editor.parser.json.TextureMeta;
+import mygame.editor.parser.json.*;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -22,16 +19,19 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ParserMain {
-
+    static final String SCENE_ASSET = "cc.SceneAsset";
     static final String NODE = "cc.Node";
     static final String SCENE = "cc.Scene";
     static final String SPRITE = "cc.Sprite";
     static final String CANVAS = "cc.Canvas";
     static final String RIGID = "cc.RigidBody";
     static final String CIRCLE_COLLIDER = "cc.PhysicsCircleCollider";
+    static final String BOX_COLLIDER = "cc.PhysicsBoxCollider";
+    static final String CHAIN_COLLIDER = "cc.PhysicsChainCollider";
+    static final String LABEL = "cc.Label";
 
     static Gson gson = new Gson();
-    public static Map<Integer,Object> nodes = new HashMap<>();
+    public static Map<Integer,Typeable> nodes = new HashMap<>();
 
 
 
@@ -53,6 +53,10 @@ public class ParserMain {
             System.out.println(font.getPath());
             System.out.println(font.getUuid());
         }
+
+
+
+
     }
 
 
@@ -133,25 +137,46 @@ public class ParserMain {
 
                     System.out.println(type);
                     switch (type) {
+                        case SCENE_ASSET:
+                            JsonSceneAsset jsonSceneAsset = gson.fromJson(jsonObject, JsonSceneAsset.class);
+                            nodes.put(id, jsonSceneAsset);
+                            break;
                         case NODE:
-
                             JsonNode jsonNode = gson.fromJson(jsonObject, JsonNode.class);
                             nodes.put(id,jsonNode);
                             break;
                         case SPRITE:
                             JsonSprite jsonSprite = gson.fromJson(jsonObject, JsonSprite.class);
                             nodes.put(id, jsonSprite);
-
                             break;
                         case SCENE:
+                            JsonScene jsonScene = gson.fromJson(jsonObject, JsonScene.class);
+                            nodes.put(id, jsonScene);
                             break;
                         case RIGID:
+                            JsonRigidBody rigidBody = gson.fromJson(jsonObject, JsonRigidBody.class);
+                            nodes.put(id, rigidBody);
                             break;
                         case CIRCLE_COLLIDER:
+                            JsonCircleColider circleColider = gson.fromJson(jsonObject,JsonCircleColider.class);
+                            nodes.put(id, circleColider);
+                            break;
+                        case BOX_COLLIDER:
+                            JsonBoxCollider jsonBoxCollider = gson.fromJson(jsonObject, JsonBoxCollider.class);
+                            nodes.put(id, jsonBoxCollider);
+                            break;
+                        case CHAIN_COLLIDER:
+                            JsonChainCollider jsonChainCollider = gson.fromJson(jsonObject, JsonChainCollider.class);
+                            nodes.put(id, jsonChainCollider);
                             break;
                         case CANVAS:
+                            JsonCanvas jsonCanvas = gson.fromJson(jsonObject, JsonCanvas.class);
+                            nodes.put(id, jsonCanvas);
                             break;
-
+                        case LABEL:
+                            JsonLabel jsonLabel = gson.fromJson(jsonObject, JsonLabel.class);
+                            nodes.put(id, jsonLabel);
+                            break;
                     }
 
                     id++;

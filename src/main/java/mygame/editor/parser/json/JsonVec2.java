@@ -1,6 +1,6 @@
 package mygame.editor.parser.json;
 
-public class JsonVec2 {
+public class JsonVec2 extends Typeable{
     private Double x;
     private Double y;
 

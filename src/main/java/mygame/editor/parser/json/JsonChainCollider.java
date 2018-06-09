@@ -1,6 +1,9 @@
 package mygame.editor.parser.json;
 
-public class JsonCircleColider extends Typeable {
+import java.util.List;
+
+public class JsonChainCollider extends Typeable {
+
     private String _name;
     private Integer _objFlags;
     private JsonId node;
@@ -10,9 +13,9 @@ public class JsonCircleColider extends Typeable {
     private Boolean _sensor;
     private Double _friction;
     private Double _restitution;
-    private Object body;
-    private JsonVec2 _offset;
-    private Double _radius;
+    private Object body; //TODO
+    private Boolean loop;
+    private List<JsonVec2> points;
 
     public String get_name() {
         return _name;
@@ -94,19 +97,19 @@ public class JsonCircleColider extends Typeable {
         this.body = body;
     }
 
-    public JsonVec2 get_offset() {
-        return _offset;
+    public Boolean getLoop() {
+        return loop;
     }
 
-    public void set_offset(JsonVec2 _offset) {
-        this._offset = _offset;
+    public void setLoop(Boolean loop) {
+        this.loop = loop;
     }
 
-    public Double get_radius() {
-        return _radius;
+    public List<JsonVec2> getPoints() {
+        return points;
     }
 
-    public void set_radius(Double _radius) {
-        this._radius = _radius;
+    public void setPoints(List<JsonVec2> points) {
+        this.points = points;
     }
 }

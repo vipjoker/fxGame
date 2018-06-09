@@ -1,6 +1,6 @@
 package mygame.editor.parser.json;
 
-public class JsonColor {
+public class JsonColor extends Typeable {
 
     private Integer r;
     private Integer g;

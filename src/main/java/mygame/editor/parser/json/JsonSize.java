@@ -1,6 +1,6 @@
 package mygame.editor.parser.json;
 
-public class JsonSize {
+public class JsonSize extends Typeable{
 
     private Integer width;
 

@@ -1,8 +1,7 @@
 package mygame.editor.parser.json;
 
-public class JsonSprite {
+public class JsonSprite extends Typeable{
 
-    private String __type__;
     private String _name;
     private Integer _objFlags;
     private JsonId node;
@@ -19,13 +18,6 @@ public class JsonSprite {
     private Boolean _isTrimmedMode;
     private Object _atlas;
 
-    public String get__type__() {
-        return __type__;
-    }
-
-    public void set__type__(String __type__) {
-        this.__type__ = __type__;
-    }
 
     public String get_name() {
         return _name;

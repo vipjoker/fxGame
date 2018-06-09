@@ -1,6 +1,6 @@
 package mygame.editor.parser.json;
 
-public class JsonCircleColider extends Typeable {
+public class JsonBoxCollider extends Typeable{
     private String _name;
     private Integer _objFlags;
     private JsonId node;
@@ -12,7 +12,7 @@ public class JsonCircleColider extends Typeable {
     private Double _restitution;
     private Object body;
     private JsonVec2 _offset;
-    private Double _radius;
+    private JsonSize _size;
 
     public String get_name() {
         return _name;
@@ -102,11 +102,11 @@ public class JsonCircleColider extends Typeable {
         this._offset = _offset;
     }
 
-    public Double get_radius() {
-        return _radius;
+    public JsonSize get_size() {
+        return _size;
     }
 
-    public void set_radius(Double _radius) {
-        this._radius = _radius;
+    public void set_size(JsonSize _size) {
+        this._size = _size;
     }
 }

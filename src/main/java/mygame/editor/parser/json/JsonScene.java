@@ -1,13 +1,10 @@
 package mygame.editor.parser.json;
 
-import com.google.gson.JsonSerializationContext;
-
 import java.util.List;
 
-public class JsonNode extends Typeable{
-    private String _name;
+public class JsonScene extends Typeable{
     private Integer _objFlags;
-    private JsonId _parent;
+    private Object _parent;
     private List<JsonId> _children;
     private Integer _tag;
     private Boolean _active;
@@ -19,25 +16,11 @@ public class JsonNode extends Typeable{
     private Boolean _cascadeOpacityEnabled;
     private JsonVec2 _anchorPoint;
     private JsonSize _contentSize;
-    private Double _rotationX;
-    private Double _rotationY;
-    private Double _scaleX;
-    private Double _scaleY;
-    private JsonVec2 _position;
-    private Double _skewX;
-    private Double _skewY;
-    private Double _localZOrder;
-    private Double _globalZOrder;
+    private Integer _localZOrder;
+    private Integer _globalZOrder;
     private Boolean _opacityModifyRGB;
     private Integer groupIndex;
-
-    public String get_name() {
-        return _name;
-    }
-
-    public void set_name(String _name) {
-        this._name = _name;
-    }
+    private Boolean autoReleaseAssets;
 
     public Integer get_objFlags() {
         return _objFlags;
@@ -47,11 +30,11 @@ public class JsonNode extends Typeable{
         this._objFlags = _objFlags;
     }
 
-    public JsonId get_parent() {
+    public Object get_parent() {
         return _parent;
     }
 
-    public void set_parent(JsonId _parent) {
+    public void set_parent(Object _parent) {
         this._parent = _parent;
     }
 
@@ -143,75 +126,19 @@ public class JsonNode extends Typeable{
         this._contentSize = _contentSize;
     }
 
-    public Double get_rotationX() {
-        return _rotationX;
-    }
-
-    public void set_rotationX(Double _rotationX) {
-        this._rotationX = _rotationX;
-    }
-
-    public Double get_rotationY() {
-        return _rotationY;
-    }
-
-    public void set_rotationY(Double _rotationY) {
-        this._rotationY = _rotationY;
-    }
-
-    public Double get_scaleX() {
-        return _scaleX;
-    }
-
-    public void set_scaleX(Double _scaleX) {
-        this._scaleX = _scaleX;
-    }
-
-    public Double get_scaleY() {
-        return _scaleY;
-    }
-
-    public void set_scaleY(Double _scaleY) {
-        this._scaleY = _scaleY;
-    }
-
-    public JsonVec2 get_position() {
-        return _position;
-    }
-
-    public void set_position(JsonVec2 _position) {
-        this._position = _position;
-    }
-
-    public Double get_skewX() {
-        return _skewX;
-    }
-
-    public void set_skewX(Double _skewX) {
-        this._skewX = _skewX;
-    }
-
-    public Double get_skewY() {
-        return _skewY;
-    }
-
-    public void set_skewY(Double _skewY) {
-        this._skewY = _skewY;
-    }
-
-    public Double get_localZOrder() {
+    public Integer get_localZOrder() {
         return _localZOrder;
     }
 
-    public void set_localZOrder(Double _localZOrder) {
+    public void set_localZOrder(Integer _localZOrder) {
         this._localZOrder = _localZOrder;
     }
 
-    public Double get_globalZOrder() {
+    public Integer get_globalZOrder() {
         return _globalZOrder;
     }
 
-    public void set_globalZOrder(Double _globalZOrder) {
+    public void set_globalZOrder(Integer _globalZOrder) {
         this._globalZOrder = _globalZOrder;
     }
 
@@ -229,5 +156,13 @@ public class JsonNode extends Typeable{
 
     public void setGroupIndex(Integer groupIndex) {
         this.groupIndex = groupIndex;
+    }
+
+    public Boolean getAutoReleaseAssets() {
+        return autoReleaseAssets;
+    }
+
+    public void setAutoReleaseAssets(Boolean autoReleaseAssets) {
+        this.autoReleaseAssets = autoReleaseAssets;
     }
 }
