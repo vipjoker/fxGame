@@ -44,6 +44,9 @@ public class ParserMain {
         parseTextures("/assets/Texture/", textures);
         parseFonts("/assets/Fonts/", fonts);
         parseScene("/assets/Scene/");
+
+
+
         for (Texture texture : textures) {
             System.out.println(texture.getUuID());
             System.out.println(texture.getPath());
