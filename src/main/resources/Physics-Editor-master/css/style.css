@@ -1,0 +1,96 @@
+#canvas {
+	position: absolute;
+	left: 5%;
+	top: 10%;
+}
+
+#toolbar{
+	position: absolute;
+	top: 10%;
+	width: 5%;
+	height: 80%;
+	margin: 0 0;
+}
+
+#toolbar button{
+	width: 75%;
+	height: 12.5%;
+	margin: 7.5% 7.5%;
+}
+
+#taskbar{
+	position: absolute;
+	top: 2%;
+	left: 2%;
+	width: 90%;
+}
+
+#taskbar .dropdown{
+	float: left;
+	width: 8%;
+}
+
+#taskbar .dropdown button{
+	width: 90%;
+}
+
+#xyInput{
+	position:absolute;
+	top:95%;
+	left:70%;
+	width: 15%;
+}
+
+#xyInput .input-group{
+	width: 50%;
+	float: left;
+}
+
+#gameplayControls{
+	position: absolute;
+	left: 40%;
+	top: 2%;
+}
+
+#selection_properties{
+	position: absolute;
+	left: 85%;
+	top:10%;
+	width: 15%;
+	height: 80%;
+	overflow: auto;
+}
+#selection_properties table{
+	margin: 10px 10px;
+}
+#selection_properties td{
+	margin: 10px 10px;
+	padding: 10px 10px;
+}
+#selection_properties input{
+	width: 68%;
+}
+
+#alert_dialog{
+	position: absolute;
+	width: 25%;
+	top: 35%;
+	left: 35%;
+}
+
+#alert_dialog button{
+	width: 20%;
+	margin: 5% 6.5%;
+}
+
+#auto_shape{
+	position: absolute;
+	width: 25%;
+	top: 35%;
+	left: 35%;
+}
+
+#auto_shape button{
+	width: 30%;
+	margin: 5% 10%;
+}

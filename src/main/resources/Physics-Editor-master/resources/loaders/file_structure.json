@@ -1,0 +1,155 @@
+/* 
+    // important //
+    all units are in pixels, so make sure to divide them by meter_to_pixel ratio (generally 30)
+    the scene was made in web canvas, and therefore the y-axis is flipped, so y-axis coordinates must be multiplied by -1
+    for loading scenes refer to sample loaders available in /Loaders directory
+*/
+
+/*
+    Structure
+
+    bodies : array of body
+        type: STATIC(0), KINEMATIC(1), DYNAMIC(2)
+        userData: userdata_provided_in_editor, used in collision detection 
+        position: [position_on_x_axis, position_on_y_axis]
+        rotation: body's rotation in degrees
+        isBullet: whether body is bullet or not (bullet bodies are expensive to simulate but there collision detection is better than normal bodies), avoid wherever psossible
+        isFixedRotation: is rotation of body fixed, if true => body won't rotate
+        fixtures: array of fixtures
+
+    fixture : contains shape information and physical properties like density, friction..
+        isSensor: if true => fixture would be used only for collision detection but not collision resolution
+        restitution: elasticity of coillison (if more, body would bounce more)
+        friction
+        density
+        maskBits
+        categoryBits
+        groupIndex
+        shapes: array of shapes sharing same fixture (concave shape is exported as seprate convex shapes having same physical properties)
+
+    shape : the actual geometry
+        type: BOX(0), CIRCLE(1), POLYGON(2), CHAIN(3)
+        position: position in body's local space (with respect to bodies position)
+        vertices: array of vertices
+
+    vertices : [position_x, position_y] in shape's local space (position relative to shapes position)
+
+    joints : array of joints
+        jointType: DISTANCE(0), WELD(1), REVOLUTE(2), WHEEL(3), PULLEY(4), GEAR(5)
+        bodyA: index of bodyA (primary anchor)
+        bodyB: index of bodyB (secondary anchor)
+        localAnchorA: [position_x, position_y], offset from bodyA's position (in bodyA's local space)
+        localAnchorB: [position_x, position_y], offset from bodyB's position (in bodyB's local space)
+        userData: userdata_provided_in_editor
+        collideConnected: can bodyA and bodyB collide
+
+        // distance and wheel joint parameters
+        length: length of joint
+        dampingRatio
+        frequencyHZ 
+
+        // weld, revolute and prismatic joint paramters
+        referenceAngle: angle of bodyB
+
+        // revolute and wheel joint parameters
+        enableMotor: can bodyB rotate on its own like a motor
+        maxMotorTorque: maximum torque that can be applied on bodyB
+        motorSpeed: speed of rotation (multiply by -1 because of y-axis flipping)
+
+        // revolute joint parameters
+        enableLimit: is rotation constrained
+        lowerAngle: lower angle limit in degrees (might be -ve of upper angle limit for some engines because of y-axis flipping)
+        upperAngle: upper angle limit in degrees (might be -ve of lower angle limit for some engines because of y-axis flipping)
+
+        // wheel and prismatic joint parameters
+        localAxisA: axis of joint (along which bodyB can translate)
+
+        // pulley joint parameters
+        groundAnchorA: anchor for bodyA (this anchor doesnot moves), in world space coordinates
+        groundAnchorB: anchor for bodyB (this anchor doesnot moves), in world space coordinates
+        lengthA = maxLenghtA
+        lengthB = maxLenghtB
+        ratio
+
+        // gear joint parameters
+        joint1: must be either revolute of prismatic joint
+        joint2: must be either revolute of prismatic joint
+        ratio: influence of driving joint
+
+        // prismatic joint parameters
+        enableLimit: is rotation constrained
+        lowerTranslation: lower limit in pixels
+        upperTranslation: upper limit in pixels
+        enableMotor
+        maxMotorForce: maximum force that can be applied on bodyB
+        motorSpeed: speed of rotation (multiply by -1 because of y-axis flipping)
+
+*/
+
+{
+    // array of bodies
+    "bodies": [
+        {
+            "type":     integer,
+            "userData": string,
+            // array of fixtures
+            "fixtures": [
+                {
+                    "isSensor": boolean,
+                    "restitution": float,
+                    "friction": float,
+                    "density": float,
+                    "maskBits": short,
+        			"categoryBits" short:,
+        			"groupIndex": short,
+                    // array of shapes
+                    "shapes": [
+                        {
+                            "type": integer,
+                            "position": [
+                                float_pos-x,
+                                float_pos-y
+                            ],
+                            // array of vertices
+                            "vertices": [
+                                [
+                                    float_x,
+                                    float_y
+                                ],
+                                [
+                                    float_x,
+                                    float_y
+                                ]....
+                            ]
+                        }
+                    ]
+                }
+            ]
+            "position": [
+                float_pos-x,
+                float_pos-y
+            ],
+            "rotation": float_rotation-in-deg,
+            "isBullet": boolean,
+            "isFixedRotation": boolean
+        }
+    ],
+    "joints": [
+        {
+            "localAnchorA": [
+                0,
+                0
+            ],
+            "localAnchorB": [
+                0,
+                0
+            ],
+            "userData": "",
+            "collideConnected": false,
+            "jointType": 0,
+            "bodyA": 0,
+            "bodyB": 1,
+            // joint specific parameters
+        }
+    ]
+}
