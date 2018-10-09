@@ -436,63 +436,63 @@ public class Shape {
 
     ;
 
-    public void decomposeToConvex(float x, float y) {
-        var shapes = [];
-        var polygons = decomposeToConvex(this.vertices);
-        for (var i = 0; i < polygons.length; i++) {
-            var shape = new PhysicsShape(Shape.SHAPE_POLYGON);
-            shape.position = [this.position[0] - x, this.position[1] - y];
-            for (var j = 0; j < polygons[i].vertices.length; j++) {
-                shape.vertices.push([polygons[i].vertices[j].x - this.position[0], polygons[i].vertices[j].y - this.position[1]])
+    public List<PhysicsShape> decomposeToConvex(float x, float y) {
+        List<PhysicsShape> shapes = new ArrayList<>();
+        List<Polygon> polygons = decomposeToConvex(this.vertices);
+        for (int i = 0; i < polygons.size(); i++) {
+            PhysicsShape shape = new PhysicsShape(Shape.SHAPE_POLYGON);
+            shape.position = new float[]{this.position[0] - x, this.position[1] - y};
+            for (int j = 0; j < polygons.get(i).vertices.size(); j++) {
+                shape.vertices.add(new Vertex(polygons.get(i).vertices.get(j).x - this.position[0], polygons.get(i).vertices.get(j).y - this.position[1]))
                 ;
             }
-            shapes.push(shape);
+            shapes.add(shape);
         }
         return shapes;
     }
 
     ;
 
-    public void decomposeToConvex(List<Vertex> vertices) {
-        var polygon = new Polygon();
-        for (var i = 0; i < vertices.length; i++) {
-            polygon.addPoint(vertices[i].x, vertices[i].y);
+    public List<Polygon> decomposeToConvex(List<Vertex> vertices) {
+        Polygon polygon = new Polygon();
+        for (int i = 0; i < vertices.size(); i++) {
+            Vertex vertex = vertices.get(i);
+            polygon.addPoint(vertex.x, vertex.y);
         }
         return polygon.decompose();
     }
 
     // returns PhysicsShape for exporting
 // use (x, y) as the origin for physics shape
-    public void exportShape(float x, float y) {
-        var shapes = []; // an array of physics shape (shapes if the shape is concave)
+    public List<PhysicsShape> exportShape(float x, float y) {
+        List<PhysicsShape> shapes = new ArrayList<>(); // an array of physics shape (shapes if the shape is concave)
 
         if (this.shapeType == Shape.SHAPE_BOX && this.rotation == 0) {
-            var pShape = new PhysicsShape(Shape.SHAPE_BOX);
+            PhysicsShape pShape = new PhysicsShape(Shape.SHAPE_BOX);
             pShape.width = this.width;
             pShape.height = this.height;
-            pShape.position = [this.position[0] - x, this.position[1] - y];
-            shapes.push(pShape);
+            pShape.position = new float[]{this.position[0] - x, this.position[1] - y};
+            shapes.add(pShape);
             return shapes;
         } else if (this.shapeType == Shape.SHAPE_CIRCLE) {
-            var pShape = new PhysicsShape(Shape.SHAPE_CIRCLE);
+            PhysicsShape pShape = new PhysicsShape(Shape.SHAPE_CIRCLE);
             pShape.radius = this.radius / 2;
-            pShape.position = [this.position[0] - x, this.position[1] - y];
-            shapes.push(pShape);
+            pShape.position = new float[]{this.position[0] - x, this.position[1] - y};
+            shapes.add(pShape);
             return shapes;
         }
 
-        var pShape = new PhysicsShape(this.shapeType == Shape.SHAPE_BOX ? Shape.SHAPE_POLYGON : this.shapeType);
-        pShape.position = [this.position[0] - x, this.position[1] - y];
+        PhysicsShape pShape = new PhysicsShape(this.shapeType == Shape.SHAPE_BOX ? Shape.SHAPE_POLYGON : this.shapeType);
+        pShape.position =new float[] {this.position[0] - x, this.position[1] - y};
         // need to check for convexity if shape is polygon
         if (this.shapeType == Shape.SHAPE_POLYGON) {
             // is shape convex
             if (this.isConvex()) {
                 // just export it
-                for (var i = 0; i < this.vertices.length; i++) {
-                    pShape.vertices.push([this.vertices[i].x - this.position[0], this.vertices[i].y - this.position[1]])
-                    ;    // vertex position relative to shape
+                for (int i = 0; i < this.vertices.size(); i++) {
+                    pShape.vertices.add(new Vertex(this.vertices.get(i).x - this.position[0], this.vertices.get(i).y - this.position[1]));    // vertex position relative to shape
                 }
-                shapes.push(pShape);
+                shapes.add(pShape);
                 return shapes;
             }
             // decompose concave shape to convex shapes
@@ -504,23 +504,20 @@ public class Shape {
         }
         // just add the vertices if the shape is edge
         else {
-            for (var i = 0; i < this.vertices.length; i++) {
-                pShape.vertices.push([this.vertices[i].x - this.position[0], this.vertices[i].y - this.position[1]])
+            for (int i = 0; i < this.vertices.size(); i++) {
+                pShape.vertices.add(new Vertex(this.vertices.get(i).x - this.position[0], this.vertices.get(i).y - this.position[1]));
                 ;        // vertex position relative to shape
             }
-            shapes.push(pShape);
+            shapes.add(pShape);
             return shapes;
         }
     }
 
     ;
 
-    Shape toPhysics(x, y) {
-        if (x == null || y == null) {
-            x = this.position[0];
-            y = this.position[1];
-        }
-        var fixture = new Fixture();
+    Fixture toPhysics(float x,float y) {
+
+        Fixture fixture = new Fixture();
         fixture.restitution = this.restitution;
         fixture.friction = this.friction;
         fixture.density = this.density;
@@ -532,7 +529,12 @@ public class Shape {
         return fixture;
     }
 
-    Shape toPhysics
+    Fixture toPhysics(){
+
+            float x = this.position[0];
+            float y = this.position[1];
+        return toPhysics(x,y);
+    }
 
 
 }

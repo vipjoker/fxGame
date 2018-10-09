@@ -15,8 +15,8 @@ public class PhysicsShape {
     public float height;
     public float radius;
 
-    public PhysicsShape(String type) {
-        this.type = parseInt(type);
+    public PhysicsShape(int type) {
+        this.type = type;
         this.position = new float[2];                // position relative to body
         this.vertices = new ArrayList<>();
     }

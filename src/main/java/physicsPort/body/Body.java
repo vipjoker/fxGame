@@ -1,5 +1,8 @@
 package physicsPort.body;
 
+import javafx.scene.image.Image;
+import mygame.editor.util.Resources;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,41 +16,37 @@ public class Body {
     public static final int BODY_TYPE_DYNAMIC = 2;
 
 
+    public String name = "body" + Body.counter++;    // for editor
+    public String userData = "";                        // for physics body
+    public String texture = "";
+    public Sprite sprite;
+    public float[] spriteData;                    // [source-x, source-y, width, height, image-w, image-h]
+    public float[] initialSpriteData;
+    public List<Shape> shapes;
+    public float[] position;
+    public float[] scaleXY;
+    public float rotation;
+    public float[] bounds;
+    public boolean isSelected;
+    public int bodyType;    // default to dynmic body
+    public boolean isBullet;
+    public boolean isFixedRotation;
+    public float linearDamping;
+    public float angularDamping;
 
 
-        private String name = "body" + Body.counter++;	// for editor
-        private String userData = "";						// for physics body
-        private String texture = "";
-        private String sprite;
-        private List<Object> spriteData;					// [source-x, source-y, width, height, image-w, image-h]
-        private List<Object> initialSpriteData ;
-        private List<Shape> shapes ;
-        private float[] position ;
-        private float[] scaleXY ;
-        private float rotation ;
-        private float[] bounds;
-        private boolean isSelected ;
-        private int bodyType ;	// default to dynmic body
-        private boolean isBullet ;
-        private boolean isFixedRotation ;
-        private float linearDamping ;
-        private float angularDamping;
-
-
-    public Body(){
-        this.name = "body" + Body.counter++;	// for editor
-        this.userData = "";						// for physics body
+    public Body() {
+        this.name = "body" + Body.counter++;    // for editor
+        this.userData = "";                        // for physics body
         this.texture = "";
 
-        this.spriteData = new ArrayList<>();					// [source-x, source-y, width, height, image-w, image-h]
-        this.initialSpriteData = new ArrayList<>();
         this.shapes = new ArrayList<>();
-        this.position = new float[] {0, 0};
+        this.position = new float[]{0, 0};
         this.scaleXY = new float[]{1, 1};
         this.rotation = 0;
         this.bounds = new float[]{0, 0, 0, 0};
         this.isSelected = false;
-        this.bodyType = Body.BODY_TYPE_DYNAMIC;	// default to dynmic body
+        this.bodyType = Body.BODY_TYPE_DYNAMIC;    // default to dynmic body
         this.isBullet = false;
         this.isFixedRotation = false;
         this.linearDamping = 0;
@@ -55,194 +54,211 @@ public class Body {
     }
 
 
-    Body.prototype.setSprite = function(file, x, y, w, h){
-        if (x != null && y != null && w != null && h != null){	// image is sprite sheet
-            this.sprite = new Image();
-            this.sprite.src = file;
-            this.spriteData = [x, y, w, h, w, h];
-            this.initialSpriteData = [w, h];
-        }
+    public void setSprite(String file, float x, float y, float w, float h) {
 
-        else {
-            this.sprite = new Image();
-            this.sprite.src = file;
-            var ref = this;
-            this.sprite.onload = function(){
-                console.log(this.width);
-                ref.initialSpriteData = [this.width, this.height];
-                ref.spriteData = [this.width, this.height];
-            }
-        }
+        Image image = Resources.initImage(file);
         this.texture = file;
-    };
+
+        this.sprite =new Sprite(image,w,h);
+        this.spriteData = new float[] {x, y, w, h, w, h} ;
+        this.initialSpriteData = new float[]{w, h};
 
 
+    }
+
+    public void setSprite(String file) {
+        Image image = Resources.initImage(file);
+        this.sprite = new Sprite(image);
+
+        this.initialSpriteData = new float[]{(float) image.getWidth(),(float) image.getHeight()};
+        this.spriteData = new float[]{(float)image.getWidth(), (float)image.getHeight()};
+    }
 
 
-
-    Body.prototype.setSpriteWidth = function(width){
-        if (this.sprite == null){
+    public void setSpriteWidth(float width) {
+        if (this.sprite == null) {
             return;
         }
 
-        if (this.spriteData.length > 2){
+        if (this.spriteData.length > 2) {
             this.spriteData[4] = width;
             this.spriteData[2] = width;
             return;
         }
         this.sprite.width = width;
         this.spriteData[0] = width;
-    };
+    }
 
-    Body.prototype.setSpriteHeight = function(height){
-        if (this.sprite == null){
+    ;
+
+    public void setSpriteHeight(float height) {
+        if (this.sprite == null) {
             return;
         }
 
-        if (this.spriteData.length > 2){
+        if (this.spriteData.length > 2) {
             this.spriteData[5] = height;
             this.spriteData[3] = height;
             return;
         }
         this.sprite.height = height;
         this.spriteData[1] = height;
-    };
+    }
 
-    Body.prototype.setSpriteSourceWidth = function(width){
-        if (this.sprite == null){
+    ;
+
+    public void setSpriteSourceWidth (float width) {
+        if (this.sprite == null) {
             return;
         }
 
-        if (this.spriteData.length == 2){
-            this.spriteData = [0, 0, width, this.initialSpriteData[1], this.initialSpriteData[0], this.initialSpriteData[1]];
+        if (this.spriteData.length == 2) {
+            this.spriteData = new float[]{0, 0, width, this.initialSpriteData[1], this.initialSpriteData[0], this.initialSpriteData[1]};
             return;
         }
 
         this.spriteData[2] = width;
-    };
+    }
 
-    Body.prototype.setSpriteSourceHeight = function(height){
-        if (this.sprite == null){
+    ;
+
+    public void setSpriteSourceHeight(float height) {
+        if (this.sprite == null) {
             return;
         }
 
-        if (this.spriteData.length == 2){
-            this.spriteData = [0, 0, this.initialSpriteData[0], height, this.initialSpriteData[0], this.initialSpriteData[1]];
+        if (this.spriteData.length == 2) {
+            this.spriteData = new float[]{0, 0, this.initialSpriteData[0], height, this.initialSpriteData[0], this.initialSpriteData[1]};
             return;
         }
 
         this.spriteData[3] = height;
-    };
+    }
 
-    Body.prototype.setOffsetX = function(x){
-        if (this.sprite == null){
+    ;
+
+    public void setOffsetX (float x) {
+        if (this.sprite == null) {
             return;
         }
 
-        if (this.spriteData.length == 2){
-            this.spriteData = [x, 0, this.initialSpriteData[0], this.initialSpriteData[1], this.initialSpriteData[0], this.initialSpriteData[1]];
+        if (this.spriteData.length == 2) {
+            this.spriteData = new float []{
+            x, 0, this.initialSpriteData[0], this.initialSpriteData[1], this.initialSpriteData[0], this.initialSpriteData[1]};
         }
 
-        if (this.spriteData.length > 2){
+        if (this.spriteData.length > 2) {
             this.spriteData[0] = x;
             return;
         }
-    };
+    }
 
-    Body.prototype.setOffsetY = function(y){
-        if (this.sprite == null){
+    ;
+
+    public void setOffsetY (float y) {
+        if (this.sprite == null) {
             return;
         }
 
-        if (this.spriteData.length == 2){
-            this.spriteData = [0, y, this.initialSpriteData[0], this.initialSpriteData[1], this.initialSpriteData[0], this.initialSpriteData[1]];
+        if (this.spriteData.length == 2) {
+            this.spriteData = new float[]{0, y, this.initialSpriteData[0], this.initialSpriteData[1], this.initialSpriteData[0], this.initialSpriteData[1]};
+
         }
 
-        if (this.spriteData.length > 2){
+        if (this.spriteData.length > 2) {
             this.spriteData[1] = y;
             return;
         }
-    };
+    }
 
-    Body.prototype.getSpriteWidth = function(){
-        if (this.spriteData.length > 2){
+
+
+    public float getSpriteWidth () {
+        if (this.spriteData.length > 2) {
             return this.spriteData[4];
         }
         return this.sprite.width;
-    };
+    }
 
-    Body.prototype.getSpriteHeight = function(){
-        if (this.spriteData.length > 2){
+
+
+    public float getSpriteHeight () {
+        if (this.spriteData.length > 2) {
             return this.spriteData[5];
         }
         return this.sprite.height;
-    };
+    }
 
-    Body.prototype.getSpriteSourceHeight = function(){
-        if (this.spriteData.length > 2){
+
+
+    public float getSpriteSourceHeight () {
+        if (this.spriteData.length > 2) {
             return this.spriteData[3];
         }
-        return null;
-    };
+        return 0;
+    }
 
-    Body.prototype.getSpriteSourceWidth = function(){
-        if (this.spriteData.length > 2){
+    ;
+
+    public float getSpriteSourceWidth () {
+        if (this.spriteData.length > 2) {
             return this.spriteData[2];
         }
-        return null;
-    };
+        return 0;
+    }
 
-    Body.prototype.getSpriteOffsetX = function(){
-        if (this.spriteData.length > 2){
+    ;
+
+    public float getSpriteOffsetX () {
+        if (this.spriteData.length > 2) {
             return this.spriteData[0];
         }
-        return null;
-    };
+        return 0;
+    }
 
-    Body.prototype.getSpriteOffsetY = function(){
-        if (this.spriteData.length > 2){
+
+    public float getSpriteOffsetY () {
+        if (this.spriteData.length > 2) {
             return this.spriteData[1];
         }
-        return null;
-    };
+        return 0;
+    }
 
-// if (setPos == true) => shape would be moved to bodies center
-    Body.prototype.addShape = function(shape, setPos){
-        if (setPos){
+    ;
+
+    // if (setPos == true) => shape would be moved to bodies center
+    public void addShape(Shape shape,boolean setPos) {
+        if (setPos) {
             shape.setPosition(this.position[0], this.position[1]);
         }
-        this.shapes.push(shape);
-    };
+        this.shapes.add(shape);
+    }
 
-    Body.prototype.removeShapeGivenIndex = function(index){
-        if (index == 0){
-            this.shapes.shift();
-        }
-        else if (index == this.shapes.length - 1){
-            this.shapes.pop();
-        }
-        else {
-            this.shapes.splice(index, 1);
-        }
-    };
+    ;
 
-    Body.prototype.removeShapeGivenShape = function(shape){
-        for (var i = 0; i < this.shapes.length; i++){
-            if (this.shapes[i] == shape){
+    public void removeShapeGivenIndex(int index) {
+        shapes.remove(index);
+
+    }
+
+    public void removeShapeGivenShape(Shape shape) {
+        for (int i = 0; i < this.shapes.size(); i++) {
+            if (this.shapes.get(i) == shape) {
                 this.removeShapeGivenIndex(i);
                 break;
             }
         }
-    };
+    }
 
-    Body.prototype.calculateBounds = function(){
-        var minX = 100000, maxX = -100000, minY = 100000, maxY = -100000;
-        var v;
+    ;
 
-        for (var i = 0; i < this.shapes.length; i++){
-            for (var j = 0; j < this.shapes[i].vertices.length; j++){
-                v = this.shapes[i].vertices[j];
-                minX = Math.min(minX, v.x)
+    public void calculateBounds() {
+        float minX = 100000, maxX = -100000, minY = 100000, maxY = -100000;
+
+        for (int i = 0; i < this.shapes.size(); i++) {
+            for (int j = 0; j < this.shapes.get(i).vertices.size(); j++) {
+                Vertex v = this.shapes.get(i).vertices.get(j);
+                minX = Math.min(minX, v.x);
                 maxX = Math.max(maxX, v.x);
                 minY = Math.min(minY, v.y);
                 maxY = Math.max(maxY, v.y);
@@ -252,26 +268,37 @@ public class Body {
         this.bounds[1] = (maxY + minY) / 2;
         this.bounds[2] = maxX - minX;
         this.bounds[3] = maxY - minY;
-    };
+    }
 
-    Body.prototype.move = function(dx, dy){
+    public void move(float dx, float dy) {
         this.position[0] += dx;
         this.position[1] += dy;
 
-        for (var i = 0; i < this.shapes.length; i++){
-            this.shapes[i].move(dx, dy);
+        for (int i = 0; i < this.shapes.size(); i++) {
+            this.shapes.get(i).move(dx, dy);
         }
-    };
+    }
 
-    Body.prototype.setPosition = function(x, y){
+    ;
+
+    public void setPosition(float x, float y) {
         this.move(x - this.position[0], y - this.position[1]);
-    };
+    }
 
-    Body.prototype.scale = function(sx, sy, pivotX, pivotY){
-        if (pivotX == null || pivotY == null){
-            pivotX = this.position[0];
-            pivotY = this.position[1];
-        }
+    ;
+
+
+    public void scale(float sx, float sy) {
+
+        float pivotX = this.position[0];
+        float pivotY = this.position[1];
+        scale(sx, sy, pivotX, pivotY);
+
+
+    }
+
+    public void scale(float sx, float sy, float pivotX, float pivotY) {
+
 
         this.scaleXY[0] *= sx;
         this.scaleXY[1] *= sy;
@@ -283,43 +310,47 @@ public class Body {
 
         this.move(pivotX, pivotY);
 
-        for (var i = 0; i < this.shapes.length; i++){
-            this.shapes[i].scale(sx, sy, pivotX, pivotY);
+        for (int i = 0; i < this.shapes.size(); i++) {
+            this.shapes.get(i).scale(sx, sy, pivotX, pivotY);
         }
 
-    };
+    }
 
-    Body.prototype.setScale = function(sx, sy, pivotX, pivotY){
+    public void setScale(float sx, float sy, float pivotX, float pivotY) {
         this.scale(sx / this.scaleXY[0], sy / this.scaleXY[1], pivotX, pivotY);
-    };
+    }
 
-    Body.prototype.rotate = function(angle, pivotX, pivotY){
-        if (pivotX == null || pivotY == null){
-            pivotX = this.position[0];
-            pivotY = this.position[1];
-        }
+    ;
+
+    public void rotate(float angle) {
+        float pivotX = this.position[0];
+        float pivotY = this.position[1];
+        rotate(angle, pivotX, pivotY);
+    }
+
+    public void rotate(float angle, float pivotX, float pivotY) {
+
 
         this.rotation += angle;
-        for (var i = 0; i < this.shapes.length; i++){
-            this.shapes[i].rotate(angle, pivotX, pivotY);
+        for (int i = 0; i < this.shapes.size(); i++) {
+            this.shapes.get(i).rotate(angle, pivotX, pivotY);
         }
 
         // update position
-        var x = this.position[0] - pivotX;
-        var y = this.position[1] - pivotY;
-        var newAngle = angle + Math.atan2(y, x) * 180 / Math.PI;
-        var length = Math.pow(x * x + y * y, 0.5);
-        this.position[0] = pivotX + length * Math.cos(newAngle * Math.PI / 180);
-        this.position[1] = pivotY + length * Math.sin(newAngle * Math.PI / 180);
-    };
+        float x = this.position[0] - pivotX;
+        float y = this.position[1] - pivotY;
+        float newAngle = angle + (float) Math.atan2(y, x) * 180 / (float) Math.PI;
+        float length = (float) Math.pow(x * x + y * y, 0.5);
+        this.position[0] = pivotX + length * (float) Math.cos(newAngle * Math.PI / 180);
+        this.position[1] = pivotY + length * (float) Math.sin(newAngle * Math.PI / 180);
+    }
 
-    Body.prototype.setRotation = function(angle, pivotX, pivotY){
+    public void setRotation(float angle, float pivotX, float pivotY) {
         this.rotate(angle - this.rotation, pivotX, pivotY);
-    };
+    }
 
-    Body.prototype.clone = function(){
-        var b = clone(this);
-        return b;
-    };
+    public Body clone() {
+        return null;
+    }
 
 }

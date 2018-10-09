@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Fixture {
 
-    public List<Shape> shapes;
+    public List<PhysicsShape> shapes;
     public float restitution;
     public float friction;
     public float density;
