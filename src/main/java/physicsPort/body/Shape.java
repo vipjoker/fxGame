@@ -18,27 +18,26 @@ public class Shape {
     public static final int SHAPE_CHAIN = 3;
     public static final int SHAPE_NONE = 4;
 
-    int shapeType;
-    float[] position;                        // position
-    float[] scaleXY;                        // scale
-    float rotation;                            // only for editor purpose
-    List<Vertex> vertices;
-    float[] bounds;                    // AABB for selecting
-    float[] centroid;                        // centroid for shape
-    boolean isSelected;
-    boolean inEditMode;
+    public int shapeType;
+    public float[] position;                        // position
+    public float[] scaleXY;                        // scale
+    public float rotation;                            // only for editor purpose
+    public List<Vertex> vertices;
+    public float[] bounds;                    // AABB for selecting
+    public float[] centroid;                        // centroid for shape
+    public boolean isSelected;
+    public boolean inEditMode;
 
-    // fixture properties
-    float friction;
-    float restitution;
-    float density;
-    boolean isSensor;
-    int maskBits;
-    int categoryBits;
-    int groupIndex;
-    float width;
-    float height;
-    float radius;
+    public float friction;
+    public float restitution;
+    public float density;
+    public boolean isSensor;
+    public int maskBits;
+    public int categoryBits;
+    public int groupIndex;
+    public float width;
+    public float height;
+    public float radius;
 
     public Shape(int type, float width, float height) {
         this.shapeType = type;

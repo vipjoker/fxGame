@@ -15,29 +15,33 @@ import mygame.editor.util.FileUtil;
 import physicsPort.body.Body;
 import physicsPort.body.Box2dDebugDraw;
 import physicsPort.body.WorldLoader;
+import physicsPort.viewport.Navigator;
 
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 public class GameView {
 
 public static float mouseX, mouseY;
     public static Vector2 mousePVec;
-    public static Object _navigator;
+    public static Navigator _navigator;
     public static boolean isMouseDown;
     public static MouseJoint mouseJoint;
+
     public static com.badlogic.gdx.physics.box2d.Body selectedBody;
+    public static com.badlogic.gdx.physics.box2d.Body groundBody;
     WorldLoader worldLoader;
 
-    private boolean hasLoaded;
     private boolean paused;
     private Canvas canvas;
     private GraphicsContext context;
     private World world;
+    public boolean hasLoaded;
 
-    public GameView(Canvas canvas, Object navigator) {
+    public GameView(Canvas canvas, Navigator navigator) {
         this.canvas = canvas;
         this.context = canvas.getGraphicsContext2D();
         _navigator = navigator;
@@ -107,28 +111,28 @@ public static float mouseX, mouseY;
 
         this.world.clearForces();
 
-        for (var i = 0; i < this.worldLoader.gameObjects.length; i++){
+        for (com.badlogic.gdx.physics.box2d.Body body :worldLoader.loadedBodies){
             // handle sprite rotation and translation
-            var gameObject = this.worldLoader.gameObjects[i];
+
             this.context.save();
-            this.context.translate(gameObject.body.GetPosition().x * 30, gameObject.body.GetPosition().y * 30);
-            this.context.rotate(gameObject.body.GetAngle());
+            this.context.translate(body.getPosition().x * 30, body.getPosition().y * 30);
+            this.context.rotate(body.getAngle());
 
-            if (gameObject.spriteData.length > 0){
-                var spriteData  = gameObject.spriteData,
-                        sourceX     = spriteData[0],
-                        sourceY     = spriteData[1],
-                        sourceW     = spriteData[2],
-                        sourceH     = spriteData[3],
-                        imageW      = spriteData[4],
-                        imageH      = spriteData[5];
-                this.context.drawImage(gameObject.sprite, sourceX, sourceY, sourceW, sourceH, -imageW / 2, -imageH / 2, imageW, imageH);
-
-            }
-            else {
-                var imageW = gameObject.sprite.width, imageH = gameObject.sprite.height;
-                this.context.drawImage(gameObject.sprite, -imageW / 2, -imageH / 2, imageW, imageH);
-            }
+//            if (gameObject.spriteData.length > 0){
+//                var spriteData  = gameObject.spriteData,
+//                        sourceX     = spriteData[0],
+//                        sourceY     = spriteData[1],
+//                        sourceW     = spriteData[2],
+//                        sourceH     = spriteData[3],
+//                        imageW      = spriteData[4],
+//                        imageH      = spriteData[5];
+//                this.context.drawImage(gameObject.sprite, sourceX, sourceY, sourceW, sourceH, -imageW / 2, -imageH / 2, imageW, imageH);
+//
+//            }
+//            else {
+//                var imageW = gameObject.sprite.width, imageH = gameObject.sprite.height;
+//                this.context.drawImage(gameObject.sprite, -imageW / 2, -imageH / 2, imageW, imageH);
+//            }
             this.context.restore();
         }
     };
@@ -139,17 +143,17 @@ public static float mouseX, mouseY;
             com.badlogic.gdx.physics.box2d.Body body = getBodyAtMouse(world);
             if(body != null) {
                 MouseJointDef md = new MouseJointDef();
-                md.bodyA = this.world.GetGroundBody();
+                md.bodyA = groundBody;
                 md.bodyB = body;
-                md.target.Set(mouseX, mouseY);
+                md.target.set(mouseX, mouseY);
                 md.collideConnected = true;
-                md.maxForce = 300.0 * body.GetMass();
-                mouseJoint = this.world.CreateJoint(md);
-                body.SetAwake(true);
+                md.maxForce = 300.0f * body.getMass();
+                mouseJoint = (MouseJoint) this.world.createJoint(md);
+                body.setAwake(true);
             }
         }
 
-        if(mouseJoint) {
+        if(mouseJoint!= null) {
             if(isMouseDown) {
                 mouseJoint.setTarget(new Vector2(mouseX, mouseY));
             } else {
@@ -173,8 +177,8 @@ public static float mouseX, mouseY;
     }
 
     public void handleMouseMove(MouseEvent e) {
-        mouseX = _navigator.screenPointToWorld(e.getX(), e.getY())[0] / 30;
-        mouseY = _navigator.screenPointToWorld(e.getX(), e.getY())[1] / 30;
+        mouseX = _navigator.screenPointToWorld((float) e.getX(), (float) e.getY())[0] / 30;
+        mouseY = _navigator.screenPointToWorld((float) e.getX(),(float) e.getY())[1] / 30;
     }
 
     public com.badlogic.gdx.physics.box2d.Body getBodyAtMouse(World world) {
@@ -194,7 +198,7 @@ public static float mouseX, mouseY;
 
     public boolean getBodyCB(Fixture fixture) {
         if(fixture.getBody().getType() != BodyDef.BodyType.StaticBody) {
-            if(fixture.getShape().TestPoint(fixture.GetBody().GetTransform(), mousePVec)) {
+            if(fixture.testPoint(mousePVec)/*.TestPoint(fixture.getBody().getTransform(), mousePVec)*/) {
                 selectedBody = fixture.getBody();
                 return false;
             }
