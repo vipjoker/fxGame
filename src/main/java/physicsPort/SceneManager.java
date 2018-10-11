@@ -1,6 +1,9 @@
 package physicsPort;
 
+import javafx.scene.input.MouseEvent;
 import physicsPort.body.*;
+import physicsPort.viewport.InputHandler;
+import physicsPort.viewport.Navigator;
 import sun.security.provider.SHA;
 
 import java.util.ArrayList;
@@ -18,7 +21,7 @@ public class SceneManager {
             public List<Shape> selectedShapes;
             public List <Vertex>selectedVertices;
             public List<Joint> selectedJoints;
-            public Object selectedAnchor;
+            public int selectedAnchor;
     public int state;
     public  SceneManager (){
 
@@ -84,37 +87,37 @@ public class SceneManager {
         };
 
         public void duplicateSelection (){
-            if (this.state == this.STATE_DEFAULT_MODE){
-                for (var i = 0; i < this.selectedBodies.length; i++){
-                    this.addBody(this.selectedBodies[i].clone());
+            if (this.state == STATE_DEFAULT_MODE){
+                for (int  i = 0; i < this.selectedBodies.size(); i++){
+                    this.addBody(this.selectedBodies.get(i).clone());
                 }
-                for (var i = 0; i < this.selectedJoints.length; i++){
-                    this.addJoint(this.selectedJoints[i].clone());
+                for (int i = 0; i < this.selectedJoints.size(); i++){
+                    this.addJoint(this.selectedJoints.get(i).clone());
                     // this.addBody(this.joints[this.joints.length - 1].bodyB);
                 }
             }
-            else if (this.state == this.STATE_BODY_EDIT_MODE){
-                for (var i = 0; i < this.selectedShapes.length; i++){
-                    this.selectedBodies[0].addShape(this.selectedShapes[i].clone());
+            else if (this.state == STATE_BODY_EDIT_MODE){
+                for (int i = 0; i < this.selectedShapes.size(); i++){
+                    this.selectedBodies.get(0).addShape(this.selectedShapes.get(i).clone(),false);
                 }
             }
-            else if (this.state == this.STATE_SHAPE_EDIT_MODE){
-                for (var i = 0; i < this.selectedVertices.length; i++){
-                    this.selectedShapes[0].vertices.splice(this.selectedShapes[0].indexOfVertex(this.selectedVertices[i]) + 1, 0, this.selectedVertices[i].clone());
+            else if (this.state == STATE_SHAPE_EDIT_MODE){
+                for (int i = 0; i < this.selectedVertices.size(); i++){
+                    this.selectedShapes.get(0).vertices.remove(this.selectedShapes.get(0).indexOfVertex(this.selectedVertices.get(i)) + 1);
                 }
             }
         };
 
         // don't use only aabb collision detection for chain shapes, instead use its edges
-        public void checkCollisionWithChainShape (pointx, pointy,Shape shape){
+        public boolean checkCollisionWithChainShape (float pointx,float  pointy,Shape shape){
             LineSegment lineSegment;
             int index = 0;
-            for (var i = 0; i < shape.vertices.length; i++){
-                if (i == shape.vertices.length - 1){
-                    lineSegment = new LineSegment(shape.vertices[i].x, shape.vertices[i].y, shape.vertices[0].x, shape.vertices[0].y);
+            for (int i = 0; i < shape.vertices.size(); i++){
+                if (i == shape.vertices.size() - 1){
+                    lineSegment = new LineSegment(shape.vertices.get(i).x, shape.vertices.get(i).y, shape.vertices.get(0).x, shape.vertices.get(0).y);
                 }
                 else{
-                    lineSegment = new LineSegment(shape.vertices[i].x, shape.vertices[i].y, shape.vertices[i + 1].x, shape.vertices[i + 1].y);
+                    lineSegment = new LineSegment(shape.vertices.get(i).x, shape.vertices.get(i).y, shape.vertices.get(i + 1).x, shape.vertices.get(i + 1).y);
                 }
 
                 // use some threshold to determine collision
@@ -128,23 +131,23 @@ public class SceneManager {
         }
 
         // for selecting objects
-        public void onMouseDown (e, inputHandler, navigator){
-            float eoffsetX = e.offsetX == undefined ? e.layerX : e.offsetX;
-            float eoffsetY = e.offsetY == undefined ? e.layerY : e.offsetY;
+        public boolean onMouseDown (MouseEvent e, InputHandler inputHandler, Navigator navigator){
+            float eoffsetX = (float) e.getX();
+            float eoffsetY = (float) e.getY();
 
             if (this.state == STATE_SHAPE_EDIT_MODE){
                 // for rendering vertices
                 this.selectedShapes.get(0).inEditMode = true;
 
                 // for adding vertex to the selected shape
-                if (inputHandler.CTRL_PRESSED){
-                    var point = navigator.screenPointToWorld(eoffsetX, eoffsetY);
-                    this.selectedShapes[0].addVertex(point[0], point[1]);
+                if (InputHandler.CTRL_PRESSED != 0){
+                    float[] point = navigator.screenPointToWorld(eoffsetX, eoffsetY);
+                    this.selectedShapes.get(0).addVertex(point[0], point[1]);
                     return true;
                 }
 
                 // for handling multiple vertices
-                if (this.selectedVertices.length > 1) {
+                if (this.selectedVertices.size()> 1) {
                     for (int i = 0; i < this.selectedVertices.size(); i++){
                         var vertex = this.selectedVertices[i];
                         if (navigator.checkPointInAABB(eoffsetX, eoffsetY, [vertex.x, vertex.y, vertex.width, vertex.height])){
@@ -395,13 +398,13 @@ public class SceneManager {
          * params move, 			1 for moving, 0 for setting position
          * params inputHandler, 	information about pivot mode and snapping data
          */
-        public void setPositionOfSelectedObjects (x, y, move, inputHandler){
+        public void setPositionOfSelectedObjects (float x,float  y,boolean move, InputHandler inputHandler){
             if (this.state == STATE_DEFAULT_MODE){
                 // move anchor
-                if (this.selectedJoints.length == 1 && this.selectedJoints[0].inEditMode){
+                if (this.selectedJoints.size() == 1 && this.selectedJoints.get(0).inEditMode){
                     Joint joint = this.selectedJoints.get(0);
                     if (this.selectedAnchor == 0){
-                        if (inputHandler.SNAPPING_ENABLED){
+                        if (InputHandler.SNAPPING_ENABLED){
                             joint.setLocalAnchorA(parseInt(inputHandler.pointerWorldPos[2] / inputHandler.snappingData[0]) * inputHandler.snappingData[0],
                                     parseInt(inputHandler.pointerWorldPos[3] / inputHandler.snappingData[0]) * inputHandler.snappingData[0]);
                         }
@@ -410,7 +413,7 @@ public class SceneManager {
                         }
                     }
                     else if (this.selectedAnchor == 1){
-                        if (inputHandler.SNAPPING_ENABLED){
+                        if (InputHandler.SNAPPING_ENABLED){
                             joint.setLocalAnchorB(parseInt(inputHandler.pointerWorldPos[2] / inputHandler.snappingData[0]) * inputHandler.snappingData[0],
                                     parseInt(inputHandler.pointerWorldPos[3] / inputHandler.snappingData[0]) * inputHandler.snappingData[0]);
                         }
@@ -420,21 +423,21 @@ public class SceneManager {
                     }
                     else if (this.selectedAnchor == 2){
                         if (joint.jointType == Joint.JOINT_WELD || joint.jointType == Joint.JOINT_REVOLUTE){
-                            if (inputHandler.SHIFT_PRESSED){
+                            if (InputHandler.SHIFT_PRESSED){
                                 joint.changeReferenceAngle(x);
                             }
                         }
                         else if (joint.jointType == Joint.JOINT_PULLEY){
-                            if (inputHandler.SNAPPING_ENABLED){
-                                joint.setGroundAnchorA(parseInt(inputHandler.pointerWorldPos[2] / inputHandler.snappingData[0]) * inputHandler.snappingData[0],
-                                        parseInt(inputHandler.pointerWorldPos[3] / inputHandler.snappingData[0]) * inputHandler.snappingData[0]);
+                            if (InputHandler.SNAPPING_ENABLED){
+                                joint.setGroundAnchorA(inputHandler.pointerWorldPos[2] / inputHandler.snappingData[0] * inputHandler.snappingData[0],
+                                                inputHandler.pointerWorldPos[3] / inputHandler.snappingData[0] * inputHandler.snappingData[0]);
                             }
                             else {
                                 joint.moveGroundAnchorA(x, y);
                             }
                         }
                         else if (joint.jointType == Joint.JOINT_PRISMATIC){
-                            if (inputHandler.SHIFT_PRESSED){
+                            if (InputHandler.SHIFT_PRESSED != 0){
                                 joint.changeReferenceAngle(x);
                             }
                             else {
@@ -442,7 +445,7 @@ public class SceneManager {
                             }
                         }
                         else if (joint.jointType == Joint.JOINT_WHEEL){
-                            if (inputHandler.SHIFT_PRESSED){
+                            if (InputHandler.SHIFT_PRESSED ! =0){
                                 joint.changeLowerAngle(x);
                             }
                         }
@@ -450,7 +453,7 @@ public class SceneManager {
                     else if (this.selectedAnchor == 3){
                         if (joint.jointType == Joint.JOINT_REVOLUTE){
                             if (joint.enableLimit){
-                                if (inputHandler.SHIFT_PRESSED){
+                                if (InputHandler.SHIFT_PRESSED != 0){
                                     joint.changeUpperAngle(x);
                                 }
                                 else {
@@ -460,7 +463,7 @@ public class SceneManager {
                         }
                         else if (joint.jointType == Joint.JOINT_PRISMATIC){
                             if (joint.enableLimit){
-                                if (inputHandler.SHIFT_PRESSED){
+                                if (InputHandler.SHIFT_PRESSED!=0){
                                     joint.upperTranslation += x;
                                 }
                                 else {
@@ -469,9 +472,9 @@ public class SceneManager {
                             }
                         }
                         else if (joint.jointType == Joint.JOINT_PULLEY){
-                            if (inputHandler.SNAPPING_ENABLED){
-                                joint.setGroundAnchorB(parseInt(inputHandler.pointerWorldPos[2] / inputHandler.snappingData[0]) * inputHandler.snappingData[0],
-                                        parseInt(inputHandler.pointerWorldPos[3] / inputHandler.snappingData[0]) * inputHandler.snappingData[0]);
+                            if (InputHandler.SNAPPING_ENABLED){
+                                joint.setGroundAnchorB(inputHandler.pointerWorldPos[2] / inputHandler.snappingData[0] * inputHandler.snappingData[0],
+                                        inputHandler.pointerWorldPos[3] / inputHandler.snappingData[0] * inputHandler.snappingData[0]);
                             }
                             else {
                                 joint.moveGroundAnchorB(x, y);
@@ -481,12 +484,12 @@ public class SceneManager {
                     return;
                 }
 
-                for (var i = 0; i < this.selectedBodies.length; i++){
+                for (int i = 0; i < this.selectedBodies.size(); i++){
                     if (move){
-                        this.selectedBodies[i].move(x, y);
-                        if (inputHandler.SNAPPING_ENABLED){
-                            this.selectedBodies[i].setPosition(parseInt(inputHandler.pointerWorldPos[2] / inputHandler.snappingData[0]) * inputHandler.snappingData[0],
-                                    parseInt(inputHandler.pointerWorldPos[3] / inputHandler.snappingData[0]) * inputHandler.snappingData[0]);
+                        this.selectedBodies.get(i).move(x, y);
+                        if (InputHandler.SNAPPING_ENABLED){
+                            this.selectedBodies.get(i).setPosition(inputHandler.pointerWorldPos[2] / inputHandler.snappingData[0] * inputHandler.snappingData[0],
+                                    inputHandler.pointerWorldPos[3] / inputHandler.snappingData[0] * inputHandler.snappingData[0]);
                         }
                     }
                     else{
@@ -527,7 +530,7 @@ public class SceneManager {
                     }
                 }
             }
-            else if (	this.state == this.STATE_SHAPE_EDIT_MODE &&
+            else if (	this.state == STATE_SHAPE_EDIT_MODE &&
                     this.selectedShapes[0].shapeType != Shape.SHAPE_BOX &&
                     this.selectedShapes[0].shapeType != Shape.SHAPE_CIRCLE){
                 for (var i = 0; i < this.selectedVertices.length; i++){
@@ -535,8 +538,8 @@ public class SceneManager {
                         this.selectedVertices[i].x = x + this.selectedVertices[i].x * move;
                         this.selectedVertices[i].y = y + this.selectedVertices[i].y * move;
 
-                        if (inputHandler.SNAPPING_ENABLED){
-                            this.selectedVertices[i].x = parseInt(inputHandler.pointerWorldPos[2] / inputHandler.snappingData[0]) * inputHandler.snappingData[0];
+                        if (InputHandler.SNAPPING_ENABLED){
+                            this.selectedVertices[i].x = Integer.parseInt(inputHandler.pointerWorldPos[2] / inputHandler.snappingData[0]) * inputHandler.snappingData[0];
                             this.selectedVertices[i].y = parseInt(inputHandler.pointerWorldPos[3] / inputHandler.snappingData[0]) * inputHandler.snappingData[0];
                         }
                     }
@@ -557,7 +560,7 @@ public class SceneManager {
          * params scale, 			1 for scaling, 0 for setting scale
          * params inputHandler, 	information about pivot mode and snapping data
          */
-        public void setScaleOfSelectedObjects (sx, sy, scale, inputHandler){
+        public void setScaleOfSelectedObjects (float sx, float sy,float scale,InputHandler inputHandler){
             if (this.state == STATE_DEFAULT_MODE){
                 if (inputHandler.pivotMode == 3){								// InputHandler.PIVOT_LOCAL_MODE
                     for (var i = 0; i < this.selectedBodies.length; i++){
@@ -686,7 +689,7 @@ public class SceneManager {
          * params rotate,    	1 for rotating, 0 for setting rotation (do not use rotate = 0 when editing vertices)
          * params inputHandler, 	information about pivot mode and snapping data
          */
-        SceneManager.prototype.setRotationOfSelectedObjects = function(angle, rotate, inputHandler){
+        public void setRotationOfSelectedObjects (float angle, boolean rotate, InputHandler inputHandler){
             if (this.state == this.STATE_DEFAULT_MODE){
                 if (inputHandler.pivotMode == 3){								// InputHandler.PIVOT_LOCAL_MODE
                     for (var i = 0; i < this.selectedBodies.length; i++){
@@ -781,7 +784,7 @@ public class SceneManager {
 	* params delta, 		array for x and y axis manipulation
 	* params inputHandler, 	info about pivot mode and snapping data
 	*/
-        SceneManager.prototype.transformSelection = function(delta, inputHandler){
+        public void transformSelection (float []delta, InputHandler inputHandler){
             if (inputHandler.transformTool == 5){					// scale
                 if (Math.abs(delta[0]) >= 3 * Math.abs(delta[1])){
                     delta[1] = 0;
@@ -800,8 +803,8 @@ public class SceneManager {
             }
         };
 
-        SceneManager.prototype.addBody = function(body){
-            this.bodies.push(body);
+        public void addBody (Body body){
+            this.bodies.add(body);
         };
 
         /**
@@ -810,7 +813,7 @@ public class SceneManager {
          * params asCircle,  1 if circle shape is to be generated, otherwise defaults to box (use only when polygon or chain shape is created)
          * creates new body and adds it to the scene
          */
-        SceneManager.prototype.createBody = function(shapeType, asCircle){
+        public void createBody (int shapeType, boolean asCircle){
             var body = new Body();
 
             if (shapeType == Shape.SHAPE_POLYGON || shapeType == Shape.SHAPE_CHAIN){
@@ -1064,13 +1067,13 @@ public class SceneManager {
             return scene;
         };
 
-        SceneManager.prototype.newScene = function(){
+        public void newScene (){
             this.state = this.STATE_DEFAULT_MODE;
             this.bodies = [];
             this.joints = [];
         };
 
-        SceneManager.prototype.loadScene = function(scene){
+        public void loadScene(scene){
             for (var i = 0; i < scene.bodies.length; i++){
                 this.addBody(loadBody(scene.bodies[i]));
             }
@@ -1079,7 +1082,7 @@ public class SceneManager {
             }
         };
 
-        function cloneArray(obj){
+        public static void cloneArray(obj){
         if (obj instanceof Array) {
             copy = [];
             for (var i = 0, len = obj.length; i < len; i++) {
@@ -1089,7 +1092,7 @@ public class SceneManager {
         }
 	}
 
-        function loadVertex(obj){
+        public static void loadVertex(obj){
                 var vertices = [];
         for (var i = 0; i < obj.length; i++){
             var vertex = new Vertex();
@@ -1102,7 +1105,7 @@ public class SceneManager {
         return vertices;
 	}
 
-        function loadShape(obj){
+        public static void loadShape(obj){
                 var shapes = [];
         for (var i = 0; i < obj.length; i++){
             var shape = new Shape(Shape.SHAPE_NONE);
@@ -1136,7 +1139,7 @@ public class SceneManager {
         return shapes;
 	}
 
-        function loadBody(obj){
+        public static void loadBody(obj){
                 var body = new Body();
         body.name = obj.name;
         body.userData = obj.userData;
@@ -1165,7 +1168,7 @@ public class SceneManager {
         return body;
 	}
 
-        function loadJoint(obj, bodies, joints){
+        public static void  loadJoint(obj, bodies, joints){
             var joint = new Joint();
             joint.name = obj.name;
             joint.userData = obj.userData;
@@ -1234,16 +1237,5 @@ public class SceneManager {
             return joint;
         }
 
-        var instance;
-        return{
-                getInstance: function(){
-            if (instance == null){
-                instance = new SceneManager();
-                instance.constructor = null;
-            }
-            return instance;
-        }
-	};
 
-    })();
 }

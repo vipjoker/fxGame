@@ -3,9 +3,7 @@ package physicsPort;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
 import javafx.scene.paint.Color;
 import physicsPort.body.Body;
 import physicsPort.body.LineSegment;
@@ -147,22 +145,21 @@ public class ViewPort {
         };
 
         public void onMouseDown (MouseEvent e){
-            var eoffsetX = e.offsetX == undefined ? e.layerX : e.offsetX;
-            var eoffsetY = e.offsetY == undefined ? e.layerY : e.offsetY;
+            float eoffsetX = (float) e.getX();
+            float eoffsetY = (float) e.getY();
 
-            var inputHandler = this.inputHandler;
             inputHandler.mouseStatus[0] = 1;
 
             inputHandler.pointerWorldPos[0] = this.navigator.screenPointToWorld(eoffsetX, eoffsetY)[0];
             inputHandler.pointerWorldPos[1] = this.navigator.screenPointToWorld(eoffsetX, eoffsetY)[1];
 
             // check whether right button is pressd or not
-            if (e.which)
-                inputHandler.mouseStatus[1] = (e.which == 3) + 1;
-            else if (e.button)
-                inputHandler.mouseStatus[1] = (e.button == 2) + 1;
+            if (e.getButton() == MouseButton.SECONDARY)
+                inputHandler.mouseStatus[1] = 2;
+            else if (e.getButton() == MouseButton.PRIMARY)
+                inputHandler.mouseStatus[1] =1;
 
-            inputHandler.start = [eoffsetX, eoffsetY];
+            inputHandler.start = new float[]{eoffsetX, eoffsetY};
 
             if (inputHandler.mouseStatus[1] == InputHandler.IS_RIGHT_MOUSE_BUTTON)
                 return;
@@ -180,38 +177,37 @@ public class ViewPort {
 
             // selected object goes to inputHandler.selection[]
             else {
-                if (this.sceneManager.state == this.sceneManager.STATE_DEFAULT_MODE){
-                    inputHandler.selection = [];
-                    for (var i = 0; i < this.sceneManager.selectedBodies.length; i++){
-                        inputHandler.selection.push(this.sceneManager.selectedBodies[i]);
+                if (this.sceneManager.state == SceneManager.STATE_DEFAULT_MODE){
+                    inputHandler.selection.clear();
+                    for (int i = 0; i < this.sceneManager.selectedBodies.size(); i++){
+                        inputHandler.selection.add(this.sceneManager.selectedBodies.get(i));
                     }
-                    for (var i = 0; i < this.sceneManager.selectedJoints.length; i++){
-                        inputHandler.selection.push(this.sceneManager.selectedJoints[i]);
+                    for (int i = 0; i < this.sceneManager.selectedJoints.size(); i++){
+                        inputHandler.selection.add(this.sceneManager.selectedJoints.get(i));
                     }
 
                 }
-                else if (this.sceneManager.state == this.sceneManager.STATE_BODY_EDIT_MODE){
-                    inputHandler.selection = this.sceneManager.selectedShapes;
+                else if (this.sceneManager.state == SceneManager.STATE_BODY_EDIT_MODE){
+                    inputHandler.selection.addAll(this.sceneManager.selectedShapes);
                 }
-                else if (this.sceneManager.state == this.sceneManager.STATE_SHAPE_EDIT_MODE){
-                    inputHandler.selection = this.sceneManager.selectedVertices;
+                else if (this.sceneManager.state == SceneManager.STATE_SHAPE_EDIT_MODE){
+                    inputHandler.selection.addAll(this.sceneManager.selectedVertices);
                 }
             }
         };
 
-        Viewport.prototype.onMouseMove = function(e){
-            var eoffsetX = e.offsetX == undefined ? e.layerX : e.offsetX;
-            var eoffsetY = e.offsetY == undefined ? e.layerY : e.offsetY;
-            var inputHandler = this.inputHandler, navigator = this.navigator, sceneManager = this.sceneManager;
+        public void onMouseMove (MouseEvent e){
+            float eoffsetX = (float) e.getX();
+            float  eoffsetY = (float)e.getY();
 
             inputHandler.pointerWorldPos[2] = navigator.screenPointToWorld(eoffsetX, eoffsetY)[0];
             inputHandler.pointerWorldPos[3] = navigator.screenPointToWorld(eoffsetX, eoffsetY)[1];
 
-            if (inputHandler.mouseStatus[0]){
+            if (inputHandler.mouseStatus[0] != 0){
                 inputHandler.selectionArea[2] = (eoffsetX - inputHandler.selectionArea[0]);
                 inputHandler.selectionArea[3] = (eoffsetY - inputHandler.selectionArea[1]);
 
-                inputHandler.current = [eoffsetX, eoffsetY];
+                inputHandler.current = new float[]{eoffsetX, eoffsetY};
 
                 inputHandler.delta[0] = inputHandler.current[0] - inputHandler.start[0];
                 inputHandler.delta[0] *= inputHandler.mouseSensitivity / navigator.scale;
@@ -239,7 +235,7 @@ public class ViewPort {
                     return;
                 }
 
-                if (inputHandler.selectionArea[4]){
+                if (inputHandler.selectionArea[4]!= 0){
                     return;
                 }
 
@@ -249,137 +245,137 @@ public class ViewPort {
             }
         };
 
-        Viewport.prototype.onMouseUp = function(e){
-            var eoffsetX = e.offsetX == undefined ? e.layerX : e.offsetX;
-            var eoffsetY = e.offsetY == undefined ? e.layerY : e.offsetY;
-            var inputHandler = this.inputHandler, sceneManager = this.sceneManager;
+        public void onMouseUp (MouseEvent e){
+            float eoffsetX = (float) e.getX();
+            float eoffsetY = (float) e.getY();
+
             inputHandler.mouseStatus[0] = 0;
 
             // return if in game mode
             if (this.inputHandler.inGameMode)
                 return;
 
-            if (inputHandler.selectionArea[4]){
-                var startPoint = this.screenPointToWorld(inputHandler.selectionArea[0], inputHandler.selectionArea[1]),
-                        endPoint = this.screenPointToWorld(eoffsetX, eoffsetY);
+            if (inputHandler.selectionArea[4] != 0){
+                float[] startPoint = this.screenPointToWorld(inputHandler.selectionArea[0], inputHandler.selectionArea[1]);
+                      float[]  endPoint = this.screenPointToWorld(eoffsetX, eoffsetY);
                 LineSegment lineSegment  = new LineSegment(startPoint[0], startPoint[1], endPoint[0], endPoint[1]);
 
                 // edit bodies and shapes
-                if (sceneManager.state == sceneManager.STATE_DEFAULT_MODE){
-                    if (sceneManager.selectedJoints.length == 1){
-                        if (sceneManager.selectedJoints[0].inEditMode){
-                            inputHandler.selectionArea = [0, 0, 0, 0, 0];
+                if (sceneManager.state == SceneManager.STATE_DEFAULT_MODE){
+                    if (sceneManager.selectedJoints.size() == 1){
+                        if (sceneManager.selectedJoints.get(0).inEditMode){
+                            inputHandler.selectionArea = new float[]{0, 0, 0, 0, 0};
                             return;
                         }
                     }
-                    if (!inputHandler.SHIFT_PRESSED){
-                        sceneManager.selectedBodies = [];
-                        sceneManager.selectedJoints = [];
+                    if (InputHandler.SHIFT_PRESSED ==0){
+                        sceneManager.selectedBodies.clear();
+                        sceneManager.selectedJoints.clear();
                     }
                     // bodies
-                    for (var i = 0; i < sceneManager.bodies.length; i++){
-                        if (lineSegment.checkInBoundsAABB(sceneManager.bodies[i].bounds)){
-                            if (sceneManager.selectedBodies.indexOf(sceneManager.bodies[i]) < 0){
-                                sceneManager.selectedBodies.push(sceneManager.bodies[i]);
+                    for (int i = 0; i < sceneManager.bodies.size(); i++){
+                        if (lineSegment.checkInBoundsAABB(sceneManager.bodies.get(i).bounds)){
+                            if (sceneManager.selectedBodies.indexOf(sceneManager.bodies.get(i)) < 0){
+                                sceneManager.selectedBodies.add(sceneManager.bodies.get(i));
                             }
-                            sceneManager.bodies[i].isSelected = true;
+                            sceneManager.bodies.get(i).isSelected = true;
                         }
                         else {
-                            if (!inputHandler.SHIFT_PRESSED){
-                                sceneManager.bodies[i].isSelected = false;
+                            if (InputHandler.SHIFT_PRESSED== 0){
+                                sceneManager.bodies.get(i).isSelected = false;
                             }
                         }
                     }
                     // joints
-                    for (var i = 0; i < sceneManager.joints.length; i++){
-                        if (lineSegment.checkInBoundsAABB(sceneManager.joints[i].getBounds())){
-                            if (sceneManager.selectedJoints.indexOf(sceneManager.joints[i]) < 0){
-                                sceneManager.selectedJoints.push(sceneManager.joints[i]);
+                    for (int i = 0; i < sceneManager.joints.size(); i++){
+                        if (lineSegment.checkInBoundsAABB(sceneManager.joints.get(i).getBounds())){
+                            if (sceneManager.selectedJoints.indexOf(sceneManager.joints.get(i)) < 0){
+                                sceneManager.selectedJoints.add(sceneManager.joints.get(i));
                             }
-                            sceneManager.joints[i].isSelected = true;
+                            sceneManager.joints.get(i).isSelected = true;
                         }
                         else {
-                            if (!inputHandler.SHIFT_PRESSED){
-                                sceneManager.joints[i].isSelected = false;
+                            if (InputHandler.SHIFT_PRESSED == 0){
+                                sceneManager.joints.get(i).isSelected = false;
                             }
                         }
                     }
                 }
-                else if (sceneManager.state == sceneManager.STATE_BODY_EDIT_MODE){
-                    if (!inputHandler.SHIFT_PRESSED){
-                        sceneManager.selectedShapes = [];
+                else if (sceneManager.state == SceneManager.STATE_BODY_EDIT_MODE){
+                    if (InputHandler.SHIFT_PRESSED ==0){
+                        sceneManager.selectedShapes.clear();
                     }
-                    for (var i = 0; i < sceneManager.selectedBodies[0].shapes.length; i++){
+                    for (int i = 0; i < sceneManager.selectedBodies.get(0).shapes.size(); i++){
 
-                        if (lineSegment.checkInBoundsAABB(sceneManager.selectedBodies[0].shapes[i].bounds)){
-                            if (sceneManager.selectedShapes.indexOf(sceneManager.selectedBodies[0].shapes[i]) < 0){
-                                sceneManager.selectedShapes.push(sceneManager.selectedBodies[0].shapes[i]);
+                        if (lineSegment.checkInBoundsAABB(sceneManager.selectedBodies.get(0).shapes.get(i).bounds)){
+                            if (sceneManager.selectedShapes.indexOf(sceneManager.selectedBodies.get(0).shapes.get(i)) < 0){
+                                sceneManager.selectedShapes.add(sceneManager.selectedBodies.get(0).shapes.get(i));
                             }
-                            sceneManager.selectedBodies[0].shapes[i].isSelected = true;
+                            sceneManager.selectedBodies.get(0).shapes.get(i).isSelected = true;
                         }
                         else {
-                            if (!inputHandler.SHIFT_PRESSED){
-                                sceneManager.selectedBodies[0].shapes[i].isSelected = false;
+                            if (InputHandler.SHIFT_PRESSED == 0){
+                                sceneManager.selectedBodies.get(0).shapes.get(i).isSelected = false;
                             }
                         }
                     }
                 }
-                else if (sceneManager.state == sceneManager.STATE_SHAPE_EDIT_MODE){
-                    if (!inputHandler.SHIFT_PRESSED){
-                        sceneManager.selectedVertices = [];
+                else if (sceneManager.state == SceneManager.STATE_SHAPE_EDIT_MODE){
+                    if (InputHandler.SHIFT_PRESSED == 0){
+                        sceneManager.selectedVertices.clear();
                     }
-                    for (var i = 0; i < sceneManager.selectedShapes[0].vertices.length; i++){
-                        var vertex = sceneManager.selectedShapes[0].vertices[i];
-                        if (lineSegment.checkInBoundsAABB([vertex.x, vertex.y, vertex.width, vertex.height])){
-                            if (sceneManager.selectedVertices.indexOf(sceneManager.selectedShapes[0].vertices[i]) < 0){
-                                sceneManager.selectedVertices.push(sceneManager.selectedShapes[0].vertices[i]);
+                    for (int  i = 0; i < sceneManager.selectedShapes.get(0).vertices.size(); i++){
+                        Vertex vertex = sceneManager.selectedShapes.get(0).vertices.get(i);
+                        if (lineSegment.checkInBoundsAABB(new float []{vertex.x, vertex.y, vertex.width, vertex.height})){
+                            if (sceneManager.selectedVertices.indexOf(sceneManager.selectedShapes.get(0).vertices.get(i)) < 0){
+                                sceneManager.selectedVertices.add(sceneManager.selectedShapes.get(0).vertices.get(i));
                             }
-                            sceneManager.selectedShapes[0].vertices[i].isSelected = true;
+                            sceneManager.selectedShapes.get(0).vertices.get(i).isSelected = true;
                         }
 					else{
-                            if (!inputHandler.SHIFT_PRESSED){
-                                sceneManager.selectedShapes[0].vertices[i].isSelected = false;
+                            if (InputHandler.SHIFT_PRESSED == 0){
+                                sceneManager.selectedShapes.get(0).vertices.get(i).isSelected = false;
                             }
                         }
                     }
                 }
 
                 // selected object goes to inputHandler.selection[]
-                if (sceneManager.state == sceneManager.STATE_DEFAULT_MODE){
-                    inputHandler.selection = [];
-                    for (var i = 0; i < this.sceneManager.selectedBodies.length; i++){
-                        inputHandler.selection.push(this.sceneManager.selectedBodies[i]);
+                if (sceneManager.state == SceneManager.STATE_DEFAULT_MODE){
+                    inputHandler.selection.clear();
+                    for (int i = 0; i < this.sceneManager.selectedBodies.size(); i++){
+                        inputHandler.selection.add(this.sceneManager.selectedBodies.get(i));
                     }
-                    for (var i = 0; i < this.sceneManager.selectedJoints.length; i++){
-                        inputHandler.selection.push(this.sceneManager.selectedJoints[i]);
+                    for (int i = 0; i < this.sceneManager.selectedJoints.size(); i++){
+                        inputHandler.selection.add(this.sceneManager.selectedJoints.get(i));
                     }
                 }
-                else if (sceneManager.state == sceneManager.STATE_BODY_EDIT_MODE){
-                    inputHandler.selection = sceneManager.selectedShapes;
+                else if (sceneManager.state == SceneManager.STATE_BODY_EDIT_MODE){
+                    inputHandler.selection .addAll(sceneManager.selectedShapes);
                 }
-                else if (this.sceneManager.state == sceneManager.STATE_SHAPE_EDIT_MODE){
-                    inputHandler.selection = sceneManager.selectedVertices;
+                else if (this.sceneManager.state == SceneManager.STATE_SHAPE_EDIT_MODE){
+                    inputHandler.selection.addAll(sceneManager.selectedVertices);
                 }
             }
 
-            inputHandler.selectionArea = [0, 0, 0, 0, 0];
+            inputHandler.selectionArea = new float[]{0, 0, 0, 0, 0};
         };
 
         // viewport scaling
-        Viewport.prototype.onMouseWheel = function(e){
-            var eoffsetX = e.offsetX == undefined ? e.layerX : e.offsetX;
-            var eoffsetY = e.offsetY == undefined ? e.layerY : e.offsetY;
+        public void onMouseWheel (ScrollEvent e){
+            float eoffsetX = (float) e.getX();
+            float eoffsetY = (float) e.getY();
 
-            var mouseX = eoffsetX;
-            var mouseY = eoffsetY;
-            var wheel = e.wheelDelta / 120;
-            var zoom = 1 + (wheel > 0 ? 1 : -1) * Math.min(Math.abs(wheel / 20), 0.1);
+
+            float mouseX = eoffsetX;
+            float  mouseY = eoffsetY;
+            float  wheel = (float) e.getDeltaX() / 120;
+            float zoom = 1 + (wheel > 0 ? 1 : -1) * (float)Math.min(Math.abs(wheel / 20), 0.1);
 
             this.zoom(mouseX, mouseY, zoom);
         };
 
-        Viewport.prototype.zoom = function(mouseX, mouseY, zoom){
-            var navigator = this.navigator;
+        public void zoom (float mouseX, float mouseY,float zoom){
 
             if (zoom > 1){
                 if (navigator.scale > navigator.scaleLimits[1])
@@ -405,21 +401,21 @@ public class ViewPort {
             navigator.scale *= zoom;
         };
 
-        Viewport.prototype.zoomIn = function(){
-            this.zoom(this.canvas.width / 2, this.canvas.height / 2, 1.2);
+        public void zoomIn (){
+            this.zoom((float) this.canvas.getWidth()/ 2, (float) this.canvas.getHeight()/ 2, 1.2f);
         };
 
-        Viewport.prototype.zoomOut = function(){
-            this.zoom(this.canvas.width / 2, this.canvas.height / 2, 0.8);
+        public void zoomOut (){
+            this.zoom((float) this.canvas.getWidth()/ 2, (float) this.canvas.getHeight()/ 2, 0.8f);
         };
 
-        Viewport.prototype.resetView = function(){
-            this.zoom(this.canvas.width / 2, this.canvas.height / 2, 1 / this.navigator.scale);
-            this.navigator.panning =
-					[
-            this.canvas.width / (this.navigator.scale * 2) + this.navigator.origin[0],
-                    this.canvas.height / (this.navigator.scale * 2) + this.navigator.origin[1],
-					];
+        public void resetView (){
+            this.zoom((float) this.canvas.getWidth()/ 2, (float) this.canvas.getHeight()/ 2, 1 / this.navigator.scale);
+            this.navigator.panning =new float[]
+                    {
+                            (float) this.canvas.getWidth() / (this.navigator.scale * 2) + this.navigator.origin[0],
+                            (float) this.canvas.getHeight() / (this.navigator.scale * 2) + this.navigator.origin[1],
+                    };
         };
 
         public void draw (GameView gameView){

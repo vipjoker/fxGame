@@ -392,4 +392,7 @@ public class Joint {
         return joint;
     }
 
+    public Joint clone() {
+        return this;
+    }
 }

@@ -9,6 +9,7 @@ public class Navigator {
     public float[] scaleLimits;
     public float [] grid;
     public int range;
+    public int cell_size = 10;//TODO changed
 
     public  Navigator(){
         // canvas manipulating parameters
