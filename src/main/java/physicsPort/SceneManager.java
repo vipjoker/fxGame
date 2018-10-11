@@ -68,20 +68,20 @@ public class SceneManager {
         public void deleteSelectedObjects (){
             if (this.state == STATE_DEFAULT_MODE){
                 for (int i = 0; i < this.selectedBodies.size(); i++){
-                    this.removeBody(this.selectedBodies[i]);
+                    this.removeBody(this.selectedBodies.get(i));
                 }
-                for (var i = 0; i < this.selectedJoints.length; i++){
-                    this.removeJoint(this.selectedJoints[i]);
-                }
-            }
-            else if (this.state == this.STATE_BODY_EDIT_MODE){
-                for (var i = 0; i < this.selectedShapes.length; i++){
-                    this.selectedBodies[0].removeShapeGivenShape(this.selectedShapes[i]);
+                for (int i = 0; i < this.selectedJoints.size(); i++){
+                    this.removeJoint(this.selectedJoints.get(i));
                 }
             }
-            else if (this.state == this.STATE_SHAPE_EDIT_MODE){
-                for (var i = 0; i < this.selectedVertices.length; i++){
-                    this.selectedShapes[0].removeVertexGivenVertex(this.selectedVertices[i]);
+            else if (this.state == STATE_BODY_EDIT_MODE){
+                for (int i = 0; i < this.selectedShapes.size(); i++){
+                    this.selectedBodies.get(0).removeShapeGivenShape(this.selectedShapes.get(i));
+                }
+            }
+            else if (this.state == STATE_SHAPE_EDIT_MODE){
+                for (int i = 0; i < this.selectedVertices.size(); i++){
+                    this.selectedShapes.get(0).removeVertexGivenVertex(this.selectedVertices.get(i));
                 }
             }
         };
@@ -149,9 +149,9 @@ public class SceneManager {
                 // for handling multiple vertices
                 if (this.selectedVertices.size()> 1) {
                     for (int i = 0; i < this.selectedVertices.size(); i++){
-                        var vertex = this.selectedVertices[i];
-                        if (navigator.checkPointInAABB(eoffsetX, eoffsetY, [vertex.x, vertex.y, vertex.width, vertex.height])){
-                            if (inputHandler.SHIFT_PRESSED){
+                        Vertex vertex = this.selectedVertices.get(i);
+                        if (navigator.checkPointInAABB(eoffsetX, eoffsetY,new float[] {vertex.x, vertex.y, vertex.width, vertex.height})){
+                            if (InputHandler.SHIFT_PRESSED != 0){
                                 break;
                             }
                             return true;
@@ -159,24 +159,24 @@ public class SceneManager {
                     }
                 }
 
-                if (!inputHandler.SHIFT_PRESSED){
-                    this.selectedVertices = [];
+                if (InputHandler.SHIFT_PRESSED == 0){
+                    this.selectedVertices.clear();
                 }
-                var vertexInBounds = false;
-                for (var i = 0; i < this.selectedShapes[0].vertices.length; i++){
-                    var vertex = this.selectedShapes[0].vertices[i];
+                boolean vertexInBounds = false;
+                for (int i = 0; i < this.selectedShapes.get(0).vertices.size(); i++){
+                    Vertex vertex = this.selectedShapes.get(0).vertices.get(i);
 
-                    if (!inputHandler.SHIFT_PRESSED){
+                    if (InputHandler.SHIFT_PRESSED == 0){
                         vertex.isSelected = false;
                     }
-                    if (navigator.checkPointInAABB(eoffsetX, eoffsetY, [vertex.x, vertex.y, vertex.width, vertex.height])){
-                        if (!inputHandler.SHIFT_PRESSED){
-                            this.selectedVertices[0] = vertex;
+                    if (navigator.checkPointInAABB(eoffsetX, eoffsetY, new float[]{vertex.x, vertex.y, vertex.width, vertex.height})){
+                        if (InputHandler.SHIFT_PRESSED == 0){
+                            this.selectedVertices.set(0,vertex);
                             vertex.isSelected = true;
                         }
                         else {
                             if (this.selectedVertices.indexOf(vertex) < 0){
-                                this.selectedVertices.push(vertex);
+                                this.selectedVertices.add(vertex);
                                 vertex.isSelected = true;
                             }
                         }
@@ -190,7 +190,7 @@ public class SceneManager {
                 // for handling multiple shapes
                 if (this.selectedShapes.size() > 1) {
                     for (int i = 0; i < this.selectedShapes.size(); i++){
-                        var shape = this.selectedShapes[i];
+                        Shape shape = this.selectedShapes.get(i);
                         if (navigator.checkPointInAABB(eoffsetX, eoffsetY, shape.bounds)){
                             // check for chain shapes
                             if (shape.shapeType == Shape.SHAPE_CHAIN){
@@ -398,15 +398,15 @@ public class SceneManager {
          * params move, 			1 for moving, 0 for setting position
          * params inputHandler, 	information about pivot mode and snapping data
          */
-        public void setPositionOfSelectedObjects (float x,float  y,boolean move, InputHandler inputHandler){
+        public void setPositionOfSelectedObjects (float x,float  y,float move, InputHandler inputHandler){
             if (this.state == STATE_DEFAULT_MODE){
                 // move anchor
                 if (this.selectedJoints.size() == 1 && this.selectedJoints.get(0).inEditMode){
                     Joint joint = this.selectedJoints.get(0);
                     if (this.selectedAnchor == 0){
                         if (InputHandler.SNAPPING_ENABLED){
-                            joint.setLocalAnchorA(parseInt(inputHandler.pointerWorldPos[2] / inputHandler.snappingData[0]) * inputHandler.snappingData[0],
-                                    parseInt(inputHandler.pointerWorldPos[3] / inputHandler.snappingData[0]) * inputHandler.snappingData[0]);
+                            joint.setLocalAnchorA(inputHandler.pointerWorldPos[2] / inputHandler.snappingData[0] * inputHandler.snappingData[0],
+                                    inputHandler.pointerWorldPos[3] / inputHandler.snappingData[0] * inputHandler.snappingData[0]);
                         }
                         else {
                             joint.moveAnchorA(x, y);
@@ -414,8 +414,8 @@ public class SceneManager {
                     }
                     else if (this.selectedAnchor == 1){
                         if (InputHandler.SNAPPING_ENABLED){
-                            joint.setLocalAnchorB(parseInt(inputHandler.pointerWorldPos[2] / inputHandler.snappingData[0]) * inputHandler.snappingData[0],
-                                    parseInt(inputHandler.pointerWorldPos[3] / inputHandler.snappingData[0]) * inputHandler.snappingData[0]);
+                            joint.setLocalAnchorB(inputHandler.pointerWorldPos[2] / inputHandler.snappingData[0] * inputHandler.snappingData[0],
+                                    inputHandler.pointerWorldPos[3] / inputHandler.snappingData[0] * inputHandler.snappingData[0]);
                         }
                         else {
                             joint.moveAnchorB(x, y);
@@ -423,7 +423,7 @@ public class SceneManager {
                     }
                     else if (this.selectedAnchor == 2){
                         if (joint.jointType == Joint.JOINT_WELD || joint.jointType == Joint.JOINT_REVOLUTE){
-                            if (InputHandler.SHIFT_PRESSED){
+                            if (InputHandler.SHIFT_PRESSED != 0){
                                 joint.changeReferenceAngle(x);
                             }
                         }
@@ -485,7 +485,7 @@ public class SceneManager {
                 }
 
                 for (int i = 0; i < this.selectedBodies.size(); i++){
-                    if (move){
+                    if (move>0){
                         this.selectedBodies.get(i).move(x, y);
                         if (InputHandler.SNAPPING_ENABLED){
                             this.selectedBodies.get(i).setPosition(inputHandler.pointerWorldPos[2] / inputHandler.snappingData[0] * inputHandler.snappingData[0],
@@ -493,61 +493,61 @@ public class SceneManager {
                         }
                     }
                     else{
-                        var px = x == null ? this.selectedBodies[i].position[0] : x;
-                        var py = y == null ? this.selectedBodies[i].position[1] : y;
-                        this.selectedBodies[i].setPosition(px, py);
+                        float px = x == 0? this.selectedBodies.get(i).position[0] : x;
+                        float py = y == 0? this.selectedBodies.get(i).position[1] : y;
+                        this.selectedBodies.get(i).setPosition(px, py);
                     }
                 }
                 // joints
-                for (var i = 0; i < this.selectedJoints.length; i++){
-                    if (move){
-                        this.selectedJoints[i].move(x, y);
-                        if (inputHandler.SNAPPING_ENABLED){
-                            this.selectedJoints[i].setPosition(parseInt(inputHandler.pointerWorldPos[2] / inputHandler.snappingData[0]) * inputHandler.snappingData[0],
-                                    parseInt(inputHandler.pointerWorldPos[3] / inputHandler.snappingData[0]) * inputHandler.snappingData[0]);
+                for (int i = 0; i < this.selectedJoints.size(); i++){
+                    if (move>0){
+                        this.selectedJoints.get(i).move(x, y);
+                        if (InputHandler.SNAPPING_ENABLED){
+                            this.selectedJoints.get(i).setPosition(inputHandler.pointerWorldPos[2] / inputHandler.snappingData[0] * inputHandler.snappingData[0],
+                                    inputHandler.pointerWorldPos[3] / inputHandler.snappingData[0] * inputHandler.snappingData[0]);
                         }
                     }
                     else{
-                        var px = x == null ? this.selectedJoints[i].position[0] : x;
-                        var py = y == null ? this.selectedJoints[i].position[1] : y;
-                        this.selectedJoints[i].setPosition(px, py);
+                        float px = x == 0? this.selectedJoints.get(i).position[0] : x;
+                        float py = y == 0? this.selectedJoints.get(i).position[1] : y;
+                        this.selectedJoints.get(i).setPosition(px, py);
                     }
                 }
             }
-            else if (this.state == this.STATE_BODY_EDIT_MODE){
-                for (var i = 0; i < this.selectedShapes.length; i++){
-                    if (move){
-                        this.selectedShapes[i].move(x, y);
-                        if (inputHandler.SNAPPING_ENABLED){
-                            this.selectedShapes[i].setPosition(parseInt(inputHandler.pointerWorldPos[2] / inputHandler.snappingData[0]) * inputHandler.snappingData[0],
-                                    parseInt(inputHandler.pointerWorldPos[3] / inputHandler.snappingData[0]) * inputHandler.snappingData[0]);
+            else if (this.state == STATE_BODY_EDIT_MODE){
+                for (int i = 0; i < this.selectedShapes.size(); i++){
+                    if (move>0){
+                        this.selectedShapes.get(i).move(x, y);
+                        if (InputHandler.SNAPPING_ENABLED){
+                            this.selectedShapes.get(i).setPosition(inputHandler.pointerWorldPos[2] / inputHandler.snappingData[0] * inputHandler.snappingData[0],
+                                    inputHandler.pointerWorldPos[3] / inputHandler.snappingData[0] * inputHandler.snappingData[0]);
                         }
                     }
                     else {
-                        var px = x == null ? this.selectedShapes[i].position[0] : x;
-                        var py = y == null ? this.selectedShapes[i].position[1] : y;
-                        this.selectedShapes[i].setPosition(px, py);
+                        float px = x == 0? this.selectedShapes.get(i).position[0] : x;
+                        float py = y == 0? this.selectedShapes.get(i).position[1] : y;
+                        this.selectedShapes.get(i).setPosition(px, py);
                     }
                 }
             }
             else if (	this.state == STATE_SHAPE_EDIT_MODE &&
-                    this.selectedShapes[0].shapeType != Shape.SHAPE_BOX &&
-                    this.selectedShapes[0].shapeType != Shape.SHAPE_CIRCLE){
-                for (var i = 0; i < this.selectedVertices.length; i++){
-                    if (move){
-                        this.selectedVertices[i].x = x + this.selectedVertices[i].x * move;
-                        this.selectedVertices[i].y = y + this.selectedVertices[i].y * move;
+                    this.selectedShapes.get(0).shapeType != Shape.SHAPE_BOX &&
+                    this.selectedShapes.get(0).shapeType != Shape.SHAPE_CIRCLE){
+                for (int i = 0; i < this.selectedVertices.size(); i++){
+                    if (move>0){
+                        this.selectedVertices.get(i).x = x + this.selectedVertices.get(i).x * move;
+                        this.selectedVertices.get(i).y = y + this.selectedVertices.get(i).y * move;
 
                         if (InputHandler.SNAPPING_ENABLED){
-                            this.selectedVertices[i].x = Integer.parseInt(inputHandler.pointerWorldPos[2] / inputHandler.snappingData[0]) * inputHandler.snappingData[0];
-                            this.selectedVertices[i].y = parseInt(inputHandler.pointerWorldPos[3] / inputHandler.snappingData[0]) * inputHandler.snappingData[0];
+                            this.selectedVertices.get(i).x = inputHandler.pointerWorldPos[2] / inputHandler.snappingData[0] * inputHandler.snappingData[0];
+                            this.selectedVertices.get(i).y = inputHandler.pointerWorldPos[3] / inputHandler.snappingData[0] * inputHandler.snappingData[0];
                         }
                     }
                     else {
-                        var px = x == null ? this.selectedVertices[i].x : x;
-                        var py = y == null ? this.selectedVertices[i].y : y;
-                        this.selectedVertices[i].x = px;
-                        this.selectedVertices[i].y = py;
+                        float px = x == 0? this.selectedVertices.get(i).x : x;
+                        float py = y == 0? this.selectedVertices.get(i).y : y;
+                        this.selectedVertices.get(i).x = px;
+                        this.selectedVertices.get(i).y = py;
                     }
                 }
             }
@@ -563,119 +563,119 @@ public class SceneManager {
         public void setScaleOfSelectedObjects (float sx, float sy,float scale,InputHandler inputHandler){
             if (this.state == STATE_DEFAULT_MODE){
                 if (inputHandler.pivotMode == 3){								// InputHandler.PIVOT_LOCAL_MODE
-                    for (var i = 0; i < this.selectedBodies.length; i++){
-                        if (scale){
-                            this.selectedBodies[i].scale(sx, sy);
+                    for (int i = 0; i < this.selectedBodies.size(); i++){
+                        if (scale > 0){
+                            this.selectedBodies.get(i).scale(sx, sy);
                         }
                         else {
-                            var sclx = sx == null ? this.selectedBodies[i].scaleXY[0] : sx;
-                            var scly = sy == null ? this.selectedBodies[i].scaleXY[1] : sy;
-                            this.selectedBodies[i].setScale(sclx, scly);
+                            float sclx = sx == 0? this.selectedBodies.get(i).scaleXY[0] : sx;
+                            float scly = sy == 0 ? this.selectedBodies.get(i).scaleXY[1] : sy;
+                            this.selectedBodies.get(i).setScale(sclx, scly,0,0);
                         }
                     }
                     // joints
-                    for (var i = 0; i < this.selectedJoints.length; i++){
-                        if (scale){
-                            this.selectedJoints[i].scale(sx, sy);
+                    for (int  i = 0; i < this.selectedJoints.size(); i++){
+                        if (scale> 0){
+                            this.selectedJoints.get(i).scale(sx, sy);
                         }
                         else{
-                            var sclx = sx == null ? this.selectedJoints[i].scaleXY[0] : sx;
-                            var scly = sy == null ? this.selectedJoints[i].scaleXY[1] : sy;
-                            this.selectedJoints[i].setScale(sclx, scly);
+                            float sclx = sx == 0? this.selectedJoints.get(i).scaleXY[0] : sx;
+                            float scly = sy == 0? this.selectedJoints.get(i).scaleXY[1] : sy;
+                            this.selectedJoints.get(i).setScale(sclx, scly,0,0);
                         }
                     }
                     return;
                 }
 
                 // if selection center is used as pivot (selection center)
-                var pivot = [0, 0];
-                for (var i = 0; i < this.selectedBodies.length; i++){
-                    pivot[0] += this.selectedBodies[i].position[0];
-                    pivot[1] += this.selectedBodies[i].position[1];
+                float[] pivot =new float [2];
+                for (int i = 0; i < this.selectedBodies.size(); i++){
+                    pivot[0] += this.selectedBodies.get(i).position[0];
+                    pivot[1] += this.selectedBodies.get(i).position[1];
                 }
-                for (var i = 0; i < this.selectedJoints.length; i++){
-                    pivot[0] += this.selectedJoints[i].position[0];
-                    pivot[1] += this.selectedJoints[i].position[1];
+                for (int i = 0; i < this.selectedJoints.size(); i++){
+                    pivot[0] += this.selectedJoints.get(i).position[0];
+                    pivot[1] += this.selectedJoints.get(i).position[1];
                 }
-                pivot[0] /= (this.selectedBodies.length + this.selectedJoints.length);
-                pivot[1] /= (this.selectedBodies.length + this.selectedJoints.length);
+                pivot[0] /= (this.selectedBodies.size() + this.selectedJoints.size());
+                pivot[1] /= (this.selectedBodies.size() + this.selectedJoints.size());
 
-                for (var i = 0; i < this.selectedBodies.length; i++){
-                    if (scale){
-                        this.selectedBodies[i].scale(sx, sy, pivot[0], pivot[1]);
+                for (int i = 0; i < this.selectedBodies.size(); i++){
+                    if (scale > 0){
+                        this.selectedBodies.get(i).scale(sx, sy, pivot[0], pivot[1]);
                     }
                     else {
-                        var sclx = sx == null ? this.selectedBodies[i].scaleXY[0] : sx;
-                        var scly = sy == null ? this.selectedBodies[i].scaleXY[1] : sy;
-                        this.selectedBodies[i].setScale(sclx, scly, pivot[0], pivot[1]);
+                        float sclx = sx == 0 ? this.selectedBodies.get(i).scaleXY[0] : sx;
+                        float scly = sy == 0 ? this.selectedBodies.get(i).scaleXY[1] : sy;
+                        this.selectedBodies.get(i).setScale(sclx, scly, pivot[0], pivot[1]);
                     }
                 }
                 // joints
-                for (var i = 0; i < this.selectedJoints.length; i++){
-                    if (scale){
-                        this.selectedJoints[i].scale(sx, sy, pivot[0], pivot[1]);
+                for (int i = 0; i < this.selectedJoints.size(); i++){
+                    if (scale> 0){
+                        this.selectedJoints.get(i).scale(sx, sy, pivot[0], pivot[1]);
                     }
                     else{
-                        var sclx = sx == null ? this.selectedJoints[i].scaleXY[0] : sx;
-                        var scly = sy == null ? this.selectedJoints[i].scaleXY[1] : sy;
-                        this.selectedJoints[i].setScale(sclx, scly, pivot[0], pivot[1]);
+                        float sclx = sx ==0 ? this.selectedJoints.get(i).scaleXY[0] : sx;
+                        float scly = sy ==0 ? this.selectedJoints.get(i).scaleXY[1] : sy;
+                        this.selectedJoints.get(i).setScale(sclx, scly, pivot[0], pivot[1]);
                     }
                 }
             }
-            else if (this.state == this.STATE_BODY_EDIT_MODE){
+            else if (this.state == STATE_BODY_EDIT_MODE){
                 if (inputHandler.pivotMode == 3){
-                    for (var i = 0; i < this.selectedShapes.length; i++){
-                        if (scale){
+                    for (int i = 0; i < this.selectedShapes.size(); i++){
+                        if (scale>0){
                             this.selectedShapes[i].scale(sx, sy);
                         }
                         else {
-                            var sclx = sx == null ? this.selectedShapes[i].scaleXY[0] : sx;
-                            var scly = sy == null ? this.selectedShapes[i].scaleXY[1] : sy;
-                            this.selectedShapes[i].setScale(sclx, scly);
+                            float sclx = sx == 0? this.selectedShapes.get(i).scaleXY[0] : sx;
+                            float scly = sy == 0? this.selectedShapes.get(i).scaleXY[1] : sy;
+                            this.selectedShapes.get(i).setScale(sclx, scly,0,0);
                         }
                     }
                     return;
                 }
 
-                var pivot = [0, 0];
-                for (var i = 0; i < this.selectedShapes.length; i++){
-                    pivot[0] += this.selectedShapes[i].position[0];
-                    pivot[1] += this.selectedShapes[i].position[1];
+                float[] pivot = new float[2];
+                for (int i = 0; i < this.selectedShapes.size(); i++){
+                    pivot[0] += this.selectedShapes.get(i).position[0];
+                    pivot[1] += this.selectedShapes.get(i).position[1];
                 }
-                pivot[0] /= this.selectedShapes.length;
-                pivot[1] /= this.selectedShapes.length;
+                pivot[0] /= this.selectedShapes.size();
+                pivot[1] /= this.selectedShapes.size();
 
-                for (var i = 0; i < this.selectedShapes.length; i++){
-                    if (scale){
-                        this.selectedShapes[i].scale(sx, sy, pivot[0], pivot[1]);
+                for (int i = 0; i < this.selectedShapes.size(); i++){
+                    if (scale > 0){
+                        this.selectedShapes.get(i).scale(sx, sy, pivot[0], pivot[1]);
                     }
                     else {
-                        var sclx = sx == null ? this.selectedShapes[i].scaleXY[0] : sx;
-                        var scly = sy == null ? this.selectedShapes[i].scaleXY[1] : sy;
-                        this.selectedShapes[i].setScale(sclx, scly, pivot[0], pivot[1]);
+                        float sclx = sx == 0 ? this.selectedShapes.get(i).scaleXY[0] : sx;
+                        float scly = sy == 0 ? this.selectedShapes.get(i).scaleXY[1] : sy;
+                        this.selectedShapes.get(i).setScale(sclx, scly, pivot[0], pivot[1]);
                     }
                 }
             }
-            else if (	this.state == this.STATE_SHAPE_EDIT_MODE &&
-                    this.selectedShapes[0].shapeType != Shape.SHAPE_BOX &&
-                    this.selectedShapes[0].shapeType != Shape.SHAPE_CIRCLE){
-                if (this.selectedVertices.length < 1)
+            else if (	this.state == STATE_SHAPE_EDIT_MODE &&
+                    this.selectedShapes.get(0).shapeType != Shape.SHAPE_BOX &&
+                    this.selectedShapes.get(0).shapeType != Shape.SHAPE_CIRCLE){
+                if (this.selectedVertices.size() < 1)
                     return;
 
                 // here we always use selection center pivot mode
-                var pivot = [0, 0];
-                for (var i = 0; i < this.selectedVertices.length; i++){
-                    pivot[0] += this.selectedVertices[i].x;
-                    pivot[1] += this.selectedVertices[i].y;
+                float []pivot = new float[2];
+                for (int i = 0; i < this.selectedVertices.size(); i++){
+                    pivot[0] += this.selectedVertices.get(i).x;
+                    pivot[1] += this.selectedVertices.get(i).y;
                 }
-                pivot[0] /= this.selectedVertices.length;
-                pivot[1] /= this.selectedVertices.length;
+                pivot[0] /= this.selectedVertices.size();
+                pivot[1] /= this.selectedVertices.size();
 
-                for (var i = 0; i < this.selectedVertices.length; i++){
-                    var vertex = this.selectedVertices[i];
+                for (int i = 0; i < this.selectedVertices.size(); i++){
+                    Vertex vertex = this.selectedVertices.get(i);
                     vertex.move(-pivot[0], -pivot[1]);
-                    var sclx = sx == null ? 1 : sx;
-                    var scly = sy == null ? 1 : sy;
+                    float sclx = sx == 0? 1 : sx;
+                    float scly = sy == 0? 1 : sy;
                     vertex.x *= sclx;
                     vertex.y *= scly;
                     vertex.move(pivot[0], pivot[1]);
@@ -814,22 +814,22 @@ public class SceneManager {
          * creates new body and adds it to the scene
          */
         public void createBody (int shapeType, boolean asCircle){
-            var body = new Body();
-
+            Body body = new Body();
+            Shape shape =null;
             if (shapeType == Shape.SHAPE_POLYGON || shapeType == Shape.SHAPE_CHAIN){
-                asCircle = asCircle || 0;
+
                 if (asCircle){
-                    var shape = new Shape(shapeType, asCircle);
+                    shape = new Shape(shapeType, 0,0);
                 }
                 else {
-                    var shape = new Shape(shapeType);
+                     shape = new Shape(shapeType,0,0);
                 }
             }
             else {
-                var shape = new Shape(shapeType);
+                shape = new Shape(shapeType,0,0);
             }
 
-            body.addShape(shape);
+            body.addShape(shape,false);
             this.addBody(body);
         };
 
@@ -839,80 +839,66 @@ public class SceneManager {
          * params asCircle,  1 if circle shape is to be generated, otherwise defaults to box (use only when polygon or chain shape is created)
          * creates new shape and adds it to the selected body
          */
-        SceneManager.prototype.createShape = function(shapeType, asCircle){
-            if (this.state != this.STATE_BODY_EDIT_MODE){
-                return "shapes can be created only when editing body";
+        public void createShape (int shapeType, boolean asCircle){
+            if (this.state != STATE_BODY_EDIT_MODE){
+                System.out.println("shapes can be created only when editing body");
+                return;
             }
-
+            Shape shape = null;
             if (shapeType == Shape.SHAPE_POLYGON || shapeType == Shape.SHAPE_CHAIN){
-                asCircle = asCircle || 0;
+
                 if (asCircle){
-                    var shape = new Shape(shapeType, asCircle);
+                     shape = new Shape(shapeType,0,0);
                 }
                 else {
-                    var shape = new Shape(shapeType);
+                     shape = new Shape(shapeType,0,0);
                 }
             }
             else {
-                var shape = new Shape(shapeType);
+                 shape = new Shape(shapeType,0,0);
             }
 
-            this.selectedBodies[0].addShape(shape, true);
+            this.selectedBodies.get(0).addShape(shape, true);
         };
 
         /**
          * params points, array of points ([pos_x, pox_y])
          * create a new polygon shape with given vertices
          */
-        SceneManager.prototype.createShapeFromPoints = function(points){
-            if (this.state != this.STATE_BODY_EDIT_MODE){
-                return "shapes can be created only when editing body";
+        public void createShapeFromPoints (List<Vertex> points){
+            if (this.state != STATE_BODY_EDIT_MODE){
+                return ;
             }
 
-            var shape = new Shape(Shape.SHAPE_NONE);
-            for (var i = 0; i < points.length; i++){
-                var vertex = new Vertex(points[i][0], points[i][1], 10, 10);
-                shape.vertices.push(vertex);
+            Shape shape = new Shape(Shape.SHAPE_NONE,0,0);
+            for (Vertex v:points){
+                Vertex vertex = new Vertex(v.x, v.y, 10, 10);
+                shape.vertices.add(vertex);
             }
 
             // remove overlapping vertices
-            for (var i = 1; i < shape.vertices.length; i++){
-                var vertex = shape.vertices[i];
-                for (var j = 0; j < shape.vertices.length; j++){
-                    var vertexToCheck = shape.vertices[j];
-                    if (vertexToCheck != vertex){
-                        var dx = vertex.x - vertexToCheck.x;
-                        var dy = vertex.y - vertexToCheck.y;
+            for (Vertex vertex :shape.vertices){
+                for (Vertex another :shape.vertices){
+                    if (another!= vertex){
+                        float dx = vertex.x - another.x;
+                        float dy = vertex.y - another.y;
                         if (dx * dx + dy * dy < 120){
-                            shape.removeVertexGivenIndex(j);
+                            shape.removeVertexGivenIndex(shape.vertices.indexOf(another));
                         }
                     }
                 }
             }
 
-            this.selectedBodies[0].addShape(shape, true);
+            this.selectedBodies.get(0).addShape(shape, true);
         };
 
         // removes body from the scene
-        SceneManager.prototype.removeBody = function(body){
-            for (var i = 0; i < this.bodies.length; i++){
-                if (this.bodies[i] == body){
-                    if (i == 0){
-                        this.bodies.shift();
-                    }
-                    else if (i == this.bodies.length - 1){
-                        this.bodies.pop();
-                    }
-                    else {
-                        this.bodies.splice(i, 1);
-                    }
-                    break;
-                }
-            }
+        public void removeBody (Body body){
+            bodies.remove(body);
         };
 
-        SceneManager.prototype.addJoint = function(joint){
-            this.joints.push(joint);
+        public void addJoint (Joint joint){
+            this.joints.add(joint);
         };
 
         /**
@@ -920,11 +906,11 @@ public class SceneManager {
          * params jointType
          * creates a new joint
          */
-        SceneManager.prototype.createJoint = function(jointType){
-            if (this.selectedBodies.length == 2 && this.state == this.STATE_DEFAULT_MODE){
-                var joint = new Joint(jointType);
-                joint.bodyA = this.selectedBodies[0];
-                joint.bodyB = this.selectedBodies[1];
+        public String createJoint (int jointType){
+            if (this.selectedBodies.size() == 2 && this.state == STATE_DEFAULT_MODE){
+                Joint joint = new Joint(jointType);
+                joint.bodyA = this.selectedBodies.get(0);
+                joint.bodyB = this.selectedBodies.get(1);
                 joint.setLocalAnchorA(joint.bodyA.position[0], joint.bodyA.position[1]);
                 joint.setLocalAnchorB(joint.bodyB.position[0], joint.bodyB.position[1]);
                 if (jointType == Joint.JOINT_REVOLUTE) {
@@ -936,57 +922,43 @@ public class SceneManager {
                     joint.setGroundAnchorB(joint.bodyB.position[0], joint.bodyB.position[1] - 100);
                 }
                 else if (jointType == Joint.JOINT_GEAR){
-                    if (this.selectedJoints.length == 2 && ((this.selectedJoints[0].jointType == Joint.JOINT_REVOLUTE &&
-                            this.selectedJoints[1].jointType == Joint.JOINT_REVOLUTE) || (this.selectedJoints[0].jointType == Joint.JOINT_PRISMATIC &&
-                            this.selectedJoints[1].jointType == Joint.JOINT_PRISMATIC) || (this.selectedJoints[0].jointType == Joint.JOINT_PRISMATIC &&
-                            this.selectedJoints[1].jointType == Joint.JOINT_REVOLUTE) || (this.selectedJoints[0].jointType == Joint.JOINT_REVOLUTE &&
-                            this.selectedJoints[1].jointType == Joint.JOINT_PRISMATIC))){
-                        joint.joint1 = this.selectedJoints[0];
-                        joint.joint2 = this.selectedJoints[1];
+                    if (this.selectedJoints.size() == 2 && ((this.selectedJoints.get(0).jointType == Joint.JOINT_REVOLUTE &&
+                            this.selectedJoints.get(1).jointType == Joint.JOINT_REVOLUTE) || (this.selectedJoints.get(0).jointType == Joint.JOINT_PRISMATIC &&
+                            this.selectedJoints.get(1).jointType == Joint.JOINT_PRISMATIC) || (this.selectedJoints.get(0).jointType == Joint.JOINT_PRISMATIC &&
+                            this.selectedJoints.get(1).jointType == Joint.JOINT_REVOLUTE) || (this.selectedJoints.get(0).jointType == Joint.JOINT_REVOLUTE &&
+                            this.selectedJoints.get(1).jointType == Joint.JOINT_PRISMATIC))){
+                        joint.joint1 = this.selectedJoints.get(0);
+                        joint.joint2 = this.selectedJoints.get(1);
                     }
                     else {
-                        console.log("select 2 revolute/prismatic joints to create gear joint");
                         return "select 2 revolute/prismatic joints to create gear joint";
                     }
                 }
                 else if (jointType == Joint.JOINT_ROPE){
-                    var lengthVec = [joint.localAnchorA[0] - joint.localAnchorB[0], joint.localAnchorA[1] - joint.localAnchorB[1]];
-                    joint.frequencyHZ = (Math.pow(lengthVec[0] * lengthVec[0] + lengthVec[1] * lengthVec[1], 0.5));
+                    float [] lengthVec = new float[]{joint.localAnchorA[0] - joint.localAnchorB[0], joint.localAnchorA[1] - joint.localAnchorB[1]};
+                    joint.frequencyHZ = ((float)Math.pow(lengthVec[0] * lengthVec[0] + lengthVec[1] * lengthVec[1], 0.5));
                 }
                 if (jointType != Joint.JOINT_REVOLUTE){
-                    joint.position = [(joint.localAnchorA[0] + joint.localAnchorB[0]) / 2, (joint.localAnchorA[1] + joint.localAnchorB[1]) / 2];
+                    joint.position = new float []{(joint.localAnchorA[0] + joint.localAnchorB[0]) / 2, (joint.localAnchorA[1] + joint.localAnchorB[1]) / 2};
                 }
                 else {
-                    joint.position = [(joint.bodyA.position[0] + joint.bodyB.position[0]) / 2, (joint.bodyA.position[1] + joint.bodyB.position[1]) / 2];
+                    joint.position = new float []{(joint.bodyA.position[0] + joint.bodyB.position[0]) / 2, (joint.bodyA.position[1] + joint.bodyB.position[1]) / 2};
                 }
                 this.addJoint(joint);
             }
             else {
-                console.log("select 2 bodies to create a joint");
                 return "select 2 bodies to create a joint";
             }
+            return null;
         };
 
         // removes joint from the scene
-        SceneManager.prototype.removeJoint = function(joint){
-            for (var i = 0; i < this.joints.length; i++){
-                if (this.joints[i] == joint){
-                    if (i == 0){
-                        this.joints.shift();
-                    }
-                    else if (i == this.bodies.length - 1){
-                        this.joints.pop();
-                    }
-                    else {
-                        this.joints.splice(i, 1);
-                    }
-                    break;
-                }
-            }
+        public void removeJoint (Joint joint){
+            joints.remove(joint);
         };
 
         // export the scene
-        SceneManager.prototype.exportWorld = function(){
+        public void exportWorld (){
             var world = {
                     bodies : [],
             joints : []
@@ -1006,8 +978,8 @@ public class SceneManager {
         };
 
         // exports the seleted object(s)
-        SceneManager.prototype.exportSelection = function(){
-            if (this.state == this.STATE_DEFAULT_MODE){
+        public void exportSelection (){
+            if (this.state == STATE_DEFAULT_MODE){
                 var array = {
                         bodies: []
 			};
@@ -1044,7 +1016,7 @@ public class SceneManager {
             console.log("only body and shapes can be exported");
         };
 
-        SceneManager.prototype.saveScene = function(){
+        public void saveScene (){
             for (var i = 0; i < this.joints.length; i++){
                 this.joints[i].bodyIndexA = this.bodies.indexOf(this.joints[i].bodyA);
                 this.joints[i].bodyIndexB = this.bodies.indexOf(this.joints[i].bodyB);
@@ -1068,7 +1040,7 @@ public class SceneManager {
         };
 
         public void newScene (){
-            this.state = this.STATE_DEFAULT_MODE;
+            this.state = STATE_DEFAULT_MODE;
             this.bodies = [];
             this.joints = [];
         };
