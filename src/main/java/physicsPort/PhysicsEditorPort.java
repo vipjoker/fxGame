@@ -14,7 +14,7 @@ public class PhysicsEditorPort extends Application implements TimerCounter.Frame
     private GraphicsContext context;
     private int width = 800;
     private int height = 800;
-
+    PhysicsEditor editor;
     public static void main(String[] args) {
         launch(args);
     }
@@ -23,6 +23,8 @@ public class PhysicsEditorPort extends Application implements TimerCounter.Frame
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
+        editor = new PhysicsEditor();
         Canvas canvas = new Canvas(width, height);
         primaryStage.setScene(new Scene(new HBox(canvas)));
 
@@ -42,4 +44,57 @@ public class PhysicsEditorPort extends Application implements TimerCounter.Frame
         context.fillOval(100,100,100,100);
 
     }
+
+
+
+
+
+
+    function init(){
+        var canvas = document.getElementById("canvas");
+        canvas.width = window.innerWidth * 0.8;
+        canvas.height = window.innerHeight * 0.8;
+
+        // create instance of physics editor
+        Editor = new PhysicsEditor(canvas);
+
+        // cached variables
+        var viewport = Editor.getViewport(),
+                lastElementSelected;
+
+        // to avoid viewport events while editing selection properties
+        document.addEventListener("mousedown", function(e){
+            lastElementSelected = e.target;
+        });
+
+        // key events
+        window.addEventListener("keydown", function(e){
+            if (lastElementSelected == viewport.canvas)
+                viewport.onKeyDown(e);
+        });
+        window.addEventListener("keyup", function(e){
+            if (lastElementSelected == viewport.canvas)
+                viewport.onKeyUp(e)
+        });
+        window.addEventListener("resize", function(e){
+            // canvas.width = window.innerWidth * 0.8;
+            // canvas.height = window.innerHeight * 0.8;
+            // Editor.viewport.getRenderer().setStageWidthHeight(canvas.width, canvas.height);
+        });
+        window.onbeforeunload = function(){
+            return "All Unsaved Changes Would Be Lost";
+        }
+    }
+
+    // update loop
+    function render() {
+        Editor.viewport.draw(Editor.getGameView());
+        setTimeout(render, 1000.0 / 60.0);		// update at 60 fps
+    }
+//-------------------------------------------//
+
+    // launch the editor
+    init();
+    setTimeout(render, 1000.0 / 60.0);
+
 }

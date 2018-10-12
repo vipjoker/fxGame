@@ -1,5 +1,6 @@
 package physicsPort;
 
+import com.badlogic.gdx.Input;
 import javafx.scene.input.MouseEvent;
 import physicsPort.body.*;
 import physicsPort.viewport.InputHandler;
@@ -194,13 +195,13 @@ public class SceneManager {
                         if (navigator.checkPointInAABB(eoffsetX, eoffsetY, shape.bounds)){
                             // check for chain shapes
                             if (shape.shapeType == Shape.SHAPE_CHAIN){
-                                var screenPointToWorld = navigator.screenPointToWorld(eoffsetX, eoffsetY);
+                                float[] screenPointToWorld = navigator.screenPointToWorld(eoffsetX, eoffsetY);
                                 if (!this.checkCollisionWithChainShape(screenPointToWorld[0], screenPointToWorld[1], shape)){
                                     continue;
                                 }
                             }
 
-                            if (inputHandler.SHIFT_PRESSED){
+                            if (InputHandler.SHIFT_PRESSED == 1){
                                 break;
                             }
                             return true;
@@ -209,43 +210,45 @@ public class SceneManager {
                 }
 
                 // don't reset selectedShapes array if shift is pressed (multiple selection)
-                if (!inputHandler.SHIFT_PRESSED){
-                    this.selectedShapes = [];
+                if (InputHandler.SHIFT_PRESSED== 0){
+                    this.selectedShapes.clear();
                 }
-                var minDistance = 1000000000, distance, shapeInBounds = false;
-                for (var i = 0; i < this.selectedBodies[0].shapes.length; i++){
-                    var shape = this.selectedBodies[0].shapes[i];
+                float minDistance = 1000000000;
+                float distance= 0;
+                boolean shapeInBounds = false;
+                for (int i = 0; i < this.selectedBodies.get(0).shapes.size(); i++){
+                    Shape shape = this.selectedBodies.get(0).shapes.get(i);
 
-                    if (!inputHandler.SHIFT_PRESSED){
+                    if (InputHandler.SHIFT_PRESSED == 0){
                         shape.isSelected = false;
                     }
 
                     // check if test point is in the shape
                     if (navigator.checkPointInAABB(eoffsetX, eoffsetY, shape.bounds)){
 
-                        var point = navigator.worldPointToScreen(shape.position[0], shape.position[1]);
+                        float[] point = navigator.worldPointToScreen(shape.position[0], shape.position[1]);
                         distance = (point[0] - eoffsetX) * (point[0] - eoffsetX) + (point[1] - eoffsetY) * (point[1] - eoffsetY);
                         // check for minimum distance in case the test point is in multiple shapes
                         if (minDistance >= distance){
 
                             // if shape is chain_shape the check for intersection between test point and its edges with some threshold
                             if (shape.shapeType == Shape.SHAPE_CHAIN){
-                                var screenPointToWorld = navigator.screenPointToWorld(eoffsetX, eoffsetY);
+                                float[] screenPointToWorld = navigator.screenPointToWorld(eoffsetX, eoffsetY);
                                 if (!this.checkCollisionWithChainShape(screenPointToWorld[0], screenPointToWorld[1], shape)){
                                     continue;
                                 }
                             }
 
                             // multiple selection is disabled
-                            if (!inputHandler.SHIFT_PRESSED){
-                                this.selectedShapes[0] = shape;
+                            if (InputHandler.SHIFT_PRESSED ==0){
+                                this.selectedShapes.set(0,shape);
                                 shape.isSelected = true;
                             }
                             // user is holding shift, so multiple selection is active
                             else {
                                 // check if the shape is already selected
                                 if (this.selectedShapes.indexOf(shape) < 0){
-                                    this.selectedShapes.push(shape);
+                                    this.selectedShapes.add(shape);
                                     shape.isSelected = true;
                                 }
                             }
@@ -259,10 +262,10 @@ public class SceneManager {
                 return shapeInBounds;
             }
 
-            if (this.state == this.STATE_DEFAULT_MODE){
+            if (this.state == STATE_DEFAULT_MODE){
                 // editing joints
-                if (this.selectedJoints.length == 1 && this.selectedJoints[0].inEditMode){
-                    var joint = this.selectedJoints[0];
+                if (this.selectedJoints.size()== 1 && this.selectedJoints.get(0).inEditMode){
+                    Joint joint = this.selectedJoints.get(0);
                     joint.isSelected = true;
                     if (navigator.checkPointInAABB(eoffsetX, eoffsetY, joint.getAnchorABounds())){
                         this.selectedAnchor = 0;
@@ -299,11 +302,11 @@ public class SceneManager {
                 }
 
                 // for handling multiple bodies
-                if (this.selectedBodies.length + this.selectedJoints.length > 1){
-                    for (var i = 0; i < this.selectedBodies.length; i++){
-                        var body = this.selectedBodies[i];
+                if (this.selectedBodies.size() + this.selectedJoints.size() > 1){
+                    for (int i = 0; i < this.selectedBodies.size(); i++){
+                        Body body = this.selectedBodies.get(i);
                         if (navigator.checkPointInAABB(eoffsetX, eoffsetY, body.bounds)){
-                            if (inputHandler.SHIFT_PRESSED){
+                            if (InputHandler.SHIFT_PRESSED == 1){
                                 break;
                             }
                             return true;
@@ -312,11 +315,11 @@ public class SceneManager {
                 }
 
                 // for handling multiple joints
-                if (this.selectedJoints.length + this.selectedBodies.length > 1){
-                    for (var i = 0; i < this.selectedJoints.length; i++){
-                        var joint = this.selectedJoints[i];
+                if (this.selectedJoints.size() + this.selectedBodies.size() > 1){
+                    for (int i = 0; i < this.selectedJoints.size(); i++){
+                        Joint joint = this.selectedJoints.get(i);
                         if (navigator.checkPointInAABB(eoffsetX, eoffsetY, joint.getBounds())){
-                            if (inputHandler.SHIFT_PRESSED){
+                            if (InputHandler.SHIFT_PRESSED == 1){
                                 break;
                             }
                             return true;
@@ -324,30 +327,33 @@ public class SceneManager {
                     }
                 }
 
-                if (!inputHandler.SHIFT_PRESSED){
-                    this.selectedBodies = [];
-                    this.selectedJoints = [];
+                if (InputHandler.SHIFT_PRESSED == 0){
+                    this.selectedBodies.clear();
+                    this.selectedJoints.clear();
                 }
-                var minDistance = 1000000000, distance, bodyInBounds = false, jointInBounds = false;
-                if (!inputHandler.J_KEY_PRESSED){
-                    for (var i = 0; i < this.bodies.length; i++){
-                        var body = this.bodies[i];
+                float minDistance = 1000000000;
+                float distance = 0;
+                boolean bodyInBounds = false;
+                boolean jointInBounds = false;
+                if (!InputHandler.J_KEY_PRESSED){
+                    for (int i = 0; i < this.bodies.size(); i++){
+                        Body body = this.bodies.get(i);
 
-                        if(!inputHandler.SHIFT_PRESSED){
+                        if(InputHandler.SHIFT_PRESSED==0){
                             body.isSelected = false;
                         }
 
                         if (navigator.checkPointInAABB(eoffsetX, eoffsetY, body.bounds)){
-                            var point = navigator.worldPointToScreen(body.position[0], body.position[1]);
+                            float[] point = navigator.worldPointToScreen(body.position[0], body.position[1]);
                             distance = (point[0] - eoffsetX) * (point[0] - eoffsetX) + (point[1] - eoffsetY) * (point[1] - eoffsetY);
                             if (minDistance >= distance){
-                                if (!inputHandler.SHIFT_PRESSED){
-                                    this.selectedBodies[0] = body;
+                                if (InputHandler.SHIFT_PRESSED == 0){
+                                    this.selectedBodies.set(0,body);
                                     body.isSelected = true;
                                 }
                                 else {
                                     if (this.selectedBodies.indexOf(body) < 0){
-                                        this.selectedBodies.push(body);
+                                        this.selectedBodies.add(body);
                                         body.isSelected = true;
                                     }
                                 }
@@ -357,26 +363,26 @@ public class SceneManager {
                         }
                     }
                 }
-                if (!inputHandler.B_KEY_PRESSED){
-                    minDistance = 100000000000000;
-                    for (var i = 0; i < this.joints.length; i++){
-                        var joint = this.joints[i];
+                if (!InputHandler.B_KEY_PRESSED){
+                    minDistance = 1000000000;
+                    for (int i = 0; i < this.joints.size(); i++){
+                        Joint joint = this.joints.get(i);
 
-                        if(!inputHandler.SHIFT_PRESSED){
+                        if(InputHandler.SHIFT_PRESSED==0){
                             joint.isSelected = false;
                         }
 
                         if (navigator.checkPointInAABB(eoffsetX, eoffsetY, joint.getBounds())){
-                            var point = navigator.worldPointToScreen(joint.position[0], joint.position[1]);
+                            float[] point = navigator.worldPointToScreen(joint.position[0], joint.position[1]);
                             distance = (point[0] - eoffsetX) * (point[0] - eoffsetX) + (point[1] - eoffsetY) * (point[1] - eoffsetY);
                             if (minDistance >= distance){
-                                if (!inputHandler.SHIFT_PRESSED){
-                                    this.selectedJoints[0] = joint;
+                                if (InputHandler.SHIFT_PRESSED==0){
+                                    this.selectedJoints.set(0,joint);
                                     joint.isSelected = true;
                                 }
                                 else {
                                     if (this.selectedJoints.indexOf(joint) < 0){
-                                        this.selectedJoints.push(joint);
+                                        this.selectedJoints.add(joint);
                                         joint.isSelected = true;
                                     }
                                 }
@@ -445,7 +451,7 @@ public class SceneManager {
                             }
                         }
                         else if (joint.jointType == Joint.JOINT_WHEEL){
-                            if (InputHandler.SHIFT_PRESSED ! =0){
+                            if (InputHandler.SHIFT_PRESSED !=0){
                                 joint.changeLowerAngle(x);
                             }
                         }
@@ -626,7 +632,7 @@ public class SceneManager {
                 if (inputHandler.pivotMode == 3){
                     for (int i = 0; i < this.selectedShapes.size(); i++){
                         if (scale>0){
-                            this.selectedShapes[i].scale(sx, sy);
+                            this.selectedShapes.get(i).scale(sx, sy);
                         }
                         else {
                             float sclx = sx == 0? this.selectedShapes.get(i).scaleXY[0] : sx;
@@ -690,91 +696,91 @@ public class SceneManager {
          * params inputHandler, 	information about pivot mode and snapping data
          */
         public void setRotationOfSelectedObjects (float angle, boolean rotate, InputHandler inputHandler){
-            if (this.state == this.STATE_DEFAULT_MODE){
+            if (this.state == STATE_DEFAULT_MODE){
                 if (inputHandler.pivotMode == 3){								// InputHandler.PIVOT_LOCAL_MODE
-                    for (var i = 0; i < this.selectedBodies.length; i++){
+                    for (int i = 0; i < this.selectedBodies.size(); i++){
                         if (rotate){
-                            this.selectedBodies[i].rotate(angle);
+                            this.selectedBodies.get(i).rotate(angle);
                         }
                         else {
-                            this.selectedBodies[i].setRotation(angle);
+                            this.selectedBodies.get(i).setRotation(angle,0,0);
                         }
                     }
                     return;
                 }
 
                 // if selection center is used as pivot (selection center)
-                var pivot = [0, 0];
-                for (var i = 0; i < this.selectedBodies.length; i++){
-                    pivot[0] += this.selectedBodies[i].position[0];
-                    pivot[1] += this.selectedBodies[i].position[1];
+                float[] pivot = new float[2];
+                for (int i = 0; i < this.selectedBodies.size(); i++){
+                    pivot[0] += this.selectedBodies.get(i).position[0];
+                    pivot[1] += this.selectedBodies.get(i).position[1];
                 }
-                pivot[0] /= this.selectedBodies.length;
-                pivot[1] /= this.selectedBodies.length;
+                pivot[0] /= this.selectedBodies.size();
+                pivot[1] /= this.selectedBodies.size();
 
-                for (var i = 0; i < this.selectedBodies.length; i++){
+                for (int i = 0; i < this.selectedBodies.size(); i++){
                     if (rotate){
-                        this.selectedBodies[i].rotate(angle, pivot[0], pivot[1]);
+                        this.selectedBodies.get(i).rotate(angle, pivot[0], pivot[1]);
                     }
                     else {
-                        this.selectedBodies[i].setRotation(angle, pivot[0], pivot[1]);
+                        this.selectedBodies.get(i).setRotation(angle, pivot[0], pivot[1]);
                     }
                 }
             }
-            else if (this.state == this.STATE_BODY_EDIT_MODE){
+            else if (this.state == STATE_BODY_EDIT_MODE){
                 if (inputHandler.pivotMode == 3){
-                    for (var i = 0; i < this.selectedShapes.length; i++){
+                    for (int i = 0; i < this.selectedShapes.size(); i++){
                         if (rotate){
-                            this.selectedShapes[i].rotate(angle);
+                            this.selectedShapes.get(i).rotate(angle);
                         }
                         else {
-                            this.selectedShapes[i].setRotation(angle);
+                            this.selectedShapes.get(i).setRotation(angle,0,0);
                         }
 
                     }
                     return;
                 }
 
-                var pivot = [0, 0];
-                for (var i = 0; i < this.selectedShapes.length; i++){
-                    pivot[0] += this.selectedShapes[i].position[0];
-                    pivot[1] += this.selectedShapes[i].position[1];
+                float[] pivot = new float[2];
+                for (int i = 0; i < this.selectedShapes.size(); i++){
+                    pivot[0] += this.selectedShapes.get(i).position[0];
+                    pivot[1] += this.selectedShapes.get(i).position[1];
                 }
-                pivot[0] /= this.selectedShapes.length;
-                pivot[1] /= this.selectedShapes.length;
+                pivot[0] /= this.selectedShapes.size();
+                pivot[1] /= this.selectedShapes.size();
 
-                for (var i = 0; i < this.selectedShapes.length; i++){
+                for (int i = 0; i < this.selectedShapes.size(); i++){
                     if (rotate){
-                        this.selectedShapes[i].rotate(angle, pivot[0], pivot[1]);
+                        this.selectedShapes.get(i).rotate(angle, pivot[0], pivot[1]);
                     }
                     else {
-                        this.selectedShapes[i].setRotation(angle, pivot[0], pivot[1]);
+                        this.selectedShapes.get(i).setRotation(angle, pivot[0], pivot[1]);
                     }
                 }
             }
-            else if (	this.state == this.STATE_SHAPE_EDIT_MODE &&
-                    this.selectedShapes[0].shapeType != Shape.SHAPE_BOX &&
-                    this.selectedShapes[0].shapeType != Shape.SHAPE_CIRCLE){
-                if (this.selectedVertices.length < 1)
+            else if (	this.state == STATE_SHAPE_EDIT_MODE &&
+                    this.selectedShapes.get(0).shapeType != Shape.SHAPE_BOX &&
+                    this.selectedShapes.get(0).shapeType != Shape.SHAPE_CIRCLE){
+                if (this.selectedVertices.size()< 1)
                     return;
 
                 // here we always use selection center pivot mode
-                var pivot = [0, 0];
-                for (var i = 0; i < this.selectedVertices.length; i++){
-                    pivot[0] += this.selectedVertices[i].x;
-                    pivot[1] += this.selectedVertices[i].y;
+                float [] pivot = new float[2];
+                for (int i = 0; i < this.selectedVertices.size(); i++){
+                    pivot[0] += this.selectedVertices.get(i).x;
+                    pivot[1] += this.selectedVertices.get(i).y;
                 }
-                pivot[0] /= this.selectedVertices.length;
-                pivot[1] /= this.selectedVertices.length;
+                pivot[0] /= this.selectedVertices.size();
+                pivot[1] /= this.selectedVertices.size();
 
-                for (var i = 0; i < this.selectedVertices.length; i++){
-                    var vertex = this.selectedVertices[i];
-                    var x = vertex.x - pivot[0];
-                    var y = vertex.y - pivot[1];
-                    var newAngle = angle + rotate * Math.atan2(y, x) * 180 / Math.PI;
-                    var length = Math.pow(x * x + y * y, 0.5);
-                    vertex.x = pivot[0] + length * Math.cos(newAngle * Math.PI / 180);
-                    vertex.y = pivot[1] + length * Math.sin(newAngle * Math.PI / 180);
+                for (int i = 0; i < this.selectedVertices.size(); i++){
+                    Vertex vertex = this.selectedVertices.get(i);
+                    float x = vertex.x - pivot[0];
+                    float y = vertex.y - pivot[1];
+                    float newAngle = angle + (rotate ?1:0)* (float)Math.atan2(y, x) * 180 / (float) Math.PI;
+                    float length = (float) Math.pow(x * x + y * y, 0.5);
+                    vertex.x = pivot[0] + length * (float) Math.cos(newAngle * Math.PI / 180);
+                    vertex.y = pivot[1] + length * (float) Math.sin(newAngle * Math.PI / 180);
                 }
             }
         };
@@ -795,7 +801,7 @@ public class SceneManager {
                 this.setScaleOfSelectedObjects(1 + delta[0] / 80, 1 - delta[1] / 80, 1, inputHandler);
             }
             else if (inputHandler.transformTool == 6){				// rotate
-                this.setRotationOfSelectedObjects(delta[0], 1, inputHandler);
+                this.setRotationOfSelectedObjects(delta[0], true, inputHandler);
 
             }
             else if (inputHandler.transformTool == 7){				// translate
@@ -957,257 +963,257 @@ public class SceneManager {
             joints.remove(joint);
         };
 
-        // export the scene
-        public void exportWorld (){
-            var world = {
-                    bodies : [],
-            joints : []
-		};
-            for (var i = 0; i < this.bodies.length; i++){
-                world.bodies.push(this.bodies[i].toPhysics());
-            }
-            for (var i = 0; i < this.joints.length; i++){
-                if (this.joints[i].jointType == Joint.JOINT_DISTANCE){
-                    var lengthVec = [this.joints[i].localAnchorA[0] - this.joints[i].localAnchorB[0], this.joints[i].localAnchorA[1] - this.joints[i].localAnchorB[1]];
-                    this.joints[i].setLength(Math.pow(lengthVec[0] * lengthVec[0] + lengthVec[1] * lengthVec[1], 0.5));
-                }
-                world.joints.push(this.joints[i].toPhysics(this.bodies, this.joints));
-            }
-
-            return world;
-        };
-
-        // exports the seleted object(s)
-        public void exportSelection (){
-            if (this.state == STATE_DEFAULT_MODE){
-                var array = {
-                        bodies: []
-			};
-                if (this.selectedBodies.length == 1){
-                    var body = this.selectedBodies[0];
-                    var position = [body.position[0], body.position[1]];
-                    body.setPosition(0, 0);
-                    array.bodies.push(body.toPhysics());
-                    body.move(position[0], position[1]);
-                    return array;
-                }
-                for (var i = 0; i < this.selectedBodies.length; i++){
-                    array.bodies.push(this.selectedBodies[i].toPhysics());
-                }
-                return array;
-            }
-            else if (this.state == this.STATE_BODY_EDIT_MODE){
-                var array = {
-                        fixtures: []
-			};
-                if (this.selectedShapes.length == 1){
-                    var shape = this.selectedShapes[0];
-                    var position = [shape.position[0], shape.position[1]];
-                    shape.setPosition(0, 0);
-                    array.fixtures.push(shape.toPhysics(0, 0));
-                    shape.move(position[0], position[1]);
-                    return array;
-                }
-                for (var i = 0; i < this.selectedShapes.length; i++){
-                    array.fixtures.push(this.selectedShapes[i].toPhysics(0, 0));
-                    return array;
-                }
-            }
-            console.log("only body and shapes can be exported");
-        };
-
-        public void saveScene (){
-            for (var i = 0; i < this.joints.length; i++){
-                this.joints[i].bodyIndexA = this.bodies.indexOf(this.joints[i].bodyA);
-                this.joints[i].bodyIndexB = this.bodies.indexOf(this.joints[i].bodyB);
-
-                if (this.joints[i].jointType == Joint.JOINT_GEAR){
-                    this.joints[i].jointIndex1 = this.joints.indexOf(this.joints[i].joint1);
-                    this.joints[i].jointIndex2 = this.joints.indexOf(this.joints[i].joint2);
-                }
-            }
-            var scene = {
-                    bodies: [],
-            joints: []
-		};
-            scene.bodies = this.bodies;
-            scene.joints = this.joints;
-            // for (var i = 0; i < scene.joints.length; i++){
-            // 	scene.joints[i].bodyA = undefined;
-            // 	scene.joints[i].bodyB = undefined;
-            // }
-            return scene;
-        };
-
-        public void newScene (){
-            this.state = STATE_DEFAULT_MODE;
-            this.bodies = [];
-            this.joints = [];
-        };
-
-        public void loadScene(scene){
-            for (var i = 0; i < scene.bodies.length; i++){
-                this.addBody(loadBody(scene.bodies[i]));
-            }
-            for (var i = 0; i < scene.joints.length; i++){
-                this.addJoint(loadJoint(scene.joints[i], this.bodies, this.joints));
-            }
-        };
-
-        public static void cloneArray(obj){
-        if (obj instanceof Array) {
-            copy = [];
-            for (var i = 0, len = obj.length; i < len; i++) {
-                copy[i] = clone(obj[i]);
-            }
-            return copy;
-        }
-	}
-
-        public static void loadVertex(obj){
-                var vertices = [];
-        for (var i = 0; i < obj.length; i++){
-            var vertex = new Vertex();
-            vertex.x = obj[i].x;
-            vertex.y = obj[i].y;
-            vertex.width = obj[i].width;
-            vertex.height = obj[i].height;
-            vertices.push(vertex);
-        }
-        return vertices;
-	}
-
-        public static void loadShape(obj){
-                var shapes = [];
-        for (var i = 0; i < obj.length; i++){
-            var shape = new Shape(Shape.SHAPE_NONE);
-            shape.shapeType = obj[i].shapeType;
-            shape.position = cloneArray(obj[i].position);						// position
-            shape.scaleXY = cloneArray(obj[i].scaleXY);						// scale
-            shape.rotation = obj[i].rotation;							// only for editor purpose
-            shape.vertices = loadVertex(obj[i].vertices);
-            shape.bounds = cloneArray(obj[i].bounds);					// AABB for selecting
-            shape.centroid = cloneArray(obj[i].centroid);						// centroid for shape
-
-            // fixture properties
-            shape.friction = obj[i].friction;
-            shape.restitution = obj[i].restitution;
-            shape.density = obj[i].density;
-            shape.isSensor = obj[i].isSensor;
-            shape.maskBits = obj[i].maskBits;
-            shape.categoryBits = obj[i].categoryBits;
-            shape.groupIndex = obj[i].groupIndex;
-
-            if (shape.shapeType == Shape.SHAPE_BOX){
-                shape.width = obj[i].width;
-                shape.height = obj[i].height;
-            }
-            else if (shape.shapeType == Shape.SHAPE_CIRCLE){
-                shape.radius = obj[i].radius;
-            }
-
-            shapes.push(shape);
-        }
-        return shapes;
-	}
-
-        public static void loadBody(obj){
-                var body = new Body();
-        body.name = obj.name;
-        body.userData = obj.userData;
-        body.texture = obj.texture;
-        if (obj.texture != ""){
-            body.initialSpriteData = cloneArray(obj.initialSpriteData);
-            body.spriteData = cloneArray(obj.spriteData);
-            body.sprite = new Image();
-            body.sprite.src = obj.texture;
-            if (body.spriteData.length == 2){
-                body.sprite.width = body.spriteData[0];
-                body.sprite.height = body.spriteData[1];
-            }
-        }
-        body.shapes = loadShape(obj.shapes);
-        body.position = cloneArray(obj.position);
-        body.scaleXY = cloneArray(obj.scaleXY);
-        body.rotation = obj.rotation;
-        body.bounds = cloneArray(obj.bounds);
-
-        body.bodyType = obj.bodyType;	// default to dynmic body
-        body.isBulllet = obj.isBulllet;
-        body.isFixedRotation = obj.isFixedRotation;
-        body.linearDamping = obj.linearDamping;
-        body.angularDamping = obj.angularDamping;
-        return body;
-	}
-
-        public static void  loadJoint(obj, bodies, joints){
-            var joint = new Joint();
-            joint.name = obj.name;
-            joint.userData = obj.userData;
-            joint.position = cloneArray(obj.position);
-            joint.scaleXY = cloneArray(obj.scaleXY);
-
-            joint.jointType = obj.jointType;
-            joint.collideConnected = obj.collideConnected;
-            joint.localAnchorA = cloneArray(obj.localAnchorA);
-            joint.localAnchorB = cloneArray(obj.localAnchorB);
-            joint.bodyA = bodies[obj.bodyIndexA];
-            joint.bodyB = bodies[obj.bodyIndexB];
-
-            if (joint.jointType == Joint.JOINT_DISTANCE){
-                joint.length 		= obj.length;
-                joint.frequencyHZ 	= obj.frequencyHZ;
-                joint.dampingRatio 	= obj.dampingRatio;
-            }
-            else if (joint.jointType == Joint.JOINT_WELD){
-                joint.referenceAngle = obj.referenceAngle;
-            }
-            else if (joint.jointType == Joint.JOINT_REVOLUTE){
-                joint.enableLimit 	 = obj.enableLimit;
-                joint.enableMotor 	 = obj.enableMotor;
-                joint.lowerAngle 	 = obj.lowerAngle;
-                joint.upperAngle	 = obj.upperAngle;
-                joint.maxMotorTorque = obj.maxMotorTorque;
-                joint.motorSpeed 	 = obj.motorSpeed;
-                joint.referenceAngle = obj.referenceAngle;
-            }
-            else if (joint.jointType == Joint.JOINT_WHEEL){
-                joint.localAxisA 	= cloneArray(obj.localAxisA);
-                joint.enableMotor 	= obj.enableMotor;
-                joint.maxMotorTorque = obj.maxMotorTorque;
-                joint.motorSpeed 	= obj.motorSpeed;
-                joint.frequencyHZ 	= obj.frequencyHZ;
-                joint.dampingRatio 	= obj.dampingRatio;
-            }
-            else if (joint.jointType == Joint.JOINT_PULLEY){
-                joint.groundAnchorA  = cloneArray(obj.groundAnchorA);
-                joint.groundAnchorB = cloneArray(obj.groundAnchorB);
-                joint.lengthA	   	 = obj.lengthA;
-                joint.lengthB		 = obj.lengthB;
-                joint.maxLengthA     = obj.maxLengthA;
-                joint.maxLengthB     = obj.maxLengthB;
-                joint.frequencyHZ    = obj.frequencyHZ;
-            }
-            else if (joint.jointType == Joint.JOINT_GEAR){
-                joint.joint1		= joints[obj.jointIndex1];
-                joint.joint2		= joints[obj.jointIndex2];
-                joint.frequencyHZ = obj.frequencyHZ;
-            }
-            else if (joint.jointType == Joint.JOINT_PRISMATIC){
-                joint.enableLimit 	 = obj.enableLimit;
-                joint.enableMotor 	 = obj.enableMotor;
-                joint.localAxisA 	= cloneArray(obj.localAxisA);
-                joint.lowerTranslation 	 = obj.lowerTranslation;
-                joint.upperTranslation	 = obj.upperTranslation;
-                joint.maxMotorTorque = obj.maxMotorTorque;
-                joint.motorSpeed 	 = obj.motorSpeed;
-                joint.referenceAngle = obj.referenceAngle;
-            }
-            else if (joint.jointType == Joint.JOINT_ROPE){
-                joint.frequencyHZ = obj.frequencyHZ;
-            }
-            return joint;
-        }
+//        // export the scene
+//        public void exportWorld (){
+//            var world = {
+//                    bodies : [],
+//            joints : []
+//		};
+//            for (var i = 0; i < this.bodies.length; i++){
+//                world.bodies.push(this.bodies[i].toPhysics());
+//            }
+//            for (var i = 0; i < this.joints.length; i++){
+//                if (this.joints[i].jointType == Joint.JOINT_DISTANCE){
+//                    var lengthVec = [this.joints[i].localAnchorA[0] - this.joints[i].localAnchorB[0], this.joints[i].localAnchorA[1] - this.joints[i].localAnchorB[1]];
+//                    this.joints[i].setLength(Math.pow(lengthVec[0] * lengthVec[0] + lengthVec[1] * lengthVec[1], 0.5));
+//                }
+//                world.joints.push(this.joints[i].toPhysics(this.bodies, this.joints));
+//            }
+//
+//            return world;
+//        };
+//
+//        // exports the seleted object(s)
+//        public void exportSelection (){
+//            if (this.state == STATE_DEFAULT_MODE){
+//                var array = {
+//                        bodies: []
+//			};
+//                if (this.selectedBodies.length == 1){
+//                    var body = this.selectedBodies[0];
+//                    var position = [body.position[0], body.position[1]];
+//                    body.setPosition(0, 0);
+//                    array.bodies.push(body.toPhysics());
+//                    body.move(position[0], position[1]);
+//                    return array;
+//                }
+//                for (var i = 0; i < this.selectedBodies.length; i++){
+//                    array.bodies.push(this.selectedBodies[i].toPhysics());
+//                }
+//                return array;
+//            }
+//            else if (this.state == this.STATE_BODY_EDIT_MODE){
+//                var array = {
+//                        fixtures: []
+//			};
+//                if (this.selectedShapes.length == 1){
+//                    var shape = this.selectedShapes[0];
+//                    var position = [shape.position[0], shape.position[1]];
+//                    shape.setPosition(0, 0);
+//                    array.fixtures.push(shape.toPhysics(0, 0));
+//                    shape.move(position[0], position[1]);
+//                    return array;
+//                }
+//                for (var i = 0; i < this.selectedShapes.length; i++){
+//                    array.fixtures.push(this.selectedShapes[i].toPhysics(0, 0));
+//                    return array;
+//                }
+//            }
+//            console.log("only body and shapes can be exported");
+//        };
+//
+//        public void saveScene (){
+//            for (var i = 0; i < this.joints.length; i++){
+//                this.joints[i].bodyIndexA = this.bodies.indexOf(this.joints[i].bodyA);
+//                this.joints[i].bodyIndexB = this.bodies.indexOf(this.joints[i].bodyB);
+//
+//                if (this.joints[i].jointType == Joint.JOINT_GEAR){
+//                    this.joints[i].jointIndex1 = this.joints.indexOf(this.joints[i].joint1);
+//                    this.joints[i].jointIndex2 = this.joints.indexOf(this.joints[i].joint2);
+//                }
+//            }
+//            var scene = {
+//                    bodies: [],
+//            joints: []
+//		};
+//            scene.bodies = this.bodies;
+//            scene.joints = this.joints;
+//            // for (var i = 0; i < scene.joints.length; i++){
+//            // 	scene.joints[i].bodyA = undefined;
+//            // 	scene.joints[i].bodyB = undefined;
+//            // }
+//            return scene;
+//        };
+//
+//        public void newScene (){
+//            this.state = STATE_DEFAULT_MODE;
+//            this.bodies = [];
+//            this.joints = [];
+//        };
+//
+//        public void loadScene(scene){
+//            for (var i = 0; i < scene.bodies.length; i++){
+//                this.addBody(loadBody(scene.bodies[i]));
+//            }
+//            for (var i = 0; i < scene.joints.length; i++){
+//                this.addJoint(loadJoint(scene.joints[i], this.bodies, this.joints));
+//            }
+//        };
+//
+//        public static void cloneArray(obj){
+//        if (obj instanceof Array) {
+//            copy = [];
+//            for (var i = 0, len = obj.length; i < len; i++) {
+//                copy[i] = clone(obj[i]);
+//            }
+//            return copy;
+//        }
+//	}
+//
+//        public static void loadVertex(obj){
+//                var vertices = [];
+//        for (var i = 0; i < obj.length; i++){
+//            var vertex = new Vertex();
+//            vertex.x = obj[i].x;
+//            vertex.y = obj[i].y;
+//            vertex.width = obj[i].width;
+//            vertex.height = obj[i].height;
+//            vertices.push(vertex);
+//        }
+//        return vertices;
+//	}
+//
+//        public static void loadShape(obj){
+//                var shapes = [];
+//        for (var i = 0; i < obj.length; i++){
+//            var shape = new Shape(Shape.SHAPE_NONE);
+//            shape.shapeType = obj[i].shapeType;
+//            shape.position = cloneArray(obj[i].position);						// position
+//            shape.scaleXY = cloneArray(obj[i].scaleXY);						// scale
+//            shape.rotation = obj[i].rotation;							// only for editor purpose
+//            shape.vertices = loadVertex(obj[i].vertices);
+//            shape.bounds = cloneArray(obj[i].bounds);					// AABB for selecting
+//            shape.centroid = cloneArray(obj[i].centroid);						// centroid for shape
+//
+//            // fixture properties
+//            shape.friction = obj[i].friction;
+//            shape.restitution = obj[i].restitution;
+//            shape.density = obj[i].density;
+//            shape.isSensor = obj[i].isSensor;
+//            shape.maskBits = obj[i].maskBits;
+//            shape.categoryBits = obj[i].categoryBits;
+//            shape.groupIndex = obj[i].groupIndex;
+//
+//            if (shape.shapeType == Shape.SHAPE_BOX){
+//                shape.width = obj[i].width;
+//                shape.height = obj[i].height;
+//            }
+//            else if (shape.shapeType == Shape.SHAPE_CIRCLE){
+//                shape.radius = obj[i].radius;
+//            }
+//
+//            shapes.push(shape);
+//        }
+//        return shapes;
+//	}
+//
+//        public static void loadBody(obj){
+//                var body = new Body();
+//        body.name = obj.name;
+//        body.userData = obj.userData;
+//        body.texture = obj.texture;
+//        if (obj.texture != ""){
+//            body.initialSpriteData = cloneArray(obj.initialSpriteData);
+//            body.spriteData = cloneArray(obj.spriteData);
+//            body.sprite = new Image();
+//            body.sprite.src = obj.texture;
+//            if (body.spriteData.length == 2){
+//                body.sprite.width = body.spriteData[0];
+//                body.sprite.height = body.spriteData[1];
+//            }
+//        }
+//        body.shapes = loadShape(obj.shapes);
+//        body.position = cloneArray(obj.position);
+//        body.scaleXY = cloneArray(obj.scaleXY);
+//        body.rotation = obj.rotation;
+//        body.bounds = cloneArray(obj.bounds);
+//
+//        body.bodyType = obj.bodyType;	// default to dynmic body
+//        body.isBulllet = obj.isBulllet;
+//        body.isFixedRotation = obj.isFixedRotation;
+//        body.linearDamping = obj.linearDamping;
+//        body.angularDamping = obj.angularDamping;
+//        return body;
+//	}
+//
+//        public static void  loadJoint(obj, bodies, joints){
+//            var joint = new Joint();
+//            joint.name = obj.name;
+//            joint.userData = obj.userData;
+//            joint.position = cloneArray(obj.position);
+//            joint.scaleXY = cloneArray(obj.scaleXY);
+//
+//            joint.jointType = obj.jointType;
+//            joint.collideConnected = obj.collideConnected;
+//            joint.localAnchorA = cloneArray(obj.localAnchorA);
+//            joint.localAnchorB = cloneArray(obj.localAnchorB);
+//            joint.bodyA = bodies[obj.bodyIndexA];
+//            joint.bodyB = bodies[obj.bodyIndexB];
+//
+//            if (joint.jointType == Joint.JOINT_DISTANCE){
+//                joint.length 		= obj.length;
+//                joint.frequencyHZ 	= obj.frequencyHZ;
+//                joint.dampingRatio 	= obj.dampingRatio;
+//            }
+//            else if (joint.jointType == Joint.JOINT_WELD){
+//                joint.referenceAngle = obj.referenceAngle;
+//            }
+//            else if (joint.jointType == Joint.JOINT_REVOLUTE){
+//                joint.enableLimit 	 = obj.enableLimit;
+//                joint.enableMotor 	 = obj.enableMotor;
+//                joint.lowerAngle 	 = obj.lowerAngle;
+//                joint.upperAngle	 = obj.upperAngle;
+//                joint.maxMotorTorque = obj.maxMotorTorque;
+//                joint.motorSpeed 	 = obj.motorSpeed;
+//                joint.referenceAngle = obj.referenceAngle;
+//            }
+//            else if (joint.jointType == Joint.JOINT_WHEEL){
+//                joint.localAxisA 	= cloneArray(obj.localAxisA);
+//                joint.enableMotor 	= obj.enableMotor;
+//                joint.maxMotorTorque = obj.maxMotorTorque;
+//                joint.motorSpeed 	= obj.motorSpeed;
+//                joint.frequencyHZ 	= obj.frequencyHZ;
+//                joint.dampingRatio 	= obj.dampingRatio;
+//            }
+//            else if (joint.jointType == Joint.JOINT_PULLEY){
+//                joint.groundAnchorA  = cloneArray(obj.groundAnchorA);
+//                joint.groundAnchorB = cloneArray(obj.groundAnchorB);
+//                joint.lengthA	   	 = obj.lengthA;
+//                joint.lengthB		 = obj.lengthB;
+//                joint.maxLengthA     = obj.maxLengthA;
+//                joint.maxLengthB     = obj.maxLengthB;
+//                joint.frequencyHZ    = obj.frequencyHZ;
+//            }
+//            else if (joint.jointType == Joint.JOINT_GEAR){
+//                joint.joint1		= joints[obj.jointIndex1];
+//                joint.joint2		= joints[obj.jointIndex2];
+//                joint.frequencyHZ = obj.frequencyHZ;
+//            }
+//            else if (joint.jointType == Joint.JOINT_PRISMATIC){
+//                joint.enableLimit 	 = obj.enableLimit;
+//                joint.enableMotor 	 = obj.enableMotor;
+//                joint.localAxisA 	= cloneArray(obj.localAxisA);
+//                joint.lowerTranslation 	 = obj.lowerTranslation;
+//                joint.upperTranslation	 = obj.upperTranslation;
+//                joint.maxMotorTorque = obj.maxMotorTorque;
+//                joint.motorSpeed 	 = obj.motorSpeed;
+//                joint.referenceAngle = obj.referenceAngle;
+//            }
+//            else if (joint.jointType == Joint.JOINT_ROPE){
+//                joint.frequencyHZ = obj.frequencyHZ;
+//            }
+//            return joint;
+//        }
 
 
 }
