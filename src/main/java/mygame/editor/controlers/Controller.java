@@ -28,6 +28,7 @@ import mygame.editor.component.SpriteComponent;
 import mygame.editor.model.TreeFileHolder;
 import mygame.editor.render.TreeItemCcNode;
 import mygame.editor.render.TreeItemPath;
+import mygame.editor.repository.InMemoryRepository;
 import mygame.editor.repository.NodeRepository;
 import mygame.editor.repository.SqlNodeRepository;
 import mygame.editor.util.Resources;
@@ -189,7 +190,7 @@ public class Controller implements Initializable {
     }
 
     private void initActions() {
-        NodeRepository repository = new SqlNodeRepository();
+        NodeRepository repository = new InMemoryRepository();
         actions.put(ACTION_EDIT, new EditAction(canvasRenderer,repository));
         actions.put(ACTION_MOVE, new MoverAction(canvasRenderer,repository));
         actions.put(ACTION_BOX_2D, new Box2dAction(canvasRenderer,repository));
@@ -328,5 +329,19 @@ public class Controller implements Initializable {
 
     public void onCreateSprite(ActionEvent event) {
         switchDrawer(ACTION_SPRITE);
+    }
+
+    public void onCreateCircleBody(ActionEvent actionEvent) {
+
+    }
+
+    public void onCreateChainBody(ActionEvent actionEvent) {
+    }
+
+    public void onCreaetJoint(ActionEvent actionEvent) {
+
+    }
+
+    public void onCreateRevoluteJoint(ActionEvent actionEvent) {
     }
 }

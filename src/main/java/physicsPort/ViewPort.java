@@ -17,7 +17,7 @@ public class ViewPort {
 
 
 
-        private Canvas canvas ;
+        public Canvas canvas ;
         public GraphicsContext context ;
         public Navigator navigator ;
         public InputHandler inputHandler ;
@@ -369,7 +369,7 @@ public class ViewPort {
 
             float mouseX = eoffsetX;
             float  mouseY = eoffsetY;
-            float  wheel = (float) e.getDeltaX() / 120;
+            float  wheel = (float) e.getDeltaY() / 120;
             float zoom = 1 + (wheel > 0 ? 1 : -1) * (float)Math.min(Math.abs(wheel / 20), 0.1);
 
             this.zoom(mouseX, mouseY, zoom);

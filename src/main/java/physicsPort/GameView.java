@@ -35,7 +35,7 @@ public static float mouseX, mouseY;
     public static com.badlogic.gdx.physics.box2d.Body groundBody;
     WorldLoader worldLoader;
 
-    private boolean paused;
+    public boolean paused;
     private Canvas canvas;
     private GraphicsContext context;
     private World world;

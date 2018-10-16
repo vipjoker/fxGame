@@ -1,10 +1,13 @@
 package physicsPort;
 
 import javafx.application.Application;
+import javafx.event.EventTarget;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import mygame.editor.TimerCounter;
 import mygame.editor.util.Constants;
@@ -15,6 +18,9 @@ public class PhysicsEditorPort extends Application implements TimerCounter.Frame
     private int width = 800;
     private int height = 800;
     PhysicsEditor editor;
+    private ViewPort viewport;
+    private EventTarget lastElementSelected;
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -24,11 +30,43 @@ public class PhysicsEditorPort extends Application implements TimerCounter.Frame
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        editor = new PhysicsEditor();
+        // create instance of physics editor
+        Button playBtn = new Button("Play");
+        Button pauseBtn = new Button("Pause");
+        Button stepBtn = new Button("Step");
+
+
+        HBox hBox = new HBox( playBtn,pauseBtn,stepBtn);
         Canvas canvas = new Canvas(width, height);
-        primaryStage.setScene(new Scene(new HBox(canvas)));
+        Scene scene = new Scene(new VBox(hBox,canvas));
+        primaryStage.setScene(scene);
 
         context = canvas.getGraphicsContext2D();
+
+
+        editor = new PhysicsEditor(canvas,  playBtn,pauseBtn,stepBtn);
+
+        // cached variables
+
+         viewport = editor.getViewport();
+
+        // to avoid viewport events while editing selection properties
+
+        scene.setOnKeyPressed(e->{
+            if (lastElementSelected == viewport.canvas)
+                viewport.onKeyDown(e);
+        });
+
+        scene.setOnKeyReleased(e->{
+            if (lastElementSelected == viewport.canvas)
+                viewport.onKeyUp(e);
+        });
+
+
+
+        canvas.setOnMousePressed(e->{
+            lastElementSelected = e.getTarget();
+        });
 
         TimerCounter timerCounter = new TimerCounter(this);
         timerCounter.start();
@@ -43,58 +81,11 @@ public class PhysicsEditorPort extends Application implements TimerCounter.Frame
         context.setFill(Constants.WHITE);
         context.fillOval(100,100,100,100);
 
+
+
+
+        editor.viewport.draw(editor.getGameView());
     }
 
-
-
-
-
-
-    function init(){
-        var canvas = document.getElementById("canvas");
-        canvas.width = window.innerWidth * 0.8;
-        canvas.height = window.innerHeight * 0.8;
-
-        // create instance of physics editor
-        Editor = new PhysicsEditor(canvas);
-
-        // cached variables
-        var viewport = Editor.getViewport(),
-                lastElementSelected;
-
-        // to avoid viewport events while editing selection properties
-        document.addEventListener("mousedown", function(e){
-            lastElementSelected = e.target;
-        });
-
-        // key events
-        window.addEventListener("keydown", function(e){
-            if (lastElementSelected == viewport.canvas)
-                viewport.onKeyDown(e);
-        });
-        window.addEventListener("keyup", function(e){
-            if (lastElementSelected == viewport.canvas)
-                viewport.onKeyUp(e)
-        });
-        window.addEventListener("resize", function(e){
-            // canvas.width = window.innerWidth * 0.8;
-            // canvas.height = window.innerHeight * 0.8;
-            // Editor.viewport.getRenderer().setStageWidthHeight(canvas.width, canvas.height);
-        });
-        window.onbeforeunload = function(){
-            return "All Unsaved Changes Would Be Lost";
-        }
-    }
-
-    // update loop
-    function render() {
-        Editor.viewport.draw(Editor.getGameView());
-        setTimeout(render, 1000.0 / 60.0);		// update at 60 fps
-    }
-//-------------------------------------------//
-
-    // launch the editor
-    init();
-    setTimeout(render, 1000.0 / 60.0);
 
 }

@@ -1,5 +1,6 @@
 package mygame.editor.model.box2d;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -7,10 +8,10 @@ import java.util.List;
  */
 public class B2Body {
     private String name;
-    private Double angle;
-    private Double angularVelocity;
+    private float angle;
+    private float angularVelocity;
     private Boolean awake;
-    private List<B2Fixture> fixture;
+    private List<B2Fixture> fixture = new ArrayList<>();
 
 
     private B2Point linearVelocity;
@@ -25,19 +26,19 @@ public class B2Body {
         this.name = name;
     }
 
-    public Double getAngle() {
+    public float getAngle() {
         return angle;
     }
 
-    public void setAngle(Double angle) {
+    public void setAngle(float angle) {
         this.angle = angle;
     }
 
-    public Double getAngularVelocity() {
+    public float getAngularVelocity() {
         return angularVelocity;
     }
 
-    public void setAngularVelocity(Double angularVelocity) {
+    public void setAngularVelocity(float angularVelocity) {
         this.angularVelocity = angularVelocity;
     }
 
@@ -79,6 +80,12 @@ public class B2Body {
     }
 
     public void setLinearVelocity(B2Point linearVelocity) {
+
+
         this.linearVelocity = linearVelocity;
+    }
+
+    public void addFixture(B2Fixture fixture){
+        this.fixture.add(fixture);
     }
 }

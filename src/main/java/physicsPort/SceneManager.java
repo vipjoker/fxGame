@@ -963,6 +963,10 @@ public class SceneManager {
             joints.remove(joint);
         };
 
+    public String exportWorld() {
+        return null;//TODO implement
+    }
+
 //        // export the scene
 //        public void exportWorld (){
 //            var world = {

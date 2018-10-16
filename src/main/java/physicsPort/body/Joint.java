@@ -395,4 +395,8 @@ public class Joint {
     public Joint clone() {
         return this;
     }
+
+    public Joint clone(Body a ,Body b){
+        return new Joint(jointType);
+    }
 }

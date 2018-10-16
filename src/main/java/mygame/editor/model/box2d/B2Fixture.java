@@ -1,15 +1,31 @@
 package mygame.editor.model.box2d;
 
+import com.badlogic.gdx.math.Vector2;
+import physicsPort.triangulation.Vec2;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by oleh on 17.04.18.
  */
 public class B2Fixture {
     private String name;
-    private Double density;
-    private Double friction;
-    private Double restitution;
-    private B2Polygon polygon;
-    private B2Circle circle;
+    private float density = 1;
+    private float friction;
+    private float restitution;
+    private List<Vector2> points = new ArrayList<>();
+    private final B2FixtureType type;
+
+
+    public B2Fixture(B2FixtureType type, Vector2... points){
+        this.type = type;
+        for (Vector2 point : points) {
+
+            this.points.add(point);
+        }
+
+    }
 
     public String getName() {
         return name;
@@ -19,43 +35,43 @@ public class B2Fixture {
         this.name = name;
     }
 
-    public Double getDensity() {
+    public float getDensity() {
         return density;
     }
 
-    public void setDensity(Double density) {
+    public void setDensity(float density) {
         this.density = density;
     }
 
-    public Double getFriction() {
+    public float getFriction() {
         return friction;
     }
 
-    public void setFriction(Double friction) {
+    public void setFriction(float friction) {
         this.friction = friction;
     }
 
-    public Double getRestitution() {
+    public float getRestitution() {
         return restitution;
     }
 
-    public void setRestitution(Double restitution) {
+    public void setRestitution(float restitution) {
         this.restitution = restitution;
     }
 
-    public B2Polygon getPolygon() {
-        return polygon;
+    public float getRadius(){
+        return points.get(0).dst(points.get(1));
     }
 
-    public void setPolygon(B2Polygon polygon) {
-        this.polygon = polygon;
+    public List<Vector2> getPoints() {
+        return points;
     }
 
-    public B2Circle getCircle() {
-        return circle;
+    public B2FixtureType getType() {
+        return type;
     }
 
-    public void setCircle(B2Circle circle) {
-        this.circle = circle;
+    public Vector2 getCenter(){
+        return points.get(0);
     }
 }

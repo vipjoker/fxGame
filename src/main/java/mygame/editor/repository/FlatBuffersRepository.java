@@ -3,7 +3,10 @@ package mygame.editor.repository;
 import Editor.EditorRoot;
 import Editor.NodeTree;
 import Editor.Vec2f;
+import com.badlogic.gdx.math.Vector2;
 import com.google.flatbuffers.FlatBufferBuilder;
+import mygame.editor.model.box2d.B2Body;
+import mygame.editor.model.box2d.B2Joint;
 import mygame.editor.views.CcNode;
 
 import java.io.*;
@@ -207,5 +210,45 @@ public class FlatBuffersRepository implements NodeRepository {
         FlatBuffersRepository flatBuffersRepository = new FlatBuffersRepository();
         flatBuffersRepository.save(null);
         CcNode nodeById = flatBuffersRepository.getNodeById(0);
+    }
+
+    @Override
+    public List<B2Body> getBodies() {
+        return null;
+    }
+
+    @Override
+    public List<B2Joint> getJoints() {
+        return null;
+    }
+
+    @Override
+    public void saveBody(B2Body body) {
+
+    }
+
+    @Override
+    public void saveJoint(B2Joint joint) {
+
+    }
+
+    @Override
+    public Vector2 getGravity() {
+        return null;
+    }
+
+    @Override
+    public void saveGravity(float x, float y) {
+
+    }
+
+    @Override
+    public void deleteBody(B2Body body) {
+
+    }
+
+    @Override
+    public void deleteJoint(B2Joint joint) {
+
     }
 }

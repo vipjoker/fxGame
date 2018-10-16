@@ -43,14 +43,14 @@ public class Renderer {
         this.vertexColor = Color.rgb(255, 0, 0, 1);
         this.boundsColor = Color.rgb(228, 177, 177, 1);
 
-        Image jointAnchor = Resources.initImage("resources/ui/crossair_white.png");
+        Image jointAnchor = Resources.initImage("/ui/crossair_white.png");
 
-        Image jointAnchorA = Resources.initImage("resources/ui/crossair_blue.png");
-        Image jointAnchorB = Resources.initImage("resources/ui/crossair_red.png");
+        Image jointAnchorA = Resources.initImage("/ui/crossair_blue.png");
+        Image jointAnchorB = Resources.initImage("/ui/crossair_red.png");
 
 
         this.jointAnchors = new Image[]{jointAnchor, jointAnchorA, jointAnchorB};
-        this.pivotImage = Resources.initImage("resources/ui/pivot.png");
+        this.pivotImage = Resources.initImage("/ui/pivot.png");
     }
 
     public void renderVertex(Vertex v) {

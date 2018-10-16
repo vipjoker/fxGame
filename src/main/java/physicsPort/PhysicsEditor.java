@@ -2,145 +2,144 @@ package physicsPort;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
+import physicsPort.body.Body;
+import physicsPort.body.Joint;
+import physicsPort.body.Shape;
+import physicsPort.body.Vertex;
+
+import java.util.List;
 
 
 public class PhysicsEditor {
 
 
+    private  String resourceDirectory;
     private  SceneManager sceneManager;
-    private  ViewPort viewport;
+    public  ViewPort viewport;
     private  UIManager uiManager;
     private GameView gameView;
 
-    public  PhysicsEditor(Canvas canvas) {
+    public  PhysicsEditor(Canvas canvas, Button playButton,Button pauseBtn,Button stepButton) {
         this.sceneManager = new SceneManager();
         this.viewport = new ViewPort(canvas, this.sceneManager);
-        this.uiManager = new UIManager(this.sceneManager);
+        this.uiManager = new UIManager(this.sceneManager,playButton,pauseBtn,stepButton);
 
 
         // directory containing textures
         this.resourceDirectory = "resources/";
 
         this.uiManager.initialize(this.viewport.getInputHandler());
-        this.uiManager.playBackControls = $("#gameplayControls").find("button");
+        this.uiManager.playBackButton = playButton;
 
         // auto trace image shape generation paramters
-        this.autoTrace = {
-                xSpace : 1.0,
-                ySpace : 1.0,
-                concavity : 20
-	}
+//        this.autoTrace = {
+//                xSpace : 1.0,
+//                ySpace : 1.0,
+//                concavity : 20
+//	}
 
         // play back controls //
-        var ref = this;
-        this.uiManager.playBackControls[0].addEventListener("click", function(){
-            if (ref.gameView){
+        PhysicsEditor ref = this;
+        uiManager.playBackButton.setOnMouseClicked(event -> {
+            if (ref.gameView  != null){
                 ref.gameView = null;
-                ref.viewport.getInputHandler().inGameMode = 0;
-                $(this).removeClass("glyphicon-stop").addClass("glyphicon-play");
+                ref.viewport.getInputHandler().inGameMode = false;
+              ////  $(this).removeClass("glyphicon-stop").addClass("glyphicon-play");
             }
             else {
                 ref.gameView = new GameView(canvas, ref.viewport.getNavigator());
-                ref.gameView.setup(ref.sceneManager.exportWorld());
-                ref.viewport.getInputHandler().inGameMode = 1;
-                $(this).removeClass("glyphicon-play").addClass("glyphicon-stop");
+                ref.gameView.setup(ref.sceneManager.exportWorld(),false);
+                ref.viewport.getInputHandler().inGameMode = true;
+               // $(this).removeClass("glyphicon-play").addClass("glyphicon-stop");
             }
         });
-        this.uiManager.playBackControls[1].addEventListener("click", function(){
+        this.uiManager.pauseButton.setOnMouseClicked(e->{
             if (ref.gameView != null)
                 ref.gameView.paused = !ref.gameView.paused;
         });
-        this.uiManager.playBackControls[2].addEventListener("click", function(){
+        this.uiManager.stepButton.setOnMouseClicked(e ->{
             if (ref.gameView != null && ref.gameView.paused)
                 ref.gameView.update();
         });
         //////////////////////
 
         // view controls //
-        this.uiManager.viewControls = $("#viewControls").find("button");
-        this.uiManager.viewControls.each(function(index){
-            var action = $(this).data("event");
-            this[action] = ref.viewport[action].bind(ref.viewport);
 
-            this.addEventListener("click", function(e){
-                e.preventDefault();
-                e.target[action]();
-            });
-        });
         ///////////////////
 
         // add event listeners to canvas
-        var mousewheelevt=(/Firefox/i.test(navigator.userAgent))? "DOMMouseScroll" : "mousewheel";
-        canvas.addEventListener(mousewheelevt, function(e){
+        canvas.setOnScroll(e->{
             ref.viewport.onMouseWheel(e);
         });
-        canvas.addEventListener("mousedown", function(e){
-            e.preventDefault();
+
+        canvas.setOnMousePressed(e->{
+
             ref.viewport.onMouseDown(e);
             ref.uiManager.onMouseDown(ref.viewport.getInputHandler());
         });
-        canvas.addEventListener("mousemove", function(e){
-            e.preventDefault();
+        canvas.setOnMouseDragged(e->{
+
             ref.viewport.onMouseMove(e);
             ref.uiManager.onMouseMove(ref.viewport.getInputHandler());
         });
-        canvas.addEventListener("mouseup", function(e){
-            ref.viewport.onMouseUp(e);
+        canvas.setOnMouseReleased(event -> {
+            ref.viewport.onMouseUp(event);
             ref.uiManager.onMouseUp(ref.viewport.getInputHandler());
         });
     };
 
-    PhysicsEditor.prototype.cloneBody = function(body){
-        var clone = body.clone();
+    public Body cloneBody (Body body){
+        Body clone = body.clone();
         this.sceneManager.addBody(clone);
         return clone;
     };
 
-    PhysicsEditor.prototype.cloneJoint = function(joint, cloneBodyA, cloneBodyB){
-        var clone = joint.clone(cloneBodyA, cloneBodyB);
-        if (cloneBodyA){
+    public Joint cloneJoint (Joint joint,Body cloneBodyA,Body cloneBodyB){
+        Joint clone = joint.clone(cloneBodyA, cloneBodyB);
+        if (cloneBodyA != null){
             this.sceneManager.addBody(clone.bodyA);
         }
-        if (cloneBodyB){
+        if (cloneBodyB != null){
             this.sceneManager.addBody(clone.bodyB);
         }
         this.sceneManager.addJoint(clone);
         return clone;
-    };
+    }
 
-    PhysicsEditor.prototype.getSelectedBodies = function(){
+    public List<Body> getSelectedBodies (){
         return this.sceneManager.selectedBodies;
-    };
+    }
 
-    PhysicsEditor.prototype.getSelectedJoints = function(){
+    public List<Joint>getSelectedJoints (){
         return this.sceneManager.selectedJoints;
-    };
+    }
 
-    PhysicsEditor.prototype.getSelectedShapes = function(){
+    public List<Shape>getSelectedShapes (){
         return this.sceneManager.selectedShapes;
-    };
+    }
 
-    PhysicsEditor.prototype.getSelectedVertices = function(){
+    List<Vertex>getSelectedVertices (){
         return this.sceneManager.selectedVertices;
     };
 
-    PhysicsEditor.prototype.getCurrentSelection = function(){
+    List<Object>getCurrentSelection (){
         return this.viewport.inputHandler.selection;
     };
 
-    PhysicsEditor.prototype.getSceneManager = function(){
+    public SceneManager getSceneManager (){
         return this.sceneManager;
     };
 
-    PhysicsEditor.prototype.getViewport = function(){
+    public ViewPort getViewport (){
         return this.viewport;
     };
 
-    PhysicsEditor.prototype.getUIManager = function(){
+    public UIManager getUIManager (){
         return this.uiManager;
     };
 
-    PhysicsEditor.prototype.getGameView = function(){
+    GameView getGameView (){
         return this.gameView;
     };
 

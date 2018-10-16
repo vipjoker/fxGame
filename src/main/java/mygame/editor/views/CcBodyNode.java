@@ -64,26 +64,25 @@ public class CcBodyNode extends CcNode {
     }
 
 
-    public void addFixture(FixtureDef fixtureDef) {
-        body.createFixture(fixtureDef);
-        switch (fixtureDef.shape.getType()){
+    public void addFixture(Fixture fixtureDef) {
+        switch (fixtureDef.getShape().getType()){
             case Polygon:
-                PolygonShape polygonShape = (PolygonShape) fixtureDef.shape;
+                PolygonShape polygonShape = (PolygonShape) fixtureDef.getShape();
                 CcPolygon polygon = new CcPolygon(polygonShape);
                 getChildren().add(polygon);
 
                 break;
             case Chain:
-                ChainShape chainShape = (ChainShape) fixtureDef.shape;
+                ChainShape chainShape = (ChainShape) fixtureDef.getShape();
                 CcChain chain = new CcChain(chainShape);
                 getChildren().add(chain);
                 break;
             case Edge:
                 break;
             case Circle:
-                CircleShape circleShape = (CircleShape)fixtureDef.shape;
-                CcCircle ccCircle = new CcCircle(1);
-//                getChildren().add(ccCircle);
+                CircleShape circleShape = (CircleShape)fixtureDef.getShape();
+                CcCircle ccCircle = new CcCircle(circleShape);
+                getChildren().add(ccCircle);
                 break;
         }
     }

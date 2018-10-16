@@ -1,5 +1,6 @@
 package mygame.editor.views;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -8,36 +9,26 @@ import javafx.scene.canvas.GraphicsContext;
 import mygame.editor.component.physics.FixtureDrawable;
 import mygame.editor.util.Constants;
 
-public class CcCircle implements FixtureDrawable{
-    FixtureDef fixtureDef ;
-    Fixture fixture;
-    private double radius;
+public class CcCircle extends CcNode{
+
     private boolean active;
-    public CcCircle(float radius){
-        fixtureDef = new FixtureDef();
-        fixtureDef.shape = new CircleShape();
-        fixtureDef.shape.setRadius(radius);
-        this.radius = radius * 32;
+    private CircleShape circleShape;
+    Vector2 position;
+    public CcCircle(CircleShape circleShape){
+       this.circleShape  = circleShape;
     }
 
-    private float getX(){
-        return CircleShape.class.cast(fixtureDef.shape).getPosition().x *32;
-    }
 
-    private float getY(){
-
-        return CircleShape.class.cast(fixtureDef.shape).getPosition().y  * -32;
-    }
 
 
     @Override
-    public void draw(GraphicsContext context) {
+    public void rasterize(GraphicsContext context) {
         context.setFill(Constants.RED.deriveColor(1, 1, 1, 0.5));
-        context.fillOval(getX() - radius, getY() - radius, radius * 2, radius * 2);
+        context.fillOval(circleShape.getPosition().x- circleShape.getRadius(), circleShape.getPosition().y - circleShape.getRadius(), circleShape.getRadius() * 2, circleShape.getRadius() * 2);
         if (active) {
             context.setLineWidth(2);
             context.setStroke(Constants.GREEN);
-            context.strokeOval(getX()- radius,getY() - radius, radius * 2, radius * 2);
+            context.strokeOval(circleShape.getPosition().x- circleShape.getRadius(), circleShape.getPosition().y - circleShape.getRadius(), circleShape.getRadius() * 2, circleShape.getRadius() * 2);
         }
     }
 
@@ -45,9 +36,9 @@ public class CcCircle implements FixtureDrawable{
     public boolean contains(Point2D point) {
         try {
 
-            Point2D center = new Point2D(getX(), getY());
+            Point2D center = new Point2D(circleShape.getPosition().x, circleShape.getPosition().y);
             double distance = point.distance(center);
-            return distance < radius;
+            return distance < circleShape.getRadius();
         } catch (Exception e) {
             e.printStackTrace();
         }
