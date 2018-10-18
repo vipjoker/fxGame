@@ -98,7 +98,7 @@
                                             <children>
                                                 <Button mnemonicParsing="false" onAction="#onCreateSprite"
                                                         text="Create Sprite"/>
-                                                <Button mnemonicParsing="false" onAction="#onCreateBody" text="Create square body"/>
+                                                <Button mnemonicParsing="false" onAction="#onCreateSquare" text="Create square body"/>
                                                 <Button mnemonicParsing="false" onAction="#onCreateCircleBody" text="Create circle body"/>
                                                 <Button mnemonicParsing="false" onAction="#onCreateChainBody" text="Create chain body"/>
                                                 <Button mnemonicParsing="false" onAction="#onCreaetJoint" text="Create distance joint"/>

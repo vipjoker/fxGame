@@ -5,24 +5,46 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import mygame.editor.model.Point;
+import mygame.editor.model.box2d.B2Fixture;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CcPolygon extends CcNode{
-    private final PolygonShape mShape;
+
+    private List<Vector2> points = new ArrayList<>();
+
 
     public CcPolygon(PolygonShape shape){
-        this.mShape = shape;
+
+        Vector2 buffer = new Vector2();
+        for (int i = 0; i < shape.getVertexCount(); i++) {
+            shape.getVertex(i,buffer);
+            points.add(new Vector2(buffer.x * 32,-buffer.y * 32));
+        }
     }
+
+    public CcPolygon(B2Fixture fixture){
+        final List<Vector2> points = fixture.getPoints();
+        for (Vector2 point : points) {
+            this.points.add(point.cpy().scl(32));
+        }
+
+    }
+
+
 
     @Override
     public void rasterize(GraphicsContext context) {
-        int size = mShape.getVertexCount();
+        int size = points.size();
         double[] xPoints = new double[size];
         double[] yPoints = new double[size];
-        for (int index = 0; index < size; index++) {
-            Vector2 point = new Vector2();
-            mShape.getVertex(index,point);
-            xPoints[index] = point.x * 32;
-            yPoints[index] =- point.y * 32;
+        int index = 0;
+        for (Vector2 v:points) {
+
+            xPoints[index] =v.x;
+            yPoints[index] =v.y;
+            index++;
         }
 
         context.setFill(Color.RED.deriveColor(1,1,1,0.3));

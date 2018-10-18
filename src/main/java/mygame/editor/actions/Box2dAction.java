@@ -24,6 +24,7 @@ public class Box2dAction extends Action implements TimerCounter.FrameRateCallbac
 
     @Override
     public void init() {
+        mRenderer.getNodes().clear();
         world = new World(new Vector2(0,-1),true);
         List<B2Body> b2Bodies = mRepository.getBodies();
         List<Body> bodies = B2Parser.createBodies(b2Bodies, world);

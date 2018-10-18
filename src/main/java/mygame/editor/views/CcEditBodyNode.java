@@ -1,22 +1,30 @@
 package mygame.editor.views;
 
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import mygame.editor.customShapes.Chain;
 import mygame.editor.model.box2d.B2Body;
+import mygame.editor.model.box2d.B2Fixture;
 
-public class CcBodyNode extends CcNode {
-    private Body body;
+public class CcEditBodyNode extends CcNode{
 
-    public CcBodyNode(Body body) {
-        this.body = body;
-        for (Fixture fixture : body.getFixtureList()) {
+
+    private B2Body editBody;
+    private boolean isInSimulateMode;
+
+    public CcEditBodyNode(B2Body body) {
+        this.editBody = body;
+        isInSimulateMode = true;
+        for (B2Fixture fixture : body.getFixture()) {
             addFixture(fixture);
         }
-    }
+
+
+   }
+
+
+
 
 
     @Override
@@ -43,35 +51,36 @@ public class CcBodyNode extends CcNode {
 
     }
 
-    private void update() {
+    private void update(){
 
 
-        x = body.getPosition().x * 32;
-        y = body.getPosition().y * 32;
-        setAngle(-body.getAngle() * MathUtils.radDeg);
+            x = editBody.getPosition().getX() * 32;
+            y = editBody.getPosition().getY()* 32;
+            setAngle(-editBody.getAngle() * MathUtils.radDeg);
+
     }
 
 
-    public void addFixture(Fixture fixtureDef) {
-        switch (fixtureDef.getShape().getType()) {
-            case Polygon:
-                PolygonShape polygonShape = (PolygonShape) fixtureDef.getShape();
-                CcPolygon polygon = new CcPolygon(polygonShape);
+    public void addFixture(B2Fixture fixtureDef) {
+        switch (fixtureDef.getType()){
+            case POLYGON:
+
+                CcPolygon polygon = new CcPolygon(fixtureDef);
                 getChildren().add(polygon);
 
                 break;
-            case Chain:
-                ChainShape chainShape = (ChainShape) fixtureDef.getShape();
-                CcChain chain = new CcChain(chainShape);
+            case CHAIN:
+                CcChain chain = new CcChain(fixtureDef);
                 getChildren().add(chain);
                 break;
-            case Edge:
+            case EDGE:
                 break;
-            case Circle:
-                CircleShape circleShape = (CircleShape) fixtureDef.getShape();
-                CcCircle ccCircle = new CcCircle(circleShape);
+            case CIRCLE:
+                CcCircle ccCircle = new CcCircle(fixtureDef);
                 getChildren().add(ccCircle);
                 break;
         }
     }
 }
+
+

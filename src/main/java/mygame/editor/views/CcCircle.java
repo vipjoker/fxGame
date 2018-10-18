@@ -7,15 +7,23 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import mygame.editor.component.physics.FixtureDrawable;
+import mygame.editor.model.box2d.B2Fixture;
 import mygame.editor.util.Constants;
 
 public class CcCircle extends CcNode{
 
     private boolean active;
-    private CircleShape circleShape;
     Vector2 position;
+    float radius;
     public CcCircle(CircleShape circleShape){
-       this.circleShape  = circleShape;
+
+       this.position = circleShape.getPosition().cpy().scl(32);
+       this.radius = circleShape.getRadius() * 32;
+    }
+
+    public CcCircle(B2Fixture fixture){
+        this.position = fixture.getCenter().cpy().scl(32);
+        this.radius = fixture.getRadius() * 32;
     }
 
 
@@ -24,11 +32,11 @@ public class CcCircle extends CcNode{
     @Override
     public void rasterize(GraphicsContext context) {
         context.setFill(Constants.RED.deriveColor(1, 1, 1, 0.5));
-        context.fillOval(circleShape.getPosition().x- circleShape.getRadius(), circleShape.getPosition().y - circleShape.getRadius(), circleShape.getRadius() * 2, circleShape.getRadius() * 2);
+        context.fillOval(position.x- radius, position.y - radius, radius * 2, radius * 2);
         if (active) {
             context.setLineWidth(2);
             context.setStroke(Constants.GREEN);
-            context.strokeOval(circleShape.getPosition().x- circleShape.getRadius(), circleShape.getPosition().y - circleShape.getRadius(), circleShape.getRadius() * 2, circleShape.getRadius() * 2);
+            context.strokeOval(position.x- radius, position.y - radius, radius * 2, radius * 2);
         }
     }
 
@@ -36,9 +44,8 @@ public class CcCircle extends CcNode{
     public boolean contains(Point2D point) {
         try {
 
-            Point2D center = new Point2D(circleShape.getPosition().x, circleShape.getPosition().y);
-            double distance = point.distance(center);
-            return distance < circleShape.getRadius();
+            float distance = position.dst((float) point.getX(),(float) point.getY());
+            return distance < radius;
         } catch (Exception e) {
             e.printStackTrace();
         }

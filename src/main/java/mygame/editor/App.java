@@ -9,7 +9,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import mygame.editor.model.box2d.B2Polygon;
 import mygame.editor.model.box2d.B2Root;
 import mygame.editor.util.ResourceUtil;
 

@@ -18,6 +18,15 @@ public class B2Body {
     private B2Point position;
     private B2Type type;
 
+
+    public B2Body(){
+
+    }
+    public B2Body (B2Type type, B2Point position){
+        this.type = type;
+        this.position = position;
+    }
+
     public String getName() {
         return name;
     }

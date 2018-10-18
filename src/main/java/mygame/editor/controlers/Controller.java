@@ -196,7 +196,10 @@ public class Controller implements Initializable {
         actions.put(ACTION_BOX_2D, new Box2dAction(canvasRenderer,repository));
         actions.put(ACTION_SELECT, new SelectAction(canvasRenderer,repository,infoController));
         actions.put(ACTION_ROTATE, new RotateAction(canvasRenderer,repository));
-        actions.put(ACTION_CREATE_BODY, new CreateBodyAction(canvasRenderer,repository));
+        actions.put(ACTION_CREATE_SQUARE_BODY, new CreateBodyAction(canvasRenderer,repository, CreateBodyAction.Mode.SQUARE));
+        actions.put(ACTION_CREATE_CIRCLE_BODY, new CreateBodyAction(canvasRenderer,repository, CreateBodyAction.Mode.CIRCLE));
+        actions.put(ACTION_CREATE_CHAIN_BODY, new CreateBodyAction(canvasRenderer,repository, CreateBodyAction.Mode.CHAIN));
+        actions.put(ACTION_CREATE_EDGE_BODY, new CreateBodyAction(canvasRenderer,repository, CreateBodyAction.Mode.EDGE));
         actions.put(ACTION_CREATE_JOINT, new CreateJointAction(canvasRenderer,repository));
         actions.put(ACTION_SPRITE, new CreateSpriteAction(canvasRenderer, repository));
         switchDrawer(ACTION_SELECT);
@@ -308,10 +311,6 @@ public class Controller implements Initializable {
         switchDrawer(ACTION_SELECT);
     }
 
-    public void onCreateBody(ActionEvent event) {
-        switchDrawer(ACTION_CREATE_BODY);
-    }
-
     public void onCreateJoint(ActionEvent event) {
         switchDrawer(ACTION_CREATE_JOINT);
     }
@@ -331,11 +330,17 @@ public class Controller implements Initializable {
         switchDrawer(ACTION_SPRITE);
     }
 
-    public void onCreateCircleBody(ActionEvent actionEvent) {
 
+    public void onCreateSquare(ActionEvent event) {
+        switchDrawer(ACTION_CREATE_SQUARE_BODY);
+    }
+
+    public void onCreateCircleBody(ActionEvent actionEvent) {
+        switchDrawer(ACTION_CREATE_CIRCLE_BODY);
     }
 
     public void onCreateChainBody(ActionEvent actionEvent) {
+        switchDrawer(ACTION_CREATE_CHAIN_BODY);
     }
 
     public void onCreaetJoint(ActionEvent actionEvent) {
