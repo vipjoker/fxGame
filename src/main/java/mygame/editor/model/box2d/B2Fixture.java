@@ -1,6 +1,7 @@
 package mygame.editor.model.box2d;
 
 import com.badlogic.gdx.math.Vector2;
+import mygame.editor.interfaces.Editable;
 import physicsPort.triangulation.Vec2;
 
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import java.util.List;
 /**
  * Created by oleh on 17.04.18.
  */
-public class B2Fixture {
+public class B2Fixture implements Editable{
     private String name;
     private float density = 1;
     private float friction;
@@ -73,5 +74,25 @@ public class B2Fixture {
 
     public Vector2 getCenter(){
         return points.get(0);
+    }
+
+    @Override
+    public void move(float x, float y) {
+
+    }
+
+    @Override
+    public void rotate(float angle) {
+
+    }
+
+    @Override
+    public void select() {
+
+    }
+
+    @Override
+    public boolean contains(float x, float y) {
+        return false;
     }
 }

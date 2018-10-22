@@ -1,39 +1,54 @@
 package mygame.editor.actions;
 
 import javafx.geometry.Point2D;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import mygame.editor.App;
 import mygame.editor.component.SelectComponent;
 import mygame.editor.controlers.InfoController;
+import mygame.editor.interfaces.Editable;
+import mygame.editor.interfaces.KeyListener;
 import mygame.editor.model.Point;
+import mygame.editor.model.box2d.B2Body;
 import mygame.editor.render.CanvasRenderer;
 import mygame.editor.repository.NodeRepository;
+import mygame.editor.views.CcBodyNode;
+import mygame.editor.views.CcEditBodyNode;
 import mygame.editor.views.CcNode;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by oleh on 3/27/17.
  */
-public class SelectAction extends Action implements CanvasRenderer.OnCanvasDragListener{
+public class SelectAction extends Action implements CanvasRenderer.OnCanvasDragListener,KeyListener {
 
     private InfoController mController;
-    private CcNode root;
-    private CcNode selected;
+
+    enum Mode{
+        SELECT,MOVE,ROTATE
+    }
+    private final List<CcNode> selected = new ArrayList<>();
+    private Mode mode = Mode.SELECT;
+
     public SelectAction(CanvasRenderer renderer, NodeRepository repository, InfoController controller) {
-        super(renderer,repository);
+        super(renderer, repository);
         this.mController = controller;
     }
 
     @Override
     public void init() {
-        root = mRepository.getRootNode();
-
         mRenderer.getNodes().clear();
-
-
-        for (CcNode ccNode : root.getChildren()) {
-
-            ccNode.addComponent(new SelectComponent());
+        App.instance.addKeyListener(this);
+        for (B2Body body : mRepository.getBodies()) {
+            mRenderer.addChild(new CcEditBodyNode(body));
         }
 
-        mRenderer.addChild(root);
+
+
+
+
         mRenderer.update();
         mRenderer.setOnCanvasDragListener(this);
 
@@ -43,41 +58,84 @@ public class SelectAction extends Action implements CanvasRenderer.OnCanvasDragL
     public void finishDrawing() {
         mRenderer.getNodes().clear();
         mRenderer.setOnCanvasDragListener(null);
-        mRepository.deleteAll();
-        mRepository.save(root);
+        App.instance.removeKeyListener(this);
+
+//        mRepository.save(root);
     }
 
     @Override
     public void onStartMove(Point2D point) {
 
-        root.updateAll(c->c.setActive(false));
-        selected = root.getSelected(point);
-        if(selected!= null){
 
+        switch (mode){
+            case SELECT:
+                handleSelect(point);
+                break;
+            case MOVE:
 
-            mController.setNode(selected, mRenderer::update);
-
-
-            mRenderer.update();
+                break;
         }
 
 
 
 
+    }
+
+    private void handleSelect(Point2D point) {
+        if(!App.buttons.contains(KeyCode.SHIFT)){
+            selected.clear();
+        }
+        for (CcNode node : mRenderer.getNodes()) {
+            final Point2D point2D = node.convertToLocalSpace(point);
+            if(node.contains(point2D)){
+                selected.add(node);
+
+            }
+            node.setActive(selected.contains(node));
+        }
     }
 
     @Override
     public void onDrag(Point2D point) {
-        if(selected!=null){
-            double newX = selected.getX() - point.getX();
-            double newY = selected.getY() + point.getY();
-            selected.setX(newX);
-            selected.setY(newY);
+
+        switch (mode){
+            case MOVE:
+                for (CcNode s : selected) {
+                    double newX = s.getX() - point.getX();
+                    double newY = s.getY() + point.getY();
+                    s.setX(newX);
+                    s.setY(newY);
+                }
+                break;
+            case ROTATE:
+                for (CcNode ccNode : selected) {
+                    ccNode.setAngle(ccNode.getAngle() - point.getX() - point.getY());
+                }
         }
+
+
+
+
+
     }
 
     @Override
     public void onStopMove(Point2D point) {
-        selected = null;
+       // selected.clear();
+    }
+
+    @Override
+    public void onKeyPressed(KeyEvent event) {
+        switch (event.getCode()){
+            case T:
+                mode = Mode.MOVE;
+                break;
+            case R:
+                mode = Mode.ROTATE;
+                break;
+            case Q:
+                mode = Mode.SELECT;
+
+        }
     }
 }

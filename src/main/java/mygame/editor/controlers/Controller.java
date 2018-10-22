@@ -67,6 +67,7 @@ public class Controller implements Initializable {
     public Button btnRun ;
     public Button btnMove;
     public Button btnEdit;
+    public Button btnStop;
     public TreeView<CcNode> nodeTreeview;
 
     private CanvasRenderer canvasRenderer;
@@ -89,16 +90,12 @@ public class Controller implements Initializable {
 
             canvasRenderer = new CanvasRenderer(centerPane);
 
-            App.instance .scene.setOnKeyPressed (it->{
 
-                if (it.getCode()== KeyCode.ENTER)
-                    currentDrawer.finishDrawing();
-            });
             root.prefWidthProperty().bind(App.instance.stage.widthProperty());
             root.prefHeightProperty().bind(App.instance.stage.heightProperty());
 //            centerPane.getChildren().add(canvas);
 
-            root.setDividerPositions(.1, .8);
+            root.setDividerPositions(.2, .8);
 
             setLeftPane();
             setRightPane();
@@ -348,5 +345,9 @@ public class Controller implements Initializable {
     }
 
     public void onCreateRevoluteJoint(ActionEvent actionEvent) {
+    }
+
+    public void onStop(ActionEvent actionEvent) {
+
     }
 }

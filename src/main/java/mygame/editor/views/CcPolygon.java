@@ -27,7 +27,10 @@ public class CcPolygon extends CcNode{
     public CcPolygon(B2Fixture fixture){
         final List<Vector2> points = fixture.getPoints();
         for (Vector2 point : points) {
-            this.points.add(point.cpy().scl(32));
+            final Vector2 cpy = point.cpy();
+            cpy.y *= -1;
+            cpy.scl(32);
+            this.points.add(cpy);
         }
 
     }

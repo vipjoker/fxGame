@@ -16,6 +16,10 @@ public class CcBodyNode extends CcNode {
         for (Fixture fixture : body.getFixtureList()) {
             addFixture(fixture);
         }
+
+        x = body.getPosition().x * 32;
+        y = body.getPosition().y * 32;
+        setAngle(-body.getAngle() * MathUtils.radDeg);
     }
 
 
@@ -23,7 +27,7 @@ public class CcBodyNode extends CcNode {
     public void rasterize(GraphicsContext context) {
 
         update();
-
+        context.beginPath();
         context.setFill(Color.WHITE.deriveColor(1, 1, 1, 0.5));
         context.fillRect(-5, -5, 10, 10);
         context.fill();

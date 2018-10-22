@@ -27,7 +27,9 @@ public class CcChain extends CcNode {
 
     public CcChain(B2Fixture fixture) {
         for (Vector2 vector2 : fixture.getPoints()) {
-            points.add(vector2.cpy().scl(32));
+            final Vector2 v = vector2.cpy().scl(32);
+            v.y *= -1;
+            points.add(v);
         }
     }
 
@@ -37,6 +39,7 @@ public class CcChain extends CcNode {
         boolean isFirstTime = true;
         context.setStroke(Color.GREEN);
         context.setLineWidth(3);
+        context.beginPath();
         for (Vector2 point : points) {
 
             if (isFirstTime) {
