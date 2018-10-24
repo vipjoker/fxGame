@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * Created by oleh on 3/27/17.
  */
-public class SelectAction extends Action implements CanvasRenderer.OnCanvasDragListener,KeyListener {
+public class FixtureEditAction extends Action implements CanvasRenderer.OnCanvasDragListener,KeyListener {
 
     private InfoController mController;
 
@@ -32,7 +32,7 @@ public class SelectAction extends Action implements CanvasRenderer.OnCanvasDragL
     private final List<CcNode> selected = new ArrayList<>();
     private Mode mode = Mode.SELECT;
 
-    public SelectAction(CanvasRenderer renderer, NodeRepository repository, InfoController controller) {
+    public FixtureEditAction(CanvasRenderer renderer, NodeRepository repository, InfoController controller) {
         super(renderer, repository);
         this.mController = controller;
     }
@@ -85,8 +85,13 @@ public class SelectAction extends Action implements CanvasRenderer.OnCanvasDragL
         if(!App.buttons.contains(KeyCode.SHIFT)){
             selected.clear();
         }
-        for (CcNode node : mRenderer.getNodes()) {
+        for (CcNode node :mRenderer.getNodes()) {
             final Point2D point2D = node.convertToLocalSpace(point);
+
+            for (CcNode child : node.getChildren()) {
+
+            }
+
             if(node.contains(point2D)){
                 selected.add(node);
 
@@ -121,7 +126,7 @@ public class SelectAction extends Action implements CanvasRenderer.OnCanvasDragL
 
     @Override
     public void onStopMove(Point2D point) {
-       // selected.clear();
+        // selected.clear();
     }
 
     @Override
