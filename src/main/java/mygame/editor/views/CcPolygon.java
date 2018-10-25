@@ -53,14 +53,32 @@ public class CcPolygon extends CcNode {
             index++;
         }
 
+        double[] xPointsScaled = new double[size];
+        double[] yPointsScaled = new double[size];
+        int indexScaled = 0;
+        for (Vector2 v : points) {
+
+            xPointsScaled[indexScaled] = v.x * 1.2f;
+            yPointsScaled[indexScaled] = v.y * 1.2f;
+            indexScaled++;
+        }
+
+
+
+
         context.beginPath();
         if(active){
             context.setFill(Color.GREEN.deriveColor(1, 1, 1, 0.3));
+            context.setStroke(Color.GREEN);
+            context.fillPolygon(xPoints, yPoints, size);
+            context.strokePolygon(xPoints, yPoints, size);
+
         }else {
             context.setFill(Color.RED.deriveColor(1, 1, 1, 0.3));
             context.setStroke(Color.RED);
+            context.fillPolygon(xPoints, yPoints, size);
+            context.strokePolygon(xPoints, yPoints, size);
         }
-        context.fillPolygon(xPoints, yPoints, size);
         context.fill();
         context.stroke();
 
