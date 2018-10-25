@@ -9,11 +9,14 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import mygame.editor.model.box2d.B2Polygon;
+import mygame.editor.interfaces.KeyListener;
 import mygame.editor.model.box2d.B2Root;
 import mygame.editor.util.ResourceUtil;
 
+import java.security.Key;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -23,6 +26,7 @@ public class App extends Application {
     public  Scene scene;
     public  Stage stage;
     public static App instance;
+    public  final List<KeyListener> keyListeners = new ArrayList<>();
     public static Set<KeyCode> buttons  = new HashSet<>();
 
 
@@ -32,8 +36,6 @@ public class App extends Application {
         instance = this;
         Parent load = FXMLLoader.load(this.getClass().getResource("/editor.fxml"));
 
-        String json = ResourceUtil.loadString("/sample.json");
-        B2Root b2Root = new Gson().fromJson(json, B2Root.class);
 
         scene = new Scene(load, 1200, 800);
 
@@ -44,6 +46,7 @@ public class App extends Application {
 
         scene.setOnKeyPressed(this::onKeyPressed);
         scene.setOnKeyReleased(this::onKeyReleased);
+        load.requestFocus();
 
 
         primaryStage.setScene(scene);
@@ -52,8 +55,10 @@ public class App extends Application {
 
 
 
-
     private void onKeyPressed(KeyEvent keyEvent) {
+        for (KeyListener keyListener : keyListeners) {
+            keyListener.onKeyPressed(keyEvent);
+        }
         buttons.add(keyEvent.getCode());
     }
 
@@ -65,7 +70,13 @@ public class App extends Application {
         launch(args);
     }
 
+    public void addKeyListener(KeyListener listener){
+        keyListeners.add(listener);
+    }
 
+    public void removeKeyListener(KeyListener listener){
+        keyListeners.remove(listener);
+    }
 
 }
 

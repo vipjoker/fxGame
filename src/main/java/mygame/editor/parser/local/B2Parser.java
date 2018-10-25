@@ -12,7 +12,7 @@ public class B2Parser {
 
     public static List<Body> createBodies(List<B2Body> bodies, World world) {
 
-        bodies = test();
+//        bodies = test();
         List<Body> list = new ArrayList<>();
         for (B2Body body : bodies) {
             BodyDef def = new BodyDef();
@@ -147,6 +147,8 @@ public class B2Parser {
         for (int i = 0; i < 10; i++) {
             bodies.add(createSquare(i));
         }
+
+
         bodies.add(createGround());
         return bodies;
     }
@@ -159,11 +161,11 @@ public class B2Parser {
         bodyDef.setType(B2Type.DYNAMIC);
 
 
-        B2Fixture fixture = new B2Fixture(B2FixtureType.CIRCLE,Vector2.Zero,new Vector2(10,0));
+        B2Fixture fixture = new B2Fixture(B2FixtureType.CIRCLE,Vector2.Zero,new Vector2(1,0));
         fixture.setDensity(1);
         fixture.setRestitution(0.5f);
         fixture.setFriction(0.5f);
-
+        bodyDef.addFixture(fixture);
         return bodyDef;
 
     }

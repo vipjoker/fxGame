@@ -6,31 +6,28 @@ import com.badlogic.gdx.physics.box2d.*;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import mygame.editor.customShapes.Chain;
+import mygame.editor.model.box2d.B2Body;
 
 public class CcBodyNode extends CcNode {
     private Body body;
-    private BodyDef bodyDef;
-    private boolean isInSimulateMode;
 
     public CcBodyNode(Body body) {
         this.body = body;
-        isInSimulateMode = true;
+        for (Fixture fixture : body.getFixtureList()) {
+            addFixture(fixture);
+        }
+
+        x = body.getPosition().x * 32;
+        y = body.getPosition().y * 32;
+        setAngle(-body.getAngle() * MathUtils.radDeg);
     }
-
-    public CcBodyNode(BodyDef bodyDef) {
-        this.bodyDef = bodyDef;
-        isInSimulateMode = false;
-    }
-
-
-
 
 
     @Override
     public void rasterize(GraphicsContext context) {
 
         update();
-
+        context.beginPath();
         context.setFill(Color.WHITE.deriveColor(1, 1, 1, 0.5));
         context.fillRect(-5, -5, 10, 10);
         context.fill();
@@ -50,22 +47,17 @@ public class CcBodyNode extends CcNode {
 
     }
 
-    private void update(){
+    private void update() {
 
-        if(isInSimulateMode) {
-            x = body.getPosition().x * 32;
-            y = body.getPosition().y * 32;
-            setAngle(-body.getAngle() * MathUtils.radDeg);
-        }else{
-            x = bodyDef.position.x * 32;
-            y = bodyDef.position.y * 32;
-            setAngle(-bodyDef.angle * MathUtils.radDeg);
-        }
+
+        x = body.getPosition().x * 32;
+        y = body.getPosition().y * 32;
+        setAngle(-body.getAngle() * MathUtils.radDeg);
     }
 
 
     public void addFixture(Fixture fixtureDef) {
-        switch (fixtureDef.getShape().getType()){
+        switch (fixtureDef.getShape().getType()) {
             case Polygon:
                 PolygonShape polygonShape = (PolygonShape) fixtureDef.getShape();
                 CcPolygon polygon = new CcPolygon(polygonShape);
@@ -80,7 +72,7 @@ public class CcBodyNode extends CcNode {
             case Edge:
                 break;
             case Circle:
-                CircleShape circleShape = (CircleShape)fixtureDef.getShape();
+                CircleShape circleShape = (CircleShape) fixtureDef.getShape();
                 CcCircle ccCircle = new CcCircle(circleShape);
                 getChildren().add(ccCircle);
                 break;

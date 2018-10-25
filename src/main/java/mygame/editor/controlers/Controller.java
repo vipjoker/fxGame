@@ -1,24 +1,15 @@
 package mygame.editor.controlers;
 
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableDoubleValue;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
@@ -30,10 +21,8 @@ import mygame.editor.render.TreeItemCcNode;
 import mygame.editor.render.TreeItemPath;
 import mygame.editor.repository.InMemoryRepository;
 import mygame.editor.repository.NodeRepository;
-import mygame.editor.repository.SqlNodeRepository;
 import mygame.editor.util.Resources;
 import mygame.editor.views.CcNode;
-import mygame.editor.views.CcSprite;
 import mygame.editor.render.CanvasRenderer;
 
 import java.io.File;
@@ -46,12 +35,8 @@ import javafx.scene.control.TreeView;
 import javafx.scene.control.TreeItem;
 import mygame.editor.data.DbConnection;
 import mygame.editor.data.NodeDao;
-import mygame.editor.data.entities.EntityNode;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+
 import java.sql.Connection;
-import java.util.stream.Stream;
 
 import static mygame.editor.util.Constants.*;
 
@@ -67,6 +52,7 @@ public class Controller implements Initializable {
     public Button btnRun ;
     public Button btnMove;
     public Button btnEdit;
+    public Button btnStop;
     public TreeView<CcNode> nodeTreeview;
 
     private CanvasRenderer canvasRenderer;
@@ -89,16 +75,12 @@ public class Controller implements Initializable {
 
             canvasRenderer = new CanvasRenderer(centerPane);
 
-            App.instance .scene.setOnKeyPressed (it->{
 
-                if (it.getCode()== KeyCode.ENTER)
-                    currentDrawer.finishDrawing();
-            });
             root.prefWidthProperty().bind(App.instance.stage.widthProperty());
             root.prefHeightProperty().bind(App.instance.stage.heightProperty());
 //            centerPane.getChildren().add(canvas);
 
-            root.setDividerPositions(.1, .8);
+            root.setDividerPositions(.2, .8);
 
             setLeftPane();
             setRightPane();
@@ -191,12 +173,15 @@ public class Controller implements Initializable {
 
     private void initActions() {
         NodeRepository repository = new InMemoryRepository();
-        actions.put(ACTION_EDIT, new EditAction(canvasRenderer,repository));
+        actions.put(ACTION_EDIT, new FixtureEditAction(canvasRenderer,repository));
         actions.put(ACTION_MOVE, new MoverAction(canvasRenderer,repository));
         actions.put(ACTION_BOX_2D, new Box2dAction(canvasRenderer,repository));
-        actions.put(ACTION_SELECT, new SelectAction(canvasRenderer,repository,infoController));
+        actions.put(ACTION_SELECT, new SelectBodyAction(canvasRenderer,repository,infoController));
         actions.put(ACTION_ROTATE, new RotateAction(canvasRenderer,repository));
-        actions.put(ACTION_CREATE_BODY, new CreateBodyAction(canvasRenderer,repository));
+        actions.put(ACTION_CREATE_SQUARE_BODY, new CreateBodyAction(canvasRenderer,repository, CreateBodyAction.Mode.SQUARE));
+        actions.put(ACTION_CREATE_CIRCLE_BODY, new CreateBodyAction(canvasRenderer,repository, CreateBodyAction.Mode.CIRCLE));
+        actions.put(ACTION_CREATE_CHAIN_BODY, new CreateBodyAction(canvasRenderer,repository, CreateBodyAction.Mode.CHAIN));
+        actions.put(ACTION_CREATE_EDGE_BODY, new CreateBodyAction(canvasRenderer,repository, CreateBodyAction.Mode.EDGE));
         actions.put(ACTION_CREATE_JOINT, new CreateJointAction(canvasRenderer,repository));
         actions.put(ACTION_SPRITE, new CreateSpriteAction(canvasRenderer, repository));
         switchDrawer(ACTION_SELECT);
@@ -308,10 +293,6 @@ public class Controller implements Initializable {
         switchDrawer(ACTION_SELECT);
     }
 
-    public void onCreateBody(ActionEvent event) {
-        switchDrawer(ACTION_CREATE_BODY);
-    }
-
     public void onCreateJoint(ActionEvent event) {
         switchDrawer(ACTION_CREATE_JOINT);
     }
@@ -331,11 +312,17 @@ public class Controller implements Initializable {
         switchDrawer(ACTION_SPRITE);
     }
 
-    public void onCreateCircleBody(ActionEvent actionEvent) {
 
+    public void onCreateSquare(ActionEvent event) {
+        switchDrawer(ACTION_CREATE_SQUARE_BODY);
+    }
+
+    public void onCreateCircleBody(ActionEvent actionEvent) {
+        switchDrawer(ACTION_CREATE_CIRCLE_BODY);
     }
 
     public void onCreateChainBody(ActionEvent actionEvent) {
+        switchDrawer(ACTION_CREATE_CHAIN_BODY);
     }
 
     public void onCreaetJoint(ActionEvent actionEvent) {
@@ -343,5 +330,9 @@ public class Controller implements Initializable {
     }
 
     public void onCreateRevoluteJoint(ActionEvent actionEvent) {
+    }
+
+    public void onStop(ActionEvent actionEvent) {
+
     }
 }

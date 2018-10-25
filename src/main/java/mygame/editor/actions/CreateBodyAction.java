@@ -1,35 +1,35 @@
 package mygame.editor.actions;
 
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.World;
 import javafx.geometry.Point2D;
-import mygame.editor.component.PhysicsComponent;
-import mygame.editor.mapper.CcNodeUtil;
-import mygame.editor.model.Point;
+import mygame.editor.model.box2d.*;
 import mygame.editor.render.CanvasRenderer;
 import mygame.editor.repository.NodeRepository;
-import mygame.editor.util.Resources;
-import mygame.editor.views.CcBodyNode;
-import mygame.editor.views.CcCircle;
-import mygame.editor.views.CcNode;
-import mygame.editor.views.CcSprite;
+import mygame.editor.views.CcEditBodyNode;
+
+import java.util.List;
 
 public class CreateBodyAction extends Action implements CanvasRenderer.OnCanvasDragListener{
 
-    private World world;
-    public CreateBodyAction(CanvasRenderer renderer, NodeRepository repository) {
+    private final Mode mode;
+
+    public CreateBodyAction(CanvasRenderer renderer, NodeRepository repository, Mode mode) {
         super(renderer,repository);
+        this.mode = mode;
     }
 
 
     @Override
     public void init() {
-        world = new World(new Vector2(10, 10), false);
+
         mRenderer.setOnCanvasDragListener(this);
+        final List<B2Body> bodies = mRepository.getBodies();
+        for (B2Body body : bodies) {
+            mRenderer.addChild(new CcEditBodyNode(body));
+        }
+        mRenderer.update();
+
     }
 
     @Override
@@ -40,17 +40,48 @@ public class CreateBodyAction extends Action implements CanvasRenderer.OnCanvasD
     @Override
     public void onStartMove(Point2D point) {
 
-        BodyDef def = new BodyDef();
-        def.position.x = (float) point.getX()/32;
-        def.position.y = (float) point.getY()/32;
-        def.angle = (float) 45 * MathUtils.degRad;
-        CcNode bodyNode= new CcNode();
-        PhysicsComponent physicsComponent = new PhysicsComponent(def);
+        float x = (float) point.getX()/32;
+        float y = (float) point.getY()/32;
 
-//        CcCircle circle = new CcCircle();
-//        physicsComponent.addFixture(circle);
-//
-        bodyNode.addComponent(physicsComponent);
+
+
+
+        B2Body body = null;
+        switch (mode){
+            case SQUARE: {
+                body = new B2Body(B2Type.DYNAMIC, new B2Point(x, y));
+                B2Fixture fixture = new B2Fixture(B2FixtureType.POLYGON, Vector2.Zero, new Vector2(1, 0),new Vector2(1,1),new Vector2(0,1));
+                body.addFixture(fixture);
+            }
+                break;
+            case CIRCLE: {
+                body = new B2Body(B2Type.DYNAMIC, new B2Point(x, y));
+                B2Fixture fixture = new B2Fixture(B2FixtureType.CIRCLE, Vector2.Zero, new Vector2(0, 1));
+                body.addFixture(fixture);
+            }
+                break;
+            case CHAIN:{
+                body = new B2Body(B2Type.STATIC, new B2Point(x, y));
+                B2Fixture fixture = new B2Fixture(B2FixtureType.CHAIN, Vector2.Zero, new Vector2(1, 1),new Vector2(2,0),new Vector2(3,1));
+                body.addFixture(fixture);
+            }
+                break;
+            case EDGE:{
+
+            }
+                break;
+        }
+
+
+
+
+
+
+
+        CcEditBodyNode bodyNode = new CcEditBodyNode(body);
+
+
+        mRepository.saveBody(body);
         mRenderer.addChild(bodyNode);
         mRenderer.update();
     }
@@ -63,5 +94,8 @@ public class CreateBodyAction extends Action implements CanvasRenderer.OnCanvasD
     @Override
     public void onStopMove(Point2D point) {
 
+    }
+    public enum Mode{
+        SQUARE,CIRCLE,EDGE,CHAIN
     }
 }

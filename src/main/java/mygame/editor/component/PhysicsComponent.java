@@ -41,9 +41,7 @@ public class PhysicsComponent extends Component {
     @Override
     public void draw(GraphicsContext g) {
 
-        for (FixtureDrawable fixtureDrawable : fixtureDrawables) {
-            fixtureDrawable.draw(g);
-        }
+
         g.setFill(Color.WHITE.deriveColor(1, 1, 1, 0.5));
         g.fillRect(-5, -5, 10, 10);
         g.fill();

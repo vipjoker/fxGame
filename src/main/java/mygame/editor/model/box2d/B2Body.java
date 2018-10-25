@@ -1,12 +1,15 @@
 package mygame.editor.model.box2d;
 
+import javafx.scene.shape.Rectangle;
+import mygame.editor.interfaces.Editable;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by oleh on 17.04.18.
  */
-public class B2Body {
+public class B2Body implements Editable{
     private String name;
     private float angle;
     private float angularVelocity;
@@ -17,6 +20,16 @@ public class B2Body {
     private B2Point linearVelocity;
     private B2Point position;
     private B2Type type;
+
+
+
+    public B2Body(){
+
+    }
+    public B2Body (B2Type type, B2Point position){
+        this.type = type;
+        this.position = position;
+    }
 
     public String getName() {
         return name;
@@ -87,5 +100,30 @@ public class B2Body {
 
     public void addFixture(B2Fixture fixture){
         this.fixture.add(fixture);
+    }
+
+    @Override
+    public void move(float x, float y) {
+
+    }
+
+    @Override
+    public void rotate(float angle) {
+
+    }
+
+    @Override
+    public void select() {
+
+    }
+
+    @Override
+    public boolean contains(float x, float y) {
+
+        System.out.println("Contains " + x + " " + y );
+
+        final Rectangle rectangle = new Rectangle(0, 0, 10, 10);
+
+        return rectangle.contains(x,y);
     }
 }
