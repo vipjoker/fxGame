@@ -85,18 +85,20 @@ public class FixtureEditAction extends Action implements CanvasRenderer.OnCanvas
         if(!App.buttons.contains(KeyCode.SHIFT)){
             selected.clear();
         }
-        for (CcNode node :mRenderer.getNodes()) {
-            final Point2D point2D = node.convertToLocalSpace(point);
+        for (CcNode parent :mRenderer.getNodes()) {
+            final Point2D point2D = parent.convertToLocalSpace(point);
 
-            for (CcNode child : node.getChildren()) {
+            for (CcNode child : parent.getChildren()) {
+                Point2D local = child.convertToLocalSpace(point2D);
+                if(child.contains(local)){
+                    selected.add(child);
 
+                }
+                child.setActive(selected.contains(child));
             }
 
-            if(node.contains(point2D)){
-                selected.add(node);
 
-            }
-            node.setActive(selected.contains(node));
+
         }
     }
 

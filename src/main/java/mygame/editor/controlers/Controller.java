@@ -173,7 +173,7 @@ public class Controller implements Initializable {
 
     private void initActions() {
         NodeRepository repository = new InMemoryRepository();
-        actions.put(ACTION_EDIT, new FixtureEditAction(canvasRenderer,repository));
+        actions.put(ACTION_EDIT, new FixtureEditAction(canvasRenderer,repository,infoController));
         actions.put(ACTION_MOVE, new MoverAction(canvasRenderer,repository));
         actions.put(ACTION_BOX_2D, new Box2dAction(canvasRenderer,repository));
         actions.put(ACTION_SELECT, new SelectBodyAction(canvasRenderer,repository,infoController));

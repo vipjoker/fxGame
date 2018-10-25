@@ -37,15 +37,15 @@ public class View extends JPanel {
 
     private Stroke stroke = new BasicStroke(3, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
     private Color color = new Color(255, 0, 0, 64);
-    private BufferedImage image;
+//    private BufferedImage image;
 
     public View() {
-        try {
-            image = ImageIO.read(getClass().getResource("hadouken_3.png"));
-        } catch (IOException ex) {
-            Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
-            System.exit(-1);
-        }
+//        try {
+////            image = ImageIO.read(getClass().getResource("hadouken_3.png"));
+//        } catch (IOException ex) {
+//            Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+//            System.exit(-1);
+//        }
 
         setPreferredSize(new Dimension(600, 480));
         MouseHandler mouseHandler = new MouseHandler();
@@ -57,7 +57,7 @@ public class View extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(image, 50, 50, image.getWidth() * 4, image.getHeight() * 4, null);
+//        g.drawImage(image, 50, 50, image.getWidth() * 4, image.getHeight() * 4, null);
         drawPolygon((Graphics2D) g);
         drawTriangles((Graphics2D) g);
 
