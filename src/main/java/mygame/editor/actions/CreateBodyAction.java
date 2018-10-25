@@ -47,9 +47,9 @@ public class CreateBodyAction extends Action implements CanvasRenderer.OnCanvasD
         CcNode bodyNode= new CcNode();
         PhysicsComponent physicsComponent = new PhysicsComponent(def);
 
-        CcCircle circle = new CcCircle(2);
-        physicsComponent.addFixture(circle);
-
+//        CcCircle circle = new CcCircle();
+//        physicsComponent.addFixture(circle);
+//
         bodyNode.addComponent(physicsComponent);
         mRenderer.addChild(bodyNode);
         mRenderer.update();

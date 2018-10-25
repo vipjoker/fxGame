@@ -17,9 +17,6 @@ public class PhysicsEditorPort extends Application implements TimerCounter.Frame
     private GraphicsContext context;
     private int width = 800;
     private int height = 800;
-    PhysicsEditor editor;
-    private ViewPort viewport;
-    private EventTarget lastElementSelected;
 
     public static void main(String[] args) {
         launch(args);
@@ -44,28 +41,24 @@ public class PhysicsEditorPort extends Application implements TimerCounter.Frame
         context = canvas.getGraphicsContext2D();
 
 
-        editor = new PhysicsEditor(canvas,  playBtn,pauseBtn,stepBtn);
+
 
         // cached variables
 
-         viewport = editor.getViewport();
 
         // to avoid viewport events while editing selection properties
 
         scene.setOnKeyPressed(e->{
-            if (lastElementSelected == viewport.canvas)
-                viewport.onKeyDown(e);
+
         });
 
         scene.setOnKeyReleased(e->{
-            if (lastElementSelected == viewport.canvas)
-                viewport.onKeyUp(e);
+
         });
 
 
 
         canvas.setOnMousePressed(e->{
-            lastElementSelected = e.getTarget();
         });
 
         TimerCounter timerCounter = new TimerCounter(this);
@@ -84,7 +77,8 @@ public class PhysicsEditorPort extends Application implements TimerCounter.Frame
 
 
 
-        editor.viewport.draw(editor.getGameView());
+
+
     }
 
 
