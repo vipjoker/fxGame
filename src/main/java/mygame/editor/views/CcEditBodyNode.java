@@ -11,12 +11,15 @@ import javafx.scene.transform.NonInvertibleTransformException;
 import mygame.editor.model.box2d.B2Body;
 import mygame.editor.model.box2d.B2Fixture;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CcEditBodyNode extends CcNode{
 
 
     private B2Body editBody;
     private boolean isInSimulateMode;
-
+    private final List<CcFixtureNode> fixtureNodes = new ArrayList<>();
     public CcEditBodyNode(B2Body body) {
         this.editBody = body;
         isInSimulateMode = true;
@@ -96,45 +99,38 @@ public class CcEditBodyNode extends CcNode{
     }
 
     @Override
-    public Point2D convertToLocalSpace(Point2D point) {
-        final Affine affine = new Affine();
-        affine.appendTranslation(x,y);
-        affine.appendRotation(getAngle());
-        affine.appendScale(scaleX,scaleY);
-        try {
-            return affine.inverseTransform(point);
-        } catch (NonInvertibleTransformException e) {
-            e.printStackTrace();
-            return null;
-        }
-
-    }
-
-    @Override
     public boolean contains(Point2D point2D) {
 
         final Rectangle2D rectangle2D = new Rectangle2D(-5, -5, 10, 10);
         return rectangle2D.contains(point2D);
     }
 
+    public List<CcFixtureNode> getFixtureNodes() {
+        return fixtureNodes;
+    }
+
     public void addFixture(B2Fixture fixtureDef) {
+        CcFixtureNode fixtureNode = null;
         switch (fixtureDef.getType()){
             case POLYGON:
 
-                CcPolygon polygon = new CcPolygon(fixtureDef);
-                getChildren().add(polygon);
+               fixtureNode = new CcPolygon(fixtureDef);
 
                 break;
             case CHAIN:
-                CcChain chain = new CcChain(fixtureDef);
-                getChildren().add(chain);
+               fixtureNode = new CcChain(fixtureDef);
+
                 break;
             case EDGE:
                 break;
             case CIRCLE:
-                CcCircle ccCircle = new CcCircle(fixtureDef);
-                getChildren().add(ccCircle);
+               fixtureNode = new CcCircle(fixtureDef);
                 break;
+        }
+
+        if (fixtureNode != null){
+            addChild(fixtureNode);
+            fixtureNodes.add(fixtureNode);
         }
     }
 }

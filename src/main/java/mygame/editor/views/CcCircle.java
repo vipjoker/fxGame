@@ -10,20 +10,29 @@ import mygame.editor.component.physics.FixtureDrawable;
 import mygame.editor.model.box2d.B2Fixture;
 import mygame.editor.util.Constants;
 
-public class CcCircle extends CcNode{
+import java.util.ArrayList;
+import java.util.List;
+
+public class CcCircle extends CcFixtureNode{
 
     private boolean active;
     Vector2 position;
     float radius;
+    private final List<Vector2> points = new ArrayList<>();
     public CcCircle(CircleShape circleShape){
 
        this.position = circleShape.getPosition().cpy().scl(32);
        this.radius = circleShape.getRadius() * 32;
+        points.add(position);
+        points.add(position.cpy().add(radius,0));
     }
 
     public CcCircle(B2Fixture fixture){
         this.position = fixture.getCenter().cpy().scl(32);
         this.radius = fixture.getRadius() * 32;
+
+        points.add(position);
+        points.add(position.cpy().add(radius,0));
     }
 
 
@@ -50,6 +59,11 @@ public class CcCircle extends CcNode{
             e.printStackTrace();
         }
         return false;
+    }
+
+    @Override
+    public List<Vector2> getPoints() {
+        return points;
     }
 
     @Override

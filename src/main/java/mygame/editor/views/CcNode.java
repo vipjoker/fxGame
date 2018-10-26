@@ -12,6 +12,7 @@ import mygame.editor.component.Component;
 import mygame.editor.customShapes.Drawable;
 import mygame.editor.model.Point;
 
+import java.awt.geom.AffineTransform;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -27,7 +28,6 @@ public class CcNode implements Drawable {
     public double scaleY = 1;
     private double angle;
     public Affine transform;
-    public Affine localTransform = new Affine();
     public String name;
     protected BoundingBox bBox;
     public boolean active;
@@ -43,12 +43,6 @@ public class CcNode implements Drawable {
 
     public void addChild(CcNode node) {
         node.setParent(this);
-        Affine clone = localTransform.clone();
-        clone.append(Transform.translate(node.getX(),node.getY()));
-        clone.append(Transform.rotate(node.angle,0,0));
-        clone.append(Transform.scale(node.scaleX,node.scaleY));
-        node.setLocalTransform(clone);
-
         children.add(node);
     }
 
@@ -62,7 +56,6 @@ public class CcNode implements Drawable {
     }
 
     public void appendAngle(double deltaAngle){
-        localTransform.appendRotation(deltaAngle);
         angle -= deltaAngle;
     }
 
@@ -74,9 +67,6 @@ public class CcNode implements Drawable {
         return parent;
     }
 
-    public void setLocalTransform(Affine affine){
-        this.localTransform = affine;
-    }
 
     @Override
     public void draw(GraphicsContext context, long time) {
@@ -140,18 +130,23 @@ public class CcNode implements Drawable {
         }
     }
 
-    public Point2D convertToLocalSpace(Point2D point){
-        if(localTransform != null){
+    public final Point2D convertToLocalSpace(Point2D point){
+
+        Affine affine = new Affine();
+        affine.appendTranslation(x,y);
+        affine.appendRotation(angle);
+        affine.appendScale(scaleX,scaleY);
+        if(getParent() != null){
+            point = getParent().convertToLocalSpace(point);
+        }
             try {
-                Point2D point2D = localTransform.inverseTransform(point);
+                Point2D point2D = affine.inverseTransform(point);
                 return point2D;
             } catch (NonInvertibleTransformException e) {
                 e.printStackTrace();
                 return null;
             }
-        }else{
-            return null;
-        }
+
     }
 
      public CcNode getSelected(Point2D point2D){
@@ -264,6 +259,10 @@ public class CcNode implements Drawable {
     public void setHeight(double height) {
         this.height = height;
         updateBoundingBox();
+    }
+
+    public void removeSelf(){
+        parent.getChildren().remove(this);
     }
 
     @Override

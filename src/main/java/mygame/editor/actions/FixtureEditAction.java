@@ -1,5 +1,6 @@
 package mygame.editor.actions;
 
+import com.badlogic.gdx.math.Vector2;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -10,11 +11,10 @@ import mygame.editor.interfaces.Editable;
 import mygame.editor.interfaces.KeyListener;
 import mygame.editor.model.Point;
 import mygame.editor.model.box2d.B2Body;
+import mygame.editor.model.box2d.B2Fixture;
 import mygame.editor.render.CanvasRenderer;
 import mygame.editor.repository.NodeRepository;
-import mygame.editor.views.CcBodyNode;
-import mygame.editor.views.CcEditBodyNode;
-import mygame.editor.views.CcNode;
+import mygame.editor.views.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +29,9 @@ public class FixtureEditAction extends Action implements CanvasRenderer.OnCanvas
     enum Mode{
         SELECT,MOVE,ROTATE,EDIT_VERTEX
     }
-    private final List<CcNode> selected = new ArrayList<>();
-    private final List<CcNode> editablePoints = new ArrayList<>();
+    private final List<CcFixtureNode> selected = new ArrayList<>();
+    private final List<CcVertex> editablePoints = new ArrayList<>();
+    private final List<CcEditBodyNode> editBodyNodes = new ArrayList<>();
     private Mode mode = Mode.SELECT;
 
     public FixtureEditAction(CanvasRenderer renderer, NodeRepository repository, InfoController controller) {
@@ -43,7 +44,9 @@ public class FixtureEditAction extends Action implements CanvasRenderer.OnCanvas
         mRenderer.getNodes().clear();
         App.instance.addKeyListener(this);
         for (B2Body body : mRepository.getBodies()) {
-            mRenderer.addChild(new CcEditBodyNode(body));
+            CcEditBodyNode node = new CcEditBodyNode(body);
+            mRenderer.addChild(node);
+            editBodyNodes.add(node);
         }
 
 
@@ -66,6 +69,9 @@ public class FixtureEditAction extends Action implements CanvasRenderer.OnCanvas
     @Override
     public void onStartMove(Point2D point) {
 
+        for (CcVertex editablePoint : editablePoints) {
+            editablePoint.move(point);
+        }
 
         switch (mode){
             case SELECT:
@@ -82,16 +88,35 @@ public class FixtureEditAction extends Action implements CanvasRenderer.OnCanvas
     }
 
     private void handleSelect(Point2D point) {
+        for (CcVertex editablePoint : editablePoints) {
+            Point2D parentPoint = editablePoint.convertToLocalSpace(point);
+
+            if (editablePoint.contains(parentPoint)) {
+                editablePoint.setActive(true);
+                return;
+            }
+            break;
+        }
+
         if(!App.buttons.contains(KeyCode.SHIFT)){
             selected.clear();
         }
-        for (CcNode parent :mRenderer.getNodes()) {
+        for (CcVertex editablePoint : editablePoints) {
+          editablePoint.removeSelf();
+        }
+        editablePoints.clear();
+        for (CcEditBodyNode parent :editBodyNodes) {
+
             final Point2D point2D = parent.convertToLocalSpace(point);
 
-            for (CcNode child : parent.getChildren()) {
+            for (CcFixtureNode child : parent.getFixtureNodes()) {
                 if(child.contains(point2D)){
                     selected.add(child);
-
+                    for (Vector2 vector2 : child.getPoints()) {
+                        CcVertex ccVertex = new CcVertex(vector2);
+                        editablePoints.add(ccVertex);
+                        child.addChild(ccVertex);
+                    }
                 }
                 child.setActive(selected.contains(child));
             }

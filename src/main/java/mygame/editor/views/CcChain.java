@@ -10,7 +10,7 @@ import mygame.editor.model.box2d.B2Fixture;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CcChain extends CcNode {
+public class CcChain extends CcFixtureNode {
 
     List<Vector2> points = new ArrayList<>();
 
@@ -52,5 +52,10 @@ public class CcChain extends CcNode {
 
         context.stroke();
 
+    }
+
+    @Override
+    public List<Vector2> getPoints() {
+        return points;
     }
 }

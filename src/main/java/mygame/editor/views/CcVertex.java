@@ -12,7 +12,7 @@ public class CcVertex extends CcNode {
     public CcVertex(Vector2 point) {
         this.point = point;
         this.x = point.x;
-        this.y = point.y;
+        this.y = -point.y;
     }
 
 
@@ -32,15 +32,14 @@ public class CcVertex extends CcNode {
         context.beginPath();
 
 
-        context.setStroke(Color.YELLOW);
-        context.strokeLine(0,0, 15,0);
+
         context.stroke();
     }
 
     @Override
     public boolean contains(Point2D point2D) {
 
-        final Rectangle rectangle = new Rectangle((float) x - 5, (float) y -5, 10, 10);
+        final Rectangle rectangle = new Rectangle((float)  - 5, (float) -5, 10, 10);
         System.out.println("point: " + point2D + " rect: " + rectangle);
         return rectangle.contains((float) point2D.getX(),(float) point2D.getY());
     }

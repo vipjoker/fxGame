@@ -16,7 +16,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CcPolygon extends CcNode {
+public class CcPolygon extends CcFixtureNode {
 
     private List<Vector2> points = new ArrayList<>();
 
@@ -45,6 +45,10 @@ public class CcPolygon extends CcNode {
         }
     }
 
+    @Override
+    public List<Vector2> getPoints() {
+        return points;
+    }
 
     @Override
     public void rasterize(GraphicsContext context) {
@@ -79,10 +83,10 @@ public class CcPolygon extends CcNode {
             context.fillPolygon(xPointsScaled, yPointsScaled, size);
             context.strokePolygon(xPointsScaled, yPointsScaled, size);
             context.setFill(Color.CYAN);
-            for (Vector2 point : points) {
-                context.fillRect(point.x-3 ,point.y-3, 6,6);
-
-            }
+//            for (Vector2 point : points) {
+//                context.fillRect(point.x-3 ,point.y-3, 6,6);
+//
+//            }
         }else {
             context.setFill(Color.RED.deriveColor(1, 1, 1, 0.3));
             context.setStroke(Color.RED);
