@@ -50,7 +50,7 @@ public class CreateBodyAction extends Action implements CanvasRenderer.OnCanvasD
         switch (mode){
             case SQUARE: {
                 body = new B2Body(B2Type.DYNAMIC, new B2Point(x, y));
-                B2Fixture fixture = new B2Fixture(B2FixtureType.POLYGON, Vector2.Zero, new Vector2(1, 0),new Vector2(1,1),new Vector2(0,1));
+                B2Fixture fixture = new B2Fixture(B2FixtureType.POLYGON, Vector2.Zero, new Vector2(1, 0),new Vector2(1,1),new Vector2(0.5f,2),new Vector2(0,1));
                 body.addFixture(fixture);
             }
                 break;
@@ -62,7 +62,7 @@ public class CreateBodyAction extends Action implements CanvasRenderer.OnCanvasD
                 break;
             case CHAIN:{
                 body = new B2Body(B2Type.STATIC, new B2Point(x, y));
-                B2Fixture fixture = new B2Fixture(B2FixtureType.CHAIN, Vector2.Zero, new Vector2(1, 1),new Vector2(2,0),new Vector2(3,1));
+                B2Fixture fixture = new B2Fixture(B2FixtureType.CHAIN, new Vector2(0,1), new Vector2(1, 0),new Vector2(2,0),new Vector2(3,1));
                 body.addFixture(fixture);
             }
                 break;

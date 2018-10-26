@@ -1,8 +1,10 @@
 package mygame.editor.views;
 
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.utils.Array;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import mygame.editor.model.Point;
@@ -18,7 +20,7 @@ public class CcPolygon extends CcNode {
 
     private List<Vector2> points = new ArrayList<>();
 
-
+    private B2Fixture fixture;
     public CcPolygon(PolygonShape shape) {
 
         Vector2 buffer = new Vector2();
@@ -26,17 +28,21 @@ public class CcPolygon extends CcNode {
             shape.getVertex(i, buffer);
             points.add(new Vector2(buffer.x * 32, -buffer.y * 32));
         }
+
+
     }
 
     public CcPolygon(B2Fixture fixture) {
+        this.fixture = fixture;
         final List<Vector2> points = fixture.getPoints();
-        for (Vector2 point : points) {
+        for (int i = 0 ; i < points.size(); i++) {
+            Vector2 point = points.get(i);
+
             final Vector2 cpy = point.cpy();
             cpy.y *= -1;
             cpy.scl(32);
             this.points.add(cpy);
         }
-
     }
 
 
@@ -58,8 +64,8 @@ public class CcPolygon extends CcNode {
         int indexScaled = 0;
         for (Vector2 v : points) {
 
-            xPointsScaled[indexScaled] = v.x * 1.2f;
-            yPointsScaled[indexScaled] = v.y * 1.2f;
+            xPointsScaled[indexScaled] = v.x ;
+            yPointsScaled[indexScaled] = v.y ;
             indexScaled++;
         }
 
@@ -70,23 +76,60 @@ public class CcPolygon extends CcNode {
         if(active){
             context.setFill(Color.GREEN.deriveColor(1, 1, 1, 0.3));
             context.setStroke(Color.GREEN);
-            context.fillPolygon(xPoints, yPoints, size);
-            context.strokePolygon(xPoints, yPoints, size);
+            context.fillPolygon(xPointsScaled, yPointsScaled, size);
+            context.strokePolygon(xPointsScaled, yPointsScaled, size);
+            context.setFill(Color.CYAN);
+            for (Vector2 point : points) {
+                context.fillRect(point.x-3 ,point.y-3, 6,6);
 
+            }
         }else {
             context.setFill(Color.RED.deriveColor(1, 1, 1, 0.3));
             context.setStroke(Color.RED);
             context.fillPolygon(xPoints, yPoints, size);
             context.strokePolygon(xPoints, yPoints, size);
         }
+
+
+
         context.fill();
         context.stroke();
 
     }
 
+
+
     @Override
     public boolean contains(javafx.geometry.Point2D point2D) {
-        return true;
+
+        final Array<Vector2> vector2s = new Array<>();
+        for (Vector2 point : points) {
+
+            vector2s.add(new Vector2(point.x,-point.y));
+        }
+        return Intersector.isPointInPolygon(vector2s,new Vector2((float) point2D.getX(),(float) point2D.getY()));
+
+    }
+
+    @Override
+    public void setY(double y) {
+        double dy = this.y - y;
+        for (Vector2 vector2 : fixture.getPoints()) {
+            vector2.sub(0,(float) dy/32);
+        }
+        super.setY(y);
+
+    }
+
+    @Override
+    public void setX(double x) {
+        double dx = this.x - x;
+
+        for (Vector2 vector2 : fixture.getPoints()) {
+            vector2.sub((float)dx/32,0);
+        }
+        super.setX(x);
+
     }
 
     float sign(Vector2 p1, Vector2 p2, Vector2 p3) {

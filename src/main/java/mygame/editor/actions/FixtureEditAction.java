@@ -27,9 +27,10 @@ public class FixtureEditAction extends Action implements CanvasRenderer.OnCanvas
     private InfoController mController;
 
     enum Mode{
-        SELECT,MOVE,ROTATE
+        SELECT,MOVE,ROTATE,EDIT_VERTEX
     }
     private final List<CcNode> selected = new ArrayList<>();
+    private final List<CcNode> editablePoints = new ArrayList<>();
     private Mode mode = Mode.SELECT;
 
     public FixtureEditAction(CanvasRenderer renderer, NodeRepository repository, InfoController controller) {
@@ -59,8 +60,7 @@ public class FixtureEditAction extends Action implements CanvasRenderer.OnCanvas
         mRenderer.getNodes().clear();
         mRenderer.setOnCanvasDragListener(null);
         App.instance.removeKeyListener(this);
-
-//        mRepository.save(root);
+        selected.clear();
     }
 
     @Override
@@ -89,8 +89,7 @@ public class FixtureEditAction extends Action implements CanvasRenderer.OnCanvas
             final Point2D point2D = parent.convertToLocalSpace(point);
 
             for (CcNode child : parent.getChildren()) {
-                Point2D local = child.convertToLocalSpace(point2D);
-                if(child.contains(local)){
+                if(child.contains(point2D)){
                     selected.add(child);
 
                 }
@@ -142,6 +141,8 @@ public class FixtureEditAction extends Action implements CanvasRenderer.OnCanvas
                 break;
             case Q:
                 mode = Mode.SELECT;
+            case V:
+                mode = Mode.EDIT_VERTEX;
 
         }
     }
