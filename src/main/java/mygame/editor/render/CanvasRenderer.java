@@ -118,15 +118,15 @@ public class CanvasRenderer {
             lists = newList;
         }
         sortedNodes.sort(Collections.reverseOrder(Comparator.comparingInt(l -> l.layer)));
-        for (CcNode n : sortedNodes) {
-            Point2D point2D = new Point2D(event.getX(), event.getY());
-            if (n.contains(point2D) && !isPressed) {
-//                n.setActive(true);
-                isPressed = true;
-            } else {
-//                n.setActive(false);
-            }
-        }
+//        for (CcNode n : sortedNodes) {
+//            Point2D point2D = new Point2D(event.getX(), event.getY());
+//            if (n.contains(point2D) && !isPressed) {
+////                n.setActive(true);
+//                isPressed = true;
+//            } else {
+////                n.setActive(false);
+//            }
+//        }
 
 
         draw(graphicsContext, Global.getWidth(), Global.getHeight());

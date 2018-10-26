@@ -54,6 +54,7 @@ public class Controller implements Initializable {
     public Button btnEdit;
     public Button btnStop;
     public TreeView<CcNode> nodeTreeview;
+    public Button btnPoint;
 
     private CanvasRenderer canvasRenderer;
     private Action currentDrawer;
@@ -184,6 +185,7 @@ public class Controller implements Initializable {
         actions.put(ACTION_CREATE_EDGE_BODY, new CreateBodyAction(canvasRenderer,repository, CreateBodyAction.Mode.EDGE));
         actions.put(ACTION_CREATE_JOINT, new CreateJointAction(canvasRenderer,repository));
         actions.put(ACTION_SPRITE, new CreateSpriteAction(canvasRenderer, repository));
+        actions.put(ACTION_EDIT_POINTS,new EditPointsAction(canvasRenderer,repository));
         switchDrawer(ACTION_SELECT);
     }
 
@@ -333,6 +335,11 @@ public class Controller implements Initializable {
     }
 
     public void onStop(ActionEvent actionEvent) {
+
+    }
+
+    public void onEditPoint(ActionEvent actionEvent) {
+        switchDrawer(ACTION_EDIT_POINTS);
 
     }
 }

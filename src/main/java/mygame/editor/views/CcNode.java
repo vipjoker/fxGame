@@ -1,5 +1,6 @@
 package mygame.editor.views;
 
+import com.badlogic.gdx.math.Vector2;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
@@ -111,7 +112,15 @@ public class CcNode implements Drawable {
         this.active = isActive;
     }
 
+    public void setPosition(Vector2 vector2){
+        setX(vector2.x);
+        setY(vector2.y);
+    }
 
+    public void move(Point2D point2D){
+        this.x -= point2D.getX();
+        this.y += point2D.getY();
+    }
 
     public void addComponent(Component component) {
         component.setNode(this);

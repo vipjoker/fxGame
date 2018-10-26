@@ -79,6 +79,9 @@
                         styleClass="button_move"/>
                 <Button fx:id="btnEdit" mnemonicParsing="false" onAction="#onEdit" prefWidth="40.0"
                         styleClass="button_edit"/>
+
+                <Button fx:id="btnPoint" mnemonicParsing="false" onAction="#onEditPoint" prefWidth="40.0"
+                        styleClass="button_square"/>
                 <Button fx:id="btnRun" mnemonicParsing="false" onAction="#onRun" prefWidth="40.0"
                         styleClass="button_play"/>
                 <Button fx:id="btnStop" mnemonicParsing="false" onAction="#onStop" prefWidth="40.0"
