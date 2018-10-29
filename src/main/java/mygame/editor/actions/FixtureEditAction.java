@@ -31,6 +31,8 @@ public class FixtureEditAction extends Action implements CanvasRenderer.OnCanvas
     }
     private final List<CcFixtureNode> selected = new ArrayList<>();
     private final List<CcVertex> editablePoints = new ArrayList<>();
+    private final List<CcVertex> selectedPoints = new ArrayList<>();
+
     private final List<CcEditBodyNode> editBodyNodes = new ArrayList<>();
     private Mode mode = Mode.SELECT;
 
@@ -69,9 +71,9 @@ public class FixtureEditAction extends Action implements CanvasRenderer.OnCanvas
     @Override
     public void onStartMove(Point2D point) {
 
-        for (CcVertex editablePoint : editablePoints) {
-            editablePoint.move(point);
-        }
+//        for (CcVertex editablePoint : editablePoints) {
+//            editablePoint.move(point);
+//        }
 
         switch (mode){
             case SELECT:
@@ -92,11 +94,13 @@ public class FixtureEditAction extends Action implements CanvasRenderer.OnCanvas
             Point2D parentPoint = editablePoint.convertToLocalSpace(point);
 
             if (editablePoint.contains(parentPoint)) {
+                selectedPoints.add(editablePoint);
                 editablePoint.setActive(true);
                 return;
             }
-            break;
+
         }
+        selectedPoints.clear();
 
         if(!App.buttons.contains(KeyCode.SHIFT)){
             selected.clear();
@@ -107,10 +111,12 @@ public class FixtureEditAction extends Action implements CanvasRenderer.OnCanvas
         editablePoints.clear();
         for (CcEditBodyNode parent :editBodyNodes) {
 
-            final Point2D point2D = parent.convertToLocalSpace(point);
+
 
             for (CcFixtureNode child : parent.getFixtureNodes()) {
-                if(child.contains(point2D)){
+                final Point2D convertToLocalSpace = child.convertToLocalSpace(point);
+
+                if(child.contains(convertToLocalSpace)){
                     selected.add(child);
                     for (Vector2 vector2 : child.getPoints()) {
                         CcVertex ccVertex = new CcVertex(vector2);
@@ -142,6 +148,12 @@ public class FixtureEditAction extends Action implements CanvasRenderer.OnCanvas
                 for (CcNode ccNode : selected) {
                     ccNode.setAngle(ccNode.getAngle() - point.getX() - point.getY());
                 }
+                break;
+            case EDIT_VERTEX:
+                for (CcVertex editablePoint : selectedPoints) {
+                    editablePoint.move(point);
+                }
+                break;
         }
 
 
@@ -166,8 +178,10 @@ public class FixtureEditAction extends Action implements CanvasRenderer.OnCanvas
                 break;
             case Q:
                 mode = Mode.SELECT;
+                break;
             case V:
                 mode = Mode.EDIT_VERTEX;
+                break;
 
         }
     }

@@ -136,11 +136,12 @@ public class CcNode implements Drawable {
         affine.appendTranslation(x,y);
         affine.appendRotation(angle);
         affine.appendScale(scaleX,scaleY);
-        if(getParent() != null){
-            point = getParent().convertToLocalSpace(point);
+        if(parent != null){
+            point = parent.convertToLocalSpace(point);
         }
             try {
                 Point2D point2D = affine.inverseTransform(point);
+
                 return point2D;
             } catch (NonInvertibleTransformException e) {
                 e.printStackTrace();

@@ -63,15 +63,7 @@ public class CcPolygon extends CcFixtureNode {
             index++;
         }
 
-        double[] xPointsScaled = new double[size];
-        double[] yPointsScaled = new double[size];
-        int indexScaled = 0;
-        for (Vector2 v : points) {
 
-            xPointsScaled[indexScaled] = v.x ;
-            yPointsScaled[indexScaled] = v.y ;
-            indexScaled++;
-        }
 
 
 
@@ -80,8 +72,8 @@ public class CcPolygon extends CcFixtureNode {
         if(active){
             context.setFill(Color.GREEN.deriveColor(1, 1, 1, 0.3));
             context.setStroke(Color.GREEN);
-            context.fillPolygon(xPointsScaled, yPointsScaled, size);
-            context.strokePolygon(xPointsScaled, yPointsScaled, size);
+            context.fillPolygon(xPoints, yPoints, size);
+            context.strokePolygon(xPoints, yPoints, size);
             context.setFill(Color.CYAN);
 //            for (Vector2 point : points) {
 //                context.fillRect(point.x-3 ,point.y-3, 6,6);

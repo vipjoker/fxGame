@@ -37,10 +37,16 @@ public class CcVertex extends CcNode {
     }
 
     @Override
+    public void move(Point2D point2D) {
+        super.move(point2D);
+        point.set((float) x,(float)-y);
+    }
+
+    @Override
     public boolean contains(Point2D point2D) {
 
         final Rectangle rectangle = new Rectangle((float)  - 5, (float) -5, 10, 10);
-        System.out.println("point: " + point2D + " rect: " + rectangle);
+        //System.out.println("point: " + point2D + " rect: " + rectangle);
         return rectangle.contains((float) point2D.getX(),(float) point2D.getY());
     }
 }

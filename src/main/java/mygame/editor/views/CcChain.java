@@ -2,8 +2,12 @@ package mygame.editor.views;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.ChainShape;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
 import mygame.editor.model.Point;
 import mygame.editor.model.box2d.B2Fixture;
 
@@ -13,6 +17,7 @@ import java.util.List;
 public class CcChain extends CcFixtureNode {
 
     List<Vector2> points = new ArrayList<>();
+    private Path path;
 
     public CcChain(ChainShape chainShape) {
 
@@ -31,15 +36,35 @@ public class CcChain extends CcFixtureNode {
             v.y *= -1;
             points.add(v);
         }
+
+        path = new Path();
+        path.setStrokeWidth(5);
+        boolean isFirstTime = true;
+        for (Vector2 point : points) {
+
+            if (isFirstTime) {
+                isFirstTime = false;
+                path.getElements().add(new MoveTo(point.x, -point.y));
+            } else {
+                path.getElements().add(new LineTo(point.x, -point.y));
+            }
+        }
+
+
+
     }
 
     @Override
     public void rasterize(GraphicsContext context) {
 
-        boolean isFirstTime = true;
-        context.setStroke(Color.GREEN);
+        if (active) {
+            context.setStroke(Color.RED);
+        }else{
+            context.setStroke(Color.GREEN);
+        }
         context.setLineWidth(3);
         context.beginPath();
+        boolean isFirstTime = true;
         for (Vector2 point : points) {
 
             if (isFirstTime) {
@@ -49,9 +74,14 @@ public class CcChain extends CcFixtureNode {
                 context.lineTo(point.x, point.y);
             }
         }
-
         context.stroke();
 
+    }
+
+    @Override
+    public boolean contains(Point2D point2D) {
+        System.out.println("Contains " + point2D);
+        return path.contains(point2D);
     }
 
     @Override
