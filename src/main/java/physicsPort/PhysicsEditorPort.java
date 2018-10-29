@@ -74,6 +74,9 @@ public class PhysicsEditorPort extends Application implements TimerCounter.Frame
         TimerCounter timerCounter = new TimerCounter(this);
         timerCounter.start();
         primaryStage.show();
+
+      new LeanTween.LTDescr().setEase(LeanTween.LeanTweenType.easeInCirc).setRepeat()
+
     }
 
 
