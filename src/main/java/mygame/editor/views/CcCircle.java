@@ -70,6 +70,11 @@ public class CcCircle extends CcFixtureNode{
     public void setActive(boolean active) {
         this.active = active;
     }
+
+    @Override
+    public void update() {
+
+    }
 }
 
 

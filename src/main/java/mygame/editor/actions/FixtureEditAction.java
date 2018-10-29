@@ -62,10 +62,19 @@ public class FixtureEditAction extends Action implements CanvasRenderer.OnCanvas
 
     @Override
     public void finishDrawing() {
+        updateFixtures();
         mRenderer.getNodes().clear();
         mRenderer.setOnCanvasDragListener(null);
         App.instance.removeKeyListener(this);
         selected.clear();
+    }
+
+    private void updateFixtures() {
+        for (CcEditBodyNode editBodyNode : editBodyNodes) {
+            for (CcFixtureNode ccFixtureNode : editBodyNode.getFixtureNodes()) {
+                ccFixtureNode.update();
+            }
+        }
     }
 
     @Override
@@ -164,7 +173,7 @@ public class FixtureEditAction extends Action implements CanvasRenderer.OnCanvas
 
     @Override
     public void onStopMove(Point2D point) {
-        // selected.clear();
+        updateFixtures();
     }
 
     @Override

@@ -1,3250 +1,2148 @@
 package physicsPort;
-// Copyright (c) 2013 Russell Savage - Dented Pixel
-//
-// physicsPort.LeanTween version 2.0 - http://dentedpixel.com/developer-diary/
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-// THE SOFTWARE.
-
-/*
-TERMS OF USE - EASING EQUATIONS#
-Open source under the BSD License.
-Copyright (c)2001 Robert Penner
-All rights reserved.
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-Neither the name of the author nor the names of contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
 
 /**
  * Pass this to the "ease" parameter in the optional hashtable, to get a different easing behavior<br><br>
  * <strong>Example: </strong><br>physicsPort.LeanTween.rotateX(gameObject, 270.0f, 1.5f).setEase(LeanTweenType.easeInBack);
- *
- * @class LeanTweenType
- * @property {integer} linear
- * @property {integer} easeOutQuad
- * @property {integer} easeInQuad
- * @property {integer} easeInOutQuad
- * @property {integer} easeInCubic
- * @property {integer} easeOutCubic
- * @property {integer} easeInOutCubic
- * @property {integer} easeInQuart
- * @property {integer} easeOutQuart
- * @property {integer} easeInOutQuart
- * @property {integer} easeInQuint
- * @property {integer} easeOutQuint
- * @property {integer} easeInOutQuint
- * @property {integer} easeInSine
- * @property {integer} easeOutSine
- * @property {integer} easeInOutSine
- * @property {integer} easeInExpo
- * @property {integer} easeOutExpo
- * @property {integer} easeInOutExpo
- * @property {integer} easeInCirc
- * @property {integer} easeOutCirc
- * @property {integer} easeInOutCirc
- * @property {integer} easeInBounce
- * @property {integer} easeOutBounce
- * @property {integer} easeInOutBounce
- * @property {integer} easeInBack
- * @property {integer} easeOutBack
- * @property {integer} easeInOutBack
- * @property {integer} easeInElastic
- * @property {integer} easeOutElastic
- * @property {integer} easeInOutElastic
- * @property {integer} punch
- * @property {integer} linear
- * @property {integer} easeOutQuad
- * @property {integer} easeInQuad
- * @property {integer} easeInOutQuad
- * @property {integer} easeInCubic
- * @property {integer} easeOutCubic
- * @property {integer} easeInOutCubic
- * @property {integer} easeInQuart
- * @property {integer} easeOutQuart
- * @property {integer} easeInOutQuart
- * @property {integer} easeInQuint
- * @property {integer} easeOutQuint
- * @property {integer} easeInOutQuint
- * @property {integer} easeInSine
- * @property {integer} easeOutSine
- * @property {integer} easeInOutSine
- * @property {integer} easeInExpo
- * @property {integer} easeOutExpo
- * @property {integer} easeInOutExpo
- * @property {integer} easeInCirc
- * @property {integer} easeOutCirc
- * @property {integer} easeInOutCirc
- * @property {integer} easeInBounce
- * @property {integer} easeOutBounce
- * @property {integer} easeInOutBounce
- * @property {integer} easeInBack
- * @property {integer} easeOutBack
- * @property {integer} easeInOutBack
- * @property {integer} easeInElastic
- * @property {integer} easeOutElastic
- * @property {integer} easeInOutElastic
- * @property {integer} punch
- * @property {integer} linear
- * @property {integer} easeOutQuad
- * @property {integer} easeInQuad
- * @property {integer} easeInOutQuad
- * @property {integer} easeInCubic
- * @property {integer} easeOutCubic
- * @property {integer} easeInOutCubic
- * @property {integer} easeInQuart
- * @property {integer} easeOutQuart
- * @property {integer} easeInOutQuart
- * @property {integer} easeInQuint
- * @property {integer} easeOutQuint
- * @property {integer} easeInOutQuint
- * @property {integer} easeInSine
- * @property {integer} easeOutSine
- * @property {integer} easeInOutSine
- * @property {integer} easeInExpo
- * @property {integer} easeOutExpo
- * @property {integer} easeInOutExpo
- * @property {integer} easeInCirc
- * @property {integer} easeOutCirc
- * @property {integer} easeInOutCirc
- * @property {integer} easeInBounce
- * @property {integer} easeOutBounce
- * @property {integer} easeInOutBounce
- * @property {integer} easeInBack
- * @property {integer} easeOutBack
- * @property {integer} easeInOutBack
- * @property {integer} easeInElastic
- * @property {integer} easeOutElastic
- * @property {integer} easeInOutElastic
- * @property {integer} punch
- */
-
-/**
- * @property {integer} linear
- */
-/**
- * @property {integer} easeOutQuad
- */
-/**
- * @property {integer} easeInQuad
- */
-/**
- * @property {integer} easeInOutQuad
- */
-/**
- * @property {integer} easeInCubic
- */
-/**
- * @property {integer} easeOutCubic
- */
-/**
- * @property {integer} easeInOutCubic
- */
-/**
- * @property {integer} easeInQuart
- */
-/**
- * @property {integer} easeOutQuart
- */
-/**
- * @property {integer} easeInOutQuart
- */
-/**
- * @property {integer} easeInQuint
- */
-/**
- * @property {integer} easeOutQuint
- */
-/**
- * @property {integer} easeInOutQuint
- */
-/**
- * @property {integer} easeInSine
- */
-/**
- * @property {integer} easeOutSine
- */
-/**
- * @property {integer} easeInOutSine
- */
-/**
- * @property {integer} easeInExpo
- */
-/**
- * @property {integer} easeOutExpo
- */
-/**
- * @property {integer} easeInOutExpo
- */
-/**
- * @property {integer} easeInCirc
- */
-/**
- * @property {integer} easeOutCirc
- */
-/**
- * @property {integer} easeInOutCirc
- */
-/**
- * @property {integer} easeInBounce
- */
-/**
- * @property {integer} easeOutBounce
- */
-/**
- * @property {integer} easeInOutBounce
- */
-/**
- * @property {integer} easeInBack
- */
-/**
- * @property {integer} easeOutBack
- */
-/**
- * @property {integer} easeInOutBack
- */
-/**
- * @property {integer} easeInElastic
- */
-/**
- * @property {integer} easeOutElastic
- */
-/**
- * @property {integer} easeInOutElastic
- */
-/**
- * @property {integer} punch
  */
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Transform;
-import javafx.scene.transform.Affine;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class LeanTween {
 
-    public enum LeanTweenType {
-        notUsed, linear, easeOutQuad, easeInQuad, easeInOutQuad, easeInCubic, easeOutCubic, easeInOutCubic, easeInQuart, easeOutQuart, easeInOutQuart,
-        easeInQuint, easeOutQuint, easeInOutQuint, easeInSine, easeOutSine, easeInOutSine, easeInExpo, easeOutExpo, easeInOutExpo, easeInCirc, easeOutCirc, easeInOutCirc,
-        easeInBounce, easeOutBounce, easeInOutBounce, easeInBack, easeOutBack, easeInOutBack, easeInElastic, easeOutElastic, easeInOutElastic, punch, once, clamp, pingPong
-    }
 
-    /**
-     * Internal Representation of a Tween<br>
-     * <br>
-     * This class represents all of the optional parameters you can pass to a method (it also represents the internal representation of the tween).<br><br>
-     * <strong id='optional'>Optional Parameters</strong> are passed at the end of every method:<br>
-     * <br>
-     * &nbsp;&nbsp;<i>Example:</i><br>
-     * &nbsp;&nbsp;physicsPort.LeanTween.moveX( gameObject, 1f, 1f).setEase( <a href="LeanTweenType.html">LeanTweenType</a>.easeInQuad ).setDelay(1f);<br>
-     * <br>
-     * You can pass the optional parameters in any order, and chain on as many as you wish.<br>
-     * You can also <strong>pass parameters at a later time</strong> by saving a reference to what is returned.<br>
-     * <br>
-     * &nbsp;&nbsp;<i>Example:</i><br>
-     * &nbsp;&nbsp;<a href="LTDescr.html">LTDescr</a> d = physicsPort.LeanTween.moveX(gameObject, 1f, 1f);<br>
-     * &nbsp;&nbsp;&nbsp; ...later set some parameters<br>
-     * &nbsp;&nbsp;d.setOnComplete( onCompleteFunc ).setEase( <a href="LeanTweenType.html">LeanTweenType</a>.easeInOutBack );<br>
-     * <br>
-     * Retrieve a <strong>unique id</strong> for the tween by using the "id" property. You can pass this to physicsPort.LeanTween.pause, physicsPort.LeanTween.resume, physicsPort.LeanTween.cancel methods<br>
-     * <br>
-     * &nbsp;&nbsp;<i>Example:</i><br>
-     * &nbsp;&nbsp;int id = physicsPort.LeanTween.moveX(gameObject, 1f, 3f).id;<br>
-     * &nbsp;&nbsp;physicsPort.LeanTween.pause( id );<br>
-     * @class LTDescr
-     * @constructor
-     */
-    public static class LTDescr {
-        public boolean toggle;
-        public TransformF trans;
-        public LTRect ltRect;
-        public Vector2 from;
-        public Vector2 to;
-        public Vector2 diff;
-        public Vector2 point;
-        public Vector2 axis;
-        public Vector2 origRotation;
-        public LTBezierPath path;
-        public float time;
-        public float lastVal;
-        public boolean useEstimatedTime;
-        public boolean useFrames;
-        public boolean hasInitiliazed;
-        public boolean hasPhysics;
-        public float passed;
-        public TweenAction type;
-
-        public Map optional;
-
-        public float delay;
-        public LeanTweenType tweenType;
-        public Vector2[] animationCurve;
-        private int _id;
-        public LeanTweenType loopType;
-        public int loopCount;
-        public float direction;
-        public Action<Float> onUpdateFloat;
-        public Action<Vector2> onUpdateVector2;
-        public Action onComplete;
-        public Object onCompleteParam;
-        public Object onUpdateParam;
-
-
-
-        /**
-         * Cancel a tween
-         *
-         * @method cancel
-         * @return {LTDescr} LTDescr an object that distinguishes the tween
-         */
-        public LTDescr cancel() {
-            LeanTween.removeTween(this._id);
-            return this;
-        }
-
-        public int uniqueId()
-
-        {
-
-            int toId = _id | ((int) type.ordinal() << 24);
-
-			/*Debug.Log("toId:"+_id+" toType:"+(TweenAction)type);
-
-			int backId = toId & 0xFFFFFF;
-			int backType = toId >> 24;
-
-			Debug.Log("backId:"+backId+" backType:"+(TweenAction)backType);*/
-
-            return toId;
-
-        }
-
-        public int id() {
-            return uniqueId();
-        }
-
-        public void reset() {
-            this.toggle = true;
-            this.optional = null;
-            this.passed = this.delay = 0.0f;
-            this.useEstimatedTime = this.useFrames = this.hasInitiliazed = false;
-            this.animationCurve = null;
-            this.tweenType = LeanTweenType.linear;
-            this.loopType = LeanTweenType.once;
-            this.direction = 1.0f;
-            this.onUpdateFloat = null;
-            this.onUpdateVector2 = null;
-            this.onUpdateFloatObject = null;
-            this.onComplete = null;
-            this.onCompleteObject = null;
-            this.onCompleteParam = null;
-            this.point = Vector2.Zero;
-        }
-
-        /**
-         * Pause a tween
-         *
-         * @method pause
-         * @return {LTDescr} LTDescr an object that distinguishes the tween
-         */
-        public LTDescr pause() {
-            this.lastVal = this.direction;
-            this.direction = 0.0f;
-            return this;
-        }
-
-        /**
-         * Resume a paused tween
-         *
-         * @method resume
-         * @return {LTDescr} LTDescr an object that distinguishes the tween
-         */
-        public LTDescr resume() {
-            this.direction = this.lastVal;
-            return this;
-        }
-
-        public LTDescr setAxis(Vector2 axis) {
-            this.axis = axis;
-            return this;
-        }
-
-        /**
-         * Delay the start of a tween
-         *
-         * @method setDelay
-         * @param {float} float time The time to complete the tween in
-         * @return {LTDescr} LTDescr an object that distinguishes the tween
-         * @example
-         * physicsPort.LeanTween.moveX(gameObject, 5f, 2.0f).setDelay(1.5f);
-         */
-        public LTDescr setDelay(float delay) {
-            this.delay = delay;
-            return this;
-        }
-
-        /**
-         * Set the type of easing used for the tween. <br>
-         * <ul><li><a href="LeanTweenType.html">List of all the ease types</a>.</li>
-         * <li><a href="http://www.robertpenner.com/easing/easing_demo.html">This page helps visualize the different easing equations</a></li>
-         * </ul>
-         *
-         * @method setEase
-         * @param {LeanTweenType} easeType:LeanTweenType the easing type to use
-         * @return {LTDescr} LTDescr an object that distinguishes the tween
-         * @example
-         * physicsPort.LeanTween.moveX(gameObject, 5f, 2.0f).setEase(LeanTweenType.easeInBounce);
-         */
-        public LTDescr setEase(LeanTweenType easeType) {
-            this.tweenType = easeType;
-            return this;
-        }
-
-        /**
-         * Set the type of easing used for the tween with a custom curve. <br>
-         * @method setEase (AnimationCurve)
-         * @param {AnimationCurve} easeDefinition:AnimationCurve an <a href="http://docs.unity3d.com/Documentation/ScriptReference/AnimationCurve.html" target="_blank">AnimationCure</a> that describes the type of easing you want, this is great for when you want a unique type of movement
-         * @return {LTDescr} LTDescr an object that distinguishes the tween
-         * @example
-         * physicsPort.LeanTween.moveX(gameObject, 5f, 2.0f).setEase(LeanTweenType.easeInBounce);
-         */
-        public LTDescr setEase(Vector2[] easeCurve) {
-            this.animationCurve = easeCurve;
-            return this;
-        }
-
-        public LTDescr setFrom(Vector2 from) {
-            this.from = from;
-            return this;
-        }
-
-        public LTDescr setId(int id) {
-            this._id = id;
-            return this;
-        }
-
-        /**
-         * Set the tween to repeat a number of times.
-         * @method setRepeat
-         * @param {int} repeatNum:int the number of times to repeat the tween. -1 to repeat infinite times
-         * @return {LTDescr} LTDescr an object that distinguishes the tween
-         * @example
-         * physicsPort.LeanTween.moveX(gameObject, 5f, 2.0f).setRepeat(10).setLoopPingPong();
-         */
-        public LTDescr setRepeat(int repeat) {
-            this.loopCount = repeat;
-            if (repeat > 1 && this.loopType == LeanTweenType.once) {
-                this.loopType = LeanTweenType.clamp;
-            }
-            return this;
-        }
-
-        public LTDescr setLoopType(LeanTweenType loopType) {
-            this.loopType = loopType;
-            return this;
-        }
-
-        /**
-         * Use estimated time when tweening an object. Great for pause screens, when you want all other action to be stopped (or slowed down)
-         * @method setUseEstimatedTime
-         * @param {boolean} useEstimatedTime:boolean whether to use estimated time or not
-         * @return {LTDescr} LTDescr an object that distinguishes the tween
-         * @example
-         * physicsPort.LeanTween.moveX(gameObject, 5f, 2.0f).setRepeat(2).setUseEstimatedTime(true);
-         */
-        public LTDescr setUseEstimatedTime(boolean useEstimatedTime) {
-            this.useEstimatedTime = useEstimatedTime;
-            return this;
-        }
-
-        /**
-         * Use frames when tweening an object, when you don't want the animation to be time-frame independent...
-         * @method setUseFrames
-         * @param {boolean} useFrames:boolean whether to use estimated time or not
-         * @return {LTDescr} LTDescr an object that distinguishes the tween
-         * @example
-         * physicsPort.LeanTween.moveX(gameObject, 5f, 2.0f).setRepeat(2).setUseFrames(true);
-         */
-        public LTDescr setUseFrames(boolean useFrames) {
-            this.useFrames = useFrames;
-            return this;
-        }
-
-        public LTDescr setLoopCount(int loopCount) {
-            this.loopCount = loopCount;
-            return this;
-        }
-
-        /**
-         * No looping involved, just run once (the default)
-         * @method setLoopOnce
-         * @return {LTDescr} LTDescr an object that distinguishes the tween
-         * @example
-         * physicsPort.LeanTween.moveX(gameObject, 5f, 2.0f).setLoopOnce();
-         */
-        public LTDescr setLoopOnce() {
-            this.loopType = LeanTweenType.once;
-            return this;
-        }
-
-        /**
-         * When the animation gets to the end it starts back at where it began
-         * @method setLoopClamp
-         * @return {LTDescr} LTDescr an object that distinguishes the tween
-         * @example
-         * physicsPort.LeanTween.moveX(gameObject, 5f, 2.0f).setRepeat(2).setLoopClamp();
-         */
-        public LTDescr setLoopClamp() {
-            this.loopType = LeanTweenType.clamp;
-            return this;
-        }
-
-        /**
-         * When the animation gets to the end it then tweens back to where it started (and on, and on)
-         * @method setLoopPingPong
-         * @return {LTDescr} LTDescr an object that distinguishes the tween
-         * @example
-         * physicsPort.LeanTween.moveX(gameObject, 5f, 2.0f).setRepeat(2).setLoopClamp();
-         */
-        public LTDescr setLoopPingPong() {
-            this.loopType = LeanTweenType.pingPong;
-            return this;
-        }
-
-        /**
-         * Have a method called when the tween finishes
-         * @method setOnComplete
-         * @param {Action} onComplete:Action the method that should be called when the tween is finished ex: tweenFinished(){ }
-         * @return {LTDescr} LTDescr an object that distinguishes the tween
-         * @example
-         * physicsPort.LeanTween.moveX(gameObject, 5f, 2.0f).setOnComplete(tweenFinished);
-         */
-        public LTDescr setOnComplete(Action onComplete) {
-            this.onComplete = onComplete;
-            return this;
-        }
-
-
-
-        /**
-         * Have a method called on each frame that the tween is being animated (passes a float value)
-         * @method setOnUpdate
-         * @param {Action<float>} onUpdate:Action<float> a method that will be called on every frame with the float value of the tweened object
-         * @return {LTDescr} LTDescr an object that distinguishes the tween
-         * @example
-         * physicsPort.LeanTween.moveX(gameObject, 5f, 2.0f).setOnUpdate(tweenMoved);<br>
-         * <br>
-         * void tweenMoved( float val ){ }<br>
-         */
-        public LTDescr setOnUpdate(Action<Float> onUpdate) {
-            this.onUpdateFloat = onUpdate;
-            return this;
-        }
-
-
-        public LTDescr setOnUpdateVector2(Action<Vector2> onUpdate) {
-            this.onUpdateVector2 = onUpdate;
-            return this;
-        }
-
-
-        /**
-         * Have an object passed along with the onUpdate method
-         * @method setOnUpdateParam
-         * @param {object} onUpdateParam:object an object that will be passed along with the onUpdate method
-         * @return {LTDescr} LTDescr an object that distinguishes the tween
-         * @example
-         * physicsPort.LeanTween.moveX(gameObject, 5f, 2.0f).setOnUpdate(tweenMoved).setOnUpdateParam(myObject);<br>
-         * <br>
-         * void tweenMoved( float val, object obj ){ }<br>
-         */
-        public LTDescr setOnUpdateParam(Object onUpdateParam) {
-            this.onUpdateParam = onUpdateParam;
-            return this;
-        }
-
-        /**
-         * While tweening along a curve, set this property to true, to be perpendicalur to the path it is moving upon
-         * @method setOrientToPath
-         * @param {boolean} doesOrient:boolean whether the gameobject will orient to the path it is animating along
-         * @return {LTDescr} LTDescr an object that distinguishes the tween
-         * @example
-         * physicsPort.LeanTween.move(ltLogo, path, 1.0f).setEase(LeanTweenType.easeOutQuad).setOrientToPath(true);<br>
-         */
-        public LTDescr setOrientToPath(boolean doesOrient) {
-            if (this.path == null)
-                this.path = new LTBezierPath();
-            this.path.orientToPath = doesOrient;
-            return this;
-        }
-
-        public LTDescr setRect(LTRect rect) {
-            this.ltRect = rect;
-            return this;
-        }
-
-        public LTDescr setRect(Rect rect) {
-            this.ltRect = new LTRect(rect);
-            return this;
-        }
-
-        public LTDescr setPath(LTBezierPath path) {
-            this.path = path;
-            return this;
-        }
-
-        /**
-         * Set the point at which the GameObject will be rotated around
-         * @method setPoint
-         * @param {Vector2} point:Vector2 point at which you want the object to rotate around (local space)
-         * @return {LTDescr} LTDescr an object that distinguishes the tween
-         * @example
-         * physicsPort.LeanTween.rotateAround(cube, Vector2.up, 360.0f, 1.0f) .setPoint( new Vector2(1f,0f,0f) ) .setEase( LeanTweenType.easeInOutBounce );<br>
-         */
-        public LTDescr setPoint(Vector2 point) {
-            this.point = point;
-            return this;
-        }
-
-    }
-
-    /**
-     * Animate GUI Elements by creating this object and passing the *.rect variable to the GUI method<br><br>
-     * <strong>Example Javascript: </strong><br>var bRect:LTRect = new LTRect( 0, 0, 100, 50 );<br>
-     * physicsPort.LeanTween.scale( bRect, Vector2(bRect.rect.width, bRect.rect.height) * 1.3, 0.25 );<br>
-     * function OnGUI(){<br>
-     * &nbsp; if(GUI.Button(bRect.rect, "Scale")){ }<br>
-     * }<br>
-     * <br>
-     * <strong>Example C#: </strong> <br>
-     * LTRect bRect = new LTRect( 0f, 0f, 100f, 50f );<br>
-     * physicsPort.LeanTween.scale( bRect, new Vector2(150f,75f), 0.25f );<br>
-     * void OnGUI(){<br>
-     * &nbsp; if(GUI.Button(bRect.rect, "Scale")){ }<br>
-     * }<br>
-     *
-     * @class LTRect
-     * @constructor
-     * @param {float} x:float X location
-     * @param {float} y:float Y location
-     * @param {float} width:float Width
-     * @param {float} height:float Height
-     */
-
-    static class LTRect {
-        /**
-         * Pass this value to the GUI Methods
-         *
-         * @property rect
-         * @type {Rect} rect:Rect Rect object that controls the positioning and size
-         */
-        public Rect _rect;
-        public float alpha;
-        public float rotation;
-        public Vector2 pivot;
-
-        public boolean rotateEnabled;
-        public boolean rotateFinished;
-        public boolean alphaEnabled;
-
-        public static boolean colorTouched;
-
-        public LTRect() {
-            reset();
-            this.rotateEnabled = this.alphaEnabled = true;
-            _rect = new Rect(0f, 0f, 1f, 1f);
-        }
-
-        public LTRect(Rect rect) {
-            _rect = rect;
-            reset();
-        }
-
-        public LTRect(float x, float y, float width, float height) {
-            _rect = new Rect(x, y, width, height);
-            this.alpha = 1.0f;
-            this.rotation = 0.0f;
-            this.rotateEnabled = this.alphaEnabled = false;
-        }
-
-        public LTRect(float x, float y, float width, float height, float alpha) {
-            _rect = new Rect(x, y, width, height);
-            this.alpha = alpha;
-            this.rotation = 0.0f;
-            this.rotateEnabled = this.alphaEnabled = false;
-        }
-
-        public LTRect(float x, float y, float width, float height, float alpha, float rotation) {
-            _rect = new Rect(x, y, width, height);
-            this.alpha = alpha;
-            this.rotation = rotation;
-            this.rotateEnabled = this.alphaEnabled = false;
-            if (rotation != 0.0f) {
-                this.rotateEnabled = true;
-                resetForRotation();
-            }
-        }
-
-        public void reset() {
-            this.alpha = 1.0f;
-            this.rotation = 0.0f;
-            this.rotateEnabled = this.alphaEnabled = false;
-        }
-
-        public void resetForRotation() {
-            if (pivot == Vector2.Zero) {
-                pivot = new Vector2(_rect.x + _rect.width * 0.5f, _rect.y + _rect.height * 0.5f);
-                _rect.x += -pivot.x;
-                _rect.y += -pivot.y;
-            }
-        }
-
-        public float x;
-
-        {
-            get {
-            return _rect.x;
-        }
-            set {
-            _rect.x = value;
-        }
-        }
-
-        public float y
-
-        {
-            get {
-            return _rect.y;
-        }
-            set {
-            _rect.y = value;
-        }
-        }
-
-        public Rect rect
-
-        {
-
-            get {
-            if (colorTouched) {
-                colorTouched = false;
-                GUI.color = new Color(GUI.color.r, GUI.color.g, GUI.color.b, 1.0f);
-            }
-            if (rotateEnabled) {
-                if (rotateFinished) {
-                    rotateFinished = false;
-                    rotateEnabled = false;
-                    _rect.x += pivot.x;
-                    _rect.y += pivot.y;
-                    pivot = Vector2.zero;
-                    GUI.matrix = Matrix4x4.identity;
-                } else {
-                    Matrix4x4 trsMatrix = Matrix4x4.identity;
-                    trsMatrix.SetTRS(pivot, Quaternion.Euler(0f, 0f, rotation), Vector2.one);
-                    GUI.matrix = trsMatrix;
-                }
-            }
-            if (alphaEnabled) {
-                GUI.color = new Color(GUI.color.r, GUI.color.g, GUI.color.b, alpha);
-                colorTouched = true;
-            }
-            return _rect;
-        }
-
-            set {
-            _rect = value;
-        }
-
-        }
-    }
-
-    static class LTBezier {
-        public float length;
-
-        private Vector2 a;
-        private Vector2 aa;
-        private Vector2 bb;
-        private Vector2 cc;
-        private float len;
-        private float[] arclengths;
-
-        public LTBezier(Vector2 a, Vector2 b, Vector2 c, Vector2 d, float precision) {
-            this.a = a;
-            aa = (-a + 3 * (b - c) + d);
-            bb = 3 * (a + c) - 6 * b;
-            cc = 3 * (b - a);
-
-            this.len = 1.0f / precision;
-            arclengths = new float[(int) this.len + (int) 1];
-            arclengths[0] = 0;
-
-            Vector2 ov = a;
-            Vector2 v;
-            float clen = 0.0f;
-            for (int i = 1; i <= this.len; i++) {
-                v = bezierPoint(i * precision);
-                clen += (ov - v).magnitude;
-                this.arclengths[i] = clen;
-                ov = v;
-            }
-            this.length = clen;
-        }
-
-        private float map(float u) {
-            float targetlength = u * this.arclengths[(int) this.len];
-            int low = 0;
-            int high = (int) this.len;
-            int index = 0;
-            while (low < high) {
-                index = low + ((int) ((high - low) / 2.0f) | 0);
-                if (this.arclengths[index] < targetlength) {
-                    low = index + 1;
-                } else {
-                    high = index;
-                }
-            }
-            if (this.arclengths[index] > targetlength)
-                index--;
-            if (index < 0)
-                index = 0;
-
-            return (index + (targetlength - arclengths[index]) / (arclengths[index + 1] - arclengths[index])) / this.len;
-        }
-
-        private Vector2 bezierPoint(float t) {
-            return ((aa * t + (bb)) * t + cc) * t + a;
-        }
-
-        public Vector2 point(float t) {
-            return bezierPoint(map(t));
-        }
-    }
-
-    /**
-     * Manually animate along a bezier path with this class
-     * @class LTBezierPath
-     * @constructor
-     * @param {float} pts:Vector2[] A set of points that define one or many bezier paths (the paths should be passed in multiples of 4, which correspond to each individual bezier curve)
-     */
-    static class LTBezierPath {
-        public Vector2[] pts;
-        public float length;
-        public boolean orientToPath;
-
-        private LTBezier[] beziers;
-        private float[] lengthRatio;
-
-        public LTBezierPath() {
-        }
-
-        public LTBezierPath(Vector2[] pts_) {
-            setPoints(pts_);
-        }
-
-        public void setPoints(Vector2[] pts_) {
-            if (pts_.length < 4)
-                LeanTween.logError("physicsPort.LeanTween - When passing values for a vector path, you must pass four or more values!");
-            if (pts_.length % 4 != 0)
-                LeanTween.logError("physicsPort.LeanTween - When passing values for a vector path, they must be in sets of four: controlPoint1, controlPoint2, endPoint2, controlPoint2, controlPoint2...");
-
-            pts = pts_;
-
-            int k = 0;
-            beziers = new LTBezier[pts.length / 4];
-            lengthRatio = new float[beziers.length];
-            int i;
-            for (i = 0; i < pts.length; i += 4) {
-                beziers[k] = new LTBezier(pts[i + 0], pts[i + 2], pts[i + 1], pts[i + 3], 0.05f);
-                length += beziers[k].length;
-                k++;
-            }
-            // Debug.Log("beziers.length:"+beziers.length + " beziers:"+beziers);
-            for (i = 0; i < beziers.length; i++) {
-                lengthRatio[i] = beziers[i].length / length;
-            }
-        }
-
-        public Vector2 point(float ratio) {
-            float added = 0.0f;
-            for (int i = 0; i < lengthRatio.length; i++) {
-                added += lengthRatio[i];
-                if (added >= ratio)
-                    return beziers[i].point((ratio - (added - lengthRatio[i])) / lengthRatio[i]);
-            }
-            return beziers[lengthRatio.length - 1].point(1.0f);
-        }
-
-        public void place(TransformF transform, float ratio) {
-            place(transform, ratio, Vector2.Y);
-        }
-
-        public void place(TransformF transform, float ratio, Vector2 worldUp) {
-            transform.position = point(ratio);
-            ratio += 0.001f;
-            if (ratio <= 1.0f)
-                transform.LookAt(point(ratio), worldUp);
-        }
-
-        public void placeLocal(Affine transform, float ratio) {
-            placeLocal(transform, ratio, Vector2.up);
-        }
-
-        public void placeLocal(Affine transform, float ratio, Vector2 worldUp) {
-            transform.localPosition = point(ratio);
-            ratio += 0.001f;
-            if (ratio <= 1.0f)
-                transform.LookAt(transform.parent.AffinePoint(point(ratio)), worldUp);
-        }
-    }
-
-    enum TweenAction {
-        MOVE_X,
-        MOVE_Y,
-        MOVE_Z,
-        MOVE_LOCAL_X,
-        MOVE_LOCAL_Y,
-        MOVE_LOCAL_Z,
-        MOVE_CURVED,
-        MOVE_CURVED_LOCAL,
-        SCALE_X,
-        SCALE_Y,
-        SCALE_Z,
-        ROTATE_X,
-        ROTATE_Y,
-        ROTATE_Z,
-        ROTATE_AROUND,
-        ALPHA,
-        ALPHA_VERTEX,
-        CALLBACK,
-        MOVE,
-        MOVE_LOCAL,
-        ROTATE,
-        ROTATE_LOCAL,
-        SCALE,
-        VALUE3,
-        GUI_MOVE,
-        GUI_SCALE,
-        GUI_ALPHA,
-        GUI_ROTATE
-    }
-
-    /**
-     * physicsPort.LeanTween is an efficient tweening engine for Unity3d<br><br>
-     * <a href="#index">Index of All Methods</a> | <a href="LTDescr.html">Optional Paramaters that can be passed</a><br><br>
-     * <strong id='optional'>Optional Parameters</strong> are passed at the end of every method<br>
-     * <br>
-     * <i>Example:</i><br>
-     * physicsPort.LeanTween.moveX( gameObject, 1f, 1f).setEase( <a href="LeanTweenType.html">LeanTweenType</a>.easeInQuad ).setDelay(1f);<br>
-     * <br>
-     * You can pass the optional parameters in any order, and chain on as many as you wish.<br>
-     * You can also pass parameters at a later time by saving a reference to what is returned.<br>
-     * <br>
-     * <i>Example:</i><br>
-     * <a href="LTDescr.html">LTDescr</a> d = physicsPort.LeanTween.moveX(gameObject, 1f, 1f);<br>
-     *  &nbsp; ...later set some parameters<br>
-     * d.setOnComplete( onCompleteFunc ).setEase( <a href="LeanTweenType.html">LeanTweenType</a>.easeInOutBack );<br>
-     *
-     * @class physicsPort.LeanTween
-     */
-
-    static class LTEvent {
-        public int id;
-        public Object data;
-
-        public LTEvent(int id, Object data) {
-            this.id = id;
-            this.data = data;
-        }
-    }
-
-    public static boolean throwErrors = true;
-
-    private static LTDescr[] tweens;
-    private static int tweenMaxSearch = 0;
-    private static int maxTweens = 400;
-    private static int frameRendered = -1;
-    private static GameObject _tweenEmpty;
-    private static float dtEstimated;
-    private static float previousRealTime;
-    private static float dt;
-    private static float dtActual;
-    private static LTDescr tween;
-    private static int i;
-    private static int j;
-    private static Vector2[] punch = {new Vector2(0.0f, 0.0f),
-            new Vector2(0.112586f, 0.9976035f),
-            new Vector2(0.3120486f, -0.1720615f),
-            new Vector2(0.4316337f, 0.07030682f),
-            new Vector2(0.5524869f, -0.03141804f),
-            new Vector2(0.6549395f, 0.003909959f),
-            new Vector2(0.770987f, -0.009817753f),
-            new Vector2(0.8838775f, 0.001939224f),
-            new Vector2(1.0f, 0.0f)};
-
-    public static void init() {
-        init(maxTweens);
-    }
-
-    /**
-     * This line is optional. Here you can specify the maximum number of tweens you will use (the default is 400).  This must be called before any use of physicsPort.LeanTween is made for it to be effective.
-     *
-     * @method physicsPort.LeanTween.init
-     * @param {integer} maxSimultaneousTweens:int The maximum number of tweens you will use, make sure you don't go over this limit, otherwise the code will throw an error
-     * @example
-     *   physicsPort.LeanTween.init(800);
-     */
-    public static void init(int maxSimultaneousTweens) {
-        if (tweens == null) {
-            maxTweens = maxSimultaneousTweens;
-            tweens = new LTDescr[maxTweens];
-            _tweenEmpty = new GameObject();
-            _tweenEmpty.name = "~physicsPort.LeanTween";
-            _tweenEmpty.AddComponent(typeof(LeanTween));
-            _tweenEmpty.isStatic = true;
-            DontDestroyOnLoad(_tweenEmpty);
-            for (int i = 0; i < maxTweens; i++) {
-                tweens[i] = new LTDescr();
-            }
-        }
-    }
-
-    public static void reset() {
-        tweens = null;
-    }
-
-    public void Update() {
-        LeanTween.update();
-    }
-
-    private static TransformF trans;
-    private static float timeTotal;
-    private static TweenAction tweenAction;
-    private static float ratioPassed;
-    private static float from;
-    private static float to;
-    private static float val;
-    private static Vector2 newVect;
-    private static boolean isTweenFinished;
-    private static GameObject target;
-    private static GameObject customTarget;
-
-    public static void update() {
-        if (frameRendered != Time.frameCount) { // make sure update is only called once per frame
-            init();
-
-            dtEstimated = Time.realtimeSinceStartup - previousRealTime;
-            if (dtEstimated > 0.2f) // a catch put in, when at the start sometimes this number can grow unrealistically large
-                dtEstimated = 0.2f;
-            previousRealTime = Time.realtimeSinceStartup;
-            dtActual = Time.deltaTime * Time.timeScale;
-            // if(tweenMaxSearch>1500)
-            // 	Debug.Log("tweenMaxSearch:"+tweenMaxSearch +" maxTweens:"+maxTweens);
-            for (int i = 0; i < tweenMaxSearch && i < maxTweens; i++) {
-
-                //Debug.Log("tweens["+i+"].toggle:"+tweens[i].toggle);
-                if (tweens[i].toggle) {
-                    tween = tweens[i];
-                    trans = tween.trans;
-                    timeTotal = tween.time * Time.timeScale;
-                    tweenAction = tween.type;
-
-                    dt = dtActual;
-                    if (tween.useEstimatedTime) {
-                        dt = dtEstimated;
-                        timeTotal = tween.time;
-                    } else if (tween.useFrames) {
-                        dt = 1;
-                    }
-
-                    if (trans == null) {
-                        removeTween(i);
-                        continue;
-                    }
-
-                    // Check for tween finished
-                    isTweenFinished = false;
-                    if ((tween.passed + dt > timeTotal && tween.direction > 0.0f)) {
-                        isTweenFinished = true;
-                        tween.passed = timeTotal; // Set to the exact end time so that it can finish tween exactly on the end value
-                    } else if (tween.direction < 0.0f && tween.passed - dt < 0.0f) {
-                        isTweenFinished = true;
-                        tween.passed = Mathf.Epsilon;
-                    }
-
-                    if ((tween.passed == 0.0 && tweens[i].delay == 0.0) || (!tween.hasInitiliazed && tween.passed > 0.0)) {
-                        tween.hasInitiliazed = true;
-                        // Initialize From Values
-
-
-                        switch (tweenAction) {
-                            case MOVE:
-                                tween.from = trans.position;
-                                break;
-                            case MOVE_X:
-                                tween.from.x = trans.position.x;
-                                break;
-                            case MOVE_Y:
-                                tween.from.x = trans.position.y;
-                                break;
-
-                            case MOVE_LOCAL_X:
-                                tweens[i].from.x = trans.localPosition.x;
-                                break;
-                            case MOVE_LOCAL_Y:
-                                tweens[i].from.x = trans.localPosition.y;
-                                break;
-
-                            break;
-                            case SCALE_X:
-                                tween.from.x = trans.localScale.x;
-                                break;
-                            case SCALE_Y:
-                                tween.from.x = trans.localScale.y;
-                                break;
-
-                            break;
-                            case ALPHA:
-                                tween.from.x = trans.gameObject.renderer.material.color.a;
-                                break;
-                            case MOVE_LOCAL:
-                                tween.from = trans.localPosition;
-                                break;
-                            case MOVE_CURVED:
-                                // tween.path.pts[0] = trans.position;
-                                tween.from.x = 0;
-                                break;
-                            case MOVE_CURVED_LOCAL:
-                                // tween.path.pts[0] = trans.localPosition;
-                                tween.from.x = 0;
-                                break;
-                            case ROTATE:
-                                tween.from = trans.eulerAngles;
-                                tween.to.x = LeanTween.closestRot(tween.from.x, tween.to.x);
-                                tween.to.y = LeanTween.closestRot(tween.from.y, tween.to.y);
-                                break;
-                            case ROTATE_X:
-                                tween.from.x = trans.eulerAngles.x;
-                                tween.to.x = LeanTween.closestRot(tween.from.x, tween.to.x);
-                                break;
-                            case ROTATE_Y:
-                                tween.from.x = trans.eulerAngles.y;
-                                tween.to.x = LeanTween.closestRot(tween.from.x, tween.to.x);
-                                break;
-
-                            case ROTATE_AROUND:
-                                tween.lastVal = 0.0f; // optional["last"]
-                                tween.origRotation = trans.eulerAngles; // optional["origRotation"
-                                break;
-                            case ROTATE_LOCAL:
-                                tween.from = trans.localEulerAngles;
-                                tween.to.x = LeanTween.closestRot(tween.from.x, tween.to.x);
-                                tween.to.y = LeanTween.closestRot(tween.from.y, tween.to.y);
-                                break;
-                            case SCALE:
-                                tween.from = trans.localScale;
-                                break;
-                            case GUI_MOVE:
-                                tween.from = new Vector2(tween.ltRect.rect.x, tween.ltRect.rect.y, 0);
-                                break;
-                            case GUI_SCALE:
-                                tween.from = new Vector2(tween.ltRect.rect.width, tween.ltRect.rect.height, 0);
-                                break;
-                            case GUI_ALPHA:
-                                tween.from.x = tween.ltRect.alpha;
-                                break;
-                            case GUI_ROTATE:
-                                if (tween.ltRect.rotateEnabled == false) {
-                                    tween.ltRect.rotateEnabled = true;
-                                    tween.ltRect.resetForRotation();
-                                }
-
-                                tween.from.x = tween.ltRect.rotation;
-                                break;
-
-                        }
-                        tween.diff.x = tween.to.x - tween.from.x;
-                        tween.diff.y = tween.to.y - tween.from.y;
-                    }
-                    if (tween.delay <= 0) {
-                        // Move Values
-                        if (timeTotal <= 0f) {
-                            //Debug.LogError("time total is zero Time.timeScale:"+Time.timeScale+" useEstimatedTime:"+tween.useEstimatedTime);
-                            ratioPassed = 0f;
-                        } else {
-                            ratioPassed = tween.passed / timeTotal;
-                        }
-
-                        if (ratioPassed > 1.0)
-                            ratioPassed = 1.0f;
-
-                        if (tweenAction.ordinal() >= TweenAction.MOVE_X.ordinal() && tweenAction.ordinal() <= TweenAction.CALLBACK.ordinal()) {
-                            if (tween.animationCurve != null) {
-                                val = tweenOnCurve(tween, ratioPassed);
-                            } else {
-                                switch (tween.tweenType) {
-                                    case linear:
-                                        val = tween.from.x + tween.diff.x * ratioPassed;
-                                        break;
-                                    case easeOutQuad:
-                                        val = easeOutQuadOpt(tween.from.x, tween.diff.x, ratioPassed);
-                                        break;
-                                    case easeInQuad:
-                                        val = easeInQuadOpt(tween.from.x, tween.diff.x, ratioPassed);
-                                        break;
-                                    case easeInOutQuad:
-                                        val = easeInOutQuadOpt(tween.from.x, tween.diff.x, ratioPassed);
-                                        break;
-                                    case easeInCubic:
-                                        val = easeInCubic(tween.from.x, tween.to.x, ratioPassed);
-                                        break;
-                                    case easeOutCubic:
-                                        val = easeOutCubic(tween.from.x, tween.to.x, ratioPassed);
-                                        break;
-                                    case easeInOutCubic:
-                                        val = easeInOutCubic(tween.from.x, tween.to.x, ratioPassed);
-                                        break;
-                                    case easeInQuart:
-                                        val = easeInQuart(tween.from.x, tween.to.x, ratioPassed);
-                                        break;
-                                    case easeOutQuart:
-                                        val = easeOutQuart(tween.from.x, tween.to.x, ratioPassed);
-                                        break;
-                                    case easeInOutQuart:
-                                        val = easeInOutQuart(tween.from.x, tween.to.x, ratioPassed);
-                                        break;
-                                    case easeInQuint:
-                                        val = easeInQuint(tween.from.x, tween.to.x, ratioPassed);
-                                        break;
-                                    case easeOutQuint:
-                                        val = easeOutQuint(tween.from.x, tween.to.x, ratioPassed);
-                                        break;
-                                    case easeInOutQuint:
-                                        val = easeInOutQuint(tween.from.x, tween.to.x, ratioPassed);
-                                        break;
-                                    case easeInSine:
-                                        val = easeInSine(tween.from.x, tween.to.x, ratioPassed);
-                                        break;
-                                    case easeOutSine:
-                                        val = easeOutSine(tween.from.x, tween.to.x, ratioPassed);
-                                        break;
-                                    case easeInOutSine:
-                                        val = easeInOutSine(tween.from.x, tween.to.x, ratioPassed);
-                                        break;
-                                    case easeInExpo:
-                                        val = easeInExpo(tween.from.x, tween.to.x, ratioPassed);
-                                        break;
-                                    case easeOutExpo:
-                                        val = easeOutExpo(tween.from.x, tween.to.x, ratioPassed);
-                                        break;
-                                    case easeInOutExpo:
-                                        val = easeInOutExpo(tween.from.x, tween.to.x, ratioPassed);
-                                        break;
-                                    case easeInCirc:
-                                        val = easeInCirc(tween.from.x, tween.to.x, ratioPassed);
-                                        break;
-                                    case easeOutCirc:
-                                        val = easeOutCirc(tween.from.x, tween.to.x, ratioPassed);
-                                        break;
-                                    case easeInOutCirc:
-                                        val = easeInOutCirc(tween.from.x, tween.to.x, ratioPassed);
-                                        break;
-                                    case easeInBounce:
-                                        val = easeInBounce(tween.from.x, tween.to.x, ratioPassed);
-                                        break;
-                                    case easeOutBounce:
-                                        val = easeOutBounce(tween.from.x, tween.to.x, ratioPassed);
-                                        break;
-                                    case easeInOutBounce:
-                                        val = easeInOutBounce(tween.from.x, tween.to.x, ratioPassed);
-                                        break;
-                                    case easeInBack:
-                                        val = easeInBack(tween.from.x, tween.to.x, ratioPassed);
-                                        break;
-                                    case easeOutBack:
-                                        val = easeOutBack(tween.from.x, tween.to.x, ratioPassed);
-                                        break;
-                                    case easeInOutBack:
-                                        val = easeInOutElastic(tween.from.x, tween.to.x, ratioPassed);
-                                        break;
-                                    case easeInElastic:
-                                        val = easeInElastic(tween.from.x, tween.to.x, ratioPassed);
-                                        break;
-                                    case easeOutElastic:
-                                        val = easeOutElastic(tween.from.x, tween.to.x, ratioPassed);
-                                        break;
-                                    case easeInOutElastic:
-                                        val = easeInOutElastic(tween.from.x, tween.to.x, ratioPassed);
-                                        break;
-                                    case punch:
-                                        tween.animationCurve = LeanTween.punch;
-                                        tween.to.x = tween.from.x + tween.to.x;
-                                        val = tweenOnCurve(tween, ratioPassed);
-                                        break;
-                                    default: {
-                                        val = tween.from.x + tween.diff.x * ratioPassed;
-                                        break;
-                                    }
-                                }
-
-                            }
-
-                            //Debug.Log("from:"+from+" to:"+to+" val:"+val+" ratioPassed:"+ratioPassed);
-                            if (tweenAction == TweenAction.MOVE_X) {
-                                trans.position = new Vector2(val, trans.position.y, trans.position.z);
-                            } else if (tweenAction == TweenAction.MOVE_Y) {
-                                trans.position = new Vector2(trans.position.x, val, trans.position.z);
-                            } else if (tweenAction == TweenAction.MOVE_Z) {
-                                trans.position = new Vector2(trans.position.x, trans.position.y, val);
-                            }
-                            if (tweenAction == TweenAction.MOVE_LOCAL_X) {
-                                trans.localPosition = new Vector2(val, trans.localPosition.y, trans.localPosition.z);
-                            } else if (tweenAction == TweenAction.MOVE_LOCAL_Y) {
-                                trans.localPosition = new Vector2(trans.localPosition.x, val, trans.localPosition.z);
-                            } else if (tweenAction == TweenAction.MOVE_LOCAL_Z) {
-                                trans.localPosition = new Vector2(trans.localPosition.x, trans.localPosition.y);
-                            } else if (tweenAction == TweenAction.MOVE_CURVED) {
-                                if (tween.path.orientToPath) {
-                                    tween.path.place(trans, val);
-                                } else {
-                                    trans.position = tween.path.point(val);
-                                }
-                                // Debug.Log("val:"+val+" trans.position:"+trans.position + " 0:"+ tween.curves[0] +" 1:"+tween.curves[1] +" 2:"+tween.curves[2] +" 3:"+tween.curves[3]);
-                            } else if ((TweenAction) tweenAction == TweenAction.MOVE_CURVED_LOCAL) {
-                                if (tween.path.orientToPath) {
-                                    tween.path.placeLocal(trans, val);
-                                } else {
-                                    trans.localPosition = tween.path.point(val);
-                                }
-                                // Debug.Log("val:"+val+" trans.position:"+trans.position);
-                            } else if (tweenAction == TweenAction.SCALE_X) {
-                                trans.localScale = new Vector2(val, trans.localScale.y, trans.localScale.z);
-                            } else if (tweenAction == TweenAction.SCALE_Y) {
-                                trans.localScale = new Vector2(trans.localScale.x, val, trans.localScale.z);
-                            } else if (tweenAction == TweenAction.SCALE_Z) {
-                                trans.localScale = new Vector2(trans.localScale.x, trans.localScale.y, val);
-                            } else if (tweenAction == TweenAction.ROTATE_X) {
-                                trans.eulerAngles = new Vector2(val, trans.eulerAngles.y, trans.eulerAngles.z);
-                            } else if (tweenAction == TweenAction.ROTATE_Y) {
-                                trans.eulerAngles = new Vector2(trans.eulerAngles.x, val, trans.eulerAngles.z);
-                            } else if (tweenAction == TweenAction.ROTATE_Z) {
-                                trans.eulerAngles = new Vector2(trans.eulerAngles.x, trans.eulerAngles.y, val);
-                            } else if (tweenAction == TweenAction.ROTATE_AROUND) {
-
-                                float move = val - tween.lastVal;
-                                // Debug.Log("move:"+move+" val:"+val + " timeTotal:"+timeTotal + " from:"+tween.from+ " diff:"+tween.diff);
-					    	/*if(isTweenFinished){
-					    		trans.eulerAngles = tween.origRotation;
-					    		trans.RotateAround((Vector2)trans.AffinePoint( tween.point ), tween.axis, tween.to.x);
-					    	}else{*/
-                                trans.RotateAround((Vector2) trans.AffinePoint(tween.point), tween.axis, move /*tween.to.x * (dt/timeTotal)*/);
-                                tween.lastVal = val;
-                                //}
-
-                            } else if (tweenAction == TweenAction.ALPHA) {
-                                foreach(Material mat in trans.gameObject.renderer.materials) {
-                                    mat.color = new Color(mat.color.r, mat.color.g, mat.color.b, val);
-                                }
-                            } else if (tweenAction == TweenAction.ALPHA_VERTEX) {
-                                Mesh mesh = trans.GetComponent < MeshFilter > ().mesh;
-                                Vector2[] vertices = mesh.vertices;
-                                Color32[] colors = new Color32[vertices.length];
-                                Color32 c = mesh.colors32[0];
-                                c = new Color(c.r, c.g, c.b, val);
-                                for (int k = 0; k < vertices.length; k++) {
-                                    colors[k] = c;
-                                }
-                                mesh.colors32 = colors;
-                            }
-
-                        } else if (tweenAction >= TweenAction.MOVE) {
-                            //
-
-                            if (tween.animationCurve != null) {
-                                newVect = tweenOnCurveVector(tween, ratioPassed);
-                            } else {
-                                if (tween.tweenType == LeanTweenType.linear) {
-                                    newVect.x = tween.from.x + tween.diff.x * ratioPassed;
-                                    newVect.y = tween.from.y + tween.diff.y * ratioPassed;
-                                } else if (tween.tweenType >= LeanTweenType.linear) {
-                                    switch (tween.tweenType) {
-                                        case easeOutQuad:
-                                            newVect = new Vector2(easeOutQuadOpt(tween.from.x, tween.diff.x, ratioPassed), easeOutQuadOpt(tween.from.y, tween.diff.y, ratioPassed), easeOutQuadOpt(tween.from.z, tween.diff.z, ratioPassed));
-                                            break;
-                                        case easeInQuad:
-                                            newVect = new Vector2(easeInQuadOpt(tween.from.x, tween.diff.x, ratioPassed), easeInQuadOpt(tween.from.y, tween.diff.y, ratioPassed), easeInQuadOpt(tween.from.z, tween.diff.z, ratioPassed));
-                                            break;
-                                        case easeInOutQuad:
-                                            newVect = new Vector2(easeInOutQuadOpt(tween.from.x, tween.diff.x, ratioPassed), easeInOutQuadOpt(tween.from.y, tween.diff.y, ratioPassed), easeInOutQuadOpt(tween.from.z, tween.diff.z, ratioPassed));
-                                            break;
-                                        case easeInCubic:
-                                            newVect = new Vector2(easeInCubic(tween.from.x, tween.to.x, ratioPassed), easeInCubic(tween.from.y, tween.to.y, ratioPassed), easeInCubic(tween.from.z, tween.to.z, ratioPassed));
-                                            break;
-                                        case easeOutCubic:
-                                            newVect = new Vector2(easeOutCubic(tween.from.x, tween.to.x, ratioPassed), easeOutCubic(tween.from.y, tween.to.y, ratioPassed), easeOutCubic(tween.from.z, tween.to.z, ratioPassed));
-                                            break;
-                                        case easeInOutCubic:
-                                            newVect = new Vector2(easeInOutCubic(tween.from.x, tween.to.x, ratioPassed), easeInOutCubic(tween.from.y, tween.to.y, ratioPassed), easeInOutCubic(tween.from.z, tween.to.z, ratioPassed));
-                                            break;
-                                        case easeInQuart:
-                                            newVect = new Vector2(easeInQuart(tween.from.x, tween.to.x, ratioPassed), easeInQuart(tween.from.y, tween.to.y, ratioPassed), easeInQuart(tween.from.z, tween.to.z, ratioPassed));
-                                            break;
-                                        case easeOutQuart:
-                                            newVect = new Vector2(easeOutQuart(tween.from.x, tween.to.x, ratioPassed), easeOutQuart(tween.from.y, tween.to.y, ratioPassed), easeOutQuart(tween.from.z, tween.to.z, ratioPassed));
-                                            break;
-                                        case easeInOutQuart:
-                                            newVect = new Vector2(easeInOutQuart(tween.from.x, tween.to.x, ratioPassed), easeInOutQuart(tween.from.y, tween.to.y, ratioPassed), easeInOutQuart(tween.from.z, tween.to.z, ratioPassed));
-                                            break;
-                                        case easeInQuint:
-                                            newVect = new Vector2(easeInQuint(tween.from.x, tween.to.x, ratioPassed), easeInQuint(tween.from.y, tween.to.y, ratioPassed), easeInQuint(tween.from.z, tween.to.z, ratioPassed));
-                                            break;
-                                        case easeOutQuint:
-                                            newVect = new Vector2(easeOutQuint(tween.from.x, tween.to.x, ratioPassed), easeOutQuint(tween.from.y, tween.to.y, ratioPassed), easeOutQuint(tween.from.z, tween.to.z, ratioPassed));
-                                            break;
-                                        case easeInOutQuint:
-                                            newVect = new Vector2(easeInOutQuint(tween.from.x, tween.to.x, ratioPassed), easeInOutQuint(tween.from.y, tween.to.y, ratioPassed), easeInOutQuint(tween.from.z, tween.to.z, ratioPassed));
-                                            break;
-                                        case easeInSine:
-                                            newVect = new Vector2(easeInSine(tween.from.x, tween.to.x, ratioPassed), easeInSine(tween.from.y, tween.to.y, ratioPassed), easeInSine(tween.from.z, tween.to.z, ratioPassed));
-                                            break;
-                                        case easeOutSine:
-                                            newVect = new Vector2(easeOutSine(tween.from.x, tween.to.x, ratioPassed), easeOutSine(tween.from.y, tween.to.y, ratioPassed), easeOutSine(tween.from.z, tween.to.z, ratioPassed));
-                                            break;
-                                        case easeInOutSine:
-                                            newVect = new Vector2(easeInOutSine(tween.from.x, tween.to.x, ratioPassed), easeInOutSine(tween.from.y, tween.to.y, ratioPassed), easeInOutSine(tween.from.z, tween.to.z, ratioPassed));
-                                            break;
-                                        case easeOutExpo:
-                                            newVect = new Vector2(easeOutExpo(tween.from.x, tween.to.x, ratioPassed), easeOutExpo(tween.from.y, tween.to.y, ratioPassed), easeOutExpo(tween.from.z, tween.to.z, ratioPassed));
-                                            break;
-                                        case easeInExpo:
-                                            newVect = new Vector2(easeInExpo(tween.from.x, tween.to.x, ratioPassed), easeInExpo(tween.from.y, tween.to.y, ratioPassed), easeInExpo(tween.from.z, tween.to.z, ratioPassed));
-                                            break;
-                                        case easeInOutExpo:
-                                            newVect = new Vector2(easeInOutExpo(tween.from.x, tween.to.x, ratioPassed), easeInOutExpo(tween.from.y, tween.to.y, ratioPassed), easeInOutExpo(tween.from.z, tween.to.z, ratioPassed));
-                                            break;
-                                        case easeInCirc:
-                                            newVect = new Vector2(easeInCirc(tween.from.x, tween.to.x, ratioPassed), easeInCirc(tween.from.y, tween.to.y, ratioPassed), easeInCirc(tween.from.z, tween.to.z, ratioPassed));
-                                            break;
-                                        case easeOutCirc:
-                                            newVect = new Vector2(easeOutCirc(tween.from.x, tween.to.x, ratioPassed), easeOutCirc(tween.from.y, tween.to.y, ratioPassed), easeOutCirc(tween.from.z, tween.to.z, ratioPassed));
-                                            break;
-                                        case easeInOutCirc:
-                                            newVect = new Vector2(easeInOutCirc(tween.from.x, tween.to.x, ratioPassed), easeInOutCirc(tween.from.y, tween.to.y, ratioPassed), easeInOutCirc(tween.from.z, tween.to.z, ratioPassed));
-                                            break;
-                                        case easeInBounce:
-                                            newVect = new Vector2(easeInBounce(tween.from.x, tween.to.x, ratioPassed), easeInBounce(tween.from.y, tween.to.y, ratioPassed), easeInBounce(tween.from.z, tween.to.z, ratioPassed));
-                                            break;
-                                        case easeOutBounce:
-                                            newVect = new Vector2(easeOutBounce(tween.from.x, tween.to.x, ratioPassed), easeOutBounce(tween.from.y, tween.to.y, ratioPassed), easeOutBounce(tween.from.z, tween.to.z, ratioPassed));
-                                            break;
-                                        case easeInOutBounce:
-                                            newVect = new Vector2(easeInOutBounce(tween.from.x, tween.to.x, ratioPassed), easeInOutBounce(tween.from.y, tween.to.y, ratioPassed), easeInOutBounce(tween.from.z, tween.to.z, ratioPassed));
-                                            break;
-                                        case easeInBack:
-                                            newVect = new Vector2(easeInBack(tween.from.x, tween.to.x, ratioPassed), easeInBack(tween.from.y, tween.to.y, ratioPassed), easeInBack(tween.from.z, tween.to.z, ratioPassed));
-                                            break;
-                                        case easeOutBack:
-                                            newVect = new Vector2(easeOutBack(tween.from.x, tween.to.x, ratioPassed), easeOutBack(tween.from.y, tween.to.y, ratioPassed), easeOutBack(tween.from.z, tween.to.z, ratioPassed));
-                                            break;
-                                        case easeInOutBack:
-                                            newVect = new Vector2(easeInOutBack(tween.from.x, tween.to.x, ratioPassed), easeInOutBack(tween.from.y, tween.to.y, ratioPassed), easeInOutBack(tween.from.z, tween.to.z, ratioPassed));
-                                            break;
-                                        case easeInElastic:
-                                            newVect = new Vector2(easeInElastic(tween.from.x, tween.to.x, ratioPassed), easeInElastic(tween.from.y, tween.to.y, ratioPassed), easeInElastic(tween.from.z, tween.to.z, ratioPassed));
-                                            break;
-                                        case easeOutElastic:
-                                            newVect = new Vector2(easeOutElastic(tween.from.x, tween.to.x, ratioPassed), easeOutElastic(tween.from.y, tween.to.y, ratioPassed), easeOutElastic(tween.from.z, tween.to.z, ratioPassed));
-                                            break;
-                                        case easeInOutElastic:
-                                            newVect = new Vector2(easeInOutElastic(tween.from.x, tween.to.x, ratioPassed), easeInOutElastic(tween.from.y, tween.to.y, ratioPassed), easeInOutElastic(tween.from.z, tween.to.z, ratioPassed));
-                                            break;
-                                        case punch:
-                                            tween.animationCurve = LeanTween.punch;
-                                            tween.to.x = tween.from.x + tween.to.x;
-                                            tween.to.y = tween.from.y + tween.to.y;
-                                            if (tweenAction == TweenAction.ROTATE || tweenAction == TweenAction.ROTATE_LOCAL) {
-                                                tween.to.x = closestRot(tween.from.x, tween.to.x);
-                                                tween.to.y = closestRot(tween.from.y, tween.to.y);
-                                            }
-                                            newVect = tweenOnCurveVector(tween, ratioPassed);
-                                            break;
-                                    }
-                                } else {
-                                    newVect.x = tween.from.x + tween.diff.x * ratioPassed;
-                                    newVect.y = tween.from.y + tween.diff.y * ratioPassed;
-                                }
-                            }
-
-                            if (tweenAction == TweenAction.MOVE) {
-                                trans.position = newVect;
-                            } else if (tweenAction == TweenAction.MOVE_LOCAL) {
-                                trans.localPosition = newVect;
-                            } else if (tweenAction == TweenAction.ROTATE) {
-                                if (tween.hasPhysics) {
-                                    trans.gameObject.rigidbody.MoveRotation(Quaternion.Euler(newVect));
-                                } else {
-                                    trans.eulerAngles = newVect;
-                                }
-                            } else if (tweenAction == TweenAction.ROTATE_LOCAL) {
-                                trans.localEulerAngles = newVect;
-                            } else if (tweenAction == TweenAction.SCALE) {
-                                trans.localScale = newVect;
-                            } else if (tweenAction == TweenAction.GUI_MOVE) {
-                                tween.ltRect.rect = new Rect(newVect.x, newVect.y, tween.ltRect.rect.width, tween.ltRect.rect.height);
-                            } else if (tweenAction == TweenAction.GUI_SCALE) {
-                                tween.ltRect.rect = new Rect(tween.ltRect.rect.x, tween.ltRect.rect.y, newVect.x, newVect.y);
-                            } else if (tweenAction == TweenAction.GUI_ALPHA) {
-                                tween.ltRect.alpha = newVect.x;
-                            } else if (tweenAction == TweenAction.GUI_ROTATE) {
-                                tween.ltRect.rotation = newVect.x;
-                            }
-                        }
-                        //Debug.Log("tween.delay:"+tween.delay + " tween.passed:"+tween.passed + " tweenAction:"+tweenAction + " from:"+newVect);
-
-                        if (tween.onUpdateFloat != null) {
-                            tween.onUpdateFloat(val);
-                        } else if (tween.onUpdateFloatObject != null) {
-                            tween.onUpdateFloatObject(val, tween.onUpdateParam);
-                        } else if (tween.onUpdateVector2 != null) {
-                            tween.onUpdateVector2(newVect);
-                        } else if (tween.optional != null) { // physicsPort.LeanTween 1.x legacy stuff
-
-                            var onUpdate = tween.optional["onUpdate"];
-                            if (onUpdate != null) {
-                                Hashtable updateParam = (Hashtable) tween.optional["onUpdateParam"];
-                                if ((TweenAction) tweenAction == TweenAction.VALUE3) {
-                                    if (onUpdate.GetType() == typeof(string)) {
-                                        string onUpdateS = onUpdate as string;
-                                        customTarget = tween.optional["onUpdateTarget"] != null ? tween.optional["onUpdateTarget"]
-                                        as GameObject :trans.gameObject;
-                                        customTarget.BroadcastMessage(onUpdateS, newVect);
-                                    } else if (onUpdate.GetType() == typeof(System.Action < Vector2, Hashtable >)) {
-                                        System.Action<Vector2, Hashtable> onUpdateA = (System.Action<Vector2, Hashtable>) onUpdate;
-                                        onUpdateA(newVect, updateParam);
-                                    } else {
-                                        System.Action<Vector2> onUpdateA = (System.Action<Vector2>) onUpdate;
-                                        onUpdateA(newVect);
-                                    }
-                                } else {
-                                    if (onUpdate.GetType() == typeof(string)) {
-                                        string onUpdateS = onUpdate as string;
-                                        if (tween.optional["onUpdateTarget"] != null) {
-                                            customTarget = tween.optional["onUpdateTarget"] as GameObject;
-                                            customTarget.BroadcastMessage(onUpdateS, val);
-                                        } else {
-                                            trans.gameObject.BroadcastMessage(onUpdateS, val);
-                                        }
-                                    } else if (onUpdate.GetType() == typeof(System.Action <float,Hashtable >)){
-                                        System.Action<float, Hashtable> onUpdateA = (System.Action<float, Hashtable>) onUpdate;
-                                        onUpdateA(val, updateParam);
-                                    }else if (onUpdate.GetType() == typeof(System.Action < Vector2 >)) {
-                                        System.Action<Vector2> onUpdateA = (System.Action<Vector2>) onUpdate;
-                                        onUpdateA(newVect);
-                                    } else {
-                                        System.Action<float> onUpdateA = (System.Action<float>) onUpdate;
-                                        onUpdateA(val);
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    if (isTweenFinished) {
-                        // Debug.Log("fininished tween:"+tween.id);
-                        if (tweenAction == TweenAction.GUI_ROTATE)
-                            tween.ltRect.rotateFinished = true;
-
-                        if (tween.loopType == LeanTweenType.once || tween.loopCount == 1) {
-                            if (tween.onComplete != null) {
-                                removeTween(i);
-                                tween.onComplete();
-
-                            } else if (tween.onCompleteObject != null) {
-                                removeTween(i);
-                                tween.onCompleteObject(tween.onCompleteParam);
-                            } else if (tween.optional != null) {
-                                Action callback = null;
-                                Action<Object> callbackWithParam = null;
-                                string callbackS = string.Empty;
-                                object callbackParam = null;
-                                if (tween.optional != null && tween.trans) {
-                                    if (tween.optional["onComplete"] != null) {
-                                        callbackParam = tween.optional["onCompleteParam"];
-                                        if (tween.optional["onComplete"].GetType() == typeof(string)) {
-                                            callbackS = tween.optional["onComplete"] as string;
-                                        } else {
-                                            if (callbackParam != null) {
-                                                callbackWithParam = (System.Action<object>) tween.optional["onComplete"];
-                                            } else {
-                                                callback = (System.Action) tween.optional["onComplete"];
-                                                if (callback == null){
-
-                                            }
-                                        }
-                                    }
-                                }
-                                removeTween(i);
-                                if (callbackWithParam != null) {
-                                    callbackWithParam(callbackParam);
-                                } else if (callback != null) {
-                                    callback();
-                                } else if (callbackS != string.Empty) {
-                                    if (tween.optional["onCompleteTarget"] != null) {
-                                        customTarget = tween.optional["onCompleteTarget"] as GameObject;
-                                        if (callbackParam != null)
-                                            customTarget.BroadcastMessage(callbackS, callbackParam);
-                                        else customTarget.BroadcastMessage(callbackS);
-                                    } else {
-                                        if (callbackParam != null)
-                                            trans.gameObject.BroadcastMessage(callbackS, callbackParam);
-                                        else trans.gameObject.BroadcastMessage(callbackS);
-                                    }
-                                }
-                            } else {
-                                removeTween(i);
-                            }
-                        } else {
-                            if (tween.loopCount >= 1) {
-                                tween.loopCount--;
-                            }
-                            if (tween.loopType == LeanTweenType.clamp) {
-                                tween.passed = Mathf.Epsilon;
-                                // tween.delay = 0.0;
-                            } else if (tween.loopType == LeanTweenType.pingPong) {
-                                tween.direction = 0.0f - (tween.direction);
-                            }
-                        }
-                    } else if (tween.delay <= 0) {
-                        tween.passed += dt * tween.direction;
-                    } else {
-                        tween.delay -= dt;
-                        if (tween.delay < 0) {
-                            tween.passed = 0.0f;//-tween.delay
-                            tween.delay = 0.0f;
-                        }
-                    }
-                }
-            }
-
-            frameRendered = Time.frameCount;
-        }
-    }
-
-    public static void removeTween(int i) {
-        if (tweens[i].toggle) {
-            tweens[i].toggle = false;
-            //tweens[i].optional = null;
-            startSearch = i;
-            //Debug.Log("start search reset:"+startSearch + " i:"+i+" tweenMaxSearch:"+tweenMaxSearch);
-            if (i + 1 >= tweenMaxSearch) {
-                //Debug.Log("reset to zero");
-                startSearch = 0;
-                tweenMaxSearch--;
-            }
-        }
-    }
-
-    public static Vector2[] add(Vector2[] a, Vector2 b) {
-        Vector2[] c = new Vector2[a.length];
-        for (i = 0; i < a.length; i++) {
-            c[i] = a[i] + b;
-        }
-
-        return c;
-    }
-
-    public static float closestRot(float from, float to) {
-        float minusWhole = 0 - (360 - to);
-        float plusWhole = 360 + to;
-        float toDiffAbs = Mathf.abs(to - from);
-        float minusDiff = Mathf.abs(minusWhole - from);
-        float plusDiff = Mathf.abs(plusWhole - from);
-        if (toDiffAbs < minusDiff && toDiffAbs < plusDiff) {
-            return to;
-        } else {
-            if (minusDiff < plusDiff) {
-                return minusWhole;
-            } else {
-                return plusWhole;
-            }
-        }
-    }
-
-    /**
-     * Cancel all tweens that are currently targeting the gameObject
-     *
-     * @method physicsPort.LeanTween.cancel
-     * @param {GameObject} gameObject:GameObject gameObject whose tweens you want to cancel
-     */
-    public static void cancel(GameObject gameObject) {
-        TransformF trans = gameObject.transform;
-        for (int i = 0; i < tweenMaxSearch; i++) {
-            if (tweens[i].trans == trans)
-                removeTween(i);
-        }
-    }
-
-    // Deprecated use cancel( id )
-    public static void cancel(GameObject gameObject, int id) {
-        cancel(id);
-    }
-
-    // Deprecated use cancel( id )
-    public static void cancel(LTRect ltRect, int id) {
-        cancel(id);
-    }
-
-    /**
-     * Cancel all tweens that are currently targeting the gameObject
-     *
-     * @method physicsPort.LeanTween.cancel
-     * @param {int} id:int id of the tween you want to cancel
-     * @example int tweenIDMove = physicsPort.LeanTween.move( gameObject, new Vector2(0f,1f,2f), 1f).id; <br>
-     * physicsPort.LeanTween.cancel( tweenIDMove );
-     */
-    public static void cancel(int uniqueId) {
-        int backId = uniqueId & 0xFFFFFF;
-        int backType = uniqueId >> 24;
-        // Debug.Log("id:"+backId+" action:"+backType + " tweens[id].type:"+tweens[backId].type +" action:"+(TweenAction)backType);
-        if (tweens[backId].type == (TweenAction) backType)
-            removeTween(backId);
-    }
-
-    // Deprecated
-    public static LTDescr description(int uniqueId) {
-        int backId = uniqueId & 0xFFFFFF;
-        int backType = uniqueId >> 24;
-
-        if (tweens[backId] != null && tweens[backId].uniqueId == uniqueId && tweens[backId].type == (TweenAction) backType)
-            return tweens[backId];
-        for (int i = 0; i < tweenMaxSearch; i++) {
-            if (tweens[i].uniqueId == uniqueId && tweens[i].type == (TweenAction) backType)
-                return tweens[i];
-        }
-        return null;
-    }
-
-    // Deprecated use pause( id )
-    public static void pause(GameObject gameObject, int uniqueId) {
-        pause(uniqueId);
-    }
-
-    public static void pause(int uniqueId) {
-        int backId = uniqueId & 0xFFFFFF;
-        int backType = uniqueId >> 24;
-        if (tweens[backId].type == (TweenAction) backType) {
-            tweens[backId].lastVal = tweens[backId].direction;
-            tweens[backId].direction = 0.0f;
-        }
-    }
-
-    /**
-     * Pause all tweens for a GameObject
-     *
-     * @method physicsPort.LeanTween.pause
-     * @param {GameObject} gameObject:GameObject GameObject whose tweens you want to pause
-     */
-    public static void pause(GameObject gameObject) {
-        Affine trans = gameObject.transform;
-        for (int i = 0; i < tweenMaxSearch; i++) {
-            if (tweens[i].trans == trans) {
-                tweens[i].lastVal = tweens[i].direction;
-                tweens[i].direction = 0.0f;
-            }
-        }
-    }
-
-    // Deprecated
-    public static void resume(GameObject gameObject, int uniqueId) {
-        resume(uniqueId);
-    }
-
-    /**
-     * Resume a specific tween
-     *
-     * @method physicsPort.LeanTween.resume
-     * @param {int} id:int Id of the tween you want to resume ex: int id = physicsPort.LeanTween.MoveX(gameObject, 5, 1.0).id;
-     */
-    public static void resume(int uniqueId) {
-        int backId = uniqueId & 0xFFFFFF;
-        int backType = uniqueId >> 24;
-        if (tweens[backId].type == (TweenAction) backType) {
-            tweens[backId].direction = tweens[backId].lastVal;
-        }
-    }
-
-    /**
-     * Resume all the tweens on a GameObject
-     *
-     * @method physicsPort.LeanTween.resume
-     * @param {GameObject} gameObject:GameObject GameObject whose tweens you want to resume
-     */
-    public static void resume(GameObject gameObject) {
-        Affine trans = gameObject.transform;
-        for (int i = 0; i < tweenMaxSearch; i++) {
-            if (tweens[i].trans == trans)
-                tweens[i].direction = tweens[i].lastVal;
-        }
-    }
-
-    /**
-     * Test whether or not a tween is active on a GameObject
-     *
-     * @method physicsPort.LeanTween.isTweening
-     * @param {GameObject} gameObject:GameObject GameObject that you want to test if it is tweening
-     */
-    public static boolean isTweening(GameObject gameObject) {
-        TransformF trans = gameObject.transform;
-        for (int i = 0; i < tweenMaxSearch; i++) {
-            if (tweens[i].toggle && tweens[i].trans == trans)
-                return true;
-        }
-        return false;
-    }
-
-    /**
-     * Test whether or not a tween is active on a LTRect
-     *
-     * @method physicsPort.LeanTween.isTweening
-     * @param {LTRect} ltRect:LTRect LTRect that you want to test if it is tweening
-     */
-    public static boolean isTweening(LTRect ltRect) {
-        for (int i = 0; i < tweenMaxSearch; i++) {
-            if (tweens[i].toggle && tweens[i].ltRect == ltRect)
-                return true;
-        }
-        return false;
-    }
-
-    public static void drawBezierPath(Vector2 a, Vector2 b, Vector2 c, Vector2 d) {
-        Vector2 last = a;
-        Vector2 p;
-        Vector2 aa = (-a + 3 * (b - c) + d);
-        Vector2 bb = 3 * (a + c) - 6 * b;
-        Vector2 cc = 3 * (b - a);
-        float t;
-        for (float k = 1.0f; k <= 30.0f; k++) {
-            t = k / 30.0f;
-            p = ((aa * t + (bb)) * t + cc) * t + a;
-            // Gizmos.DrawLine(last, p);
-            last = p;
-        }
-    }
-
-    public static void logError(String error) {
-        if (throwErrors) {
-            System.out.println(error);
-        } else {
-            System.err.println(error);
-        }
-
-    }
-
-
-    public static LTDescr options() {
-        init();
-
-        for (j = 0, i = startSearch; j < maxTweens; i++) {
-            if (i >= maxTweens - 1)
-                i = 0;
-            if (tweens[i].toggle == false) {
-                if (i + 1 > tweenMaxSearch)
-                    tweenMaxSearch = i + 1;
-                startSearch = i + 1;
-                break;
-            }
-
-            j++;
-            if (j >= maxTweens) {
-
-                logError("physicsPort.LeanTween - You have run out of available spaces for tweening. To avoid this error increase the number of spaces to available for tweening when you initialize the physicsPort.LeanTween class ex: physicsPort.LeanTween.init( " + (maxTweens * 2));
-                return null;
-            }
-        }
-        tween = tweens[i];
-        tween.reset();
-        tween.setId(i);
-
-        return tween;
-    }
-
-
-
-    public static int startSearch = 0;
-    public static LTDescr descr;
-
-    private static LTDescr pushNewTween(GameObject gameObject, Vector2 to, float time, TweenAction tweenAction, LTDescr tween) {
-        init(maxTweens);
-        if (gameObject == null)
-            return null;
-        tween.trans = gameObject.transform;
-        tween.to = to;
-        tween.time = time;
-        tween.type = tweenAction;
-
-        return tween;
-    }
-
-    /**
-     * Fade a gameobject's material to a certain alpha value. The material's shader needs to support alpha. <a href="http://owlchemylabs.com/content/">Owl labs has some excellent efficient shaders</a>.
-     *
-     * @method physicsPort.LeanTween.alpha
-     * @param {GameObject} gameObject:GameObject Gameobject that you wish to fade
-     * @param {float} to:float the final alpha value (0-1)
-     * @param {float} time:float The time with which to fade the object
-     * @return {LTDescr} LTDescr an object that distinguishes the tween
-     * @example
-     * physicsPort.LeanTween.alpha(gameObject, 1f, 1f) .setDelay(1f);
-     */
-    public static LTDescr alpha(GameObject gameObject, float to, float time) {
-        return pushNewTween(gameObject, new Vector2(to, 0), time, TweenAction.ALPHA, options());
-    }
-
-    /**
-     * Fade a GUI Object
-     *
-     * @method physicsPort.LeanTween.alpha
-     * @param {LTRect} ltRect:LTRect LTRect that you wish to fade
-     * @param {float} to:float the final alpha value (0-1)
-     * @param {float} time:float The time with which to fade the object
-     * @return {LTDescr} LTDescr an object that distinguishes the tween
-     * @example
-     * physicsPort.LeanTween.alpha(ltRect, 1f, 1f) .setEase(LeanTweenType.easeInCirc);
-     */
-    public static LTDescr alpha(LTRect ltRect, float to, float time) {
-        ltRect.alphaEnabled = true;
-        return pushNewTween(tweenEmpty, new Vector2(to, 0f), time, TweenAction.GUI_ALPHA, options().setRect(ltRect));
-    }
-
-    /**
-     * This works by tweening the vertex colors directly.<br>
-     <br>
-     Vertex-based coloring is useful because you avoid making a copy of your
-     object's material for each instance that needs a different color.<br>
-     <br>
-     A shader that supports vertex colors is required for it to work
-     (for example the shaders in Mobile/Particles/)
-     *
-     * @method physicsPort.LeanTween.alphaVertex
-     * @param {GameObject} gameObject:GameObject Gameobject that you wish to alpha
-     * @param {float} to:float The alpha value you wish to tween to
-     * @param {float} time:float The time with which to delay before calling the function
-     * @return {LTDescr} LTDescr an object that distinguishes the tween
-     */
-    public static LTDescr alphaVertex(GameObject gameObject, float to, float time) {
-        return pushNewTween(gameObject, new Vector2(to, 0f), time, TweenAction.ALPHA_VERTEX, options());
-    }
-
-    public static LTDescr delayedCall(float delayTime, Action callback) {
-        return pushNewTween(tweenEmpty, Vector2.Zero, delayTime, TweenAction.CALLBACK, options().setOnComplete(callback));
-    }
-
-    public static LTDescr delayedCall(GameObject gameObject, float delayTime, Action callback) {
-        return pushNewTween(gameObject, Vector2.Zero, delayTime, TweenAction.CALLBACK, options().setOnComplete(callback));
-    }
-
-/*public static LTDescr delayedCall(GameObject gameObject, float delayTime, string callback){
-	return pushNewTween( gameObject, Vector2.zero, delayTime, TweenAction.CALLBACK, options().setOnComplete( callback ) );
-}*/
-
-    /**
-     * Move a GameObject to a certain location
-     *
-     * @method physicsPort.LeanTween.move
-     * @param {GameObject} GameObject gameObject Gameobject that you wish to move
-     * @param {Vector2} vec:Vector2 to The final positin with which to move to
-     * @param {float} time:float time The time to complete the tween in
-     * @return {LTDescr} LTDescr an object that distinguishes the tween
-     * @example physicsPort.LeanTween.move(gameObject, new Vector2(0f,-3f, 5f), 2.0f) .setEase( physicsPort.LeanTween.easeOutQuad );
-     */
-    public static LTDescr move(GameObject gameObject, Vector2 to, float time) {
-        return pushNewTween(gameObject, to, time, TweenAction.MOVE, options());
-    }
-
-    /**
-     * Move a GameObject along a set of bezier curves
-     *
-     * @method physicsPort.LeanTween.move
-     * @param {GameObject} gameObject:GameObject Gameobject that you wish to move
-     * @param {Vector2[]} path:Vector2[] A set of points that define the curve(s) ex: Point1,Handle1,Handle2,Point2,...
-     * @param {float} time:float The time to complete the tween in
-     * @return {LTDescr} LTDescr an object that distinguishes the tween
-     * @example
-     * <i>Javascript:</i><br>
-     * physicsPort.LeanTween.move(gameObject, [Vector2(0,0,0),Vector2(1,0,0),Vector2(1,0,0),Vector2(1,0,1)], 2.0) .setEase(physicsPort.LeanTween.easeOutQuad).setOrientToPath(true);<br><br>
-     * <i>C#:</i><br>
-     * physicsPort.LeanTween.move(gameObject, new Vector2{Vector2(0f,0f,0f),Vector2(1f,0f,0f),Vector2(1f,0f,0f),Vector2(1f,0f,1f)}, 1.5f) .setEase(physicsPort.LeanTween.easeOutQuad).setOrientToPath(true);;<br>
-     */
-    public static LTDescr move(GameObject gameObject, Vector2[] to, float time) {
-        descr = options();
-        if (descr.path == null)
-            descr.path = new LTBezierPath(to);
-        else
-            descr.path.setPoints(to);
-
-        return pushNewTween(gameObject, new Vector2(1.0f, 0.0f), time, TweenAction.MOVE_CURVED, descr);
-    }
-
-    /**
-     * Move a GUI Element to a certain location
-     *
-     * @method physicsPort.LeanTween.move (GUI)
-     * @param {LTRect} ltRect:LTRect ltRect LTRect object that you wish to move
-     * @param {Vector2} vec:Vector2 to The final position with which to move to (pixel coordinates)
-     * @param {float} time:float time The time to complete the tween in
-     * @return {LTDescr} LTDescr an object that distinguishes the tween
-     */
-    public static LTDescr move(LTRect ltRect, Vector2 to, float time) {
-        return pushNewTween(tweenEmpty, to, time, TweenAction.GUI_MOVE, options().setRect(ltRect));
-    }
-
-    /**
-     * Move a GameObject along the x-axis
-     *
-     * @method physicsPort.LeanTween.moveX
-     * @param {GameObject} gameObject:GameObject gameObject Gameobject that you wish to move
-     * @param {float} to:float to The final position with which to move to
-     * @param {float} time:float time The time to complete the move in
-     * @return {LTDescr} LTDescr an object that distinguishes the tween
-     */
-    public static LTDescr moveX(GameObject gameObject, float to, float time) {
-        return pushNewTween(gameObject, new Vector2(to, 0), time, TweenAction.MOVE_X, options());
-    }
-
-    /**
-     * Move a GameObject along the y-axis
-     *
-     * @method physicsPort.LeanTween.moveY
-     * @param {GameObject} GameObject gameObject Gameobject that you wish to move
-     * @param {float} float to The final position with which to move to
-     * @param {float} float time The time to complete the move in
-     * @return {LTDescr} LTDescr an object that distinguishes the tween
-     */
-    public static LTDescr moveY(GameObject gameObject, float to, float time) {
-        return pushNewTween(gameObject, new Vector2(to, 0), time, TweenAction.MOVE_Y, options());
-    }
-
-    /**
-     * Move a GameObject along the z-axis
-     *
-     * @method physicsPort.LeanTween.moveZ
-     * @param {GameObject} GameObject gameObject Gameobject that you wish to move
-     * @param {float} float to The final position with which to move to
-     * @param {float} float time The time to complete the move in
-     * @return {LTDescr} LTDescr an object that distinguishes the tween
-     */
-    public static LTDescr moveZ(GameObject gameObject, float to, float time) {
-        return pushNewTween(gameObject, new Vector2(to, 0), time, TweenAction.MOVE_Z, options());
-    }
-
-    /**
-     * Move a GameObject to a certain location relative to the parent transform.
-     *
-     * @method physicsPort.LeanTween.moveLocal
-     * @param {GameObject} GameObject gameObject Gameobject that you wish to rotate
-     * @param {Vector2} Vector2 to The final positin with which to move to
-     * @param {float} float time The time to complete the tween in
-     * @param {Hashtable} Hashtable optional Hashtable where you can pass <a href="#optional">optional items</a>.
-     * @return {LTDescr} LTDescr an object that distinguishes the tween
-     */
-    public static LTDescr moveLocal(GameObject gameObject, Vector2 to, float time) {
-        return pushNewTween(gameObject, to, time, TweenAction.MOVE_LOCAL, options());
-    }
-
-    /**
-     * Move a GameObject along a set of bezier curves
-     *
-     * @method physicsPort.LeanTween.move
-     * @param {GameObject} gameObject:GameObject Gameobject that you wish to move
-     * @param {Vector2[]} path:Vector2[] A set of points that define the curve(s) ex: Point1,Handle1,Handle2,Point2,...
-     * @param {float} time:float The time to complete the tween in
-     * @return {LTDescr} LTDescr an object that distinguishes the tween
-     * @example
-     * <i>Javascript:</i><br>
-     * physicsPort.LeanTween.move(gameObject, [Vector2(0,0,0),Vector2(1,0,0),Vector2(1,0,0),Vector2(1,0,1)], 2.0).setEase(physicsPort.LeanTween.easeOutQuad).setOrientToPath(true);<br><br>
-     * <i>C#:</i><br>
-     * physicsPort.LeanTween.move(gameObject, new Vector2{Vector2(0f,0f,0f),Vector2(1f,0f,0f),Vector2(1f,0f,0f),Vector2(1f,0f,1f)}).setEase(physicsPort.LeanTween.easeOutQuad).setOrientToPath(true);<br>
-     */
-    public static LTDescr moveLocal(GameObject gameObject, Vector2[] to, float time) {
-        descr = options();
-        if (descr.path == null)
-            descr.path = new LTBezierPath(to);
-        else
-            descr.path.setPoints(to);
-
-        return pushNewTween(gameObject, new Vector2(1.0f, 0.0f), time, TweenAction.MOVE_CURVED_LOCAL, descr);
-    }
-
-    public static LTDescr moveLocalX(GameObject gameObject, float to, float time) {
-        return pushNewTween(gameObject, new Vector2(to, 0), time, TweenAction.MOVE_LOCAL_X, options());
-    }
-
-    public static LTDescr moveLocalY(GameObject gameObject, float to, float time) {
-        return pushNewTween(gameObject, new Vector2(to, 0), time, TweenAction.MOVE_LOCAL_Y, options());
-    }
-
-    public static LTDescr moveLocalZ(GameObject gameObject, float to, float time) {
-        return pushNewTween(gameObject, new Vector2(to, 0), time, TweenAction.MOVE_LOCAL_Z, options());
-    }
-
-    /**
-     * Rotate a GameObject, to values are in passed in degrees
-     *
-     * @method physicsPort.LeanTween.rotate
-     * @param {GameObject} GameObject gameObject Gameobject that you wish to rotate
-     * @param {Vector2} Vector2 to The final rotation with which to rotate to
-     * @param {float} float time The time to complete the tween in
-     * @return {LTDescr} LTDescr an object that distinguishes the tween
-     * @example physicsPort.LeanTween.rotate(cube, new Vector2(180f, 30f, 0f), 1.5f);
-     */
-
-    public static LTDescr rotate(GameObject gameObject, Vector2 to, float time) {
-        return pushNewTween(gameObject, to, time, TweenAction.ROTATE, options());
-    }
-
-    /**
-     * Rotate a GUI element (using an LTRect object), to a value that is in degrees
-     *
-     * @method physicsPort.LeanTween.rotate
-     * @param {LTRect} ltRect:LTRect LTRect that you wish to rotate
-     * @param {float} to:float The final rotation with which to rotate to
-     * @param {float} time:float The time to complete the tween in
-     * @param {Array} optional:Array Object Array where you can pass <a href="#optional">optional items</a>.
-     * @return {LTDescr} LTDescr an object that distinguishes the tween
-     * @example
-     * if(GUI.Button(buttonRect.rect, "Rotate"))<br>
-     *	physicsPort.LeanTween.rotate( buttonRect4, 150.0f, 1.0f).setEase(physicsPort.LeanTween.easeOutElastic);<br>
-     * GUI.matrix = Matrix4x4.identity;<br>
-     */
-    public static LTDescr rotate(LTRect ltRect, float to, float time) {
-        return pushNewTween(tweenEmpty, new Vector2(to, 0f), time, TweenAction.GUI_ROTATE, options().setRect(ltRect));
-    }
-
-    /**
-     * Rotate a GameObject in the objects local space (on the transforms localEulerAngles object)
-     *
-     * @method physicsPort.LeanTween.rotateLocal
-     * @param {GameObject} gameObject:GameObject Gameobject that you wish to rotate
-     * @param {Vector2} to:Vector2 The final rotation with which to rotate to
-     * @param {float} time:float The time to complete the rotation in
-     * @return {LTDescr} LTDescr an object that distinguishes the tween
-     */
-    public static LTDescr rotateLocal(GameObject gameObject, Vector2 to, float time) {
-        return pushNewTween(gameObject, to, time, TweenAction.ROTATE_LOCAL, options());
-    }
-
-    /**
-     * Rotate a GameObject only on the X axis
-     *
-     * @method physicsPort.LeanTween.rotateX
-     * @param {GameObject} GameObject Gameobject that you wish to rotate
-     * @param {float} to:float The final x-axis rotation with which to rotate
-     * @param {float} time:float The time to complete the rotation in
-     * @return {LTDescr} LTDescr an object that distinguishes the tween
-     */
-    public static LTDescr rotateX(GameObject gameObject, float to, float time) {
-        return pushNewTween(gameObject, new Vector2(to, 0), time, TweenAction.ROTATE_X, options());
-    }
-
-    /**
-     * Rotate a GameObject only on the Y axis
-     *
-     * @method physicsPort.LeanTween.rotateY
-     * @param {GameObject} GameObject Gameobject that you wish to rotate
-     * @param {float} to:float The final y-axis rotation with which to rotate
-     * @param {float} time:float The time to complete the rotation in
-     * @return {LTDescr} LTDescr an object that distinguishes the tween
-     */
-    public static LTDescr rotateY(GameObject gameObject, float to, float time) {
-        return pushNewTween(gameObject, new Vector2(to, 0), time, TweenAction.ROTATE_Y, options());
-    }
-
-    /**
-     * Rotate a GameObject only on the Z axis
-     *
-     * @method physicsPort.LeanTween.rotateZ
-     * @param {GameObject} GameObject Gameobject that you wish to rotate
-     * @param {float} to:float The final z-axis rotation with which to rotate
-     * @param {float} time:float The time to complete the rotation in
-     * @return {LTDescr} LTDescr an object that distinguishes the tween
-     */
-    public static LTDescr rotateZ(GameObject gameObject, float to, float time) {
-        return pushNewTween(gameObject, new Vector2(to, 0), time, TweenAction.ROTATE_Z, options());
-    }
-
-    /**
-     * Rotate a GameObject around a certain Axis (the best method to use when you want to rotate beyond 180 degrees)
-     *
-     * @method physicsPort.LeanTween.rotateAround
-     * @param {GameObject} gameObject:GameObject Gameobject that you wish to rotate
-     * @param {Vector2} vec:Vector2 axis in which to rotate around ex: Vector2.up
-     * @param {float} degrees:float the degrees in which to rotate
-     * @param {float} time:float time The time to complete the rotation in
-     * @return {LTDescr} LTDescr an object that distinguishes the tween
-     */
-    public static LTDescr rotateAround(GameObject gameObject, Vector2 axis, float add, float time) {
-        return pushNewTween(gameObject, new Vector2(add, 0f), time, TweenAction.ROTATE_AROUND, options().setAxis(axis));
-    }
-
-    /**
-     * Scale a GameObject to a certain size
-     *
-     * @method physicsPort.LeanTween.scale
-     * @param {GameObject} gameObject:GameObject gameObject Gameobject that you wish to scale
-     * @param {Vector2} vec:Vector2 to The size with which to tween to
-     * @param {float} time:float time The time to complete the tween in
-     * @return {LTDescr} LTDescr an object that distinguishes the tween
-     */
-    public static LTDescr scale(GameObject gameObject, Vector2 to, float time) {
-        return pushNewTween(gameObject, to, time, TweenAction.SCALE, options());
-    }
-
-    /**
-     * Scale a GUI Element to a certain width and height
-     *
-     * @method physicsPort.LeanTween.scale (GUI)
-     * @param {LTRect} LTRect ltRect LTRect object that you wish to move
-     * @param {Vector2} Vector2 to The final width and height to scale to (pixel based)
-     * @param {float} float time The time to complete the tween in
-     * @return {LTDescr} LTDescr an object that distinguishes the tween
-     * @example
-     * <i>Example Javascript: </i><br>
-     * var bRect:LTRect = new LTRect( 0, 0, 100, 50 );<br>
-     * physicsPort.LeanTween.scale( bRect, Vector2(bRect.rect.width, bRect.rect.height) * 1.3, 0.25 ).setEase(LeanTweenType.easeOutBounce);<br>
-     * function OnGUI(){<br>
-     * &nbsp; if(GUI.Button(bRect.rect, "Scale")){ }<br>
-     * }<br>
-     * <br>
-     * <i>Example C#: </i> <br>
-     * LTRect bRect = new LTRect( 0f, 0f, 100f, 50f );<br>
-     * physicsPort.LeanTween.scale( bRect, new Vector2(150f,75f), 0.25f ).setEase(LeanTweenType.easeOutBounce);<br>
-     * void OnGUI(){<br>
-     * &nbsp; if(GUI.Button(bRect.rect, "Scale")){ }<br>
-     * }<br>
-     */
-    public static LTDescr scale(LTRect ltRect, Vector2 to, float time) {
-        return pushNewTween(tweenEmpty, to, time, TweenAction.GUI_SCALE, options().setRect(ltRect));
-    }
-
-    /**
-     * Scale a GameObject to a certain size along the x-axis only
-     *
-     * @method physicsPort.LeanTween.scaleX
-     * @param {GameObject} gameObject:GameObject Gameobject that you wish to scale
-     * @param {float} scaleTo:float the size with which to scale to
-     * @param {float} time:float the time to complete the tween in
-     * @return {LTDescr} LTDescr an object that distinguishes the tween
-     */
-    public static LTDescr scaleX(GameObject gameObject, float to, float time) {
-        return pushNewTween(gameObject, new Vector2(to, 0), time, TweenAction.SCALE_X, options());
-    }
-
-    /**
-     * Scale a GameObject to a certain size along the y-axis only
-     *
-     * @method physicsPort.LeanTween.scaleY
-     * @param {GameObject} gameObject:GameObject Gameobject that you wish to scale
-     * @param {float} scaleTo:float the size with which to scale to
-     * @param {float} time:float the time to complete the tween in
-     * @return {LTDescr} LTDescr an object that distinguishes the tween
-     */
-    public static LTDescr scaleY(GameObject gameObject, float to, float time) {
-        return pushNewTween(gameObject, new Vector2(to, 0), time, TweenAction.SCALE_Y, options());
-    }
-
-    /**
-     * Scale a GameObject to a certain size along the z-axis only
-     *
-     * @method physicsPort.LeanTween.scaleZ
-     * @param {GameObject} gameObject:GameObject Gameobject that you wish to scale
-     * @param {float} scaleTo:float the size with which to scale to
-     * @param {float} time:float the time to complete the tween in
-     * @return {LTDescr} LTDescr an object that distinguishes the tween
-     */
-    public static LTDescr scaleZ(GameObject gameObject, float to, float time) {
-        return pushNewTween(gameObject, new Vector2(to, 0), time, TweenAction.SCALE_Z, options());
-    }
-
-    /**
-     * Tween any particular value, it does not need to be tied to any particular type or GameObject
-     *
-     * @method physicsPort.LeanTween.value (float)
-     * @param {GameObject} GameObject gameObject GameObject with which to tie the tweening with. This is only used when you need to cancel this tween, it does not actually perform any operations on this gameObject
-     * @param {Action<float>} callOnUpdate:Action<float> The function that is called on every Update frame, this function needs to accept a float value ex: function updateValue( float val ){ }
-     * @param {float} float from The original value to start the tween from
-     * @param {float} float to The value to end the tween on
-     * @param {float} float time The time to complete the tween in
-     * @return {LTDescr} LTDescr an object that distinguishes the tween
-     */
-    public static LTDescr value(GameObject gameObject, Action<Float> callOnUpdate, float from, float to, float time) {
-        return pushNewTween(gameObject, new Vector2(to, 0), time, TweenAction.CALLBACK, options().setFrom(new Vector2(from, 0)).setOnUpdate(callOnUpdate));
-    }
-
-    /**
-     * Tween any particular value (Vector2), this could be used to tween an arbitrary value like a material color
-     *
-     * @method physicsPort.LeanTween.value (Vector2)
-     * @param {GameObject} gameObject:GameObject Gameobject that you wish to attach the tween to
-     * @param {Action<Vector2>} callOnUpdate:Action<Vector2> The function that is called on every Update frame, this function needs to accept a float value ex: function updateValue( Vector2 val ){ }
-     * @param {float} from:Vector2 The original value to start the tween from
-     * @param {Vector2} to:Vector2 The final Vector2 with which to tween to
-     * @param {float} time:float The time to complete the tween in
-     * @return {LTDescr} LTDescr an object that distinguishes the tween
-     */
-    public static LTDescr value(GameObject gameObject, Action<Vector2> callOnUpdate, Vector2 from, Vector2 to, float time) {
-        return pushNewTween(gameObject, to, time, TweenAction.VALUE3, options().setFrom(from).setOnUpdateVector2(callOnUpdate));
-    }
-
-    /**
-     * Tween any particular value (float)
-     *
-     * @method physicsPort.LeanTween.value (float,object)
-     * @param {GameObject} gameObject:GameObject Gameobject that you wish to attach the tween to
-     * @param {Action<float,object>} callOnUpdate:Action<float,object> The function that is called on every Update frame, this function needs to accept a float value ex: function updateValue( Vector2 val, object obj ){ }
-     * @param {float} from:Vector2 The original value to start the tween from
-     * @param {Vector2} to:Vector2 The final Vector2 with which to tween to
-     * @param {float} time:float The time to complete the tween in
-     * @return {LTDescr} LTDescr an object that distinguishes the tween
-     */
-    public static LTDescr value(GameObject gameObject, Action<float, object> callOnUpdate, float from, float to, float time) {
-        return pushNewTween(gameObject, new Vector2(to, 0), time, TweenAction.CALLBACK, options().setFrom(new Vector2(from, 0, 0)).setOnUpdateObject(callOnUpdate));
-    }
-
-
-    public static Map<String, Object> h(object[] arr) {
-        if (arr.length % 2 == 1) {
-            logError("physicsPort.LeanTween - You have attempted to create a Hashtable with an odd number of values.");
-            return null;
-        }
-        Map hash = new HashMap();
-        for (i = 0; i < arr.length; i += 2) {
-            hash.Add(arr[i]as string, arr[i + 1]);
-        }
-
-        return hash;
-    }
-
-    private static int idFromUnique(int uniqueId) {
-        return uniqueId & 0xFFFFFF;
-    }
-
-    private static int pushNewTween(GameObject gameObject, Vector2 to, float time, TweenAction tweenAction, Map<String, String> optional) {
-        init(maxTweens);
-        if (gameObject == null)
-            return -1;
-
-        j = 0;
-        for (i = startSearch; j < maxTweens; i++) {
-            if (i >= maxTweens - 1)
-                i = 0;
-            if (tweens[i].toggle == false) {
-                if (i + 1 > tweenMaxSearch)
-                    tweenMaxSearch = i + 1;
-                startSearch = i + 1;
-                break;
-            }
-
-            j++;
-            if (j >= maxTweens) {
-                logError("physicsPort.LeanTween - You have run out of available spaces for tweening. To avoid this error increase the number of spaces to available for tweening when you initialize the physicsPort.LeanTween class ex: physicsPort.LeanTween.init( " + (maxTweens * 2) + " );");
-                return -1;
-            }
-        }
-        tween = tweens[i];
-        tween.toggle = true;
-        tween.reset();
-        tween.trans = gameObject.transform;
-        tween.to = to;
-        tween.time = time;
-        tween.type = tweenAction;
-        tween.optional = optional;
-        tween.setId(i);
-        tween.hasPhysics = gameObject.rigidbody != null;
-
-        if (optional != null) {
-            var ease = optional["ease"];
-            //LeanTweenType ease;
-            var optionsNotUsed = 0;
-            if (ease != null) {
-                tween.tweenType = LeanTweenType.linear;
-                if (ease.GetType() == typeof(LeanTweenType)) {
-                    tween.tweenType = (LeanTweenType) ease;// Enum.Parse(typeof(LeanTweenType), optional["ease"].ToString());
-                } else if (ease.GetType() == typeof(AnimationCurve)) {
-                    tween.animationCurve = optional["ease"] as AnimationCurve;
-                } else {
-                    String func = optional.get("ease"].ToString();
-                    if (func.Equals("easeOutQuad")) {
-                        tween.tweenType = LeanTweenType.easeOutQuad;
-                    } else if (func.Equals("easeInQuad")) {
-                        tween.tweenType = LeanTweenType.easeInQuad;
-                    } else if (func.Equals("easeInOutQuad")) {
-                        tween.tweenType = LeanTweenType.easeInOutQuad;
-                    }
-                }
-                optionsNotUsed++;
-            }
-            if (optional["rect"] != null) {
-                tween.ltRect = (LTRect) optional["rect"];
-                optionsNotUsed++;
-            }
-            if (optional["path"] != null) {
-                tween.path = (LTBezierPath) optional["path"];
-                optionsNotUsed++;
-            }
-            if (optional["delay"] != null) {
-                tween.delay = (float) optional["delay"];
-                optionsNotUsed++;
-            }
-            if (optional["useEstimatedTime"] != null) {
-                tween.useEstimatedTime = (boolean) optional["useEstimatedTime"];
-                optionsNotUsed++;
-            }
-            if (optional["useFrames"] != null) {
-                tween.useFrames = (boolean) optional["useFrames"];
-                optionsNotUsed++;
-            }
-            if (optional["loopType"] != null) {
-                tween.loopType = (LeanTweenType) optional["loopType"];
-                optionsNotUsed++;
-            }
-            if (optional["repeat"] != null) {
-                tween.loopCount = (int) optional["repeat"];
-                if (tween.loopType == LeanTweenType.once)
-                    tween.loopType = LeanTweenType.clamp;
-                optionsNotUsed++;
-            }
-            if (optional["point"] != null) {
-                tween.point = (Vector2) optional["point"];
-                optionsNotUsed++;
-            }
-            if (optional["axis"] != null) {
-                tween.axis = (Vector2) optional["axis"];
-                optionsNotUsed++;
-            }
-            if (optional.Count <= optionsNotUsed)
-                tween.optional = null;  // nothing else is used with the extra piece, so set to null
-        } else {
-            tween.optional = null;
-        }
-        //Debug.Log("pushing new tween["+i+"]:"+tweens[i]);
-
-        return tweens[i].uniqueId;
-    }
-
-    public static int value(String callOnUpdate, float from, float to, float time, Hashtable optional) {
-        return value(tweenEmpty, callOnUpdate, from, to, time, optional);
-    }
-
-    public static int value(GameObject gameObject, String callOnUpdate, float from, float to, float time) {
-        return value(gameObject, callOnUpdate, from, to, time, new Hashtable());
-    }
-
-    public static int value(GameObject gameObject, String callOnUpdate, float from, float to, float time, object[] optional) {
-        return value(gameObject, callOnUpdate, from, to, time, h(optional));
-    }
-
-    public static int value(GameObject gameObject, Action<float> callOnUpdate, float from, float to, float time, object[] optional) {
-        return value(gameObject, callOnUpdate, from, to, time, h(optional));
-    }
-
-    public static int value(GameObject gameObject, Action<float, Hashtable> callOnUpdate, float from, float to, float time, object[] optional) {
-        return value(gameObject, callOnUpdate, from, to, time, h(optional));
-    }
-
-    public static int value(GameObject gameObject, String callOnUpdate, float from, float to, float time, Hashtable optional) {
-        if (optional == null || optional.Count == 0)
-            optional = new Hashtable();
-
-        optional["onUpdate"] = callOnUpdate;
-        int id = idFromUnique(pushNewTween(gameObject, new Vector2(to, 0, 0), time, TweenAction.CALLBACK, optional));
-        tweens[id].from = new Vector2(from, 0, 0);
-        return id;
-    }
-
-    public static int value(GameObject gameObject, Action<Float> callOnUpdate, float from, float to, float time, Hashtable optional) {
-        if (optional == null || optional.Count == 0)
-            optional = new Hashtable();
-
-        optional["onUpdate"] = callOnUpdate;
-        int id = idFromUnique(pushNewTween(gameObject, new Vector2(to, 0, 0), time, TweenAction.CALLBACK, optional));
-        tweens[id].from = new Vector2(from, 0, 0);
-        return id;
-    }
-
-    public static int value(GameObject gameObject, Action<Float, Hashtable> callOnUpdate, float from, float to, float time, Hashtable optional) {
-        if (optional == null || optional.Count == 0)
-            optional = new Hashtable();
-
-        optional["onUpdate"] = callOnUpdate;
-        int id = idFromUnique(pushNewTween(gameObject, new Vector2(to, 0, 0), time, TweenAction.CALLBACK, optional));
-        tweens[id].from = new Vector2(from, 0, 0);
-        return id;
-    }
-
-    public static int value(GameObject gameObject, String callOnUpdate, Vector2 from, Vector2 to, float time, Hashtable optional) {
-        if (optional == null || optional.Count == 0)
-            optional = new Hashtable();
-
-        optional["onUpdate"] = callOnUpdate;
-        int id = idFromUnique(pushNewTween(gameObject, to, time, TweenAction.VALUE3, optional));
-        tweens[id].from = from;
-        return id;
-    }
-
-    public static int value(GameObject gameObject, String callOnUpdate, Vector2 from, Vector2 to, float time, object[] optional) {
-        return value(gameObject, callOnUpdate, from, to, time, h(optional));
-    }
-
-    public static int value(GameObject gameObject, Action<Vector2> callOnUpdate, Vector2 from, Vector2 to, float time, Hashtable optional) {
-        if (optional == null || optional.Count == 0)
-            optional = new Hashtable();
-
-        optional["onUpdate"] = callOnUpdate;
-        int id = idFromUnique(pushNewTween(gameObject, to, time, TweenAction.VALUE3, optional));
-        tweens[id].from = from;
-        return id;
-    }
-
-    public static int value(GameObject gameObject, Action<Vector2, Hashtable> callOnUpdate, Vector2 from, Vector2 to, float time, Hashtable optional) {
-        if (optional == null || optional.Count == 0)
-            optional = new Hashtable();
-
-        optional["onUpdate"] = callOnUpdate;
-        int id = idFromUnique(pushNewTween(gameObject, to, time, TweenAction.VALUE3, optional));
-        tweens[id].from = from;
-        return id;
-    }
-
-    public static int value(GameObject gameObject, Action<Vector2> callOnUpdate, Vector2 from, Vector2 to, float time, object[] optional) {
-        return value(gameObject, callOnUpdate, from, to, time, h(optional));
-    }
-
-    public static int value(GameObject gameObject, System.Action<Vector2, Hashtable> callOnUpdate, Vector2 from, Vector2 to, float time, object[] optional) {
-        return value(gameObject, callOnUpdate, from, to, time, h(optional));
-    }
-
-    public static int rotate(GameObject gameObject, Vector2 to, float time, Hashtable optional) {
-        return pushNewTween(gameObject, to, time, TweenAction.ROTATE, optional);
-    }
-
-    public static int rotate(GameObject gameObject, Vector2 to, float time, object[] optional) {
-        return rotate(gameObject, to, time, h(optional));
-    }
-
-
-    public static int rotate(LTRect ltRect, float to, float time, Hashtable optional) {
-        init();
-        if (optional == null || optional.Count == 0)
-            optional = new Hashtable();
-
-        optional["rect"] = ltRect;
-        return pushNewTween(tweenEmpty, new Vector2(to, 0f), time, TweenAction.GUI_ROTATE, optional);
-    }
-
-    public static int rotate(LTRect ltRect, float to, float time, object[] optional) {
-        return rotate(ltRect, to, time, h(optional));
-    }
-
-    public static int rotateX(GameObject gameObject, float to, float time, Hashtable optional) {
-        return pushNewTween(gameObject, new Vector2(to, 0), time, TweenAction.ROTATE_X, optional);
-    }
-
-    public static int rotateX(GameObject gameObject, float to, float time, object[] optional) {
-        return rotateX(gameObject, to, time, h(optional));
-    }
-
-    public static int rotateY(GameObject gameObject, float to, float time, Hashtable optional) {
-        return pushNewTween(gameObject, new Vector2(to, 0, 0), time, TweenAction.ROTATE_Y, optional);
-    }
-
-    public static int rotateY(GameObject gameObject, float to, float time, object[] optional) {
-        return rotateY(gameObject, to, time, h(optional));
-    }
-
-    public static int rotateZ(GameObject gameObject, float to, float time, Hashtable optional) {
-        return pushNewTween(gameObject, new Vector2(to, 0, 0), time, TweenAction.ROTATE_Z, optional);
-    }
-
-    public static int rotateZ(GameObject gameObject, float to, float time, object[] optional) {
-        return rotateZ(gameObject, to, time, h(optional));
-    }
-
-    public static int rotateLocal(GameObject gameObject, Vector2 to, float time, Hashtable optional) {
-        return pushNewTween(gameObject, to, time, TweenAction.ROTATE_LOCAL, optional);
-    }
-
-    public static int rotateLocal(GameObject gameObject, Vector2 to, float time, object[] optional) {
-        return rotateLocal(gameObject, to, time, h(optional));
-    }
-
-
-    public static int rotateAround(GameObject gameObject, Vector2 axis, float add, float time, Hashtable optional) {
-        if (optional == null || optional.Count == 0)
-            optional = new Hashtable();
-
-        optional["axis"] = axis;
-        if (optional["point"] == null)
-            optional["point"] = Vector2.zero;
-
-        return pushNewTween(gameObject, new Vector2(add, 0f, 0f), time, TweenAction.ROTATE_AROUND, optional);
-    }
-
-    public static int rotateAround(GameObject gameObject, Vector2 axis, float add, float time, object[] optional) {
-        return rotateAround(gameObject, axis, add, time, h(optional));
-    }
-
-    public static int moveX(GameObject gameObject, float to, float time, Hashtable optional) {
-        return pushNewTween(gameObject, new Vector2(to, 0, 0), time, TweenAction.MOVE_X, optional);
-    }
-
-    public static int moveX(GameObject gameObject, float to, float time, object[] optional) {
-        return moveX(gameObject, to, time, h(optional));
-    }
-
-    public static int moveY(GameObject gameObject, float to, float time, Hashtable optional) {
-        return pushNewTween(gameObject, new Vector2(to, 0, 0), time, TweenAction.MOVE_Y, optional);
-    }
-
-    public static int moveY(GameObject gameObject, float to, float time, object[] optional) {
-        return moveY(gameObject, to, time, h(optional));
-    }
-
-    public static int moveZ(GameObject gameObject, float to, float time, Hashtable optional) {
-        return pushNewTween(gameObject, new Vector2(to, 0), time, TweenAction.MOVE_Z, optional);
-    }
-
-    public static int moveZ(GameObject gameObject, float to, float time, object[] optional) {
-        return moveZ(gameObject, to, time, h(optional));
-    }
-
-    public static int move(GameObject gameObject, Vector2 to, float time, Hashtable optional) {
-        return pushNewTween(gameObject, to, time, TweenAction.MOVE, optional);
-    }
-
-    public static int move(GameObject gameObject, Vector2 to, float time, object[] optional) {
-        return move(gameObject, to, time, LeanTween.h(optional));
-    }
-
-    public static int move(GameObject gameObject, Vector2[] to, float time, Hashtable optional) {
-        if (to.length < 4) {
-            string errorMsg = "physicsPort.LeanTween - When passing values for a vector path, you must pass four or more values!";
-            if (throwErrors) Debug.LogError(errorMsg);
-            else Debug.Log(errorMsg);
-            return -1;
-        }
-        if (to.length % 4 != 0) {
-            string errorMsg2 = "physicsPort.LeanTween - When passing values for a vector path, they must be in sets of four: controlPoint1, controlPoint2, endPoint2, controlPoint2, controlPoint2...";
-            if (throwErrors) Debug.LogError(errorMsg2);
-            else Debug.Log(errorMsg2);
-            return -1;
-        }
-
-        init();
-        if (optional == null || optional.Count == 0)
-            optional = new Hashtable();
-
-        LTBezierPath ltPath = new LTBezierPath(to);
-        if (optional["orientToPath"] != null)
-            ltPath.orientToPath = true;
-        optional["path"] = ltPath;
-
-        return pushNewTween(gameObject, new Vector2(1.0f, 0.0f, 0.0f), time, TweenAction.MOVE_CURVED, optional);
-    }
-
-    public static int move(GameObject gameObject, Vector2[] to, float time, object[] optional) {
-        return move(gameObject, to, time, LeanTween.h(optional));
-    }
-
-    public static int move(LTRect ltRect, Vector2 to, float time, Hashtable optional) {
-        init();
-        if (optional == null || optional.Count == 0)
-            optional = new Hashtable();
-
-        optional["rect"] = ltRect;
-        return pushNewTween(tweenEmpty, to, time, TweenAction.GUI_MOVE, optional);
-    }
-
-    public static int move(LTRect ltRect, Vector2 to, float time, object[] optional) {
-        return move(ltRect, to, time, LeanTween.h(optional));
-    }
-
-    public static int moveLocal(GameObject gameObject, Vector2 to, float time, Hashtable optional) {
-        return pushNewTween(gameObject, to, time, TweenAction.MOVE_LOCAL, optional);
-    }
-
-    public static int moveLocal(GameObject gameObject, Vector2 to, float time, object[] optional) {
-        return moveLocal(gameObject, to, time, LeanTween.h(optional));
-    }
-
-    public static int moveLocal(GameObject gameObject, Vector2[] to, float time, Hashtable optional) {
-        if (to.length < 4) {
-            string errorMsg = "physicsPort.LeanTween - When passing values for a vector path, you must pass four or more values!";
-            if (throwErrors) Debug.LogError(errorMsg);
-            else Debug.Log(errorMsg);
-            return -1;
-        }
-        if (to.length % 4 != 0) {
-            string errorMsg2 = "physicsPort.LeanTween - When passing values for a vector path, they must be in sets of four: controlPoint1, controlPoint2, endPoint2, controlPoint2, controlPoint2...";
-            if (throwErrors) Debug.LogError(errorMsg2);
-            else Debug.Log(errorMsg2);
-            return -1;
-        }
-
-        init();
-        if (optional == null)
-            optional = new Hashtable();
-
-        LTBezierPath ltPath = new LTBezierPath(to);
-        if (optional["orientToPath"] != null)
-            ltPath.orientToPath = true;
-        optional["path"] = ltPath;
-
-        return pushNewTween(gameObject, new Vector2(1.0f, 0.0f, 0.0f), time, TweenAction.MOVE_CURVED_LOCAL, optional);
-    }
-
-    public static int moveLocal(GameObject gameObject, Vector2[] to, float time, object[] optional) {
-        return moveLocal(gameObject, to, time, LeanTween.h(optional));
-    }
-
-    public static int moveLocalX(GameObject gameObject, float to, float time, Hashtable optional) {
-        return pushNewTween(gameObject, new Vector2(to, 0), time, TweenAction.MOVE_LOCAL_X, optional);
-    }
-
-    public static int moveLocalX(GameObject gameObject, float to, float time, object[] optional) {
-        return moveLocalX(gameObject, to, time, h(optional));
-    }
-
-    public static int moveLocalY(GameObject gameObject, float to, float time, Hashtable optional) {
-        return pushNewTween(gameObject, new Vector2(to, 0, 0), time, TweenAction.MOVE_LOCAL_Y, optional);
-    }
-
-    public static int moveLocalY(GameObject gameObject, float to, float time, object[] optional) {
-        return moveLocalY(gameObject, to, time, h(optional));
-    }
-
-    public static int moveLocalZ(GameObject gameObject, float to, float time, Hashtable optional) {
-        return pushNewTween(gameObject, new Vector2(to, 0, 0), time, TweenAction.MOVE_LOCAL_Z, optional);
-    }
-
-    public static int moveLocalZ(GameObject gameObject, float to, float time, object[] optional) {
-        return moveLocalZ(gameObject, to, time, h(optional));
-    }
-
-    public static int scale(GameObject gameObject, Vector2 to, float time, Hashtable optional) {
-        return pushNewTween(gameObject, to, time, TweenAction.SCALE, optional);
-    }
-
-    public static int scale(GameObject gameObject, Vector2 to, float time, object[] optional) {
-        return scale(gameObject, to, time, h(optional));
-    }
-
-    public static int scale(LTRect ltRect, Vector2 to, float time, Hashtable optional) {
-        init();
-        if (optional == null || optional.Count == 0)
-            optional = new Hashtable();
-
-        optional["rect"] = ltRect;
-        return pushNewTween(tweenEmpty, to, time, TweenAction.GUI_SCALE, optional);
-    }
-
-    public static int scale(LTRect ltRect, Vector2 to, float time, object[] optional) {
-        return scale(ltRect, to, time, h(optional));
-    }
-
-    public static int alpha(LTRect ltRect, float to, float time, Hashtable optional) {
-        init();
-        if (optional == null || optional.Count == 0)
-            optional = new Hashtable();
-
-        ltRect.alphaEnabled = true;
-        optional["rect"] = ltRect;
-        return pushNewTween(tweenEmpty, new Vector2(to, 0f, 0f), time, TweenAction.GUI_ALPHA, optional);
-    }
-
-    public static int alpha(LTRect ltRect, float to, float time, object[] optional) {
-        return alpha(ltRect, to, time, h(optional));
-    }
-
-    public static int scaleX(GameObject gameObject, float to, float time, Hashtable optional) {
-        return pushNewTween(gameObject, new Vector2(to, 0, 0), time, TweenAction.SCALE_X, optional);
-    }
-
-    public static int scaleX(GameObject gameObject, float to, float time, object[] optional) {
-        return scaleX(gameObject, to, time, h(optional));
-    }
-
-    public static int scaleY(GameObject gameObject, float to, float time, Hashtable optional) {
-        return pushNewTween(gameObject, new Vector2(to, 0, 0), time, TweenAction.SCALE_Y, optional);
-    }
-
-    public static int scaleY(GameObject gameObject, float to, float time, object[] optional) {
-        return scaleY(gameObject, to, time, h(optional));
-    }
-
-    public static int scaleZ(GameObject gameObject, float to, float time, Hashtable optional) {
-        return pushNewTween(gameObject, new Vector2(to, 0, 0), time, TweenAction.SCALE_Z, optional);
-    }
-
-    public static int scaleZ(GameObject gameObject, float to, float time, object[] optional) {
-        return scaleZ(gameObject, to, time, h(optional));
-    }
-
-    public static int delayedCall(float delayTime, string callback, Hashtable optional) {
-        init();
-        return delayedCall(tweenEmpty, delayTime, callback, optional);
-    }
-
-    public static int delayedCall(float delayTime, Action callback, object[] optional) {
-        init();
-        return delayedCall(tweenEmpty, delayTime, callback, h(optional));
-    }
-
-    public static int delayedCall(GameObject gameObject, float delayTime, string callback, object[] optional) {
-        return delayedCall(gameObject, delayTime, callback, h(optional));
-    }
-
-    public static int delayedCall(GameObject gameObject, float delayTime, Action callback, object[] optional) {
-        return delayedCall(gameObject, delayTime, callback, h(optional));
-    }
-
-    public static int delayedCall(GameObject gameObject, float delayTime, string callback, Hashtable optional) {
-        if (optional == null || optional.Count == 0)
-            optional = new Hashtable();
-        optional["onComplete"] = callback;
-
-        return pushNewTween(gameObject, Vector2.zero, delayTime, TweenAction.CALLBACK, optional);
-    }
-
-    public static int delayedCall(GameObject gameObject, float delayTime, Action callback, Map optional) {
-        if (optional == null)
-            optional = new Hashtable();
-        optional["onComplete"] = callback;
-
-        return pushNewTween(gameObject, Vector2.zero, delayTime, TweenAction.CALLBACK, optional);
-    }
-
-    public static int delayedCall(GameObject gameObject, float delayTime, Action<object> callback, Map optional) {
-        if (optional == null)
-            optional = new Hashtable();
-        optional["onComplete"] = callback;
-
-        return pushNewTween(gameObject, Vector2.zero, delayTime, TweenAction.CALLBACK, optional);
-    }
-
-    public static int alpha(GameObject gameObject, float to, float time, Map optional) {
-        return pushNewTween(gameObject, new Vector2(to, 0, 0), time, TweenAction.ALPHA, optional);
-    }
-
-    public static int alpha(GameObject gameObject, float to, float time, object[] optional) {
-        return alpha(gameObject, to, time, h(optional));
-    }
-        #endif
-
-// Tweening Functions - Thanks to Robert Penner and GFX47
-
-    private static float tweenOnCurve(LTDescr tweenDescr, float ratioPassed) {
-        // Debug.Log("single ratio:"+ratioPassed+" tweenDescr.animationCurve.Evaluate(ratioPassed):"+tweenDescr.animationCurve.Evaluate(ratioPassed));
-        return tweenDescr.from.x + (tweenDescr.diff.x) * tweenDescr.animationCurve.Evaluate(ratioPassed);
-    }
-
-
-
-    private static float easeOutQuadOpt(float start, float diff, float ratioPassed) {
-        return -diff * ratioPassed * (ratioPassed - 2) + start;
-    }
-
-    private static float easeInQuadOpt(float start, float diff, float ratioPassed) {
-        return diff * ratioPassed * ratioPassed + start;
-    }
-
-    private static float easeInOutQuadOpt(float start, float diff, float ratioPassed) {
-        ratioPassed /= .5f;
-        if (ratioPassed < 1) return diff / 2 * ratioPassed * ratioPassed + start;
-        ratioPassed--;
-        return -diff / 2 * (ratioPassed * (ratioPassed - 2) - 1) + start;
-    }
-
-    private static float linear(float start, float end, float val) {
-        return Mathf.lerp(start, end, val);
-    }
-
-    private static float clerp(float start, float end, float val) {
-        float min = 0.0f;
-        float max = 360.0f;
-        float half = Mathf.abs((max - min) / 2.0f);
-        float retval = 0.0f;
-        float diff = 0.0f;
-        if ((end - start) < -half) {
-            diff = ((max - start) + end) * val;
-            retval = start + diff;
-        } else if ((end - start) > half) {
-            diff = -((max - end) + start) * val;
-            retval = start + diff;
-        } else retval = start + (end - start) * val;
-        return retval;
-    }
-
-    private static float spring(float start, float end, float val) {
-        val = Mathf.clamp01(val);
-        val = (Mathf.sin(val * Mathf.PI * (0.2f + 2.5f * val * val * val)) * Mathf.pow(1f - val, 2.2f) + val) * (1f + (1.2f * (1f - val)));
-        return start + (end - start) * val;
-    }
-
-    private static float easeInQuad(float start, float end, float val) {
-        end -= start;
-        return end * val * val + start;
-    }
-
-    private static float easeOutQuad(float start, float end, float val) {
-        end -= start;
-        return -end * val * (val - 2) + start;
-    }
-
-    private static float easeInOutQuad(float start, float end, float val) {
-        val /= .5f;
-        end -= start;
-        if (val < 1) return end / 2 * val * val + start;
-        val--;
-        return -end / 2 * (val * (val - 2) - 1) + start;
-    }
-
-    private static float easeInCubic(float start, float end, float val) {
-        end -= start;
-        return end * val * val * val + start;
-    }
-
-    private static float easeOutCubic(float start, float end, float val) {
-        val--;
-        end -= start;
-        return end * (val * val * val + 1) + start;
-    }
-
-    private static float easeInOutCubic(float start, float end, float val) {
-        val /= .5f;
-        end -= start;
-        if (val < 1) return end / 2 * val * val * val + start;
-        val -= 2;
-        return end / 2 * (val * val * val + 2) + start;
-    }
-
-    private static float easeInQuart(float start, float end, float val) {
-        end -= start;
-        return end * val * val * val * val + start;
-    }
-
-    private static float easeOutQuart(float start, float end, float val) {
-        val--;
-        end -= start;
-        return -end * (val * val * val * val - 1) + start;
-    }
-
-    private static float easeInOutQuart(float start, float end, float val) {
-        val /= .5f;
-        end -= start;
-        if (val < 1) return end / 2 * val * val * val * val + start;
-        val -= 2;
-        return -end / 2 * (val * val * val * val - 2) + start;
-    }
-
-    private static float easeInQuint(float start, float end, float val) {
-        end -= start;
-        return end * val * val * val * val * val + start;
-    }
-
-    private static float easeOutQuint(float start, float end, float val) {
-        val--;
-        end -= start;
-        return end * (val * val * val * val * val + 1) + start;
-    }
-
-    private static float easeInOutQuint(float start, float end, float val) {
-        val /= .5f;
-        end -= start;
-        if (val < 1) return end / 2 * val * val * val * val * val + start;
-        val -= 2;
-        return end / 2 * (val * val * val * val * val + 2) + start;
-    }
-
-    private static float easeInSine(float start, float end, float val) {
-        end -= start;
-        return -end * Mathf.Cos(val / 1 * (Mathf.PI / 2)) + end + start;
-    }
-
-    private static float easeOutSine(float start, float end, float val) {
-        end -= start;
-        return end * Mathf.Sin(val / 1 * (Mathf.PI / 2)) + start;
-    }
-
-    private static float easeInOutSine(float start, float end, float val) {
-        end -= start;
-        return -end / 2 * (Mathf.Cos(Mathf.PI * val / 1) - 1) + start;
-    }
-
-    private static float easeInExpo(float start, float end, float val) {
-        end -= start;
-        return end * Mathf.pow(2, 10 * (val / 1 - 1)) + start;
-    }
-
-    private static float easeOutExpo(float start, float end, float val) {
-        end -= start;
-        return end * (-Mathf.pow(2, -10 * val / 1) + 1) + start;
-    }
-
-    private static float easeInOutExpo(float start, float end, float val) {
-        val /= .5f;
-        end -= start;
-        if (val < 1) return end / 2 * Mathf.pow(2, 10 * (val - 1)) + start;
-        val--;
-        return end / 2 * (-Mathf.pow(2, -10 * val) + 2) + start;
-    }
-
-    private static float easeInCirc(float start, float end, float val) {
-        end -= start;
-        return -end * (Mathf.sqrt(1 - val * val) - 1) + start;
-    }
-
-    private static float easeOutCirc(float start, float end, float val) {
-        val--;
-        end -= start;
-        return end * Mathf.sqrt(1 - val * val) + start;
-    }
-
-    private static float easeInOutCirc(float start, float end, float val) {
-        val /= .5f;
-        end -= start;
-        if (val < 1) return -end / 2 * (Mathf.sqrt(1 - val * val) - 1) + start;
-        val -= 2;
-        return end / 2 * (Mathf.sqrt(1 - val * val) + 1) + start;
-    }
-
-    /* GFX47 MOD START */
-    private static float easeInBounce(float start, float end, float val) {
-        end -= start;
-        float d = 1f;
-        return end - easeOutBounce(0, end, d - val) + start;
-    }
-/* GFX47 MOD END */
-
-    /* GFX47 MOD START */
-//public static function bounce(float start, float end, float val){
-    private static float easeOutBounce(float start, float end, float val) {
-        val /= 1f;
-        end -= start;
-        if (val < (1 / 2.75f)) {
-            return end * (7.5625f * val * val) + start;
-        } else if (val < (2 / 2.75f)) {
-            val -= (1.5f / 2.75f);
-            return end * (7.5625f * (val) * val + .75f) + start;
-        } else if (val < (2.5 / 2.75)) {
-            val -= (2.25f / 2.75f);
-            return end * (7.5625f * (val) * val + .9375f) + start;
-        } else {
-            val -= (2.625f / 2.75f);
-            return end * (7.5625f * (val) * val + .984375f) + start;
-        }
-    }
-/* GFX47 MOD END */
-
-    /* GFX47 MOD START */
-    private static float easeInOutBounce(float start, float end, float val) {
-        end -= start;
-        float d = 1f;
-        if (val < d / 2) return easeInBounce(0, end, val * 2) * 0.5f + start;
-        else return easeOutBounce(0, end, val * 2 - d) * 0.5f + end * 0.5f + start;
-    }
-/* GFX47 MOD END */
-
-    private static float easeInBack(float start, float end, float val) {
-        end -= start;
-        val /= 1;
-        float s = 1.70158f;
-        return end * (val) * val * ((s + 1) * val - s) + start;
-    }
-
-    private static float easeOutBack(float start, float end, float val) {
-        float s = 1.70158f;
-        end -= start;
-        val = (val / 1) - 1;
-        return end * ((val) * val * ((s + 1) * val + s) + 1) + start;
-    }
-
-    private static float easeInOutBack(float start, float end, float val) {
-        float s = 1.70158f;
-        end -= start;
-        val /= .5f;
-        if ((val) < 1) {
-            s *= (1.525f);
-            return end / 2 * (val * val * (((s) + 1) * val - s)) + start;
-        }
-        val -= 2;
-        s *= (1.525f);
-        return end / 2 * ((val) * val * (((s) + 1) * val + s) + 2) + start;
-    }
-
-    private static float easeInElastic(float start, float end, float val) {
-        end -= start;
-
-        float d = 1f;
-        float p = d * .3f;
-        float s = 0;
-        float a = 0;
-
-        if (val == 0) return start;
-        val = val / d;
-        if (val == 1) return start + end;
-
-        if (a == 0f || a < Mathf.abs(end)) {
-            a = end;
-            s = p / 4;
-        } else {
-            s = p / (2 * Mathf.PI) * Mathf.asin(end / a);
-        }
-        val = val - 1;
-        return -(a * Mathf.pow(2, 10 * val) * Mathf.sin((val * d - s) * (2 * Mathf.PI) / p)) + start;
-    }
-
-    private static float easeOutElastic(float start, float end, float val) {
-/* GFX47 MOD END */
-        //Thank you to rafael.marteleto for fixing this as a port over from Pedro's UnityTween
-        end -= start;
-
-        float d = 1f;
-        float p = d * .3f;
-        float s = 0;
-        float a = 0;
-
-        if (val == 0) return start;
-
-        val = val / d;
-        if (val == 1) return start + end;
-
-        if (a == 0f || a < Mathf.abs(end)) {
-            a = end;
-            s = p / 4;
-        } else {
-            s = p / (2 * Mathf.PI) * Mathf.asin(end / a);
-        }
-
-        return (a * Mathf.pow(2, -10 * val) * Mathf.sin((val * d - s) * (2 * Mathf.PI) / p) + end + start);
-    }
-
-    private static float easeInOutElastic(float start, float end, float val) {
-        end -= start;
-
-        float d = 1f;
-        float p = d * .3f;
-        float s = 0;
-        float a = 0;
-
-        if (val == 0) return start;
-
-        val = val / (d / 2);
-        if (val == 2) return start + end;
-
-        if (a == 0f || a < Mathf.abs(end)) {
-            a = end;
-            s = p / 4;
-        } else {
-            s = p / (2 * Mathf.PI) * Mathf.asin(end / a);
-        }
-
-        if (val < 1) {
-            val = val - 1;
-            return -0.5f * (a * Mathf.pow(2, 10 * val) * Mathf.sin((val * d - s) * (2 * Mathf.PI) / p)) + start;
-        }
-        val = val - 1;
-        return a * Mathf.pow(2, -10 * val) * Mathf.sin((val * d - s) * (2 * Mathf.PI) / p) * 0.5f + end + start;
-    }
-
-
-    private static List<LTEvent> eventListeners = new ArrayList<>();
-    private static GameObject[] goListeners;
-    private static int eventsMaxSearch = 0;
-    public static int EVENTS_MAX = 10;
-    public static int LISTENERS_MAX = 10;
-
-    public static void addListener(int eventId, Action<LTEvent> callback) {
-        addListener(tweenEmpty, eventId, callback);
-    }
-
-    public static void addListener(GameObject caller, int eventId, Action<LTEvent> callback) {
-        if (eventListeners == null) {
-            eventListeners = new System.Action<LTEvent>[EVENTS_MAX * LISTENERS_MAX];
-            goListeners = new GameObject[EVENTS_MAX * LISTENERS_MAX];
-        }
-        // Debug.Log("searching for an empty space for:"+caller + " eventid:"+event);
-        for (i = 0; i < LISTENERS_MAX; i++) {
-            int point = eventId * LISTENERS_MAX + i;
-            if (goListeners[point] == null || eventListeners[point] == null) {
-                eventListeners[point] = callback;
-                goListeners[point] = caller;
-                if (i >= eventsMaxSearch)
-                    eventsMaxSearch = i + 1;
-                // Debug.Log("adding event for:"+caller.name);
-
-                return;
-            }
-            if (goListeners[point] == caller && System.Object.ReferenceEquals(eventListeners[point], callback)) {
-                // Debug.Log("This event is already being listened for.");
-                return;
-            }
-        }
-    }
-
-    public static boolean removeListener(int eventId, Action<LTEvent> callback) {
-        return removeListener(tweenEmpty, eventId, callback);
-    }
-
-    public static boolean removeListener(GameObject caller, int eventId, Action<LTEvent> callback) {
-        for (i = 0; i < eventsMaxSearch; i++) {
-            int point = eventId * LISTENERS_MAX + i;
-            if (goListeners[point] == caller && System.Object.ReferenceEquals(eventListeners[point], callback)) {
-                eventListeners.set(point,null);
-                goListeners[point] = null;
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static void dispatchEvent(int eventId) {
-        dispatchEvent(eventId, null);
-    }
-
-    public static void dispatchEvent(int eventId, Object data) {
-        for (int k = 0; k < eventsMaxSearch; k++) {
-            int point = eventId * LISTENERS_MAX + k;
-            if (eventListeners[point] != null) {
-                if (goListeners[point]) {
-                    eventListeners[point] (new LTEvent(eventId, data));
-                } else {
-                    eventListeners[point] = null;
-                }
-            }
-        }
-    }
-
+//    public static class AnimationTask {
+//        public boolean toggle;
+//        public TransformF trans;
+//        public Vector2 from;
+//        public Vector2 to;
+//        public Vector2 diff;
+//        public Vector2 point;
+//        public Vector2 axis;
+//        public Vector2 origRotation;
+//        public float time;
+//        public float lastVal;
+//        public float passed;
+//
+//
+//        public long delay;
+//        private String id;
+//        public Interpolator loopType;
+//        public int loopCount;
+//        public float direction;
+//        public Action<Float> onUpdateFloat;
+//        public Action<Vector2> onUpdateVector2;
+//        public Action onComplete;
+//
+//    }
 }
 
+//
+//        /**
+//         * Cancel a tween
+//         *
+//         * @return {LTDescr} LTDescr an object that distinguishes the tween
+//         * @method cancel
+//         */
+//        public LTDescr cancel() {
+//            LeanTween.removeTween(this._id);
+//            return this;
+//        }
+//
+//        public int uniqueId()
+//
+//        {
+//
+//            int toId = _id | ((int) type.ordinal() << 24);
+//
+//			/*Debug.Log("toId:"+_id+" toType:"+(TweenAction)type);
+//
+//			int backId = toId & 0xFFFFFF;
+//			int backType = toId >> 24;
+//
+//			Debug.Log("backId:"+backId+" backType:"+(TweenAction)backType);*/
+//
+//            return toId;
+//
+//        }
+//
+//        public int id() {
+//            return uniqueId();
+//        }
+//
+//        public void reset() {
+//            this.toggle = true;
+//            this.optional = null;
+//            this.passed = this.delay = 0.0f;
+//            this.useEstimatedTime = this.useFrames = this.hasInitiliazed = false;
+//            this.animationCurve = null;
+//            this.tweenType = LeanTweenType.linear;
+//            this.loopType = LeanTweenType.once;
+//            this.direction = 1.0f;
+//            this.onUpdateFloat = null;
+//            this.onUpdateVector2 = null;
+//            this.onComplete = null;
+//            this.onCompleteParam = null;
+//            this.point = Vector2.Zero;
+//        }
+//
+//        /**
+//         * Pause a tween
+//         *
+//         * @return {LTDescr} LTDescr an object that distinguishes the tween
+//         * @method pause
+//         */
+//        public LTDescr pause() {
+//            this.lastVal = this.direction;
+//            this.direction = 0.0f;
+//            return this;
+//        }
+//
+//        /**
+//         * Resume a paused tween
+//         *
+//         * @return {LTDescr} LTDescr an object that distinguishes the tween
+//         * @method resume
+//         */
+//        public LTDescr resume() {
+//            this.direction = this.lastVal;
+//            return this;
+//        }
+//
+//        public LTDescr setAxis(Vector2 axis) {
+//            this.axis = axis;
+//            return this;
+//        }
+//
+//        /**
+//         * Delay the start of a tween
+//         *
+//         * @param {float} float time The time to complete the tween in
+//         * @return {LTDescr} LTDescr an object that distinguishes the tween
+//         * @method setDelay
+//         * @example physicsPort.LeanTween.moveX(gameObject, 5f, 2.0f).setDelay(1.5f);
+//         */
+//        public LTDescr setDelay(float delay) {
+//            this.delay = delay;
+//            return this;
+//        }
+//
+//        /**
+//         * Set the type of easing used for the tween. <br>
+//         * <ul><li><a href="LeanTweenType.html">List of all the ease types</a>.</li>
+//         * <li><a href="http://www.robertpenner.com/easing/easing_demo.html">This page helps visualize the different easing equations</a></li>
+//         * </ul>
+//         *
+//         * @param {LeanTweenType} easeType:LeanTweenType the easing type to use
+//         * @return {LTDescr} LTDescr an object that distinguishes the tween
+//         * @method setEase
+//         * @example physicsPort.LeanTween.moveX(gameObject, 5f, 2.0f).setEase(LeanTweenType.easeInBounce);
+//         */
+//        public LTDescr setEase(LeanTweenType easeType) {
+//            this.tweenType = easeType;
+//            return this;
+//        }
+//
+//        /**
+//         * Set the type of easing used for the tween with a custom curve. <br>
+//         *
+//         * @param {AnimationCurve} easeDefinition:AnimationCurve an <a href="http://docs.unity3d.com/Documentation/ScriptReference/AnimationCurve.html" target="_blank">AnimationCure</a> that describes the type of easing you want, this is great for when you want a unique type of movement
+//         * @return {LTDescr} LTDescr an object that distinguishes the tween
+//         * @method setEase (AnimationCurve)
+//         * @example physicsPort.LeanTween.moveX(gameObject, 5f, 2.0f).setEase(LeanTweenType.easeInBounce);
+//         */
+//        public LTDescr setEase(Vector2[] easeCurve) {
+//            this.animationCurve = easeCurve;
+//            return this;
+//        }
+//
+//        public LTDescr setFrom(Vector2 from) {
+//            this.from = from;
+//            return this;
+//        }
+//
+//        public LTDescr setId(int id) {
+//            this._id = id;
+//            return this;
+//        }
+//
+//        /**
+//         * Set the tween to repeat a number of times.
+//         *
+//         * @param {int} repeatNum:int the number of times to repeat the tween. -1 to repeat infinite times
+//         * @return {LTDescr} LTDescr an object that distinguishes the tween
+//         * @method setRepeat
+//         * @example physicsPort.LeanTween.moveX(gameObject, 5f, 2.0f).setRepeat(10).setLoopPingPong();
+//         */
+//        public LTDescr setRepeat(int repeat) {
+//            this.loopCount = repeat;
+//            if (repeat > 1 && this.loopType == LeanTweenType.once) {
+//                this.loopType = LeanTweenType.clamp;
+//            }
+//            return this;
+//        }
+//
+//        public LTDescr setLoopType(LeanTweenType loopType) {
+//            this.loopType = loopType;
+//            return this;
+//        }
+//
+//        /**
+//         * Use estimated time when tweening an object. Great for pause screens, when you want all other action to be stopped (or slowed down)
+//         *
+//         * @param {boolean} useEstimatedTime:boolean whether to use estimated time or not
+//         * @return {LTDescr} LTDescr an object that distinguishes the tween
+//         * @method setUseEstimatedTime
+//         * @example physicsPort.LeanTween.moveX(gameObject, 5f, 2.0f).setRepeat(2).setUseEstimatedTime(true);
+//         */
+//        public LTDescr setUseEstimatedTime(boolean useEstimatedTime) {
+//            this.useEstimatedTime = useEstimatedTime;
+//            return this;
+//        }
+//
+//        /**
+//         * Use frames when tweening an object, when you don't want the animation to be time-frame independent...
+//         *
+//         * @param {boolean} useFrames:boolean whether to use estimated time or not
+//         * @return {LTDescr} LTDescr an object that distinguishes the tween
+//         * @method setUseFrames
+//         * @example physicsPort.LeanTween.moveX(gameObject, 5f, 2.0f).setRepeat(2).setUseFrames(true);
+//         */
+//        public LTDescr setUseFrames(boolean useFrames) {
+//            this.useFrames = useFrames;
+//            return this;
+//        }
+//
+//        public LTDescr setLoopCount(int loopCount) {
+//            this.loopCount = loopCount;
+//            return this;
+//        }
+//
+//        /**
+//         * No looping involved, just run once (the default)
+//         *
+//         * @return {LTDescr} LTDescr an object that distinguishes the tween
+//         * @method setLoopOnce
+//         * @example physicsPort.LeanTween.moveX(gameObject, 5f, 2.0f).setLoopOnce();
+//         */
+//        public LTDescr setLoopOnce() {
+//            this.loopType = LeanTweenType.once;
+//            return this;
+//        }
+//
+//        /**
+//         * When the animation gets to the end it starts back at where it began
+//         *
+//         * @return {LTDescr} LTDescr an object that distinguishes the tween
+//         * @method setLoopClamp
+//         * @example physicsPort.LeanTween.moveX(gameObject, 5f, 2.0f).setRepeat(2).setLoopClamp();
+//         */
+//        public LTDescr setLoopClamp() {
+//            this.loopType = LeanTweenType.clamp;
+//            return this;
+//        }
+//
+//        /**
+//         * When the animation gets to the end it then tweens back to where it started (and on, and on)
+//         *
+//         * @return {LTDescr} LTDescr an object that distinguishes the tween
+//         * @method setLoopPingPong
+//         * @example physicsPort.LeanTween.moveX(gameObject, 5f, 2.0f).setRepeat(2).setLoopClamp();
+//         */
+//        public LTDescr setLoopPingPong() {
+//            this.loopType = LeanTweenType.pingPong;
+//            return this;
+//        }
+//
+//        /**
+//         * Have a method called when the tween finishes
+//         *
+//         * @param {Action} onComplete:Action the method that should be called when the tween is finished ex: tweenFinished(){ }
+//         * @return {LTDescr} LTDescr an object that distinguishes the tween
+//         * @method setOnComplete
+//         * @example physicsPort.LeanTween.moveX(gameObject, 5f, 2.0f).setOnComplete(tweenFinished);
+//         */
+//        public LTDescr setOnComplete(Action onComplete) {
+//            this.onComplete = onComplete;
+//            return this;
+//        }
+//
+//
+//        /**
+//         * Have a method called on each frame that the tween is being animated (passes a float value)
+//         *
+//         * @param {Action<float>} onUpdate:Action<float> a method that will be called on every frame with the float value of the tweened object
+//         * @return {LTDescr} LTDescr an object that distinguishes the tween
+//         * @method setOnUpdate
+//         * @example physicsPort.LeanTween.moveX(gameObject, 5f, 2.0f).setOnUpdate(tweenMoved);<br>
+//         * <br>
+//         * void tweenMoved( float val ){ }<br>
+//         */
+//        public LTDescr setOnUpdate(Action<Float> onUpdate) {
+//            this.onUpdateFloat = onUpdate;
+//            return this;
+//        }
+//
+//
+//        public LTDescr setOnUpdateVector2(Action<Vector2> onUpdate) {
+//            this.onUpdateVector2 = onUpdate;
+//            return this;
+//        }
+//
+//
+//        /**
+//         * Have an object passed along with the onUpdate method
+//         *
+//         * @param {object} onUpdateParam:object an object that will be passed along with the onUpdate method
+//         * @return {LTDescr} LTDescr an object that distinguishes the tween
+//         * @method setOnUpdateParam
+//         * @example physicsPort.LeanTween.moveX(gameObject, 5f, 2.0f).setOnUpdate(tweenMoved).setOnUpdateParam(myObject);<br>
+//         * <br>
+//         * void tweenMoved( float val, object obj ){ }<br>
+//         */
+//        public LTDescr setOnUpdateParam(Object onUpdateParam) {
+//            this.onUpdateParam = onUpdateParam;
+//            return this;
+//        }
+//
+//        /**
+//         * While tweening along a curve, set this property to true, to be perpendicalur to the path it is moving upon
+//         *
+//         * @param {boolean} doesOrient:boolean whether the gameobject will orient to the path it is animating along
+//         * @return {LTDescr} LTDescr an object that distinguishes the tween
+//         * @method setOrientToPath
+//         * @example physicsPort.LeanTween.move(ltLogo, path, 1.0f).setEase(LeanTweenType.easeOutQuad).setOrientToPath(true);<br>
+//         */
+//        public LTDescr setOrientToPath(boolean doesOrient) {
+//            if (this.path == null)
+//                this.path = new LTBezierPath();
+//            this.path.orientToPath = doesOrient;
+//            return this;
+//        }
+//
+//        public LTDescr setRect(LTRect rect) {
+//            this.ltRect = rect;
+//            return this;
+//        }
+//
+//        public LTDescr setRect(Rect rect) {
+//            this.ltRect = new LTRect(rect);
+//            return this;
+//        }
+//
+//        public LTDescr setPath(LTBezierPath path) {
+//            this.path = path;
+//            return this;
+//        }
+//
+//        /**
+//         * Set the point at which the GameObject will be rotated around
+//         *
+//         * @param {Vector2} point:Vector2 point at which you want the object to rotate around (local space)
+//         * @return {LTDescr} LTDescr an object that distinguishes the tween
+//         * @method setPoint
+//         * @example physicsPort.LeanTween.rotateAround(cube, Vector2.up, 360.0f, 1.0f) .setPoint( new Vector2(1f,0f,0f) ) .setEase( LeanTweenType.easeInOutBounce );<br>
+//         */
+//        public LTDescr setPoint(Vector2 point) {
+//            this.point = point;
+//            return this;
+//        }
+//
+//    }
+//
+//    /**
+//     * Animate GUI Elements by creating this object and passing the *.rect variable to the GUI method<br><br>
+//     * <strong>Example Javascript: </strong><br>var bRect:LTRect = new LTRect( 0, 0, 100, 50 );<br>
+//     * physicsPort.LeanTween.scale( bRect, Vector2(bRect.rect.width, bRect.rect.height) * 1.3, 0.25 );<br>
+//     * function OnGUI(){<br>
+//     * &nbsp; if(GUI.Button(bRect.rect, "Scale")){ }<br>
+//     * }<br>
+//     * <br>
+//     * <strong>Example C#: </strong> <br>
+//     * LTRect bRect = new LTRect( 0f, 0f, 100f, 50f );<br>
+//     * physicsPort.LeanTween.scale( bRect, new Vector2(150f,75f), 0.25f );<br>
+//     * void OnGUI(){<br>
+//     * &nbsp; if(GUI.Button(bRect.rect, "Scale")){ }<br>
+//     * }<br>
+//     *
+//     * @param {float} x:float X location
+//     * @param {float} y:float Y location
+//     * @param {float} width:float Width
+//     * @param {float} height:float Height
+//     * @class LTRect
+//     * @constructor
+//     */
+//
+//    static class LTRect {
+//        /**
+//         * Pass this value to the GUI Methods
+//         *
+//         * @property rect
+//         * @type {Rect} rect:Rect Rect object that controls the positioning and size
+//         */
+//        public Rect _rect;
+//        public float alpha;
+//        public float rotation;
+//        public Vector2 pivot;
+//
+//        public boolean rotateEnabled;
+//        public boolean rotateFinished;
+//        public boolean alphaEnabled;
+//
+//        public static boolean colorTouched;
+//
+//        public LTRect() {
+//            reset();
+//            this.rotateEnabled = this.alphaEnabled = true;
+//            _rect = new Rect(0f, 0f, 1f, 1f);
+//        }
+//
+//        public LTRect(Rect rect) {
+//            _rect = rect;
+//            reset();
+//        }
+//
+//        public LTRect(float x, float y, float width, float height) {
+//            _rect = new Rect(x, y, width, height);
+//            this.alpha = 1.0f;
+//            this.rotation = 0.0f;
+//            this.rotateEnabled = this.alphaEnabled = false;
+//        }
+//
+//        public LTRect(float x, float y, float width, float height, float alpha) {
+//            _rect = new Rect(x, y, width, height);
+//            this.alpha = alpha;
+//            this.rotation = 0.0f;
+//            this.rotateEnabled = this.alphaEnabled = false;
+//        }
+//
+//        public LTRect(float x, float y, float width, float height, float alpha, float rotation) {
+//            _rect = new Rect(x, y, width, height);
+//            this.alpha = alpha;
+//            this.rotation = rotation;
+//            this.rotateEnabled = this.alphaEnabled = false;
+//            if (rotation != 0.0f) {
+//                this.rotateEnabled = true;
+//                resetForRotation();
+//            }
+//        }
+//
+//        public void reset() {
+//            this.alpha = 1.0f;
+//            this.rotation = 0.0f;
+//            this.rotateEnabled = this.alphaEnabled = false;
+//        }
+//
+//        public void resetForRotation() {
+//            if (pivot == Vector2.Zero) {
+//                pivot = new Vector2(_rect.x + _rect.width * 0.5f, _rect.y + _rect.height * 0.5f);
+//                _rect.x += -pivot.x;
+//                _rect.y += -pivot.y;
+//            }
+//        }
+//
+//        public float x() {
+//
+//            return _rect.x;
+//        }
+//
+//        public void x(float value) {
+//            _rect.x = value;
+//
+//        }
+//
+//        public float y()
+//
+//        {
+//
+//            return _rect.y;
+//        }
+//
+//        void y(float value) {
+//            _rect.y = value;
+//
+//        }
+//
+//        public Rect rect()
+//
+//        {
+//
+////            get {
+////            if (colorTouched) {
+////                colorTouched = false;
+////                GUI.color = new Color(GUI.color.r, GUI.color.g, GUI.color.b, 1.0f);
+////            }
+////            if (rotateEnabled) {
+////                if (rotateFinished) {
+////                    rotateFinished = false;
+////                    rotateEnabled = false;
+////                    _rect.x += pivot.x;
+////                    _rect.y += pivot.y;
+////                    pivot = Vector2.zero;
+////                    GUI.matrix = Matrix4x4.identity;
+////                } else {
+////                    Matrix4x4 trsMatrix = Matrix4x4.identity;
+////                    trsMatrix.SetTRS(pivot, Quaternion.Euler(0f, 0f, rotation), Vector2.one);
+////                    GUI.matrix = trsMatrix;
+////                }
+////            }
+////            if (alphaEnabled) {
+////                GUI.color = new Color(GUI.color.r, GUI.color.g, GUI.color.b, alpha);
+////                colorTouched = true;
+////            }
+////            return _rect;
+////        }
+////
+////            set {
+////            _rect = value;
+////        }
+//            return null;
+//
+//        }
+//    }
+//
+//    static class LTBezier {
+//        public float length;
+//
+//        private Vector2 a;
+//        private Vector2 aa;
+//        private Vector2 bb;
+//        private Vector2 cc;
+//        private float len;
+//        private float[] arclengths;
+//
+//        public LTBezier(Vector2 a, Vector2 b, Vector2 c, Vector2 d, float precision) {
+////            this.a = a;
+////            aa = (-a + 3 * (b - c) + d);
+////            bb = 3 * (a + c) - 6 * b;
+////            cc = 3 * (b - a);
+////
+////            this.len = 1.0f / precision;
+////            arclengths = new float[(int) this.len + (int) 1];
+////            arclengths[0] = 0;
+////
+////            Vector2 ov = a;
+////            Vector2 v;
+////            float clen = 0.0f;
+////            for (int i = 1; i <= this.len; i++) {
+////                v = bezierPoint(i * precision);
+////                clen += (ov - v).magnitude;
+////                this.arclengths[i] = clen;
+////                ov = v;
+////            }
+////            this.length = clen;
+//        }
+//
+//        private float map(float u) {
+//            float targetlength = u * this.arclengths[(int) this.len];
+//            int low = 0;
+//            int high = (int) this.len;
+//            int index = 0;
+//            while (low < high) {
+//                index = low + ((int) ((high - low) / 2.0f) | 0);
+//                if (this.arclengths[index] < targetlength) {
+//                    low = index + 1;
+//                } else {
+//                    high = index;
+//                }
+//            }
+//            if (this.arclengths[index] > targetlength)
+//                index--;
+//            if (index < 0)
+//                index = 0;
+//
+//            return (index + (targetlength - arclengths[index]) / (arclengths[index + 1] - arclengths[index])) / this.len;
+//        }
+//
+//        //private Vector2 bezierPoint(float t) {
+////            return ((aa * t + (bb)) * t + cc) * t + a;
+////        }
+//
+////        public Vector2 point(float t) {
+////            return bezierPoint(map(t));
+////        }
+//    }
+//
+//    /**
+//     * Manually animate along a bezier path with this class
+//     *
+//     * @param {float} pts:Vector2[] A set of points that define one or many bezier paths (the paths should be passed in multiples of 4, which correspond to each individual bezier curve)
+//     * @class LTBezierPath
+//     * @constructor
+//     */
+//    static class LTBezierPath {
+//        public Vector2[] pts;
+//        public float length;
+//        public boolean orientToPath;
+//
+//        private LTBezier[] beziers;
+//        private float[] lengthRatio;
+//
+//        public LTBezierPath() {
+//        }
+//
+//        public LTBezierPath(Vector2[] pts_) {
+//            setPoints(pts_);
+//        }
+//
+//        public void setPoints(Vector2[] pts_) {
+//            if (pts_.length < 4)
+//                LeanTween.logError("physicsPort.LeanTween - When passing values for a vector path, you must pass four or more values!");
+//            if (pts_.length % 4 != 0)
+//                LeanTween.logError("physicsPort.LeanTween - When passing values for a vector path, they must be in sets of four: controlPoint1, controlPoint2, endPoint2, controlPoint2, controlPoint2...");
+//
+//            pts = pts_;
+//
+//            int k = 0;
+//            beziers = new LTBezier[pts.length / 4];
+//            lengthRatio = new float[beziers.length];
+//            int i;
+//            for (i = 0; i < pts.length; i += 4) {
+//                beziers[k] = new LTBezier(pts[i + 0], pts[i + 2], pts[i + 1], pts[i + 3], 0.05f);
+//                length += beziers[k].length;
+//                k++;
+//            }
+//            // Debug.Log("beziers.length:"+beziers.length + " beziers:"+beziers);
+//            for (i = 0; i < beziers.length; i++) {
+//                lengthRatio[i] = beziers[i].length / length;
+//            }
+//        }
+//
+//        public Vector2 point(float ratio) {
+////            float added = 0.0f;
+////            for (int i = 0; i < lengthRatio.length; i++) {
+////                added += lengthRatio[i];
+////                if (added >= ratio)
+////                    return beziers[i].point((ratio - (added - lengthRatio[i])) / lengthRatio[i]);
+////            }
+////            return beziers[lengthRatio.length - 1].point(1.0f);
+//            return null;
+//        }
+//
+//        public void place(TransformF transform, float ratio) {
+//            place(transform, ratio, Vector2.Y);
+//        }
+//
+//        public void place(TransformF transform, float ratio, Vector2 worldUp) {
+////            transform.position = point(ratio);
+////            ratio += 0.001f;
+////            if (ratio <= 1.0f)
+////                transform.LookAt(point(ratio), worldUp);
+//        }
+//
+//    }
+//
+//    enum TweenAction {
+//        MOVE_X,
+//        MOVE_Y,
+//        MOVE_Z,
+//        MOVE_LOCAL_X,
+//        MOVE_LOCAL_Y,
+//        MOVE_LOCAL_Z,
+//        MOVE_CURVED,
+//        MOVE_CURVED_LOCAL,
+//        SCALE_X,
+//        SCALE_Y,
+//        SCALE_Z,
+//        ROTATE_X,
+//        ROTATE_Y,
+//        ROTATE_Z,
+//        ROTATE_AROUND,
+//        ALPHA,
+//        ALPHA_VERTEX,
+//        CALLBACK,
+//        MOVE,
+//        MOVE_LOCAL,
+//        ROTATE,
+//        ROTATE_LOCAL,
+//        SCALE,
+//        VALUE3,
+//        GUI_MOVE,
+//        GUI_SCALE,
+//        GUI_ALPHA,
+//        GUI_ROTATE
+//    }
+//
+//    /**
+//     * physicsPort.LeanTween is an efficient tweening engine for Unity3d<br><br>
+//     * <a href="#index">Index of All Methods</a> | <a href="LTDescr.html">Optional Paramaters that can be passed</a><br><br>
+//     * <strong id='optional'>Optional Parameters</strong> are passed at the end of every method<br>
+//     * <br>
+//     * <i>Example:</i><br>
+//     * physicsPort.LeanTween.moveX( gameObject, 1f, 1f).setEase( <a href="LeanTweenType.html">LeanTweenType</a>.easeInQuad ).setDelay(1f);<br>
+//     * <br>
+//     * You can pass the optional parameters in any order, and chain on as many as you wish.<br>
+//     * You can also pass parameters at a later time by saving a reference to what is returned.<br>
+//     * <br>
+//     * <i>Example:</i><br>
+//     * <a href="LTDescr.html">LTDescr</a> d = physicsPort.LeanTween.moveX(gameObject, 1f, 1f);<br>
+//     * &nbsp; ...later set some parameters<br>
+//     * d.setOnComplete( onCompleteFunc ).setEase( <a href="LeanTweenType.html">LeanTweenType</a>.easeInOutBack );<br>
+//     *
+//     * @class physicsPort.LeanTween
+//     */
+//
+//    static class LTEvent {
+//        public int id;
+//        public Object data;
+//
+//        public LTEvent(int id, Object data) {
+//            this.id = id;
+//            this.data = data;
+//        }
+//    }
+//
+//    public static boolean throwErrors = true;
+//
+//    private static final List<LTDescr> tweens = new ArrayList<>();
+//    private static int frameRendered = -1;
+//    private static GameObject _tweenEmpty;
+//    private static float dtEstimated;
+//    private static float previousRealTime;
+//    private static float dt;
+//    private static float dtActual;
+//    private static LTDescr tween;
+//    private static int i;
+//    private static int j;
+//    private static Vector2[] punch = {new Vector2(0.0f, 0.0f),
+//            new Vector2(0.112586f, 0.9976035f),
+//            new Vector2(0.3120486f, -0.1720615f),
+//            new Vector2(0.4316337f, 0.07030682f),
+//            new Vector2(0.5524869f, -0.03141804f),
+//            new Vector2(0.6549395f, 0.003909959f),
+//            new Vector2(0.770987f, -0.009817753f),
+//            new Vector2(0.8838775f, 0.001939224f),
+//            new Vector2(1.0f, 0.0f)};
+//
+//
+//
+//
+//    public static void reset() {
+//        tweens.clear();
+//    }
+//
+//    public void Update() {
+//        LeanTween.update();
+//    }
+//
+//    private static TransformF trans;
+//    private static long timeTotal;
+//    private static TweenAction tweenAction;
+//    private static float ratioPassed;
+//    private static float from;
+//    private static float to;
+//    private static float val;
+//    private static Vector2 newVect;
+//    private static boolean isTweenFinished;
+//    private static GameObject target;
+//    private static GameObject customTarget;
+//
+//    public static void update() {
+//        if (frameRendered != Time.frameCount) { // make sure update is only called once per frame
+//
+//
+//            dtEstimated = Time.realtimeSinceStartup - previousRealTime;
+//            if (dtEstimated > 0.2f) // a catch put in, when at the start sometimes this number can grow unrealistically large
+//                dtEstimated = 0.2f;
+//            previousRealTime = Time.realtimeSinceStartup;
+//            dtActual = Time.deltaTime * Time.timeScale;
+//            // if(tweenMaxSearch>1500)
+//            // 	Debug.Log("tweenMaxSearch:"+tweenMaxSearch +" maxTweens:"+maxTweens);
+//            for (int i = 0; i < tweenMaxSearch && i < maxTweens; i++) {
+//
+//                //Debug.Log("tweens["+i+"].toggle:"+tweens[i].toggle);
+//                if (tweens[i].toggle) {
+//                    tween = tweens[i];
+//                    trans = tween.trans;
+//                    timeTotal = tween.time ;
+//                    tweenAction = tween.type;
+//
+//                    dt = dtActual;
+//                    if (tween.useEstimatedTime) {
+//                        dt = dtEstimated;
+//                        timeTotal = tween.time;
+//                    } else if (tween.useFrames) {
+//                        dt = 1;
+//                    }
+//
+//                    if (trans == null) {
+//                        removeTween(i);
+//                        continue;
+//                    }
+//
+//                    // Check for tween finished
+//                    isTweenFinished = false;
+//                    if ((tween.passed + dt > timeTotal && tween.direction > 0.0f)) {
+//                        isTweenFinished = true;
+//                        tween.passed = timeTotal; // Set to the exact end time so that it can finish tween exactly on the end value
+//                    } else if (tween.direction < 0.0f && tween.passed - dt < 0.0f) {
+//                        isTweenFinished = true;
+//                        tween.passed = Mathf.Epsilon;
+//                    }
+//
+//                    if ((tween.passed == 0.0 && tweens[i].delay == 0.0) || (!tween.hasInitiliazed && tween.passed > 0.0)) {
+//                        tween.hasInitiliazed = true;
+//                        // Initialize From Values
+//
+//
+//                        switch (tweenAction) {
+//                            case MOVE:
+//                                tween.from = trans.position;
+//                                break;
+//                            case MOVE_X:
+//                                tween.from.x = trans.position.x;
+//                                break;
+//                            case MOVE_Y:
+//                                tween.from.x = trans.position.y;
+//                                break;
+//
+//                            case MOVE_LOCAL_X:
+//                                tweens.get(i).from.x = trans.localPosition.x;
+//                                break;
+//                            case MOVE_LOCAL_Y:
+//                                tweens.get(i).from.x = trans.localPosition.y;
+//                                break;
+//
+//                            break;
+//                            case SCALE_X:
+//                                tween.from.x = trans.localScale.x;
+//                                break;
+//                            case SCALE_Y:
+//                                tween.from.x = trans.localScale.y;
+//                                break;
+//
+//                            break;
+//                            case ALPHA:
+////                                tween.from.x = trans.alpha;
+//                                break;
+//                            case MOVE_LOCAL:
+//                                tween.from = trans.localPosition;
+//                                break;
+//                            case MOVE_CURVED:
+//                                // tween.path.pts[0] = trans.position;
+//                                tween.from.x = 0;
+//                                break;
+//                            case MOVE_CURVED_LOCAL:
+//                                // tween.path.pts[0] = trans.localPosition;
+//                                tween.from.x = 0;
+//                                break;
+//
+//                            case SCALE:
+//                                tween.from = trans.localScale;
+//                                break;
+//
+//
+//                        }
+//                        tween.diff.x = tween.to.x - tween.from.x;
+//                        tween.diff.y = tween.to.y - tween.from.y;
+//                    }
+//                    if (tween.delay <= 0) {
+//                        // Move Values
+//                        if (timeTotal <= 0f) {
+//                            //Debug.LogError("time total is zero Time.timeScale:"+Time.timeScale+" useEstimatedTime:"+tween.useEstimatedTime);
+//                            ratioPassed = 0f;
+//                        } else {
+//                            ratioPassed = tween.passed / timeTotal;
+//                        }
+//
+//                        if (ratioPassed > 1.0)
+//                            ratioPassed = 1.0f;
+//
+//                        if (tweenAction.ordinal() >= TweenAction.MOVE_X.ordinal() && tweenAction.ordinal() <= TweenAction.CALLBACK.ordinal()) {
+//
+//                            switch (tween.tweenType) {
+//                                case linear:
+//                                    val = tween.from.x + tween.diff.x * ratioPassed;
+//                                    break;
+//                                case easeOutQuad:
+//                                    val = easeOutQuadOpt(tween.from.x, tween.diff.x, ratioPassed);
+//                                    break;
+//                                case easeInQuad:
+//                                    val = easeInQuadOpt(tween.from.x, tween.diff.x, ratioPassed);
+//                                    break;
+//                                case easeInOutQuad:
+//                                    val = easeInOutQuadOpt(tween.from.x, tween.diff.x, ratioPassed);
+//                                    break;
+//                                case easeInCubic:
+//                                    val = easeInCubic(tween.from.x, tween.to.x, ratioPassed);
+//                                    break;
+//                                case easeOutCubic:
+//                                    val = easeOutCubic(tween.from.x, tween.to.x, ratioPassed);
+//                                    break;
+//                                case easeInOutCubic:
+//                                    val = easeInOutCubic(tween.from.x, tween.to.x, ratioPassed);
+//                                    break;
+//                                case easeInQuart:
+//                                    val = easeInQuart(tween.from.x, tween.to.x, ratioPassed);
+//                                    break;
+//                                case easeOutQuart:
+//                                    val = easeOutQuart(tween.from.x, tween.to.x, ratioPassed);
+//                                    break;
+//                                case easeInOutQuart:
+//                                    val = easeInOutQuart(tween.from.x, tween.to.x, ratioPassed);
+//                                    break;
+//                                case easeInQuint:
+//                                    val = easeInQuint(tween.from.x, tween.to.x, ratioPassed);
+//                                    break;
+//                                case easeOutQuint:
+//                                    val = easeOutQuint(tween.from.x, tween.to.x, ratioPassed);
+//                                    break;
+//                                case easeInOutQuint:
+//                                    val = easeInOutQuint(tween.from.x, tween.to.x, ratioPassed);
+//                                    break;
+//                                case easeInSine:
+//                                    val = easeInSine(tween.from.x, tween.to.x, ratioPassed);
+//                                    break;
+//                                case easeOutSine:
+//                                    val = easeOutSine(tween.from.x, tween.to.x, ratioPassed);
+//                                    break;
+//                                case easeInOutSine:
+//                                    val = easeInOutSine(tween.from.x, tween.to.x, ratioPassed);
+//                                    break;
+//                                case easeInExpo:
+//                                    val = easeInExpo(tween.from.x, tween.to.x, ratioPassed);
+//                                    break;
+//                                case easeOutExpo:
+//                                    val = easeOutExpo(tween.from.x, tween.to.x, ratioPassed);
+//                                    break;
+//                                case easeInOutExpo:
+//                                    val = easeInOutExpo(tween.from.x, tween.to.x, ratioPassed);
+//                                    break;
+//                                case easeInCirc:
+//                                    val = easeInCirc(tween.from.x, tween.to.x, ratioPassed);
+//                                    break;
+//                                case easeOutCirc:
+//                                    val = easeOutCirc(tween.from.x, tween.to.x, ratioPassed);
+//                                    break;
+//                                case easeInOutCirc:
+//                                    val = easeInOutCirc(tween.from.x, tween.to.x, ratioPassed);
+//                                    break;
+//                                case easeInBounce:
+//                                    val = easeInBounce(tween.from.x, tween.to.x, ratioPassed);
+//                                    break;
+//                                case easeOutBounce:
+//                                    val = easeOutBounce(tween.from.x, tween.to.x, ratioPassed);
+//                                    break;
+//                                case easeInOutBounce:
+//                                    val = easeInOutBounce(tween.from.x, tween.to.x, ratioPassed);
+//                                    break;
+//                                case easeInBack:
+//                                    val = easeInBack(tween.from.x, tween.to.x, ratioPassed);
+//                                    break;
+//                                case easeOutBack:
+//                                    val = easeOutBack(tween.from.x, tween.to.x, ratioPassed);
+//                                    break;
+//                                case easeInOutBack:
+//                                    val = easeInOutElastic(tween.from.x, tween.to.x, ratioPassed);
+//                                    break;
+//                                case easeInElastic:
+//                                    val = easeInElastic(tween.from.x, tween.to.x, ratioPassed);
+//                                    break;
+//                                case easeOutElastic:
+//                                    val = easeOutElastic(tween.from.x, tween.to.x, ratioPassed);
+//                                    break;
+//                                case easeInOutElastic:
+//                                    val = easeInOutElastic(tween.from.x, tween.to.x, ratioPassed);
+//                                    break;
+//                                case punch:
+//                                    tween.animationCurve = LeanTween.punch;
+//                                    tween.to.x = tween.from.x + tween.to.x;
+////                                    val = tweenOnCurve(tween, ratioPassed);
+//                                    break;
+//                                default: {
+//                                    val = tween.from.x + tween.diff.x * ratioPassed;
+//                                    break;
+//                                }
+//                            }
+//
+//
+//                            //Debug.Log("from:"+from+" to:"+to+" val:"+val+" ratioPassed:"+ratioPassed);
+//                            if (tweenAction == TweenAction.MOVE_X) {
+//                                trans.position = new Vector2(val, trans.position.y);
+//                            } else if (tweenAction == TweenAction.MOVE_Y) {
+//                                trans.position = new Vector2(trans.position.x, val);
+//                            } else if (tweenAction == TweenAction.MOVE_Z) {
+//                                trans.position = new Vector2(trans.position.x, trans.position.y);
+//                            }
+//                            if (tweenAction == TweenAction.MOVE_LOCAL_X) {
+//                                trans.localPosition = new Vector2(val, trans.localPosition.y);
+//                            } else if (tweenAction == TweenAction.MOVE_LOCAL_Y) {
+//                                trans.localPosition = new Vector2(trans.localPosition.x, val);
+//                            } else if (tweenAction == TweenAction.MOVE_LOCAL_Z) {
+//                                trans.localPosition = new Vector2(trans.localPosition.x, trans.localPosition.y);
+////                            } else if (tweenAction == TweenAction.MOVE_CURVED) {
+////                                if (tween.path.orientToPath) {
+////                                    tween.path.place(trans, val);
+////                                } else {
+////                                    trans.position = tween.path.point(val);
+////                                }
+//                                // Debug.Log("val:"+val+" trans.position:"+trans.position + " 0:"+ tween.curves[0] +" 1:"+tween.curves[1] +" 2:"+tween.curves[2] +" 3:"+tween.curves[3]);
+//                            } else if (tweenAction == TweenAction.SCALE_X) {
+//                                trans.localScale = new Vector2(val, trans.localScale.y);
+//                            } else if (tweenAction == TweenAction.SCALE_Y) {
+//                                trans.localScale = new Vector2(trans.localScale.x, val);
+//                            } else if (tweenAction == TweenAction.SCALE_Z) {
+//                                trans.localScale = new Vector2(trans.localScale.x, trans.localScale.y);
+//
+//                            } else if (tweenAction == TweenAction.ALPHA) {
+//
+//                            }
+//                        } else if (tweenAction.ordinal() >= TweenAction.MOVE.ordinal()) {
+//                            //
+//
+//
+//                            if (tween.tweenType == LeanTweenType.linear) {
+//                                newVect.x = tween.from.x + tween.diff.x * ratioPassed;
+//                                newVect.y = tween.from.y + tween.diff.y * ratioPassed;
+//                            } else if (tween.tweenType.ordinal() >= LeanTweenType.linear.ordinal()) {
+//                                switch (tween.tweenType) {
+//                                    case easeOutQuad:
+//                                        newVect = new Vector2(easeOutQuadOpt(tween.from.x, tween.diff.x, ratioPassed), easeOutQuadOpt(tween.from.y, tween.diff.y, ratioPassed));
+//                                        break;
+//                                    case easeInQuad:
+//                                        newVect = new Vector2(easeInQuadOpt(tween.from.x, tween.diff.x, ratioPassed), easeInQuadOpt(tween.from.y, tween.diff.y, ratioPassed));
+//                                        break;
+//                                    case easeInOutQuad:
+//                                        newVect = new Vector2(easeInOutQuadOpt(tween.from.x, tween.diff.x, ratioPassed), easeInOutQuadOpt(tween.from.y, tween.diff.y, ratioPassed));
+//                                        break;
+//                                    case easeInCubic:
+//                                        newVect = new Vector2(easeInCubic(tween.from.x, tween.to.x, ratioPassed), easeInCubic(tween.from.y, tween.to.y, ratioPassed));
+//                                        break;
+//                                    case easeOutCubic:
+//                                        newVect = new Vector2(easeOutCubic(tween.from.x, tween.to.x, ratioPassed), easeOutCubic(tween.from.y, tween.to.y, ratioPassed));
+//                                        break;
+//                                    case easeInOutCubic:
+//                                        newVect = new Vector2(easeInOutCubic(tween.from.x, tween.to.x, ratioPassed), easeInOutCubic(tween.from.y, tween.to.y, ratioPassed));
+//                                        break;
+//                                    case easeInQuart:
+//                                        newVect = new Vector2(easeInQuart(tween.from.x, tween.to.x, ratioPassed), easeInQuart(tween.from.y, tween.to.y, ratioPassed));
+//                                        break;
+//                                    case easeOutQuart:
+//                                        newVect = new Vector2(easeOutQuart(tween.from.x, tween.to.x, ratioPassed), easeOutQuart(tween.from.y, tween.to.y, ratioPassed));
+//                                        break;
+//                                    case easeInOutQuart:
+//                                        newVect = new Vector2(easeInOutQuart(tween.from.x, tween.to.x, ratioPassed), easeInOutQuart(tween.from.y, tween.to.y, ratioPassed));
+//                                        break;
+//                                    case easeInQuint:
+//                                        newVect = new Vector2(easeInQuint(tween.from.x, tween.to.x, ratioPassed), easeInQuint(tween.from.y, tween.to.y, ratioPassed));
+//                                        break;
+//                                    case easeOutQuint:
+//                                        newVect = new Vector2(easeOutQuint(tween.from.x, tween.to.x, ratioPassed), easeOutQuint(tween.from.y, tween.to.y, ratioPassed));
+//                                        break;
+//                                    case easeInOutQuint:
+//                                        newVect = new Vector2(easeInOutQuint(tween.from.x, tween.to.x, ratioPassed), easeInOutQuint(tween.from.y, tween.to.y, ratioPassed));
+//                                        break;
+//                                    case easeInSine:
+//                                        newVect = new Vector2(easeInSine(tween.from.x, tween.to.x, ratioPassed), easeInSine(tween.from.y, tween.to.y, ratioPassed));
+//                                        break;
+//                                    case easeOutSine:
+//                                        newVect = new Vector2(easeOutSine(tween.from.x, tween.to.x, ratioPassed), easeOutSine(tween.from.y, tween.to.y, ratioPassed));
+//                                        break;
+//                                    case easeInOutSine:
+//                                        newVect = new Vector2(easeInOutSine(tween.from.x, tween.to.x, ratioPassed), easeInOutSine(tween.from.y, tween.to.y, ratioPassed));
+//                                        break;
+//                                    case easeOutExpo:
+//                                        newVect = new Vector2(easeOutExpo(tween.from.x, tween.to.x, ratioPassed), easeOutExpo(tween.from.y, tween.to.y, ratioPassed));
+//                                        break;
+//                                    case easeInExpo:
+//                                        newVect = new Vector2(easeInExpo(tween.from.x, tween.to.x, ratioPassed), easeInExpo(tween.from.y, tween.to.y, ratioPassed));
+//                                        break;
+//                                    case easeInOutExpo:
+//                                        newVect = new Vector2(easeInOutExpo(tween.from.x, tween.to.x, ratioPassed), easeInOutExpo(tween.from.y, tween.to.y, ratioPassed));
+//                                        break;
+//                                    case easeInCirc:
+//                                        newVect = new Vector2(easeInCirc(tween.from.x, tween.to.x, ratioPassed), easeInCirc(tween.from.y, tween.to.y, ratioPassed));
+//                                        break;
+//                                    case easeOutCirc:
+//                                        newVect = new Vector2(easeOutCirc(tween.from.x, tween.to.x, ratioPassed), easeOutCirc(tween.from.y, tween.to.y, ratioPassed));
+//                                        break;
+//                                    case easeInOutCirc:
+//                                        newVect = new Vector2(easeInOutCirc(tween.from.x, tween.to.x, ratioPassed), easeInOutCirc(tween.from.y, tween.to.y, ratioPassed));
+//                                        break;
+//                                    case easeInBounce:
+//                                        newVect = new Vector2(easeInBounce(tween.from.x, tween.to.x, ratioPassed), easeInBounce(tween.from.y, tween.to.y, ratioPassed));
+//                                        break;
+//                                    case easeOutBounce:
+//                                        newVect = new Vector2(easeOutBounce(tween.from.x, tween.to.x, ratioPassed), easeOutBounce(tween.from.y, tween.to.y, ratioPassed));
+//                                        break;
+//                                    case easeInOutBounce:
+//                                        newVect = new Vector2(easeInOutBounce(tween.from.x, tween.to.x, ratioPassed), easeInOutBounce(tween.from.y, tween.to.y, ratioPassed));
+//                                        break;
+//                                    case easeInBack:
+//                                        newVect = new Vector2(easeInBack(tween.from.x, tween.to.x, ratioPassed), easeInBack(tween.from.y, tween.to.y, ratioPassed));
+//                                        break;
+//                                    case easeOutBack:
+//                                        newVect = new Vector2(easeOutBack(tween.from.x, tween.to.x, ratioPassed), easeOutBack(tween.from.y, tween.to.y, ratioPassed));
+//                                        break;
+//                                    case easeInOutBack:
+//                                        newVect = new Vector2(easeInOutBack(tween.from.x, tween.to.x, ratioPassed), easeInOutBack(tween.from.y, tween.to.y, ratioPassed));
+//                                        break;
+//                                    case easeInElastic:
+//                                        newVect = new Vector2(easeInElastic(tween.from.x, tween.to.x, ratioPassed), easeInElastic(tween.from.y, tween.to.y, ratioPassed));
+//                                        break;
+//                                    case easeOutElastic:
+//                                        newVect = new Vector2(easeOutElastic(tween.from.x, tween.to.x, ratioPassed), easeOutElastic(tween.from.y, tween.to.y, ratioPassed));
+//                                        break;
+//                                    case easeInOutElastic:
+//                                        newVect = new Vector2(easeInOutElastic(tween.from.x, tween.to.x, ratioPassed), easeInOutElastic(tween.from.y, tween.to.y, ratioPassed));
+//                                        break;
+//                                    case punch:
+//                                        tween.animationCurve = LeanTween.punch;
+//                                        tween.to.x = tween.from.x + tween.to.x;
+//                                        tween.to.y = tween.from.y + tween.to.y;
+//                                        if (tweenAction == TweenAction.ROTATE || tweenAction == TweenAction.ROTATE_LOCAL) {
+//                                            tween.to.x = closestRot(tween.from.x, tween.to.x);
+//                                            tween.to.y = closestRot(tween.from.y, tween.to.y);
+//                                        }
+////                                            newVect = tweenOnCurveVector(tween, ratioPassed);
+//                                        break;
+//                                }
+//                            } else {
+//                                newVect.x = tween.from.x + tween.diff.x * ratioPassed;
+//                                newVect.y = tween.from.y + tween.diff.y * ratioPassed;
+//                            }
+//                        }
+//
+//                        if (tweenAction == TweenAction.MOVE) {
+//                            trans.position = newVect;
+//                        }
+//
+//                        //Debug.Log("tween.delay:"+tween.delay + " tween.passed:"+tween.passed + " tweenAction:"+tweenAction + " from:"+newVect);
+//
+//                        if (tween.onUpdateFloat != null) {
+//                            tween.onUpdateFloat.call(val);
+//
+//                        } else if (tween.onUpdateVector2 != null) {
+//                            tween.onUpdateVector2.call(newVect);
+//                        }
+//                    }
+//
+//                    if (isTweenFinished) {
+//                        // Debug.Log("fininished tween:"+tween.id);
+//                        if (tweenAction == TweenAction.GUI_ROTATE)
+//                            tween.ltRect.rotateFinished = true;
+//
+//                        if (tween.loopType == LeanTweenType.once || tween.loopCount == 1) {
+//                            if (tween.onComplete != null) {
+//                                removeTween(i);
+//                                tween.onComplete.call(null);
+//
+//                            } else {
+//                                if (tween.loopCount >= 1) {
+//                                    tween.loopCount--;
+//                                }
+//                                if (tween.loopType == LeanTweenType.clamp) {
+//                                    tween.passed = Mathf.Epsilon;
+//                                    // tween.delay = 0.0;
+//                                } else if (tween.loopType == LeanTweenType.pingPong) {
+//                                    tween.direction = 0.0f - (tween.direction);
+//                                }
+//                            }
+//                        } else if (tween.delay <= 0) {
+//                            tween.passed += dt * tween.direction;
+//                        } else {
+//                            tween.delay -= dt;
+//                            if (tween.delay < 0) {
+//                                tween.passed = 0.0f;//-tween.delay
+//                                tween.delay = 0.0f;
+//                            }
+//                        }
+//                    }
+//                }
+//
+//                frameRendered = Time.frameCount;
+//            }
+//        }
+//    }
+//
+//    public static void removeTween(int i) {
+//
+//    }
+//
+//    public static Vector2[] add(Vector2[] a, Vector2 b) {
+//        Vector2[] c = new Vector2[a.length];
+//        for (i = 0; i < a.length; i++) {
+//            c[i] = a[i].add(b);
+//        }
+//
+//        return c;
+//    }
+//
+//    public static float closestRot(float from, float to) {
+//        float minusWhole = 0 - (360 - to);
+//        float plusWhole = 360 + to;
+//        float toDiffAbs = Mathf.abs(to - from);
+//        float minusDiff = Mathf.abs(minusWhole - from);
+//        float plusDiff = Mathf.abs(plusWhole - from);
+//        if (toDiffAbs < minusDiff && toDiffAbs < plusDiff) {
+//            return to;
+//        } else {
+//            if (minusDiff < plusDiff) {
+//                return minusWhole;
+//            } else {
+//                return plusWhole;
+//            }
+//        }
+//    }
+//
+//    /**
+//     * Cancel all tweens that are currently targeting the gameObject
+//     *
+//     * @param {GameObject} gameObject:GameObject gameObject whose tweens you want to cancel
+//     * @method physicsPort.LeanTween.cancel
+//     */
+//    public static void cancel(GameObject gameObject) {
+//        TransformF trans = gameObject.transform;
+//        for (int i = 0; i < tweenMaxSearch; i++) {
+//            if (tweens[i].trans == trans)
+//                removeTween(i);
+//        }
+//    }
+//
+//    // Deprecated use cancel( id )
+//    public static void cancel(GameObject gameObject, int id) {
+//        cancel(id);
+//    }
+//
+//    // Deprecated use cancel( id )
+//    public static void cancel(LTRect ltRect, int id) {
+//        cancel(id);
+//    }
+//
+//    /**
+//     * Cancel all tweens that are currently targeting the gameObject
+//     *
+//     * @param {int} id:int id of the tween you want to cancel
+//     * @method physicsPort.LeanTween.cancel
+//     * @example int tweenIDMove = physicsPort.LeanTween.move( gameObject, new Vector2(0f,1f,2f), 1f).id; <br>
+//     * physicsPort.LeanTween.cancel( tweenIDMove );
+//     */
+//    public static void cancel(int uniqueId) {
+//        int backId = uniqueId & 0xFFFFFF;
+//        int backType = uniqueId >> 24;
+//        // Debug.Log("id:"+backId+" action:"+backType + " tweens[id].type:"+tweens[backId].type +" action:"+(TweenAction)backType);
+////        if (tweens[backId].type == (TweenAction) backType)
+//            removeTween(backId);
+//    }
+//
+//
+//
+//
+//
+//    /**
+//     * Pause all tweens for a GameObject
+//     *
+//     * @param {GameObject} gameObject:GameObject GameObject whose tweens you want to pause
+//     * @method physicsPort.LeanTween.pause
+//     */
+//    public static void pause(GameObject gameObject) {
+//        TransformF trans = gameObject.transform;
+//        for (int i = 0; i < tweenMaxSearch; i++) {
+//            if (tweens[i].trans == trans) {
+//                tweens[i].lastVal = tweens[i].direction;
+//                tweens[i].direction = 0.0f;
+//            }
+//        }
+//    }
+//
+//
+//
+//
+//    /**
+//     * Resume all the tweens on a GameObject
+//     *
+//     * @param {GameObject} gameObject:GameObject GameObject whose tweens you want to resume
+//     * @method physicsPort.LeanTween.resume
+//     */
+//    public static void resume(GameObject gameObject) {
+//        TransformF trans = gameObject.transform;
+//        for (int i = 0; i < tweenMaxSearch; i++) {
+//            if (tweens[i].trans == trans)
+//                tweens[i].direction = tweens[i].lastVal;
+//        }
+//    }
+//
+//    /**
+//     * Test whether or not a tween is active on a GameObject
+//     *
+//     * @param {GameObject} gameObject:GameObject GameObject that you want to test if it is tweening
+//     * @method physicsPort.LeanTween.isTweening
+//     */
+//    public static boolean isTweening(GameObject gameObject) {
+//        TransformF trans = gameObject.transform;
+//        for (int i = 0; i < tweenMaxSearch; i++) {
+//            if (tweens[i].toggle && tweens[i].trans == trans)
+//                return true;
+//        }
+//        return false;
+//    }
+//
+//    /**
+//     * Test whether or not a tween is active on a LTRect
+//     *
+//     * @param {LTRect} ltRect:LTRect LTRect that you want to test if it is tweening
+//     * @method physicsPort.LeanTween.isTweening
+//     */
+//    public static boolean isTweening(LTRect ltRect) {
+//        for (int i = 0; i < tweenMaxSearch; i++) {
+//            if (tweens[i].toggle && tweens[i].ltRect == ltRect)
+//                return true;
+//        }
+//        return false;
+//    }
+//
+////    public static void drawBezierPath(Vector2 a, Vector2 b, Vector2 c, Vector2 d) {
+////        Vector2 last = a;
+////        Vector2 p;
+////        Vector2 aa = (-a + 3 * (b - c) + d);
+////        Vector2 bb = 3 * (a + c) - 6 * b;
+////        Vector2 cc = 3 * (b - a);
+////        float t;
+////        for (float k = 1.0f; k <= 30.0f; k++) {
+////            t = k / 30.0f;
+////            p = ((aa * t + (bb)) * t + cc) * t + a;
+////            // Gizmos.DrawLine(last, p);
+////            last = p;
+////        }
+////    }
+//
+//    public static void logError(String error) {
+//        if (throwErrors) {
+//            System.out.println(error);
+//        } else {
+//            System.err.println(error);
+//        }
+//
+//    }
+//
+//
+//
+//
+//    public static LTDescr descr;
+//
+//    private static LTDescr pushNewTween(GameObject gameObject, Vector2 to, float time, TweenAction tweenAction, LTDescr tween) {
+//
+//        if (gameObject == null)
+//            return null;
+//        tween.trans = gameObject.transform;
+//        tween.to = to;
+//        tween.time = time;
+//        tween.type = tweenAction;
+//
+//        return tween;
+//    }
+//
+//    /**
+//     * Fade a gameobject's material to a certain alpha value. The material's shader needs to support alpha. <a href="http://owlchemylabs.com/content/">Owl labs has some excellent efficient shaders</a>.
+//     *
+//     * @param {GameObject} gameObject:GameObject Gameobject that you wish to fade
+//     * @param {float}      to:float the final alpha value (0-1)
+//     * @param {float}      time:float The time with which to fade the object
+//     * @return {LTDescr} LTDescr an object that distinguishes the tween
+//     * @method physicsPort.LeanTween.alpha
+//     * @example physicsPort.LeanTween.alpha(gameObject, 1f, 1f) .setDelay(1f);
+//     */
+//    public static LTDescr alpha(GameObject gameObject, float to, float time) {
+//        return pushNewTween(gameObject, new Vector2(to, 0), time, TweenAction.ALPHA, options());
+//    }
+//
+//
+//
+//
+//
+//
+//    public static LTDescr delayedCall(GameObject gameObject, float delayTime, Action callback) {
+//        return pushNewTween(gameObject, Vector2.Zero, delayTime, TweenAction.CALLBACK, options().setOnComplete(callback));
+//    }
+//
+///*public static LTDescr delayedCall(GameObject gameObject, float delayTime, string callback){
+//    return pushNewTween( gameObject, Vector2.zero, delayTime, TweenAction.CALLBACK, options().setOnComplete( callback ) );
+//}*/
+//
+//    /**
+//     * Move a GameObject to a certain location
+//     *
+//     * @param {GameObject} GameObject gameObject Gameobject that you wish to move
+//     * @param {Vector2}    vec:Vector2 to The final positin with which to move to
+//     * @param {float}      time:float time The time to complete the tween in
+//     * @return {LTDescr} LTDescr an object that distinguishes the tween
+//     * @method physicsPort.LeanTween.move
+//     * @example physicsPort.LeanTween.move(gameObject, new Vector2(0f,-3f, 5f), 2.0f) .setEase( physicsPort.LeanTween.easeOutQuad );
+//     */
+//    public static LTDescr move(GameObject gameObject, Vector2 to, float time) {
+//        return pushNewTween(gameObject, to, time, TweenAction.MOVE, options());
+//    }
+//
+//    /**
+//     * Move a GameObject along a set of bezier curves
+//     *
+//     * @param {GameObject} gameObject:GameObject Gameobject that you wish to move
+//     * @param {Vector2[]}  path:Vector2[] A set of points that define the curve(s) ex: Point1,Handle1,Handle2,Point2,...
+//     * @param {float}      time:float The time to complete the tween in
+//     * @return {LTDescr} LTDescr an object that distinguishes the tween
+//     * @method physicsPort.LeanTween.move
+//     * @example <i>Javascript:</i><br>
+//     * physicsPort.LeanTween.move(gameObject, [Vector2(0,0,0),Vector2(1,0,0),Vector2(1,0,0),Vector2(1,0,1)], 2.0) .setEase(physicsPort.LeanTween.easeOutQuad).setOrientToPath(true);<br><br>
+//     * <i>C#:</i><br>
+//     * physicsPort.LeanTween.move(gameObject, new Vector2{Vector2(0f,0f,0f),Vector2(1f,0f,0f),Vector2(1f,0f,0f),Vector2(1f,0f,1f)}, 1.5f) .setEase(physicsPort.LeanTween.easeOutQuad).setOrientToPath(true);;<br>
+//     */
+//    public static LTDescr move(GameObject gameObject, Vector2[] to, float time) {
+//        descr = options();
+//        if (descr.path == null)
+//            descr.path = new LTBezierPath(to);
+//        else
+//            descr.path.setPoints(to);
+//
+//        return pushNewTween(gameObject, new Vector2(1.0f, 0.0f), time, TweenAction.MOVE_CURVED, descr);
+//    }
+//
+//
+//
+//    /**
+//     * Move a GameObject along the x-axis
+//     *
+//     * @param {GameObject} gameObject:GameObject gameObject Gameobject that you wish to move
+//     * @param {float}      to:float to The final position with which to move to
+//     * @param {float}      time:float time The time to complete the move in
+//     * @return {LTDescr} LTDescr an object that distinguishes the tween
+//     * @method physicsPort.LeanTween.moveX
+//     */
+//    public static LTDescr moveX(GameObject gameObject, float to, float time) {
+//        return pushNewTween(gameObject, new Vector2(to, 0), time, TweenAction.MOVE_X, options());
+//    }
+//
+//    /**
+//     * Move a GameObject along the y-axis
+//     *
+//     * @param {GameObject} GameObject gameObject Gameobject that you wish to move
+//     * @param {float}      float to The final position with which to move to
+//     * @param {float}      float time The time to complete the move in
+//     * @return {LTDescr} LTDescr an object that distinguishes the tween
+//     * @method physicsPort.LeanTween.moveY
+//     */
+//    public static LTDescr moveY(GameObject gameObject, float to, float time) {
+//        return pushNewTween(gameObject, new Vector2(to, 0), time, TweenAction.MOVE_Y, options());
+//    }
+//
+//    /**
+//     * Move a GameObject along the z-axis
+//     *
+//     * @param {GameObject} GameObject gameObject Gameobject that you wish to move
+//     * @param {float}      float to The final position with which to move to
+//     * @param {float}      float time The time to complete the move in
+//     * @return {LTDescr} LTDescr an object that distinguishes the tween
+//     * @method physicsPort.LeanTween.moveZ
+//     */
+//    public static LTDescr moveZ(GameObject gameObject, float to, float time) {
+//        return pushNewTween(gameObject, new Vector2(to, 0), time, TweenAction.MOVE_Z, options());
+//    }
+//
+//    /**
+//     * Move a GameObject to a certain location relative to the parent transform.
+//     *
+//     * @param {GameObject} GameObject gameObject Gameobject that you wish to rotate
+//     * @param {Vector2}    Vector2 to The final positin with which to move to
+//     * @param {float}      float time The time to complete the tween in
+//     * @param {Hashtable}  Hashtable optional Hashtable where you can pass <a href="#optional">optional items</a>.
+//     * @return {LTDescr} LTDescr an object that distinguishes the tween
+//     * @method physicsPort.LeanTween.moveLocal
+//     */
+//    public static LTDescr moveLocal(GameObject gameObject, Vector2 to, float time) {
+//        return pushNewTween(gameObject, to, time, TweenAction.MOVE_LOCAL, options());
+//    }
+//
+//    /**
+//     * Move a GameObject along a set of bezier curves
+//     *
+//     * @param {GameObject} gameObject:GameObject Gameobject that you wish to move
+//     * @param {Vector2[]}  path:Vector2[] A set of points that define the curve(s) ex: Point1,Handle1,Handle2,Point2,...
+//     * @param {float}      time:float The time to complete the tween in
+//     * @return {LTDescr} LTDescr an object that distinguishes the tween
+//     * @method physicsPort.LeanTween.move
+//     * @example <i>Javascript:</i><br>
+//     * physicsPort.LeanTween.move(gameObject, [Vector2(0,0,0),Vector2(1,0,0),Vector2(1,0,0),Vector2(1,0,1)], 2.0).setEase(physicsPort.LeanTween.easeOutQuad).setOrientToPath(true);<br><br>
+//     * <i>C#:</i><br>
+//     * physicsPort.LeanTween.move(gameObject, new Vector2{Vector2(0f,0f,0f),Vector2(1f,0f,0f),Vector2(1f,0f,0f),Vector2(1f,0f,1f)}).setEase(physicsPort.LeanTween.easeOutQuad).setOrientToPath(true);<br>
+//     */
+//    public static LTDescr moveLocal(GameObject gameObject, Vector2[] to, float time) {
+//        descr = options();
+//        if (descr.path == null)
+//            descr.path = new LTBezierPath(to);
+//        else
+//            descr.path.setPoints(to);
+//
+//        return pushNewTween(gameObject, new Vector2(1.0f, 0.0f), time, TweenAction.MOVE_CURVED_LOCAL, descr);
+//    }
+//
+//    public static LTDescr moveLocalX(GameObject gameObject, float to, float time) {
+//        return pushNewTween(gameObject, new Vector2(to, 0), time, TweenAction.MOVE_LOCAL_X, options());
+//    }
+//
+//    public static LTDescr moveLocalY(GameObject gameObject, float to, float time) {
+//        return pushNewTween(gameObject, new Vector2(to, 0), time, TweenAction.MOVE_LOCAL_Y, options());
+//    }
+//
+//    public static LTDescr moveLocalZ(GameObject gameObject, float to, float time) {
+//        return pushNewTween(gameObject, new Vector2(to, 0), time, TweenAction.MOVE_LOCAL_Z, options());
+//    }
+//
+//    /**
+//     * Rotate a GameObject, to values are in passed in degrees
+//     *
+//     * @param {GameObject} GameObject gameObject Gameobject that you wish to rotate
+//     * @param {Vector2}    Vector2 to The final rotation with which to rotate to
+//     * @param {float}      float time The time to complete the tween in
+//     * @return {LTDescr} LTDescr an object that distinguishes the tween
+//     * @method physicsPort.LeanTween.rotate
+//     * @example physicsPort.LeanTween.rotate(cube, new Vector2(180f, 30f, 0f), 1.5f);
+//     */
+//
+//    public static LTDescr rotate(GameObject gameObject, Vector2 to, float time) {
+//        return pushNewTween(gameObject, to, time, TweenAction.ROTATE, options());
+//    }
+//
+//
+//    /**
+//     * Rotate a GameObject in the objects local space (on the transforms localEulerAngles object)
+//     *
+//     * @param {GameObject} gameObject:GameObject Gameobject that you wish to rotate
+//     * @param {Vector2}    to:Vector2 The final rotation with which to rotate to
+//     * @param {float}      time:float The time to complete the rotation in
+//     * @return {LTDescr} LTDescr an object that distinguishes the tween
+//     * @method physicsPort.LeanTween.rotateLocal
+//     */
+//    public static LTDescr rotateLocal(GameObject gameObject, Vector2 to, float time) {
+//        return pushNewTween(gameObject, to, time, TweenAction.ROTATE_LOCAL, options());
+//    }
+//
+//    /**
+//     * Rotate a GameObject only on the X axis
+//     *
+//     * @param {GameObject} GameObject Gameobject that you wish to rotate
+//     * @param {float}      to:float The final x-axis rotation with which to rotate
+//     * @param {float}      time:float The time to complete the rotation in
+//     * @return {LTDescr} LTDescr an object that distinguishes the tween
+//     * @method physicsPort.LeanTween.rotateX
+//     */
+//    public static LTDescr rotateX(GameObject gameObject, float to, float time) {
+//        return pushNewTween(gameObject, new Vector2(to, 0), time, TweenAction.ROTATE_X, options());
+//    }
+//
+//    /**
+//     * Rotate a GameObject only on the Y axis
+//     *
+//     * @param {GameObject} GameObject Gameobject that you wish to rotate
+//     * @param {float}      to:float The final y-axis rotation with which to rotate
+//     * @param {float}      time:float The time to complete the rotation in
+//     * @return {LTDescr} LTDescr an object that distinguishes the tween
+//     * @method physicsPort.LeanTween.rotateY
+//     */
+//    public static LTDescr rotateY(GameObject gameObject, float to, float time) {
+//        return pushNewTween(gameObject, new Vector2(to, 0), time, TweenAction.ROTATE_Y, options());
+//    }
+//
+//    /**
+//     * Rotate a GameObject only on the Z axis
+//     *
+//     * @param {GameObject} GameObject Gameobject that you wish to rotate
+//     * @param {float}      to:float The final z-axis rotation with which to rotate
+//     * @param {float}      time:float The time to complete the rotation in
+//     * @return {LTDescr} LTDescr an object that distinguishes the tween
+//     * @method physicsPort.LeanTween.rotateZ
+//     */
+//    public static LTDescr rotateZ(GameObject gameObject, float to, float time) {
+//        return pushNewTween(gameObject, new Vector2(to, 0), time, TweenAction.ROTATE_Z, options());
+//    }
+//
+//    /**
+//     * Rotate a GameObject around a certain Axis (the best method to use when you want to rotate beyond 180 degrees)
+//     *
+//     * @param {GameObject} gameObject:GameObject Gameobject that you wish to rotate
+//     * @param {Vector2}    vec:Vector2 axis in which to rotate around ex: Vector2.up
+//     * @param {float}      degrees:float the degrees in which to rotate
+//     * @param {float}      time:float time The time to complete the rotation in
+//     * @return {LTDescr} LTDescr an object that distinguishes the tween
+//     * @method physicsPort.LeanTween.rotateAround
+//     */
+//    public static LTDescr rotateAround(GameObject gameObject, Vector2 axis, float add, float time) {
+//        return pushNewTween(gameObject, new Vector2(add, 0f), time, TweenAction.ROTATE_AROUND, options().setAxis(axis));
+//    }
+//
+//    /**
+//     * Scale a GameObject to a certain size
+//     *
+//     * @param {GameObject} gameObject:GameObject gameObject Gameobject that you wish to scale
+//     * @param {Vector2}    vec:Vector2 to The size with which to tween to
+//     * @param {float}      time:float time The time to complete the tween in
+//     * @return {LTDescr} LTDescr an object that distinguishes the tween
+//     * @method physicsPort.LeanTween.scale
+//     */
+//    public static LTDescr scale(GameObject gameObject, Vector2 to, float time) {
+//        return pushNewTween(gameObject, to, time, TweenAction.SCALE, options());
+//    }
+//
+//
+//    /**
+//     * Scale a GameObject to a certain size along the x-axis only
+//     *
+//     * @param {GameObject} gameObject:GameObject Gameobject that you wish to scale
+//     * @param {float}      scaleTo:float the size with which to scale to
+//     * @param {float}      time:float the time to complete the tween in
+//     * @return {LTDescr} LTDescr an object that distinguishes the tween
+//     * @method physicsPort.LeanTween.scaleX
+//     */
+//    public static LTDescr scaleX(GameObject gameObject, float to, float time) {
+//        return pushNewTween(gameObject, new Vector2(to, 0), time, TweenAction.SCALE_X, options());
+//    }
+//
+//    /**
+//     * Scale a GameObject to a certain size along the y-axis only
+//     *
+//     * @param {GameObject} gameObject:GameObject Gameobject that you wish to scale
+//     * @param {float}      scaleTo:float the size with which to scale to
+//     * @param {float}      time:float the time to complete the tween in
+//     * @return {LTDescr} LTDescr an object that distinguishes the tween
+//     * @method physicsPort.LeanTween.scaleY
+//     */
+//    public static LTDescr scaleY(GameObject gameObject, float to, float time) {
+//        return pushNewTween(gameObject, new Vector2(to, 0), time, TweenAction.SCALE_Y, options());
+//    }
+//
+//    /**
+//     * Scale a GameObject to a certain size along the z-axis only
+//     *
+//     * @param {GameObject} gameObject:GameObject Gameobject that you wish to scale
+//     * @param {float}      scaleTo:float the size with which to scale to
+//     * @param {float}      time:float the time to complete the tween in
+//     * @return {LTDescr} LTDescr an object that distinguishes the tween
+//     * @method physicsPort.LeanTween.scaleZ
+//     */
+//    public static LTDescr scaleZ(GameObject gameObject, float to, float time) {
+//        return pushNewTween(gameObject, new Vector2(to, 0), time, TweenAction.SCALE_Z, options());
+//    }
+//
+//    /**
+//     * Tween any particular value, it does not need to be tied to any particular type or GameObject
+//     *
+//     * @param {GameObject}    GameObject gameObject GameObject with which to tie the tweening with. This is only used when you need to cancel this tween, it does not actually perform any operations on this gameObject
+//     * @param {Action<float>} callOnUpdate:Action<float> The function that is called on every Update frame, this function needs to accept a float value ex: function updateValue( float val ){ }
+//     * @param {float}         float from The original value to start the tween from
+//     * @param {float}         float to The value to end the tween on
+//     * @param {float}         float time The time to complete the tween in
+//     * @return {LTDescr} LTDescr an object that distinguishes the tween
+//     * @method physicsPort.LeanTween.value (float)
+//     */
+//    public static LTDescr value(GameObject gameObject, Action<Float> callOnUpdate, float from, float to, float time) {
+//        return pushNewTween(gameObject, new Vector2(to, 0), time, TweenAction.CALLBACK, options().setFrom(new Vector2(from, 0)).setOnUpdate(callOnUpdate));
+//    }
+//
+//    /**
+//     * Tween any particular value (Vector2), this could be used to tween an arbitrary value like a material color
+//     *
+//     * @param {GameObject}      gameObject:GameObject Gameobject that you wish to attach the tween to
+//     * @param {Action<Vector2>} callOnUpdate:Action<Vector2> The function that is called on every Update frame, this function needs to accept a float value ex: function updateValue( Vector2 val ){ }
+//     * @param {float}           from:Vector2 The original value to start the tween from
+//     * @param {Vector2}         to:Vector2 The final Vector2 with which to tween to
+//     * @param {float}           time:float The time to complete the tween in
+//     * @return {LTDescr} LTDescr an object that distinguishes the tween
+//     * @method physicsPort.LeanTween.value (Vector2)
+//     */
+//    public static LTDescr value(GameObject gameObject, Action<Vector2> callOnUpdate, Vector2 from, Vector2 to, float time) {
+//        return pushNewTween(gameObject, to, time, TweenAction.VALUE3, options().setFrom(from).setOnUpdateVector2(callOnUpdate));
+//    }
+//
+//    /**
+//     * Tween any particular value (float)
+//     *
+//     * @param {GameObject}           gameObject:GameObject Gameobject that you wish to attach the tween to
+//     * @param {Action<float,object>} callOnUpdate:Action<float,object> The function that is called on every Update frame, this function needs to accept a float value ex: function updateValue( Vector2 val, object obj ){ }
+//     * @param {float}                from:Vector2 The original value to start the tween from
+//     * @param {Vector2}              to:Vector2 The final Vector2 with which to tween to
+//     * @param {float}                time:float The time to complete the tween in
+//     * @return {LTDescr} LTDescr an object that distinguishes the tween
+//     * @method physicsPort.LeanTween.value (float,object)
+//     */
+//
+//
+//    public static Map<String, Object> h(Object[] arr) {
+//        if (arr.length % 2 == 1) {
+//            logError("physicsPort.LeanTween - You have attempted to create a Hashtable with an odd number of values.");
+//            return null;
+//        }
+//        Map hash = new HashMap();
+//        for (i = 0; i < arr.length; i += 2) {
+//            hash.put(arr[i], arr[i + 1]);
+//        }
+//
+//        return hash;
+//    }
+//
+//    private static int idFromUnique(int uniqueId) {
+//        return uniqueId & 0xFFFFFF;
+//    }
+//
+//
+////    public static int value(String callOnUpdate, float from, float to, float time, Map<String,Object> optional) {
+////        return value(tweenEmpty, callOnUpdate, from, to, time, optional);
+////    }
+////
+////    public static int value(GameObject gameObject, String callOnUpdate, float from, float to, float time) {
+////        return value(gameObject, callOnUpdate, from, to, time, new HashMap<>());
+////    }
+////
+////    public static int value(GameObject gameObject, String callOnUpdate, float from, float to, float time, object[] optional) {
+////        return value(gameObject, callOnUpdate, from, to, time, h(optional));
+////    }
+////
+////    public static int value(GameObject gameObject, Action<float> callOnUpdate, float from, float to, float time, object[] optional) {
+////        return value(gameObject, callOnUpdate, from, to, time, h(optional));
+////    }
+////
+////    public static int value(GameObject gameObject, Action<float, Hashtable> callOnUpdate, float from, float to, float time, object[] optional) {
+////        return value(gameObject, callOnUpdate, from, to, time, h(optional));
+////    }
+////
+////    public static int value(GameObject gameObject, String callOnUpdate, float from, float to, float time, Map<String,Object> optional) {
+////        if (optional == null || optional.size() == 0)
+////            optional = new HashMap<>();
+////
+////        optional.put("onUpdate",callOnUpdate);
+////        int id = idFromUnique(pushNewTween(gameObject, new Vector2(to, 0), time, TweenAction.CALLBACK, optional));
+////        tweens[id].from = new Vector2(from, 0);
+////        return id;
+////    }
+//
+////    public static int value(GameObject gameObject, Action<Float> callOnUpdate, float from, float to, float time, Hashtable optional) {
+////        if (optional == null || optional.Count == 0)
+////            optional = new Hashtable();
+////
+////        optional["onUpdate"] = callOnUpdate;
+////        int id = idFromUnique(pushNewTween(gameObject, new Vector2(to, 0, 0), time, TweenAction.CALLBACK, optional));
+////        tweens[id].from = new Vector2(from, 0, 0);
+////        return id;
+////    }
+////
+////    public static int value(GameObject gameObject, Action<Float, Hashtable> callOnUpdate, float from, float to, float time, Hashtable optional) {
+////        if (optional == null || optional.Count == 0)
+////            optional = new Hashtable();
+////
+////        optional["onUpdate"] = callOnUpdate;
+////        int id = idFromUnique(pushNewTween(gameObject, new Vector2(to, 0, 0), time, TweenAction.CALLBACK, optional));
+////        tweens[id].from = new Vector2(from, 0, 0);
+////        return id;
+////    }
+////
+////    public static int value(GameObject gameObject, String callOnUpdate, Vector2 from, Vector2 to, float time, Hashtable optional) {
+////        if (optional == null || optional.Count == 0)
+////            optional = new Hashtable();
+////
+////        optional["onUpdate"] = callOnUpdate;
+////        int id = idFromUnique(pushNewTween(gameObject, to, time, TweenAction.VALUE3, optional));
+////        tweens[id].from = from;
+////        return id;
+////    }
+////
+////    public static int value(GameObject gameObject, String callOnUpdate, Vector2 from, Vector2 to, float time, object[] optional) {
+////        return value(gameObject, callOnUpdate, from, to, time, h(optional));
+////    }
+////
+////    public static int value(GameObject gameObject, Action<Vector2> callOnUpdate, Vector2 from, Vector2 to, float time, Hashtable optional) {
+////        if (optional == null || optional.Count == 0)
+////            optional = new Hashtable();
+////
+////        optional["onUpdate"] = callOnUpdate;
+////        int id = idFromUnique(pushNewTween(gameObject, to, time, TweenAction.VALUE3, optional));
+////        tweens[id].from = from;
+////        return id;
+////    }
+////
+////    public static int value(GameObject gameObject, Action<Vector2, Hashtable> callOnUpdate, Vector2 from, Vector2 to, float time, Hashtable optional) {
+////        if (optional == null || optional.Count == 0)
+////            optional = new Hashtable();
+////
+////        optional["onUpdate"] = callOnUpdate;
+////        int id = idFromUnique(pushNewTween(gameObject, to, time, TweenAction.VALUE3, optional));
+////        tweens[id].from = from;
+////        return id;
+////    }
+////
+////    public static int value(GameObject gameObject, Action<Vector2> callOnUpdate, Vector2 from, Vector2 to, float time, object[] optional) {
+////        return value(gameObject, callOnUpdate, from, to, time, h(optional));
+////    }
+////
+////    public static int value(GameObject gameObject, System.Action<Vector2, Hashtable> callOnUpdate, Vector2 from, Vector2 to, float time, object[] optional) {
+////        return value(gameObject, callOnUpdate, from, to, time, h(optional));
+////    }
+////
+////    public static int rotate(GameObject gameObject, Vector2 to, float time, Hashtable optional) {
+////        return pushNewTween(gameObject, to, time, TweenAction.ROTATE, optional);
+////    }
+////
+////    public static int rotate(GameObject gameObject, Vector2 to, float time, object[] optional) {
+////        return rotate(gameObject, to, time, h(optional));
+////    }
+////
+////
+////    public static int rotate(LTRect ltRect, float to, float time, Hashtable optional) {
+////        init();
+////        if (optional == null || optional.Count == 0)
+////            optional = new Hashtable();
+////
+////        optional["rect"] = ltRect;
+////        return pushNewTween(tweenEmpty, new Vector2(to, 0f), time, TweenAction.GUI_ROTATE, optional);
+////    }
+////
+////    public static int rotate(LTRect ltRect, float to, float time, object[] optional) {
+////        return rotate(ltRect, to, time, h(optional));
+////    }
+////
+////    public static int rotateX(GameObject gameObject, float to, float time, Hashtable optional) {
+////        return pushNewTween(gameObject, new Vector2(to, 0), time, TweenAction.ROTATE_X, optional);
+////    }
+////
+////    public static int rotateX(GameObject gameObject, float to, float time, object[] optional) {
+////        return rotateX(gameObject, to, time, h(optional));
+////    }
+////
+////    public static int rotateY(GameObject gameObject, float to, float time, Hashtable optional) {
+////        return pushNewTween(gameObject, new Vector2(to, 0, 0), time, TweenAction.ROTATE_Y, optional);
+////    }
+////
+////    public static int rotateY(GameObject gameObject, float to, float time, object[] optional) {
+////        return rotateY(gameObject, to, time, h(optional));
+////    }
+////
+////    public static int rotateZ(GameObject gameObject, float to, float time, Hashtable optional) {
+////        return pushNewTween(gameObject, new Vector2(to, 0, 0), time, TweenAction.ROTATE_Z, optional);
+////    }
+////
+////    public static int rotateZ(GameObject gameObject, float to, float time, object[] optional) {
+////        return rotateZ(gameObject, to, time, h(optional));
+////    }
+////
+////    public static int rotateLocal(GameObject gameObject, Vector2 to, float time, Hashtable optional) {
+////        return pushNewTween(gameObject, to, time, TweenAction.ROTATE_LOCAL, optional);
+////    }
+////
+////    public static int rotateLocal(GameObject gameObject, Vector2 to, float time, object[] optional) {
+////        return rotateLocal(gameObject, to, time, h(optional));
+////    }
+////
+////
+////    public static int rotateAround(GameObject gameObject, Vector2 axis, float add, float time, Hashtable optional) {
+////        if (optional == null || optional.Count == 0)
+////            optional = new Hashtable();
+////
+////        optional["axis"] = axis;
+////        if (optional["point"] == null)
+////            optional["point"] = Vector2.zero;
+////
+////        return pushNewTween(gameObject, new Vector2(add, 0f, 0f), time, TweenAction.ROTATE_AROUND, optional);
+////    }
+////
+////    public static int rotateAround(GameObject gameObject, Vector2 axis, float add, float time, object[] optional) {
+////        return rotateAround(gameObject, axis, add, time, h(optional));
+////    }
+////
+////    public static int moveX(GameObject gameObject, float to, float time, Hashtable optional) {
+////        return pushNewTween(gameObject, new Vector2(to, 0, 0), time, TweenAction.MOVE_X, optional);
+////    }
+////
+////    public static int moveX(GameObject gameObject, float to, float time, object[] optional) {
+////        return moveX(gameObject, to, time, h(optional));
+////    }
+////
+////    public static int moveY(GameObject gameObject, float to, float time, Hashtable optional) {
+////        return pushNewTween(gameObject, new Vector2(to, 0, 0), time, TweenAction.MOVE_Y, optional);
+////    }
+////
+////    public static int moveY(GameObject gameObject, float to, float time, object[] optional) {
+////        return moveY(gameObject, to, time, h(optional));
+////    }
+////
+////    public static int moveZ(GameObject gameObject, float to, float time, Hashtable optional) {
+////        return pushNewTween(gameObject, new Vector2(to, 0), time, TweenAction.MOVE_Z, optional);
+////    }
+////
+////    public static int moveZ(GameObject gameObject, float to, float time, object[] optional) {
+////        return moveZ(gameObject, to, time, h(optional));
+////    }
+////
+////    public static int move(GameObject gameObject, Vector2 to, float time, Hashtable optional) {
+////        return pushNewTween(gameObject, to, time, TweenAction.MOVE, optional);
+////    }
+////
+////    public static int move(GameObject gameObject, Vector2 to, float time, object[] optional) {
+////        return move(gameObject, to, time, LeanTween.h(optional));
+////    }
+////
+////    public static int move(GameObject gameObject, Vector2[] to, float time, Hashtable optional) {
+////        if (to.length < 4) {
+////            string errorMsg = "physicsPort.LeanTween - When passing values for a vector path, you must pass four or more values!";
+////            if (throwErrors) Debug.LogError(errorMsg);
+////            else Debug.Log(errorMsg);
+////            return -1;
+////        }
+////        if (to.length % 4 != 0) {
+////            string errorMsg2 = "physicsPort.LeanTween - When passing values for a vector path, they must be in sets of four: controlPoint1, controlPoint2, endPoint2, controlPoint2, controlPoint2...";
+////            if (throwErrors) Debug.LogError(errorMsg2);
+////            else Debug.Log(errorMsg2);
+////            return -1;
+////        }
+////
+////        init();
+////        if (optional == null || optional.Count == 0)
+////            optional = new Hashtable();
+////
+////        LTBezierPath ltPath = new LTBezierPath(to);
+////        if (optional["orientToPath"] != null)
+////            ltPath.orientToPath = true;
+////        optional["path"] = ltPath;
+////
+////        return pushNewTween(gameObject, new Vector2(1.0f, 0.0f, 0.0f), time, TweenAction.MOVE_CURVED, optional);
+////    }
+////
+////    public static int move(GameObject gameObject, Vector2[] to, float time, object[] optional) {
+////        return move(gameObject, to, time, LeanTween.h(optional));
+////    }
+////
+////    public static int move(LTRect ltRect, Vector2 to, float time, Hashtable optional) {
+////        init();
+////        if (optional == null || optional.Count == 0)
+////            optional = new Hashtable();
+////
+////        optional["rect"] = ltRect;
+////        return pushNewTween(tweenEmpty, to, time, TweenAction.GUI_MOVE, optional);
+////    }
+////
+////    public static int move(LTRect ltRect, Vector2 to, float time, object[] optional) {
+////        return move(ltRect, to, time, LeanTween.h(optional));
+////    }
+////
+////    public static int moveLocal(GameObject gameObject, Vector2 to, float time, Hashtable optional) {
+////        return pushNewTween(gameObject, to, time, TweenAction.MOVE_LOCAL, optional);
+////    }
+////
+////    public static int moveLocal(GameObject gameObject, Vector2 to, float time, object[] optional) {
+////        return moveLocal(gameObject, to, time, LeanTween.h(optional));
+////    }
+////
+////    public static int moveLocal(GameObject gameObject, Vector2[] to, float time, Hashtable optional) {
+////        if (to.length < 4) {
+////            string errorMsg = "physicsPort.LeanTween - When passing values for a vector path, you must pass four or more values!";
+////            if (throwErrors) Debug.LogError(errorMsg);
+////            else Debug.Log(errorMsg);
+////            return -1;
+////        }
+////        if (to.length % 4 != 0) {
+////            string errorMsg2 = "physicsPort.LeanTween - When passing values for a vector path, they must be in sets of four: controlPoint1, controlPoint2, endPoint2, controlPoint2, controlPoint2...";
+////            if (throwErrors) Debug.LogError(errorMsg2);
+////            else Debug.Log(errorMsg2);
+////            return -1;
+////        }
+////
+////        init();
+////        if (optional == null)
+////            optional = new Hashtable();
+////
+////        LTBezierPath ltPath = new LTBezierPath(to);
+////        if (optional["orientToPath"] != null)
+////            ltPath.orientToPath = true;
+////        optional["path"] = ltPath;
+////
+////        return pushNewTween(gameObject, new Vector2(1.0f, 0.0f, 0.0f), time, TweenAction.MOVE_CURVED_LOCAL, optional);
+////    }
+////
+////    public static int moveLocal(GameObject gameObject, Vector2[] to, float time, object[] optional) {
+////        return moveLocal(gameObject, to, time, LeanTween.h(optional));
+////    }
+////
+////    public static int moveLocalX(GameObject gameObject, float to, float time, Hashtable optional) {
+////        return pushNewTween(gameObject, new Vector2(to, 0), time, TweenAction.MOVE_LOCAL_X, optional);
+////    }
+////
+////    public static int moveLocalX(GameObject gameObject, float to, float time, object[] optional) {
+////        return moveLocalX(gameObject, to, time, h(optional));
+////    }
+////
+////    public static int moveLocalY(GameObject gameObject, float to, float time, Hashtable optional) {
+////        return pushNewTween(gameObject, new Vector2(to, 0, 0), time, TweenAction.MOVE_LOCAL_Y, optional);
+////    }
+////
+////    public static int moveLocalY(GameObject gameObject, float to, float time, object[] optional) {
+////        return moveLocalY(gameObject, to, time, h(optional));
+////    }
+////
+////    public static int moveLocalZ(GameObject gameObject, float to, float time, Hashtable optional) {
+////        return pushNewTween(gameObject, new Vector2(to, 0, 0), time, TweenAction.MOVE_LOCAL_Z, optional);
+////    }
+////
+////    public static int moveLocalZ(GameObject gameObject, float to, float time, object[] optional) {
+////        return moveLocalZ(gameObject, to, time, h(optional));
+////    }
+////
+////    public static int scale(GameObject gameObject, Vector2 to, float time, Hashtable optional) {
+////        return pushNewTween(gameObject, to, time, TweenAction.SCALE, optional);
+////    }
+////
+////    public static int scale(GameObject gameObject, Vector2 to, float time, object[] optional) {
+////        return scale(gameObject, to, time, h(optional));
+////    }
+////
+////    public static int scale(LTRect ltRect, Vector2 to, float time, Hashtable optional) {
+////        init();
+////        if (optional == null || optional.Count == 0)
+////            optional = new Hashtable();
+////
+////        optional["rect"] = ltRect;
+////        return pushNewTween(tweenEmpty, to, time, TweenAction.GUI_SCALE, optional);
+////    }
+////
+////    public static int scale(LTRect ltRect, Vector2 to, float time, object[] optional) {
+////        return scale(ltRect, to, time, h(optional));
+////    }
+////
+////    public static int alpha(LTRect ltRect, float to, float time, Hashtable optional) {
+////        init();
+////        if (optional == null || optional.Count == 0)
+////            optional = new Hashtable();
+////
+////        ltRect.alphaEnabled = true;
+////        optional["rect"] = ltRect;
+////        return pushNewTween(tweenEmpty, new Vector2(to, 0f, 0f), time, TweenAction.GUI_ALPHA, optional);
+////    }
+////
+////    public static int alpha(LTRect ltRect, float to, float time, object[] optional) {
+////        return alpha(ltRect, to, time, h(optional));
+////    }
+////
+////    public static int scaleX(GameObject gameObject, float to, float time, Hashtable optional) {
+////        return pushNewTween(gameObject, new Vector2(to, 0, 0), time, TweenAction.SCALE_X, optional);
+////    }
+////
+////    public static int scaleX(GameObject gameObject, float to, float time, object[] optional) {
+////        return scaleX(gameObject, to, time, h(optional));
+////    }
+////
+////    public static int scaleY(GameObject gameObject, float to, float time, Hashtable optional) {
+////        return pushNewTween(gameObject, new Vector2(to, 0, 0), time, TweenAction.SCALE_Y, optional);
+////    }
+////
+////    public static int scaleY(GameObject gameObject, float to, float time, object[] optional) {
+////        return scaleY(gameObject, to, time, h(optional));
+////    }
+////
+////    public static int scaleZ(GameObject gameObject, float to, float time, Hashtable optional) {
+////        return pushNewTween(gameObject, new Vector2(to, 0, 0), time, TweenAction.SCALE_Z, optional);
+////    }
+////
+////    public static int scaleZ(GameObject gameObject, float to, float time, object[] optional) {
+////        return scaleZ(gameObject, to, time, h(optional));
+////    }
+////
+////    public static int delayedCall(float delayTime, string callback, Hashtable optional) {
+////        init();
+////        return delayedCall(tweenEmpty, delayTime, callback, optional);
+////    }
+////
+////    public static int delayedCall(float delayTime, Action callback, object[] optional) {
+////        init();
+////        return delayedCall(tweenEmpty, delayTime, callback, h(optional));
+////    }
+////
+////    public static int delayedCall(GameObject gameObject, float delayTime, String callback, object[] optional) {
+////        return delayedCall(gameObject, delayTime, callback, h(optional));
+////    }
+////
+////    public static int delayedCall(GameObject gameObject, float delayTime, Action callback, object[] optional) {
+////        return delayedCall(gameObject, delayTime, callback, h(optional));
+////    }
+////
+////    public static int delayedCall(GameObject gameObject, float delayTime, String callback, Hashtable optional) {
+////        if (optional == null || optional.Count == 0)
+////            optional = new Hashtable();
+////        optional["onComplete"] = callback;
+////
+////        return pushNewTween(gameObject, Vector2.zero, delayTime, TweenAction.CALLBACK, optional);
+////    }
+////
+////    public static int delayedCall(GameObject gameObject, float delayTime, Action callback, Map optional) {
+////        if (optional == null)
+////            optional = new Hashtable();
+////        optional["onComplete"] = callback;
+////
+////        return pushNewTween(gameObject, Vector2.zero, delayTime, TweenAction.CALLBACK, optional);
+////    }
+////
+////    public static int delayedCall(GameObject gameObject, float delayTime, Action<object> callback, Map optional) {
+////        if (optional == null)
+////            optional = new Hashtable();
+////        optional["onComplete"] = callback;
+////
+////        return pushNewTween(gameObject, Vector2.zero, delayTime, TweenAction.CALLBACK, optional);
+////    }
+////
+////    public static int alpha(GameObject gameObject, float to, float time, Map optional) {
+////        return pushNewTween(gameObject, new Vector2(to, 0, 0), time, TweenAction.ALPHA, optional);
+////    }
+////
+////    public static int alpha(GameObject gameObject, float to, float time, object[] optional) {
+////        return alpha(gameObject, to, time, h(optional));
+////    }
+//
+//
+//
+//
+//
+//
+//    public static void addListener(GameObject caller, int eventId, Action<LTEvent> callback) {
+////        if (eventListeners == null) {
+////            eventListeners = new Action<LTEvent>[EVENTS_MAX * LISTENERS_MAX];
+////            goListeners = new GameObject[EVENTS_MAX * LISTENERS_MAX];
+////        }
+////        // Debug.Log("searching for an empty space for:"+caller + " eventid:"+event);
+////        for (i = 0; i < LISTENERS_MAX; i++) {
+////            int point = eventId * LISTENERS_MAX + i;
+////            if (goListeners[point] == null || eventListeners[point] == null) {
+////                eventListeners[point] = callback;
+////                goListeners[point] = caller;
+////                if (i >= eventsMaxSearch)
+////                    eventsMaxSearch = i + 1;
+////                // Debug.Log("adding event for:"+caller.name);
+////
+////                return;
+////            }
+////
+////        }
+//    }
+//
+//
+//    public static boolean removeListener(GameObject caller, int eventId, Action<LTEvent> callback) {
+//        for (i = 0; i < eventsMaxSearch; i++) {
+//            int point = eventId * LISTENERS_MAX + i;
+//
+//        }
+//        return false;
+//    }
+//
+//    public static void dispatchEvent(int eventId) {
+//        dispatchEvent(eventId, null);
+//    }
+//
+//    public static void dispatchEvent(int eventId, Object data) {
+////        for (int k = 0; k < eventsMaxSearch; k++) {
+////            int point = eventId * LISTENERS_MAX + k;
+////            if (eventListeners[point] != null) {
+////                if (goListeners[point]) {
+////                    eventListeners[point] (new LTEvent(eventId, data));
+////                } else {
+////                    eventListeners[point] = null;
+////                }
+////            }
+////        }
+//    }
 
-}
+
+
+

@@ -133,6 +133,10 @@ public class CcEditBodyNode extends CcNode{
             fixtureNodes.add(fixtureNode);
         }
     }
+
+    public void save(){
+
+    }
 }
 
 

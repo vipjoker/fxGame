@@ -20,9 +20,10 @@ public class PhysicsEditorPort extends Application implements TimerCounter.Frame
     private GraphicsContext context;
     private int width = 800;
     private int height = 800;
+    private float duration  = 200;
     Vector2 pos = new Vector2(10,10);
     Vector2 target = new Vector2(10,10);
-
+    AnimationTask task ;
     private long lastTime;
     private long targetTime;
     public static void main(String[] args) {
@@ -68,14 +69,13 @@ public class PhysicsEditorPort extends Application implements TimerCounter.Frame
         canvas.setOnMousePressed(e->{
             target.x = (float) e.getX();
             target.y = (float) e.getY();
-            targetTime = lastTime +200;
+            task = new AnimationTask(Interpolator.EASEINOUTCIRC,2000);
         });
 
         TimerCounter timerCounter = new TimerCounter(this);
         timerCounter.start();
         primaryStage.show();
 
-      new LeanTween.LTDescr().setEase(LeanTween.LeanTweenType.easeInCirc).setRepeat()
 
     }
 
@@ -90,12 +90,14 @@ public class PhysicsEditorPort extends Application implements TimerCounter.Frame
         context.setFill(Constants.WHITE);
         context.fillText("Delta : " + delta,100,100);
 
-        context.fillOval(pos.x - 25,pos.y - 25,50,50);
-        if(targetTime > lastTime){
-            float alpha = 1 - (targetTime - lastTime) / 200.0f;
-            System.out.println("Alpha: " + alpha);
-            pos.interpolate(target, alpha, Interpolation.elastic);
 
+        if(task!= null && !task.isFinished()){
+            final float animate = task.animate();
+            context.fillText("Delta : " + animate,width/2,height/2);
+
+            pos.x = animate * 100;
+            pos.y = animate * 100;
+            context.fillOval(pos.x - 25,pos.y - 25,50,50);
         }
 
         lastTime = delta;

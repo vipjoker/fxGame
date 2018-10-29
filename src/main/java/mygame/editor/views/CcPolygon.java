@@ -9,6 +9,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import mygame.editor.model.Point;
 import mygame.editor.model.box2d.B2Fixture;
+import mygame.editor.util.Box2dUtil;
 import physicsPort.triangulation.Vec2;
 
 import java.awt.*;
@@ -36,12 +37,8 @@ public class CcPolygon extends CcFixtureNode {
         this.fixture = fixture;
         final List<Vector2> points = fixture.getPoints();
         for (int i = 0 ; i < points.size(); i++) {
-            Vector2 point = points.get(i);
-
-            final Vector2 cpy = point.cpy();
-            cpy.y *= -1;
-            cpy.scl(32);
-            this.points.add(cpy);
+            final Vector2 p = Box2dUtil.fromBox2d(points.get(i));
+            this.points.add(p);
         }
     }
 
@@ -208,5 +205,14 @@ public class CcPolygon extends CcFixtureNode {
             sum += (p2.x - p1.x) * (p2.y + p1.y);
         }
         return sum >= 0;
+    }
+
+    @Override
+    public void update() {
+        fixture.getPoints().clear();
+        for (Vector2 vector2 : getPoints()) {
+            final Vector2 box2dVec = Box2dUtil.toBox2d(vector2);
+            fixture.getPoints().add(box2dVec);
+        }
     }
 }
