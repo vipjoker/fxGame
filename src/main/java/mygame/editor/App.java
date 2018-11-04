@@ -1,7 +1,7 @@
 package mygame.editor;
 
-import com.google.gson.Gson;
 import javafx.application.Application;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -10,14 +10,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import mygame.editor.interfaces.KeyListener;
-import mygame.editor.model.box2d.B2Root;
-import mygame.editor.util.ResourceUtil;
 
-import java.security.Key;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 public class App extends Application {
@@ -26,9 +20,20 @@ public class App extends Application {
     public  Scene scene;
     public  Stage stage;
     public static App instance;
+    private final Map<Class, Object> controllers = new HashMap<>();
     public  final List<KeyListener> keyListeners = new ArrayList<>();
     public static Set<KeyCode> buttons  = new HashSet<>();
+    public final SimpleStringProperty observableAction = new SimpleStringProperty("");
 
+
+    public void registerController(Object object) {
+        controllers.put(object.getClass(),object);
+    }
+
+    public <T> T getConroller(Class clazz){
+        final Object o = controllers.get(clazz);
+        return (T)o;
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {

@@ -215,4 +215,11 @@ public class CcPolygon extends CcFixtureNode {
             fixture.getPoints().add(box2dVec);
         }
     }
+
+    @Override
+    public void addPoint(javafx.geometry.Point2D point) {
+        final javafx.geometry.Point2D p = convertToLocalSpace(point);
+        points.add(new Vector2((float) p.getX(),(float) -p.getY()));
+
+    }
 }

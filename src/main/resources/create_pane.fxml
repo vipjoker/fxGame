@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox
+xmlns="http://javafx.com/javafx"
+xmlns:fx="http://javafx.com/fxml"
+fx:controller="mygame.editor.controlers.CreateController"
+
+
+prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+<children>
+    <Button fx:id="btnSprite" mnemonicParsing="false" onAction="#onCreateSprite" text="Create Sprite" />
+    <Button fx:id="btnSquareBody" mnemonicParsing="false" onAction="#onCreateSquare" text="Create square body" />
+    <Button fx:id="btnCircleBody" mnemonicParsing="false" onAction="#onCreateCircleBody" text="Create circle body" />
+    <Button fx:id="btnChainBody" mnemonicParsing="false" onAction="#onCreateChainBody" text="Create chain body" />
+    <Button fx:id="btnDistanceJoint" mnemonicParsing="false" onAction="#onCreaetJoint" text="Create distance joint" />
+    <Button fx:id="btnRevoluteJoint" mnemonicParsing="false" onAction="#onCreateRevoluteJoint" text="Create revolute joint" />
+</children>
+</VBox>

@@ -75,6 +75,11 @@ public class CcCircle extends CcFixtureNode{
     public void update() {
 
     }
+
+    @Override
+    public void addPoint(Point2D points) {
+        throw new RuntimeException("Failed to add point to circle");
+    }
 }
 
 

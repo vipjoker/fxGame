@@ -22,17 +22,18 @@ import java.util.List;
 /**
  * Created by oleh on 3/27/17.
  */
-public class SelectBodyAction extends Action implements CanvasRenderer.OnCanvasDragListener,KeyListener {
+public class BodyEditAction extends Action implements CanvasRenderer.OnCanvasDragListener, KeyListener {
 
     private InfoController mController;
 
-    enum Mode{
-        SELECT,MOVE,ROTATE
+    enum Mode {
+        SELECT, MOVE, ROTATE
     }
+
     private final List<CcNode> selected = new ArrayList<>();
     private Mode mode = Mode.SELECT;
 
-    public SelectBodyAction(CanvasRenderer renderer, NodeRepository repository, InfoController controller) {
+    public BodyEditAction(CanvasRenderer renderer, NodeRepository repository, InfoController controller) {
         super(renderer, repository);
         this.mController = controller;
     }
@@ -44,9 +45,6 @@ public class SelectBodyAction extends Action implements CanvasRenderer.OnCanvasD
         for (B2Body body : mRepository.getBodies()) {
             mRenderer.addChild(new CcEditBodyNode(body));
         }
-
-
-
 
 
         mRenderer.update();
@@ -67,27 +65,25 @@ public class SelectBodyAction extends Action implements CanvasRenderer.OnCanvasD
     public void onStartMove(Point2D point) {
 
 
-        switch (mode){
-            case SELECT:
-                handleSelect(point);
-                break;
-            case MOVE:
-
-                break;
-        }
-
-
+//        switch (mode){
+//            case SELECT:
+//
+//            case MOVE:
+        handleSelect(point);
+//                break;
+//        }
 
 
     }
 
     private void handleSelect(Point2D point) {
-        if(!App.buttons.contains(KeyCode.SHIFT)){
+        if (!App.buttons.contains(KeyCode.SHIFT)) {
             selected.clear();
         }
         for (CcNode node : mRenderer.getNodes()) {
             final Point2D point2D = node.convertToLocalSpace(point);
-            if(node.contains(point2D)){
+            if (node.contains(point2D) && !selected.contains(node)) {
+
                 selected.add(node);
 
             }
@@ -98,35 +94,31 @@ public class SelectBodyAction extends Action implements CanvasRenderer.OnCanvasD
     @Override
     public void onDrag(Point2D point) {
 
-        switch (mode){
-            case MOVE:
-                for (CcNode s : selected) {
-                    double newX = s.getX() - point.getX();
-                    double newY = s.getY() + point.getY();
-                    s.setX(newX);
-                    s.setY(newY);
-                }
-                break;
-            case ROTATE:
-                for (CcNode ccNode : selected) {
-                    ccNode.setAngle(ccNode.getAngle() - point.getX() - point.getY());
-                }
+
+        if (mode == Mode.ROTATE) {
+
+            for (CcNode ccNode : selected) {
+                ccNode.setAngle(ccNode.getAngle() - point.getX() - point.getY());
+            }
+        } else {
+            for (CcNode s : selected) {
+                double newX = s.getX() - point.getX();
+                double newY = s.getY() + point.getY();
+                s.setX(newX);
+                s.setY(newY);
+            }
         }
-
-
-
-
-
     }
+
 
     @Override
     public void onStopMove(Point2D point) {
-       // selected.clear();
+        // selected.clear();
     }
 
     @Override
     public void onKeyPressed(KeyEvent event) {
-        switch (event.getCode()){
+        switch (event.getCode()) {
             case T:
                 mode = Mode.MOVE;
                 break;

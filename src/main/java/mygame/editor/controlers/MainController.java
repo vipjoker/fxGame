@@ -1,6 +1,10 @@
 package mygame.editor.controlers;
 
 import javafx.application.Platform;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -41,20 +45,15 @@ import java.sql.Connection;
 import static mygame.editor.util.Constants.*;
 
 
-public class Controller implements Initializable {
+public class MainController implements Initializable {
 
     public  VBox leftPane;
     public VBox rightPane;
     public AnchorPane centerPane;
     public SplitPane root;
+
     public TreeView<TreeFileHolder> resourcesTreeview;
     public HBox toolbar;
-    public Button btnRun ;
-    public Button btnMove;
-    public Button btnEdit;
-    public Button btnStop;
-    public TreeView<CcNode> nodeTreeview;
-    public Button btnPoint;
 
     private CanvasRenderer canvasRenderer;
     private Action currentDrawer;
@@ -64,7 +63,9 @@ public class Controller implements Initializable {
     public InfoController infoController;
 
     public void initialize(URL location, ResourceBundle resources) {
+        App.instance.registerController(this);
         setListeners();
+
     }
 
     public InfoController getInfoController() {
@@ -86,51 +87,12 @@ public class Controller implements Initializable {
             setLeftPane();
             setRightPane();
             initActions();
-            CcNode node1 = new CcNode();
-            node1.name = "FIRST";
-            CcNode node2 = new CcNode();
-            node2.name = "Second";
-            CcNode node3 = new CcNode();
-            node3.name = "Third";
-            CcNode node4 = new CcNode();
-            node4.name = "Fourth";
-            node1.addChild(node2);
-            node2.addChild(node3);
-            node2.addChild(node4);
-            updateNodeTreeView(node1);
+
 
         });
     }
 
-    private void updateNodeTreeView(CcNode node) {
 
-        nodeTreeview.setCellFactory(e->new TreeItemCcNode());
-        TreeItem<CcNode> ccNodeTreeItem = new TreeItem<>(node);
-        nodeTreeview.setRoot(ccNodeTreeItem);
-        nodeTreeview.setOnMouseDragged(e->{
-            TreeItem<CcNode> ccNodeTreeItem1 = nodeTreeview.getSelectionModel().getSelectedItems().get(0);
-
-        });
-        fillNodeTreeView(ccNodeTreeItem,node);
-
-    }
-
-    private void fillNodeTreeView(TreeItem<CcNode> ccNodeTreeItem ,CcNode root) {
-        for (CcNode node : root.getChildren()) {
-            TreeItem<CcNode> item = new TreeItem<>(node);
-
-            ;
-
-
-
-            ccNodeTreeItem.getChildren().add(item);
-            if(!node.getChildren().isEmpty()){
-                fillNodeTreeView(item,node);
-            }
-
-
-        }
-    }
 
 
     private void setRightPane() {
@@ -174,11 +136,9 @@ public class Controller implements Initializable {
 
     private void initActions() {
         NodeRepository repository = new InMemoryRepository();
-        actions.put(ACTION_EDIT, new FixtureEditAction(canvasRenderer,repository,infoController));
-        actions.put(ACTION_MOVE, new MoverAction(canvasRenderer,repository));
+        actions.put(ACTION_FIXTURE_EDIT, new FixtureEditAction(canvasRenderer,repository,infoController));
         actions.put(ACTION_BOX_2D, new Box2dAction(canvasRenderer,repository));
-        actions.put(ACTION_SELECT, new SelectBodyAction(canvasRenderer,repository,infoController));
-        actions.put(ACTION_ROTATE, new RotateAction(canvasRenderer,repository));
+        actions.put(ACTION_BODY_EDIT, new BodyEditAction(canvasRenderer,repository,infoController));
         actions.put(ACTION_CREATE_SQUARE_BODY, new CreateBodyAction(canvasRenderer,repository, CreateBodyAction.Mode.SQUARE));
         actions.put(ACTION_CREATE_CIRCLE_BODY, new CreateBodyAction(canvasRenderer,repository, CreateBodyAction.Mode.CIRCLE));
         actions.put(ACTION_CREATE_CHAIN_BODY, new CreateBodyAction(canvasRenderer,repository, CreateBodyAction.Mode.CHAIN));
@@ -186,7 +146,7 @@ public class Controller implements Initializable {
         actions.put(ACTION_CREATE_JOINT, new CreateJointAction(canvasRenderer,repository));
         actions.put(ACTION_SPRITE, new CreateSpriteAction(canvasRenderer, repository));
         actions.put(ACTION_EDIT_POINTS,new EditPointsAction(canvasRenderer,repository));
-        switchDrawer(ACTION_SELECT);
+        switchDrawer(ACTION_BODY_EDIT);
     }
 
     private void fillTreeView(String parent,File dir, TreeItem<TreeFileHolder> root) throws IOException{
@@ -267,79 +227,15 @@ public class Controller implements Initializable {
 
     }
 
-    public void onRun(ActionEvent actionEvent) {
-
-        switchDrawer(ACTION_BOX_2D);
-    }
-
-    private void switchDrawer(String action) {
+    public void switchDrawer(String action) {
+        App.instance.observableAction.set(action);
         if (currentDrawer != null) currentDrawer.finishDrawing();
         currentDrawer = actions.get(action);
         currentDrawer.init();
     }
 
-    public void onMove() {
-        switchDrawer(ACTION_MOVE);
-    }
-
-
-    public void onEdit(ActionEvent event) {
-        switchDrawer(ACTION_EDIT);
-    }
-
-    public void onRotate() {
-        switchDrawer(ACTION_ROTATE);
-    }
-
-    public void onSelect() {
-        switchDrawer(ACTION_SELECT);
-    }
-
-    public void onCreateJoint(ActionEvent event) {
-        switchDrawer(ACTION_CREATE_JOINT);
-    }
-
-    public void onPolygon(ActionEvent event) {
-        switchDrawer(ACTION_POLYGON);
-    }
-
-    public void onChain(ActionEvent event) {
-        switchDrawer(ACTION_CHAIN);
-    }
-
-    public void onCircle(ActionEvent event) { switchDrawer(ACTION_CIRCLE);
-    }
-
-    public void onCreateSprite(ActionEvent event) {
-        switchDrawer(ACTION_SPRITE);
-    }
-
-
-    public void onCreateSquare(ActionEvent event) {
-        switchDrawer(ACTION_CREATE_SQUARE_BODY);
-    }
-
-    public void onCreateCircleBody(ActionEvent actionEvent) {
-        switchDrawer(ACTION_CREATE_CIRCLE_BODY);
-    }
-
-    public void onCreateChainBody(ActionEvent actionEvent) {
-        switchDrawer(ACTION_CREATE_CHAIN_BODY);
-    }
-
-    public void onCreaetJoint(ActionEvent actionEvent) {
-
-    }
-
-    public void onCreateRevoluteJoint(ActionEvent actionEvent) {
-    }
-
-    public void onStop(ActionEvent actionEvent) {
-
-    }
-
     public void onEditPoint(ActionEvent actionEvent) {
         switchDrawer(ACTION_EDIT_POINTS);
-
     }
+
 }

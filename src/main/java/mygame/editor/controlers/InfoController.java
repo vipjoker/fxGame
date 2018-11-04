@@ -13,6 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.SwipeEvent;
 import javafx.scene.layout.GridPane;
+import mygame.editor.App;
 import mygame.editor.model.Point;
 import mygame.editor.views.CcNode;
 
@@ -46,6 +47,8 @@ public class InfoController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        App.instance.registerController(this);
+
         ObservableList<String> strings = FXCollections.observableArrayList("Static", "Kinematic", "Dynamic");
 
         comboType.setItems(strings);

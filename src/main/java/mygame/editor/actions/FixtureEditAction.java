@@ -27,7 +27,7 @@ public class FixtureEditAction extends Action implements CanvasRenderer.OnCanvas
     private InfoController mController;
 
     enum Mode{
-        SELECT,MOVE,ROTATE,EDIT_VERTEX
+        SELECT,MOVE,ROTATE, ADD_VERTEX, EDIT_VERTEX
     }
     private final List<CcFixtureNode> selected = new ArrayList<>();
     private final List<CcVertex> editablePoints = new ArrayList<>();
@@ -91,6 +91,14 @@ public class FixtureEditAction extends Action implements CanvasRenderer.OnCanvas
             case MOVE:
 
                 break;
+            case ADD_VERTEX:
+                if(selected.size() == 1){
+                    final CcFixtureNode ccFixtureNode = selected.get(0);
+                    ccFixtureNode.addPoint(point);
+                }else{
+                    mode = Mode.SELECT;
+                }
+
         }
 
 
@@ -190,6 +198,9 @@ public class FixtureEditAction extends Action implements CanvasRenderer.OnCanvas
                 break;
             case V:
                 mode = Mode.EDIT_VERTEX;
+                break;
+            case A:
+                mode = Mode.ADD_VERTEX;
                 break;
 
         }

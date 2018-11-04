@@ -8,7 +8,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
-import mygame.editor.controlers.Controller;
+import mygame.editor.controlers.MainController;
 import mygame.editor.controlers.InfoController;
 import mygame.editor.model.Point;
 
@@ -22,9 +22,9 @@ public class PhysicsNode extends Pane implements Bodyeable {
     boolean active;
     private Body body;
     private BodyDef bodyDef;
-    private Controller controller;
+    private MainController controller;
     private List<Fixtureable> fixtures = new ArrayList<>();
-    public PhysicsNode(Controller controller){
+    public PhysicsNode(MainController controller){
         this.controller = controller;
         bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
