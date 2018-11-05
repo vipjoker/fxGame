@@ -1,10 +1,6 @@
 package mygame.editor.controlers;
 
 import javafx.application.Platform;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -21,7 +17,6 @@ import mygame.editor.App;
 import mygame.editor.actions.*;
 import mygame.editor.component.SpriteComponent;
 import mygame.editor.model.TreeFileHolder;
-import mygame.editor.render.TreeItemCcNode;
 import mygame.editor.render.TreeItemPath;
 import mygame.editor.repository.InMemoryRepository;
 import mygame.editor.repository.NodeRepository;
@@ -47,7 +42,7 @@ import static mygame.editor.util.Constants.*;
 
 public class MainController implements Initializable {
 
-    public  VBox leftPane;
+    public VBox leftPane;
     public VBox rightPane;
     public AnchorPane centerPane;
     public SplitPane root;
@@ -71,28 +66,19 @@ public class MainController implements Initializable {
     public InfoController getInfoController() {
         return infoController;
     }
+
     private void setListeners() {
 
-        Platform.runLater(()-> {
-
+        Platform.runLater(() -> {
             canvasRenderer = new CanvasRenderer(centerPane);
-
-
             root.prefWidthProperty().bind(App.instance.stage.widthProperty());
             root.prefHeightProperty().bind(App.instance.stage.heightProperty());
-//            centerPane.getChildren().add(canvas);
-
             root.setDividerPositions(.2, .8);
-
             setLeftPane();
             setRightPane();
             initActions();
-
-
         });
     }
-
-
 
 
     private void setRightPane() {
@@ -102,12 +88,12 @@ public class MainController implements Initializable {
 
     private void setLeftPane() {
 
-        TreeItem<TreeFileHolder> treeRoot = new TreeItem<>(new TreeFileHolder("root","/"));
+        TreeItem<TreeFileHolder> treeRoot = new TreeItem<>(new TreeFileHolder("root", "/"));
 
         try {
             URI uri = getClass().getResource("/").toURI();
             File file = new File(uri);
-            fillTreeView("/",file, treeRoot);
+            fillTreeView("/", file, treeRoot);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -122,7 +108,7 @@ public class MainController implements Initializable {
             if (selected != null && selected.isLeaf()) {
                 String path = selected.getValue().getPath();
                 System.out.println(path);
-                CcNode node=  new CcNode();
+                CcNode node = new CcNode();
                 node.setWidth(100);
                 node.setHeight(100);
                 SpriteComponent spriteComponent = new SpriteComponent(path);
@@ -135,70 +121,68 @@ public class MainController implements Initializable {
     }
 
     private void initActions() {
-        NodeRepository repository = new InMemoryRepository();
-        actions.put(ACTION_FIXTURE_EDIT, new FixtureEditAction(canvasRenderer,repository,infoController));
-        actions.put(ACTION_BOX_2D, new Box2dAction(canvasRenderer,repository));
-        actions.put(ACTION_BODY_EDIT, new BodyEditAction(canvasRenderer,repository,infoController));
-        actions.put(ACTION_CREATE_SQUARE_BODY, new CreateBodyAction(canvasRenderer,repository, CreateBodyAction.Mode.SQUARE));
-        actions.put(ACTION_CREATE_CIRCLE_BODY, new CreateBodyAction(canvasRenderer,repository, CreateBodyAction.Mode.CIRCLE));
-        actions.put(ACTION_CREATE_CHAIN_BODY, new CreateBodyAction(canvasRenderer,repository, CreateBodyAction.Mode.CHAIN));
-        actions.put(ACTION_CREATE_EDGE_BODY, new CreateBodyAction(canvasRenderer,repository, CreateBodyAction.Mode.EDGE));
-        actions.put(ACTION_CREATE_JOINT, new CreateJointAction(canvasRenderer,repository));
+        NodeRepository repository = App.instance.repository;
+        actions.put(ACTION_FIXTURE_EDIT, new FixtureEditAction(canvasRenderer, repository, infoController));
+        actions.put(ACTION_BODY_EDIT, new BodyEditAction(canvasRenderer, repository, infoController));
+        actions.put(ACTION_BOX_2D, new Box2dAction(canvasRenderer, repository));
+        actions.put(ACTION_CREATE_SQUARE_BODY, new CreateBodyAction(canvasRenderer, repository, CreateBodyAction.Mode.SQUARE));
+        actions.put(ACTION_CREATE_CIRCLE_BODY, new CreateBodyAction(canvasRenderer, repository, CreateBodyAction.Mode.CIRCLE));
+        actions.put(ACTION_CREATE_CHAIN_BODY, new CreateBodyAction(canvasRenderer, repository, CreateBodyAction.Mode.CHAIN));
+        actions.put(ACTION_CREATE_EDGE_BODY, new CreateBodyAction(canvasRenderer, repository, CreateBodyAction.Mode.EDGE));
+        actions.put(ACTION_CREATE_JOINT, new CreateJointAction(canvasRenderer, repository));
         actions.put(ACTION_SPRITE, new CreateSpriteAction(canvasRenderer, repository));
-        actions.put(ACTION_EDIT_POINTS,new EditPointsAction(canvasRenderer,repository));
+        actions.put(ACTION_EDIT_POINTS, new EditPointsAction(canvasRenderer, repository));
         switchDrawer(ACTION_BODY_EDIT);
     }
 
-    private void fillTreeView(String parent,File dir, TreeItem<TreeFileHolder> root) throws IOException{
+    private void fillTreeView(String parent, File dir, TreeItem<TreeFileHolder> root) throws IOException {
 
         File[] files = dir.listFiles();
-        if(files != null)
-        for (File file : files) {
-            String fullPath =parent + file.getName();
-            if (!file.isDirectory()) {
+        if (files != null)
+            for (File file : files) {
+                String fullPath = parent + file.getName();
+                if (!file.isDirectory()) {
 
 
-                TreeItem<TreeFileHolder> treeItem2 = new TreeItem<>(new TreeFileHolder(file.getName(),fullPath));
-                root.getChildren().add(treeItem2);
-                ImageView folderIcon = new ImageView(Resources.imageIcon);
+                    TreeItem<TreeFileHolder> treeItem2 = new TreeItem<>(new TreeFileHolder(file.getName(), fullPath));
+                    root.getChildren().add(treeItem2);
+                    ImageView folderIcon = new ImageView(Resources.imageIcon);
 
-                folderIcon.setFitHeight(20);
-                folderIcon.setFitWidth(20);
-                treeItem2.setGraphic(folderIcon);
-            } else {
-                TreeItem <TreeFileHolder> newRoot = new TreeItem < > (new TreeFileHolder(file.getName(),fullPath));
-                root.getChildren().add(newRoot);
-                ImageView folderIcon = new ImageView(Resources.folderImage);
-                folderIcon.setFitWidth(20);
-                folderIcon.setFitHeight(20);
+                    folderIcon.setFitHeight(20);
+                    folderIcon.setFitWidth(20);
+                    treeItem2.setGraphic(folderIcon);
+                } else {
+                    TreeItem<TreeFileHolder> newRoot = new TreeItem<>(new TreeFileHolder(file.getName(), fullPath));
+                    root.getChildren().add(newRoot);
+                    ImageView folderIcon = new ImageView(Resources.folderImage);
+                    folderIcon.setFitWidth(20);
+                    folderIcon.setFitHeight(20);
 
-                newRoot.setGraphic(folderIcon);
+                    newRoot.setGraphic(folderIcon);
 
 
-                try {
-                    fillTreeView(fullPath + "/" , file, newRoot);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    try {
+                        fillTreeView(fullPath + "/", file, newRoot);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
                 }
-
             }
-        }
 
     }
 
 
     public void onSave(ActionEvent event) {
 
-        try(Connection connection = DbConnection.getDbConnection()){
+        try (Connection connection = DbConnection.getDbConnection()) {
             connection.setAutoCommit(false);
             NodeDao dao = new NodeDao(connection);
 
             connection.commit();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
-
 
 
     }

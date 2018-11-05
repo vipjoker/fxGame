@@ -32,7 +32,7 @@ public class ToolbarController implements Initializable {
     public Button btnBody;
     public Button btnFixture;
     public HBox hBoxActions;
-    private boolean isBodyMode = true;
+    private boolean isBodyMode = false;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -42,7 +42,7 @@ public class ToolbarController implements Initializable {
         btnRun.setOnMouseClicked(this::onRun);
         btnMoveFixture.setOnMouseClicked(this::onFixtureMove);
         btnEditPoints.setOnMouseClicked(this::onEditPoint);
-
+        onBodyMode(null);
     }
 
     private void onBodyRotate(MouseEvent mouseEvent) {
@@ -54,7 +54,7 @@ public class ToolbarController implements Initializable {
         MainController controller = App.instance.getConroller(MainController.class);
         clearEditableSelection();
         btnMoveFixture.getStyleClass().add("selected");
-        controller.switchDrawer(Constants.ACTION_BODY_EDIT);
+        controller.switchDrawer(Constants.ACTION_FIXTURE_EDIT);
 
     }
 
@@ -62,7 +62,7 @@ public class ToolbarController implements Initializable {
         MainController controller = App.instance.getConroller(MainController.class);
         clearEditableSelection();
         btnMove.getStyleClass().add("selected");
-        controller.switchDrawer(Constants.ACTION_FIXTURE_EDIT);
+        controller.switchDrawer(Constants.ACTION_BODY_EDIT);
 
 
     }
@@ -98,7 +98,10 @@ public class ToolbarController implements Initializable {
 
 
     public void onFixtureMode(ActionEvent actionEvent) {
-
+        if(!isBodyMode){
+            return;
+        }
+        isBodyMode = false;
         btnFixture.getStyleClass().add("selected");
         btnBody.getStyleClass().remove("selected");
 
@@ -107,6 +110,11 @@ public class ToolbarController implements Initializable {
     }
 
     public void onBodyMode(ActionEvent actionEvent) {
+        if(isBodyMode){
+            return;
+        }
+
+        isBodyMode  = true;
         btnBody.getStyleClass().add("selected");
         btnFixture.getStyleClass().remove("selected");
 

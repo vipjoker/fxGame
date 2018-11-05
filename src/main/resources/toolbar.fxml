@@ -29,7 +29,7 @@
             <children>
 
                 <Button fx:id="btnBody" layoutX="81.0" layoutY="33.0" mnemonicParsing="false"
-                        styleClass="button,selected" text="Body"
+                        styleClass="button" text="Body"
                         textFill="WHITE" onAction="#onBodyMode"/>
                 <Button fx:id="btnFixture" layoutX="110.0" layoutY="33.0" mnemonicParsing="false" styleClass="button"
                         text="Fixture"

@@ -208,8 +208,8 @@ public class CanvasRenderer {
         g.fillRect(0, 0, width, height);
         g.setFill(Constants.WHITE);
         g.save();
-        g.transform(new Affine(Affine.translate(translatex, translatey)));
         g.transform(new Affine(Affine.scale(this.scale, scale, scrollx, scrolly)));
+        g.transform(new Affine(Affine.translate(translatex / scale, translatey / scale)));
 
 
         g.translate(20, height - 20);

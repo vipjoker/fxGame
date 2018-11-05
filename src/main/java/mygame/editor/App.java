@@ -10,6 +10,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import mygame.editor.interfaces.KeyListener;
+import mygame.editor.repository.InMemoryRepository;
+import mygame.editor.repository.NodeRepository;
 
 import java.util.*;
 
@@ -24,6 +26,7 @@ public class App extends Application {
     public  final List<KeyListener> keyListeners = new ArrayList<>();
     public static Set<KeyCode> buttons  = new HashSet<>();
     public final SimpleStringProperty observableAction = new SimpleStringProperty("");
+    public final NodeRepository repository = new InMemoryRepository();
 
 
     public void registerController(Object object) {

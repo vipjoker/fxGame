@@ -80,14 +80,18 @@ public class BodyEditAction extends Action implements CanvasRenderer.OnCanvasDra
         if (!App.buttons.contains(KeyCode.SHIFT)) {
             selected.clear();
         }
+
+        boolean shouldBreak = false;
         for (CcNode node : mRenderer.getNodes()) {
             final Point2D point2D = node.convertToLocalSpace(point);
             if (node.contains(point2D) && !selected.contains(node)) {
-
                 selected.add(node);
-
+                shouldBreak = true;
             }
             node.setActive(selected.contains(node));
+            if(shouldBreak){
+                break;
+            }
         }
     }
 
