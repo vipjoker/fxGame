@@ -33,7 +33,7 @@ public class CreateController implements Initializable{
     public void onCreateSprite(ActionEvent actionEvent) {
         clearSelectoin();
         btnSprite.getStyleClass().add("selected");
-        MainController controller = App.instance.getConroller(MainController.class);
+        MainController controller = App.instance.getController(MainController.class);
         controller.switchDrawer(Constants.ACTION_SPRITE);
     }
 
@@ -41,7 +41,7 @@ public class CreateController implements Initializable{
         clearSelectoin();
         btnSquareBody.getStyleClass().add("selected");
 
-        MainController controller = App.instance.getConroller(MainController.class);
+        MainController controller = App.instance.getController(MainController.class);
         controller.switchDrawer(Constants.ACTION_CREATE_SQUARE_BODY);
     }
 
@@ -49,14 +49,14 @@ public class CreateController implements Initializable{
         clearSelectoin();
         btnCircleBody.getStyleClass().add("selected");
 
-        MainController controller = App.instance.getConroller(MainController.class);
+        MainController controller = App.instance.getController(MainController.class);
         controller.switchDrawer(Constants.ACTION_CREATE_CIRCLE_BODY);
     }
 
     public void onCreateChainBody(ActionEvent actionEvent) {
         clearSelectoin();
         btnChainBody.getStyleClass().add("selected");
-        MainController controller = App.instance.getConroller(MainController.class);
+        MainController controller = App.instance.getController(MainController.class);
         controller.switchDrawer(Constants.ACTION_CREATE_CHAIN_BODY );
     }
 

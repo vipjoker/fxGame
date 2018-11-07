@@ -1,6 +1,9 @@
 package mygame.editor.repository;
 
 import com.badlogic.gdx.math.Vector2;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import mygame.editor.model.box2d.B2Body;
 import mygame.editor.model.box2d.B2Joint;
 import mygame.editor.views.CcNode;
@@ -10,9 +13,9 @@ import java.util.List;
 
 public class InMemoryRepository implements NodeRepository{
 
-    private List<B2Body> bodies = new ArrayList<>();
+    private ObservableList<B2Body> bodies = FXCollections.observableArrayList();
 
-    private List<B2Joint> joints = new ArrayList<>();
+    private ObservableList<B2Joint> joints = FXCollections.observableArrayList();
 
     private Vector2 gravity = new Vector2();
 
@@ -92,4 +95,13 @@ public class InMemoryRepository implements NodeRepository{
     public void deleteJoint(B2Joint joint) {
         joints.remove(joint);
     }
+    @Override
+    public void listenForBodies(ListChangeListener<B2Body> listener){
+        bodies.addListener(listener);
+    }
+@Override
+    public void listenForJoints(ListChangeListener<B2Joint> listener){
+        joints.addListener(listener);
+    }
+
 }

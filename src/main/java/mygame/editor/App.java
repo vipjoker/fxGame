@@ -2,6 +2,8 @@ package mygame.editor;
 
 import javafx.application.Application;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -10,6 +12,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import mygame.editor.interfaces.KeyListener;
+import mygame.editor.model.Selectable;
 import mygame.editor.repository.InMemoryRepository;
 import mygame.editor.repository.NodeRepository;
 
@@ -27,13 +30,13 @@ public class App extends Application {
     public static Set<KeyCode> buttons  = new HashSet<>();
     public final SimpleStringProperty observableAction = new SimpleStringProperty("");
     public final NodeRepository repository = new InMemoryRepository();
-
+    public final ObservableList<Selectable> selected = FXCollections.observableArrayList();
 
     public void registerController(Object object) {
         controllers.put(object.getClass(),object);
     }
 
-    public <T> T getConroller(Class clazz){
+    public <T> T getController(Class clazz){
         final Object o = controllers.get(clazz);
         return (T)o;
     }

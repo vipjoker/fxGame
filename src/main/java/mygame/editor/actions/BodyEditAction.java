@@ -27,11 +27,11 @@ public class BodyEditAction extends Action implements CanvasRenderer.OnCanvasDra
     private InfoController mController;
 
     enum Mode {
-        SELECT, MOVE, ROTATE
+      MOVE, ROTATE
     }
 
     private final List<CcNode> selected = new ArrayList<>();
-    private Mode mode = Mode.SELECT;
+    private Mode mode = Mode.MOVE;
 
     public BodyEditAction(CanvasRenderer renderer, NodeRepository repository, InfoController controller) {
         super(renderer, repository);
@@ -45,11 +45,8 @@ public class BodyEditAction extends Action implements CanvasRenderer.OnCanvasDra
         for (B2Body body : mRepository.getBodies()) {
             mRenderer.addChild(new CcEditBodyNode(body));
         }
-
-
         mRenderer.update();
         mRenderer.setOnCanvasDragListener(this);
-
     }
 
     @Override
@@ -57,22 +54,11 @@ public class BodyEditAction extends Action implements CanvasRenderer.OnCanvasDra
         mRenderer.getNodes().clear();
         mRenderer.setOnCanvasDragListener(null);
         App.instance.removeKeyListener(this);
-
-//        mRepository.save(root);
     }
 
     @Override
     public void onStartMove(Point2D point) {
-
-
-//        switch (mode){
-//            case SELECT:
-//
-//            case MOVE:
         handleSelect(point);
-//                break;
-//        }
-
 
     }
 
@@ -81,17 +67,16 @@ public class BodyEditAction extends Action implements CanvasRenderer.OnCanvasDra
             selected.clear();
         }
 
-        boolean shouldBreak = false;
         for (CcNode node : mRenderer.getNodes()) {
             final Point2D point2D = node.convertToLocalSpace(point);
             if (node.contains(point2D) && !selected.contains(node)) {
                 selected.add(node);
-                shouldBreak = true;
-            }
-            node.setActive(selected.contains(node));
-            if(shouldBreak){
                 break;
             }
+        }
+
+        for (CcNode node : mRenderer.getNodes()) {
+            node.setActive(selected.contains(node));
         }
     }
 
@@ -123,14 +108,12 @@ public class BodyEditAction extends Action implements CanvasRenderer.OnCanvasDra
     @Override
     public void onKeyPressed(KeyEvent event) {
         switch (event.getCode()) {
-            case T:
+            case E:
                 mode = Mode.MOVE;
                 break;
             case R:
                 mode = Mode.ROTATE;
                 break;
-            case Q:
-                mode = Mode.SELECT;
 
         }
     }

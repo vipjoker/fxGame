@@ -14,25 +14,31 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import static mygame.editor.util.Constants.ACTION_BOX_2D;
-import static mygame.editor.util.Constants.ACTION_EDIT_POINTS;
 
 
 public class ToolbarController implements Initializable {
+    public Button btnCreate;
     private Button btnRun = new Button("Run");
     private Button btnEditPoints = new Button("Edit points");
     private Button btnMove = new Button ("Move");
     private Button btnMoveFixture = new Button("Move");
     private Button btnRotate = new Button("Rotate") ;
 
+    private Button btnCreateSquare = new Button("Create square");
+    private Button btnCreateCircle = new Button("Create circle");
+    private Button btnCreateChain = new Button("Create chain");
+
+
     private Button [] bodyActions = {btnMove,btnRotate,btnRun};
     private Button [] fixtureActions = {btnMoveFixture,btnEditPoints,btnRun};
-
+    private Button [] createAction = {btnCreateSquare,btnCreateCircle,btnCreateChain};
 
 
     public Button btnBody;
     public Button btnFixture;
     public HBox hBoxActions;
     private boolean isBodyMode = false;
+    private boolean isFixtureMode = false;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -42,47 +48,37 @@ public class ToolbarController implements Initializable {
         btnRun.setOnMouseClicked(this::onRun);
         btnMoveFixture.setOnMouseClicked(this::onFixtureMove);
         btnEditPoints.setOnMouseClicked(this::onEditPoint);
-        onBodyMode(null);
     }
 
     private void onBodyRotate(MouseEvent mouseEvent) {
         clearEditableSelection();
         btnRotate.getStyleClass().add("selected");
+        App.instance.observableAction.setValue(Constants.ACTION_ROTATE);
     }
 
     private void onFixtureMove(MouseEvent mouseEvent) {
-        MainController controller = App.instance.getConroller(MainController.class);
         clearEditableSelection();
         btnMoveFixture.getStyleClass().add("selected");
-        controller.switchDrawer(Constants.ACTION_FIXTURE_EDIT);
+        App.instance.observableAction.setValue(Constants.ACTION_MOVE);
 
     }
 
     private void onBodyMove(MouseEvent mouseEvent) {
-        MainController controller = App.instance.getConroller(MainController.class);
         clearEditableSelection();
         btnMove.getStyleClass().add("selected");
-        controller.switchDrawer(Constants.ACTION_BODY_EDIT);
-
-
+        App.instance.observableAction.setValue(Constants.ACTION_MOVE);
     }
 
-
-
-
-
-
-
     public void onEditPoint(MouseEvent actionEvent) {
-        MainController controller = App.instance.getConroller(MainController.class);
+        MainController controller = App.instance.getController(MainController.class);
         clearEditableSelection();
         btnEditPoints.getStyleClass().add("selected");
 
-        App.instance.observableAction.set(ACTION_EDIT_POINTS);
+        App.instance.observableAction.set(Constants.ACTION_POINT_EDIT);
     }
 
     public void onRun(MouseEvent actionEvent) {
-        MainController controller = App.instance.getConroller(MainController.class);
+        MainController controller = App.instance.getController(MainController.class);
         clearEditableSelection();
         btnRun.getStyleClass().add("selected");
         controller.switchDrawer(ACTION_BOX_2D);
@@ -98,15 +94,20 @@ public class ToolbarController implements Initializable {
 
 
     public void onFixtureMode(ActionEvent actionEvent) {
-        if(!isBodyMode){
+        if(isFixtureMode){
             return;
         }
+        isFixtureMode = true;
         isBodyMode = false;
         btnFixture.getStyleClass().add("selected");
         btnBody.getStyleClass().remove("selected");
 
         hBoxActions.getChildren().clear();
         hBoxActions.getChildren().addAll(fixtureActions);
+
+        MainController controller = App.instance.getController(MainController.class);
+        controller.switchDrawer(Constants.ACTION_FIXTURE_EDIT);
+
     }
 
     public void onBodyMode(ActionEvent actionEvent) {
@@ -114,11 +115,19 @@ public class ToolbarController implements Initializable {
             return;
         }
 
-        isBodyMode  = true;
+        isBodyMode = true;
+        isFixtureMode = false;
+         onBodyMove(null);
         btnBody.getStyleClass().add("selected");
         btnFixture.getStyleClass().remove("selected");
 
         hBoxActions.getChildren().clear();
         hBoxActions.getChildren().addAll(bodyActions);
+        MainController controller = App.instance.getController(MainController.class);
+        controller.switchDrawer(Constants.ACTION_BODY_EDIT);
+    }
+
+    public void onCreateMode(ActionEvent actionEvent) {
+
     }
 }

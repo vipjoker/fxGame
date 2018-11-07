@@ -1,10 +1,12 @@
 package mygame.editor.controlers;
 
+import javafx.beans.Observable;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
@@ -15,9 +17,11 @@ import javafx.scene.input.SwipeEvent;
 import javafx.scene.layout.GridPane;
 import mygame.editor.App;
 import mygame.editor.model.Point;
+import mygame.editor.model.Selectable;
 import mygame.editor.views.CcNode;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
@@ -51,12 +55,19 @@ public class InfoController implements Initializable {
 
         ObservableList<String> strings = FXCollections.observableArrayList("Static", "Kinematic", "Dynamic");
 
+        App.instance.selected.addListener(this::onSelected);
+
         comboType.setItems(strings);
 
         setListeners();
         initSpinners();
         setupScrollers();
     }
+
+    private void onSelected(ListChangeListener.Change<? extends Selectable> c) {
+        i
+    }
+
     private double counter = 0;
     private double value;
     private void setupScrollers() {

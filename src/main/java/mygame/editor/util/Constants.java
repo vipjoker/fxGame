@@ -28,12 +28,11 @@ public class Constants {
     public static final String ACTION_MOVE = "move";
     public static final String ACTION_ROTATE = "rotate";
     public static final String ACTION_FIXTURE_EDIT = "edit";
-    public static final String ACTION_EDIT_POINTS = "edit_points";
+    public static final String ACTION_POINT_EDIT = "point_edit";
     public static final String ACTION_CREATE_SQUARE_BODY = "create_square_body";
     public static final String ACTION_CREATE_CIRCLE_BODY = "create_circle_body";
     public static final String ACTION_CREATE_CHAIN_BODY = "create_chain_body";
     public static final String ACTION_CREATE_EDGE_BODY = "create_edge_body";
-    public static final String ACTION_CREATE_JOINT = "create_joint";
     public static final String ACTION_BOX_2D = "box2d_action";
 
     public static final String ACTION_DYNAMIC = "dynamic";

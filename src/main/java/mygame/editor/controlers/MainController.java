@@ -1,41 +1,32 @@
 package mygame.editor.controlers;
 
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.control.*;
-
+import javafx.scene.control.SplitPane;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
-
-import javafx.scene.layout.*;
-import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
-import javafx.stage.Window;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import mygame.editor.App;
 import mygame.editor.actions.*;
 import mygame.editor.component.SpriteComponent;
 import mygame.editor.model.TreeFileHolder;
+import mygame.editor.render.CanvasRenderer;
 import mygame.editor.render.TreeItemPath;
-import mygame.editor.repository.InMemoryRepository;
 import mygame.editor.repository.NodeRepository;
 import mygame.editor.util.Resources;
 import mygame.editor.views.CcNode;
-import mygame.editor.render.CanvasRenderer;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
-import java.util.*;
-
-import javafx.scene.control.TreeView;
-import javafx.scene.control.TreeItem;
-import mygame.editor.data.DbConnection;
-import mygame.editor.data.NodeDao;
-
-import java.sql.Connection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.ResourceBundle;
 
 import static mygame.editor.util.Constants.*;
 
@@ -129,9 +120,7 @@ public class MainController implements Initializable {
         actions.put(ACTION_CREATE_CIRCLE_BODY, new CreateBodyAction(canvasRenderer, repository, CreateBodyAction.Mode.CIRCLE));
         actions.put(ACTION_CREATE_CHAIN_BODY, new CreateBodyAction(canvasRenderer, repository, CreateBodyAction.Mode.CHAIN));
         actions.put(ACTION_CREATE_EDGE_BODY, new CreateBodyAction(canvasRenderer, repository, CreateBodyAction.Mode.EDGE));
-        actions.put(ACTION_CREATE_JOINT, new CreateJointAction(canvasRenderer, repository));
         actions.put(ACTION_SPRITE, new CreateSpriteAction(canvasRenderer, repository));
-        actions.put(ACTION_EDIT_POINTS, new EditPointsAction(canvasRenderer, repository));
         switchDrawer(ACTION_BODY_EDIT);
     }
 
@@ -173,43 +162,6 @@ public class MainController implements Initializable {
     }
 
 
-    public void onSave(ActionEvent event) {
-
-        try (Connection connection = DbConnection.getDbConnection()) {
-            connection.setAutoCommit(false);
-            NodeDao dao = new NodeDao(connection);
-
-            connection.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-    }
-
-    public void onLoad(ActionEvent event) {
-        Node node = (Node) event.getTarget();
-        Window window = node.getScene().getWindow();
-
-
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open level");
-
-        File file = fileChooser.showOpenDialog(window);
-
-
-    }
-
-
-    public void onAdd(ActionEvent event) {
-        Node node = (Node) event.getTarget();
-        Window window = node.getScene().getWindow();
-        DirectoryChooser directoryChooser = new DirectoryChooser();
-        directoryChooser.setTitle("Open Resource File");
-        File imageDir = directoryChooser.showDialog(window);
-
-
-    }
 
     public void switchDrawer(String action) {
         App.instance.observableAction.set(action);
@@ -217,9 +169,4 @@ public class MainController implements Initializable {
         currentDrawer = actions.get(action);
         currentDrawer.init();
     }
-
-    public void onEditPoint(ActionEvent actionEvent) {
-        switchDrawer(ACTION_EDIT_POINTS);
-    }
-
 }
