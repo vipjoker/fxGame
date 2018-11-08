@@ -23,8 +23,8 @@ public class CcEditBodyNode extends CcNode{
     public CcEditBodyNode(B2Body body) {
         this.editBody = body;
         isInSimulateMode = true;
-        x = editBody.getPosition().getX() * 32;
-        y = editBody.getPosition().getY()* 32;
+        x.set(editBody.getPosition().getX() * 32);
+        y.set(editBody.getPosition().getY()* 32);
         setAngle(-editBody.getAngle() * MathUtils.radDeg);
 
         for (B2Fixture fixture : body.getFixture()) {
@@ -92,8 +92,8 @@ public class CcEditBodyNode extends CcNode{
     private void update(){
 
 
-            x = editBody.getPosition().getX() * 32;
-            y = editBody.getPosition().getY()* 32;
+            x.set(editBody.getPosition().getX() * 32);
+            y.set(editBody.getPosition().getY()* 32);
             setAngle(-editBody.getAngle() * MathUtils.radDeg);
 
     }
@@ -136,6 +136,10 @@ public class CcEditBodyNode extends CcNode{
 
     public void save(){
 
+    }
+
+    public B2Body getEditBody(){
+        return editBody;
     }
 }
 

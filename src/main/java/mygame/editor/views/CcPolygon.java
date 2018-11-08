@@ -106,7 +106,7 @@ public class CcPolygon extends CcFixtureNode {
 
     @Override
     public void setY(double y) {
-        double dy = this.y - y;
+        double dy = this.y.doubleValue() - y;
         for (Vector2 vector2 : fixture.getPoints()) {
             vector2.sub(0,(float) dy/32);
         }
@@ -116,7 +116,7 @@ public class CcPolygon extends CcFixtureNode {
 
     @Override
     public void setX(double x) {
-        double dx = this.x - x;
+        double dx = this.x.doubleValue() - x;
 
         for (Vector2 vector2 : fixture.getPoints()) {
             vector2.sub((float)dx/32,0);

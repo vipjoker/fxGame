@@ -155,8 +155,8 @@ public class FixtureEditAction extends Action implements CanvasRenderer.OnCanvas
         switch (mode){
             case MOVE:
                 for (CcNode s : selected) {
-                    double newX = s.getX() - point.getX();
-                    double newY = s.getY() + point.getY();
+                    double newX = s.getX().doubleValue() - point.getX();
+                    double newY = s.getY().doubleValue() + point.getY();
                     s.setX(newX);
                     s.setY(newY);
                 }

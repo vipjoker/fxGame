@@ -8,8 +8,8 @@ import mygame.editor.util.Constants;
 public class CcRectangle extends CcNode {
 
     public CcRectangle(double x, double y, double width, double height) {
-        this.x = x;
-        this.y = y;
+        this.x.set(x);
+        this.y.set(y);
         this.width = width;
         this.height = height;
 

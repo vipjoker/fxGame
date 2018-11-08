@@ -31,7 +31,7 @@ public class ToolbarController implements Initializable {
 
     private Button [] bodyActions = {btnMove,btnRotate,btnRun};
     private Button [] fixtureActions = {btnMoveFixture,btnEditPoints,btnRun};
-    private Button [] createAction = {btnCreateSquare,btnCreateCircle,btnCreateChain};
+    private Button [] createActions = {btnCreateSquare,btnCreateCircle,btnCreateChain};
 
 
     public Button btnBody;
@@ -48,6 +48,7 @@ public class ToolbarController implements Initializable {
         btnRun.setOnMouseClicked(this::onRun);
         btnMoveFixture.setOnMouseClicked(this::onFixtureMove);
         btnEditPoints.setOnMouseClicked(this::onEditPoint);
+
     }
 
     private void onBodyRotate(MouseEvent mouseEvent) {
@@ -101,6 +102,7 @@ public class ToolbarController implements Initializable {
         isBodyMode = false;
         btnFixture.getStyleClass().add("selected");
         btnBody.getStyleClass().remove("selected");
+        btnCreate.getStyleClass().remove("selected");
 
         hBoxActions.getChildren().clear();
         hBoxActions.getChildren().addAll(fixtureActions);
@@ -120,6 +122,7 @@ public class ToolbarController implements Initializable {
          onBodyMove(null);
         btnBody.getStyleClass().add("selected");
         btnFixture.getStyleClass().remove("selected");
+        btnCreate.getStyleClass().remove("selected");
 
         hBoxActions.getChildren().clear();
         hBoxActions.getChildren().addAll(bodyActions);
@@ -128,6 +131,12 @@ public class ToolbarController implements Initializable {
     }
 
     public void onCreateMode(ActionEvent actionEvent) {
+        btnBody.getStyleClass().remove("selected");
+        btnFixture.getStyleClass().remove("selected");
+        btnCreate.getStyleClass().add("selected");
+
+        hBoxActions.getChildren().clear();
+        hBoxActions.getChildren().addAll(createActions);
 
     }
 }

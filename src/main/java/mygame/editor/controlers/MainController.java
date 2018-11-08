@@ -161,7 +161,9 @@ public class MainController implements Initializable {
 
     }
 
-
+    public CanvasRenderer getCanvasRenderer() {
+        return canvasRenderer;
+    }
 
     public void switchDrawer(String action) {
         App.instance.observableAction.set(action);

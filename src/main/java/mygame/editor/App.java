@@ -15,6 +15,7 @@ import mygame.editor.interfaces.KeyListener;
 import mygame.editor.model.Selectable;
 import mygame.editor.repository.InMemoryRepository;
 import mygame.editor.repository.NodeRepository;
+import mygame.editor.views.CcNode;
 
 import java.util.*;
 
@@ -30,7 +31,7 @@ public class App extends Application {
     public static Set<KeyCode> buttons  = new HashSet<>();
     public final SimpleStringProperty observableAction = new SimpleStringProperty("");
     public final NodeRepository repository = new InMemoryRepository();
-    public final ObservableList<Selectable> selected = FXCollections.observableArrayList();
+    public final ObservableList<CcNode> selected = FXCollections.observableArrayList();
 
     public void registerController(Object object) {
         controllers.put(object.getClass(),object);

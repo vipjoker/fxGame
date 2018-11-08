@@ -11,8 +11,8 @@ public class CcVertex extends CcNode {
 
     public CcVertex(Vector2 point) {
         this.point = point;
-        this.x = point.x;
-        this.y = -point.y;
+        this.x.set(point.x);
+        this.y.set( -point.y);
     }
 
 
@@ -39,7 +39,7 @@ public class CcVertex extends CcNode {
     @Override
     public void move(Point2D point2D) {
         super.move(point2D);
-        point.set((float) x,(float)-y);
+        point.set(x.floatValue(),-y.floatValue());
     }
 
     @Override
