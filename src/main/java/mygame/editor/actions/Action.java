@@ -5,6 +5,8 @@ import javafx.animation.FillTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.StrokeTransition;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
@@ -16,7 +18,7 @@ import mygame.editor.model.Point;
 import java.util.List;
 
 
-public abstract class Action {
+public abstract class Action implements ChangeListener<String>{
 
     protected final CanvasRenderer mRenderer;
     protected final NodeRepository mRepository;
@@ -29,4 +31,9 @@ public abstract class Action {
 
     public abstract void finishDrawing();
 
+
+    @Override
+    public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+
+    }
 }

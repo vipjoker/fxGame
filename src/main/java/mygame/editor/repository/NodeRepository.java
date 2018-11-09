@@ -1,7 +1,7 @@
 package mygame.editor.repository;
 
-import Editor.Vec2f;
 import com.badlogic.gdx.math.Vector2;
+import javafx.collections.ListChangeListener;
 import mygame.editor.model.box2d.B2Body;
 import mygame.editor.model.box2d.B2Joint;
 import mygame.editor.views.CcNode;
@@ -40,6 +40,8 @@ public interface NodeRepository {
 
     void saveGravity(float x, float y);
 
+    void listenForBodies(ListChangeListener<B2Body> listener);
 
+    void listenForJoints(ListChangeListener<B2Joint> listener);
 
 }

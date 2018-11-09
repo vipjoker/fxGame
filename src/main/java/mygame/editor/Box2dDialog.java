@@ -14,7 +14,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import mygame.editor.util.Constants;
-import mygame.editor.controlers.Controller;
+import mygame.editor.controlers.MainController;
 import mygame.editor.ui.ChainFixture;
 import mygame.editor.ui.CircleFixture;
 import mygame.editor.ui.PhysicsNode;
@@ -35,9 +35,9 @@ public class  Box2dDialog implements TimerCounter.FrameRateCallback {
     Canvas canvas;
     List<PhysicsNode> nodes = new ArrayList<>();
     private AnimationTimer animationTimer;
-    Controller controller;
+    MainController controller;
 
-    public Box2dDialog(Controller controller) {
+    public Box2dDialog(MainController controller) {
         this.controller = controller;
     }
 

@@ -106,7 +106,7 @@ public class CcPolygon extends CcFixtureNode {
 
     @Override
     public void setY(double y) {
-        double dy = this.y - y;
+        double dy = this.y.doubleValue() - y;
         for (Vector2 vector2 : fixture.getPoints()) {
             vector2.sub(0,(float) dy/32);
         }
@@ -116,7 +116,7 @@ public class CcPolygon extends CcFixtureNode {
 
     @Override
     public void setX(double x) {
-        double dx = this.x - x;
+        double dx = this.x.doubleValue() - x;
 
         for (Vector2 vector2 : fixture.getPoints()) {
             vector2.sub((float)dx/32,0);
@@ -214,5 +214,12 @@ public class CcPolygon extends CcFixtureNode {
             final Vector2 box2dVec = Box2dUtil.toBox2d(vector2);
             fixture.getPoints().add(box2dVec);
         }
+    }
+
+    @Override
+    public void addPoint(javafx.geometry.Point2D point) {
+        final javafx.geometry.Point2D p = convertToLocalSpace(point);
+        points.add(new Vector2((float) p.getX(),(float) -p.getY()));
+
     }
 }

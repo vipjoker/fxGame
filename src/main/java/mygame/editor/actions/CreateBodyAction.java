@@ -22,7 +22,7 @@ public class CreateBodyAction extends Action implements CanvasRenderer.OnCanvasD
 
     @Override
     public void init() {
-
+        mRenderer.getNodes().clear();
         mRenderer.setOnCanvasDragListener(this);
         final List<B2Body> bodies = mRepository.getBodies();
         for (B2Body body : bodies) {
@@ -80,7 +80,7 @@ public class CreateBodyAction extends Action implements CanvasRenderer.OnCanvasD
 
         CcEditBodyNode bodyNode = new CcEditBodyNode(body);
 
-
+        body.setName("Body " + mRepository.getBodies().size());
         mRepository.saveBody(body);
         mRenderer.addChild(bodyNode);
         mRenderer.update();

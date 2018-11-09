@@ -19,15 +19,11 @@ import mygame.editor.views.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by oleh on 3/27/17.
- */
 public class FixtureEditAction extends Action implements CanvasRenderer.OnCanvasDragListener,KeyListener {
 
-    private InfoController mController;
 
     enum Mode{
-        SELECT,MOVE,ROTATE,EDIT_VERTEX
+        SELECT,MOVE,ROTATE, ADD_VERTEX, EDIT_VERTEX
     }
     private final List<CcFixtureNode> selected = new ArrayList<>();
     private final List<CcVertex> editablePoints = new ArrayList<>();
@@ -36,9 +32,8 @@ public class FixtureEditAction extends Action implements CanvasRenderer.OnCanvas
     private final List<CcEditBodyNode> editBodyNodes = new ArrayList<>();
     private Mode mode = Mode.SELECT;
 
-    public FixtureEditAction(CanvasRenderer renderer, NodeRepository repository, InfoController controller) {
+    public FixtureEditAction(CanvasRenderer renderer, NodeRepository repository) {
         super(renderer, repository);
-        this.mController = controller;
     }
 
     @Override
@@ -50,10 +45,6 @@ public class FixtureEditAction extends Action implements CanvasRenderer.OnCanvas
             mRenderer.addChild(node);
             editBodyNodes.add(node);
         }
-
-
-
-
 
         mRenderer.update();
         mRenderer.setOnCanvasDragListener(this);
@@ -91,6 +82,14 @@ public class FixtureEditAction extends Action implements CanvasRenderer.OnCanvas
             case MOVE:
 
                 break;
+            case ADD_VERTEX:
+                if(selected.size() == 1){
+                    final CcFixtureNode ccFixtureNode = selected.get(0);
+                    ccFixtureNode.addPoint(point);
+                }else{
+                    mode = Mode.SELECT;
+                }
+
         }
 
 
@@ -147,8 +146,8 @@ public class FixtureEditAction extends Action implements CanvasRenderer.OnCanvas
         switch (mode){
             case MOVE:
                 for (CcNode s : selected) {
-                    double newX = s.getX() - point.getX();
-                    double newY = s.getY() + point.getY();
+                    double newX = s.getX().doubleValue() - point.getX();
+                    double newY = s.getY().doubleValue() + point.getY();
                     s.setX(newX);
                     s.setY(newY);
                 }
@@ -190,6 +189,9 @@ public class FixtureEditAction extends Action implements CanvasRenderer.OnCanvas
                 break;
             case V:
                 mode = Mode.EDIT_VERTEX;
+                break;
+            case A:
+                mode = Mode.ADD_VERTEX;
                 break;
 
         }

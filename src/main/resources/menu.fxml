@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<MenuBar xmlns="http://javafx.com/javafx"
+         xmlns:fx="http://javafx.com/fxml"
+         fx:id="menuBar"
+         fx:controller="mygame.editor.controlers.MenuController" VBox.vgrow="NEVER">
+<menus>
+    <Menu mnemonicParsing="false" text="GAMED">
+        <items>
+            <MenuItem mnemonicParsing="false" text="Prefferences"/>
+            <MenuItem mnemonicParsing="false" text="About"/>
+            <Menu mnemonicParsing="false" onAction="#onAdd" text="Open folder"/>
+            <SeparatorMenuItem mnemonicParsing="false"/>
+            <MenuItem mnemonicParsing="false" text="Close"/>
+            <MenuItem mnemonicParsing="false" onAction="#onLoad" text="Load"/>
+            <MenuItem mnemonicParsing="false" onAction="#onSave" text="Save"/>
+            <MenuItem mnemonicParsing="false" text="Revert"/>
+            <SeparatorMenuItem mnemonicParsing="false"/>
+            <MenuItem mnemonicParsing="false" text="Preferences…"/>
+            <SeparatorMenuItem mnemonicParsing="false"/>
+            <MenuItem mnemonicParsing="false" text="Quit"/>
+        </items>
+    </Menu>
+    <Menu mnemonicParsing="false" text="Edit">
+        <items>
+            <MenuItem mnemonicParsing="false" text="Undo"/>
+            <MenuItem mnemonicParsing="false" text="Redo"/>
+            <SeparatorMenuItem mnemonicParsing="false"/>
+            <MenuItem mnemonicParsing="false" text="Cut"/>
+            <MenuItem mnemonicParsing="false" text="Copy"/>
+            <MenuItem mnemonicParsing="false" text="Paste"/>
+            <MenuItem mnemonicParsing="false" text="Delete"/>
+            <SeparatorMenuItem mnemonicParsing="false"/>
+            <MenuItem mnemonicParsing="false" text="Select All"/>
+            <MenuItem mnemonicParsing="false" text="Unselect All"/>
+        </items>
+    </Menu>
+    <Menu mnemonicParsing="false" text="Level">
+        <items>
+            <MenuItem mnemonicParsing="false" text="Level properties"/>
+            <SeparatorMenuItem mnemonicParsing="false"/>
+            <MenuItem mnemonicParsing="false" text="New Level"/>
+            <MenuItem mnemonicParsing="false" text="Open Level"/>
+            <MenuItem mnemonicParsing="false" text="Save Level"/>
+            <MenuItem mnemonicParsing="false" text="Save Level As"/>
+            <MenuItem mnemonicParsing="false" text="Close Level"/>
+        </items>
+    </Menu>
+    <Menu mnemonicParsing="false" text="View">
+        <items>
+            <CheckMenuItem mnemonicParsing="false" text="Editing Grid"/>
+            <CheckMenuItem mnemonicParsing="false" text="Center View"/>
+            <CheckMenuItem mnemonicParsing="false" text="Zoom out"/>
+            <CheckMenuItem mnemonicParsing="false" text="Zoom in"/>
+            <SeparatorMenuItem mnemonicParsing="false"/>
+            <CheckMenuItem mnemonicParsing="false" text="Layers"/>
+            <CheckMenuItem mnemonicParsing="false" text="Tools"/>
+            <CheckMenuItem mnemonicParsing="false" text="Tile Palette"/>
+            <CheckMenuItem mnemonicParsing="false" text="Entities"/>
+        </items>
+    </Menu>
+    <Menu mnemonicParsing="false" text="Utilities">
+        <items>
+            <MenuItem mnemonicParsing="false" text="FileRenamer"/>
+        </items>
+    </Menu>
+</menus>
+</MenuBar>

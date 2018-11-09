@@ -1,6 +1,7 @@
 package mygame.editor.repository;
 
 import com.badlogic.gdx.math.Vector2;
+import javafx.collections.ListChangeListener;
 import mygame.editor.component.Component;
 import mygame.editor.component.SpriteComponent;
 import mygame.editor.data.*;
@@ -213,6 +214,13 @@ public class SqlNodeRepository implements NodeRepository {
 
     }
 
+    @Override
+    public void listenForBodies(ListChangeListener<B2Body> listener) {
 
+    }
 
+    @Override
+    public void listenForJoints(ListChangeListener<B2Joint> listener) {
+
+    }
 }

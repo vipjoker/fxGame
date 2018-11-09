@@ -107,4 +107,11 @@ public class CcChain extends CcFixtureNode {
 
         path = initPath();
     }
+
+    @Override
+    public void addPoint(Point2D point) {
+        final javafx.geometry.Point2D p = convertToLocalSpace(point);
+        points.add(new Vector2((float) p.getX(),(float) -p.getY()));
+
+    }
 }

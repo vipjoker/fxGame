@@ -1,22 +1,28 @@
 package mygame.editor.controlers;
 
+import com.sun.deploy.uitoolkit.impl.fx.FXProgressBarSkin;
+import com.sun.javafx.robot.FXRobot;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
+import javafx.embed.swt.FXCanvas;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
-import javafx.scene.input.InputMethodEvent;
-import javafx.scene.input.SwipeEvent;
 import javafx.scene.layout.GridPane;
+import javafx.util.StringConverter;
+import javafx.util.converter.DoubleStringConverter;
+import mygame.editor.App;
 import mygame.editor.model.Point;
+import mygame.editor.render.CanvasRenderer;
 import mygame.editor.views.CcNode;
 
 import java.net.URL;
+import java.text.*;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
@@ -42,34 +48,74 @@ public class InfoController implements Initializable {
     private CcNode ccNode;
     private Runnable mCallback;
     Pattern floatNumberPattern = Pattern.compile("[+-]?([0-9]*[.])?[0-9]+");
-    DoubleProperty property = new SimpleDoubleProperty(10);
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        App.instance.registerController(this);
+
         ObservableList<String> strings = FXCollections.observableArrayList("Static", "Kinematic", "Dynamic");
+
+        App.instance.selected.addListener(this::onSelected);
 
         comboType.setItems(strings);
 
-        setListeners();
+       // setListeners();
         initSpinners();
         setupScrollers();
+
+        etX.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                MainController controller = App.instance.getController(MainController.class);
+                controller.getCanvasRenderer().update();
+            }
+        });
+
+        etY.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                MainController controller = App.instance.getController(MainController.class);
+                controller.getCanvasRenderer().update();
+            }
+        });
+
     }
-    private double counter = 0;
+
+    private void onSelected(ListChangeListener.Change<? extends CcNode> c) {
+
+        if(ccNode != null){
+            etX.textProperty().unbindBidirectional(ccNode.getX());
+            etY.textProperty().unbindBidirectional(ccNode.getY());
+            etName.textProperty().unbindBidirectional(ccNode.name);
+        }
+
+
+        if(c.getList().size() == 1) {
+            ccNode = c.getList().get(0);
+            etX.textProperty().bindBidirectional(ccNode.getX(),new DecimalFormat());
+            etY.textProperty().bindBidirectional(ccNode.getY(),new DecimalFormat());
+            etName.textProperty().bindBidirectional(ccNode.name);
+
+
+
+        }
+    }
+
+    private double lastX = 0;
     private double value;
     private void setupScrollers() {
         tvX.setCursor(Cursor.H_RESIZE);
-
-
-        tvX.setOnMouseReleased(event -> counter = 0);
+        tvX.setOnMouseReleased(event -> lastX = 0);
         tvX.setOnMouseDragged(event->{
-            if(counter == 0){
-                counter = event.getX();
+            if(lastX == 0){
+                lastX = event.getX();
             }else{
 
-                double temp = event.getX() - counter;
+                double temp = event.getX() - lastX;
                 value += temp;
                 tvX.setText(String.valueOf(value));
-                counter = event.getX();
+                etX.setText(String.valueOf(value));
+                lastX = event.getX();
             }
 
         });
@@ -92,6 +138,7 @@ public class InfoController implements Initializable {
     }
 
     private void setListeners() {
+
         etX.textProperty().addListener((observable, oldValue, newValue) -> {
 
 

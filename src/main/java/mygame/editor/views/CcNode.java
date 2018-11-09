@@ -1,34 +1,38 @@
 package mygame.editor.views;
 
 import com.badlogic.gdx.math.Vector2;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
-import javafx.scene.transform.Transform;
 import mygame.editor.component.Component;
 import mygame.editor.customShapes.Drawable;
-import mygame.editor.model.Point;
 
-import java.awt.geom.AffineTransform;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class CcNode implements Drawable {
     public int id;
     public int layer;
-    protected double x;
-    protected double y;
+    protected SimpleDoubleProperty x = new SimpleDoubleProperty(0);
+    protected SimpleDoubleProperty y = new SimpleDoubleProperty(0);
+
     protected double width;
     protected double height;
     public double scaleX = 1;
     public double scaleY = 1;
     private double angle;
     public Affine transform;
-    public String name;
+    public StringProperty name  = new SimpleStringProperty("");
     protected BoundingBox bBox;
     public boolean active;
     private CcNode parent;
@@ -71,7 +75,7 @@ public class CcNode implements Drawable {
     @Override
     public void draw(GraphicsContext context, long time) {
         context.save();
-        context.translate(x, -y);
+        context.translate(x.doubleValue(), -y.doubleValue());
         context.rotate(angle);
         context.scale(scaleX, scaleY);
         rasterize(context);
@@ -94,7 +98,7 @@ public class CcNode implements Drawable {
 
 
     public boolean contains(Point2D point2D){
-        Rectangle2D rectangle2D = new Rectangle2D(x,y,width,height);
+        Rectangle2D rectangle2D = new Rectangle2D(x.doubleValue(),y.doubleValue(),width,height);
         return rectangle2D.contains(point2D);
     }
 
@@ -108,8 +112,8 @@ public class CcNode implements Drawable {
     }
 
     public void move(Point2D point2D){
-        this.x -= point2D.getX();
-        this.y += point2D.getY();
+        this.x.subtract(point2D.getX()) ;
+        this.y.add(point2D.getY());
     }
 
     public void addComponent(Component component) {
@@ -133,7 +137,7 @@ public class CcNode implements Drawable {
     public final Point2D convertToLocalSpace(Point2D point){
 
         Affine affine = new Affine();
-        affine.appendTranslation(x,y);
+        affine.appendTranslation(x.doubleValue(),y.doubleValue());
         affine.appendRotation(angle);
         affine.appendScale(scaleX,scaleY);
         if(parent != null){
@@ -169,6 +173,7 @@ public class CcNode implements Drawable {
          for (CcNode ccNode : getChildren()) {
              ccNode.updateAll(function);
          }
+
          function.accept(this);
      }
 
@@ -225,21 +230,22 @@ public class CcNode implements Drawable {
 
     }
 
-    public double getX() {
+    public DoubleProperty getX() {
         return x;
     }
 
     public void setX(double x) {
-        this.x = x;
+        this.x.set(x);
+
         updateBoundingBox();
     }
 
-    public double getY() {
+    public DoubleProperty getY() {
         return y;
     }
 
     public void setY(double y) {
-        this.y = y;
+        this.y.set(y);
 
         updateBoundingBox();
     }

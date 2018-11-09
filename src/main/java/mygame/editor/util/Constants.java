@@ -18,30 +18,28 @@ public class Constants {
 
 
 
-    public static final String ACTION_POLYGON = "polygon";
-    public static final String ACTION_CIRCLE = "circle";
     public static final String ACTION_SPRITE = "sprite";
-    public static final String ACTION_RECTANGLE = "rectangle";
-    public static final String ACTION_CHAIN = "chain";
 
-    public static final String ACTION_SELECT = "select";
-    public static final String ACTION_MOVE = "move";
-    public static final String ACTION_ROTATE = "rotate";
-    public static final String ACTION_EDIT = "edit";
-    public static final String ACTION_EDIT_POINTS = "edit_points";
-    public static final String ACTION_CREATE_SQUARE_BODY = "create_square_body";
-    public static final String ACTION_CREATE_CIRCLE_BODY = "create_circle_body";
-    public static final String ACTION_CREATE_CHAIN_BODY = "create_chain_body";
-    public static final String ACTION_CREATE_EDGE_BODY = "create_edge_body";
-    public static final String ACTION_CREATE_JOINT = "create_joint";
-    public static final String ACTION_BOX_2D = "box2d_action";
+    public static final String MODE_BODY = "body_mode";
+    public static final String MODE_FIXTURE = "fixture_mode";
+    public static final String MODE_CREATE = "create_mode";
+    public static final String MODE_RUN = "run_mode";
 
-    public static final String ACTION_DYNAMIC = "dynamic";
-    public static final String ACTION_KINEMATIC = "kinematic";
-    public static final String ACTION_STATIC = "static";
+    public static final String PARAM_MOVE = "move_param";
+    public static final String PARAM_ROTATE = "rotate_param";
+    public static final String PARAM_EDIT_POINTS = "edit_param";
+    public static final String PARAM_SQUARE = "square_param";
+    public static final String PARAM_CIRCLE = "circle_param";
+    public static final String PARAM_CHAIN = "chain_param";
+    public static final String PARAM_EDGE = "edge_param";
+    public static final String PARAM_RUN = "run_param";
+    public static final String PARAM_PAUSE = "pause_param";
 
-    public static final String ACTION_REVOLUTE = "revolute";
-    public static final String ACTION_DISTANCE = "distance";
+
+    public static final String PARAM_REVOLUTE = "revolute_param";
+    public static final String PARAM_DISTANCE = "distance_param";
+
+
 
 
 }

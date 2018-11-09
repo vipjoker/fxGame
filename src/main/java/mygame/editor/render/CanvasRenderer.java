@@ -1,24 +1,22 @@
 package mygame.editor.render;
 
-import javafx.beans.value.ChangeListener;
+import javafx.beans.Observable;
 import javafx.beans.value.ObservableValue;
-import javafx.geometry.BoundingBox;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.SplitPane;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
-import mygame.editor.util.Constants;
 import mygame.editor.TimerCounter;
+import mygame.editor.util.Constants;
 import mygame.editor.views.CcNode;
 import mygame.editor.views.Global;
 import mygame.editor.views.Grid;
@@ -41,7 +39,8 @@ public class CanvasRenderer {
     private Point2D endRect;
 
     private Grid grid = new Grid();
-    private List<CcNode> nodes = new ArrayList<>();
+    private final ObservableList<CcNode> nodes = FXCollections.observableList(new ArrayList<>(), param ->
+            new Observable[]{param.name,param.getX(),param.getY()});
     private OnCanvasDragListener mOnCanvasDragListener;
 
     public CanvasRenderer(Pane pane) {
@@ -49,12 +48,15 @@ public class CanvasRenderer {
         Global.setHeight(800);
         Global.setWidth(800);
         pane.getChildren().add(canvas);
+        counter = new TimerCounter(new TimerCounter.FrameRateCallback() {
+            @Override
+            public void update(long delta) {
+                CanvasRenderer.this.scheduledUpdate();
+            }
+        });
+        counter.start();
+       // nodes.addListener((ListChangeListener<CcNode>) change -> update());
 
-
-//        AnchorPane.setTopAnchor(canvas, 0.0);
-//        AnchorPane.setBottomAnchor(canvas, 0.0);
-//        AnchorPane.setLeftAnchor(canvas, 0.0);
-//        AnchorPane.setRightAnchor(canvas, 0.0);
 
         graphicsContext = canvas.getGraphicsContext2D();
         pane.widthProperty().addListener((observable, oldValue, newValue) -> {
@@ -144,6 +146,7 @@ public class CanvasRenderer {
 
 
     private void onDrag(MouseEvent event) {
+        mouseCursor = new Point2D(event.getX(), event.getY());
         double x = event.getX();
         double y = event.getY();
         Point2D p = new Point2D(x, y);
@@ -178,6 +181,7 @@ public class CanvasRenderer {
     }
 
     private void onScroll(ScrollEvent scrollEvent) {
+
         scale += (scrollEvent.getDeltaY() / 1000);
 
         if (scale < 0.2) scale = 0.2;
@@ -208,8 +212,8 @@ public class CanvasRenderer {
         g.fillRect(0, 0, width, height);
         g.setFill(Constants.WHITE);
         g.save();
-        g.transform(new Affine(Affine.translate(translatex, translatey)));
         g.transform(new Affine(Affine.scale(this.scale, scale, scrollx, scrolly)));
+        g.transform(new Affine(Affine.translate(translatex / scale, translatey / scale)));
 
 
         g.translate(20, height - 20);
@@ -261,6 +265,11 @@ public class CanvasRenderer {
 
 
     public void update() {
+        System.out.println("update: " + Thread.currentThread().getName());
+//        draw(graphicsContext, Global.getWidth(), Global.getHeight());
+    }
+
+    public void scheduledUpdate(){
         draw(graphicsContext, Global.getWidth(), Global.getHeight());
     }
 

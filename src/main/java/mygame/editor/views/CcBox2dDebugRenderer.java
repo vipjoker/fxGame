@@ -8,17 +8,18 @@ import com.badlogic.gdx.utils.Array;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class CcBox2dDebugRenderer extends CcNode{
+public class CcBox2dDebugRenderer extends CcNode {
 
-    private final World world ;
+    private final World world;
     private Array<Body> buffer = new Array<>();
-    public CcBox2dDebugRenderer(World world){
+
+    public CcBox2dDebugRenderer(World world) {
         this.world = world;
     }
 
     @Override
-    public void rasterize (GraphicsContext context) {
-super.rasterize(context);
+    public void rasterize(GraphicsContext context) {
+        super.rasterize(context);
         world.getBodies(buffer);
         for (Body body : buffer) {
 
@@ -29,7 +30,7 @@ super.rasterize(context);
             float x = body.getPosition().x * 32;
             float y = body.getPosition().y * 32;
             float angle = -body.getAngle() * MathUtils.radDeg;
-            context.translate(x,y);
+            context.translate(x, y);
             context.rotate(angle);
 
             context.setFill(Color.WHITE.deriveColor(1, 1, 1, 0.5));
@@ -52,7 +53,6 @@ super.rasterize(context);
         }
 
 
-
-      ;
+        ;
     }
 }

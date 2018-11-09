@@ -1,12 +1,9 @@
 package mygame.editor.views;
 
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import mygame.editor.customShapes.Chain;
-import mygame.editor.model.box2d.B2Body;
 
 public class CcBodyNode extends CcNode {
     private Body body;
@@ -17,8 +14,8 @@ public class CcBodyNode extends CcNode {
             addFixture(fixture);
         }
 
-        x = body.getPosition().x * 32;
-        y = body.getPosition().y * 32;
+        x.set(body.getPosition().x * 32);
+        y.set(body.getPosition().y * 32);
         setAngle(-body.getAngle() * MathUtils.radDeg);
     }
 
@@ -50,8 +47,8 @@ public class CcBodyNode extends CcNode {
     private void update() {
 
 
-        x = body.getPosition().x * 32;
-        y = body.getPosition().y * 32;
+        x.set(body.getPosition().x * 32);
+        y.set(body.getPosition().y * 32);
         setAngle(-body.getAngle() * MathUtils.radDeg);
     }
 

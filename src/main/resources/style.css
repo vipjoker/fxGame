@@ -47,3 +47,24 @@
     -fx-pref-height	:20px;
     -fx-pref-width	:30px;
 }
+.button{
+    -fx-background-color: rgba(79,79,79,0.96);
+    -fx-background-radius: 0;
+
+}
+
+.button:pressed {
+}
+
+.button:focused {
+
+}
+
+.selected{
+    -fx-background-color: #5a9eff;
+}
+
+.container_border{
+    -fx-border-color: #464646;
+    -fx-border-width: 1px;
+}

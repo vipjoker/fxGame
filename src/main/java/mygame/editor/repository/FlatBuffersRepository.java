@@ -5,6 +5,7 @@ import Editor.NodeTree;
 import Editor.Vec2f;
 import com.badlogic.gdx.math.Vector2;
 import com.google.flatbuffers.FlatBufferBuilder;
+import javafx.collections.ListChangeListener;
 import mygame.editor.model.box2d.B2Body;
 import mygame.editor.model.box2d.B2Joint;
 import mygame.editor.views.CcNode;
@@ -249,6 +250,16 @@ public class FlatBuffersRepository implements NodeRepository {
 
     @Override
     public void deleteJoint(B2Joint joint) {
+
+    }
+
+    @Override
+    public void listenForBodies(ListChangeListener<B2Body> listener) {
+
+    }
+
+    @Override
+    public void listenForJoints(ListChangeListener<B2Joint> listener) {
 
     }
 }

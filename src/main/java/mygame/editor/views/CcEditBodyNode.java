@@ -2,6 +2,8 @@ package mygame.editor.views;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
@@ -23,9 +25,27 @@ public class CcEditBodyNode extends CcNode{
     public CcEditBodyNode(B2Body body) {
         this.editBody = body;
         isInSimulateMode = true;
-        x = editBody.getPosition().getX() * 32;
-        y = editBody.getPosition().getY()* 32;
+        x.set(editBody.getPosition().getX() * 32);
+        y.set(editBody.getPosition().getY()* 32);
         setAngle(-editBody.getAngle() * MathUtils.radDeg);
+
+        x.addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                editBody.getPosition().setX( (float) (newValue.doubleValue() /32.0));
+            }
+        });
+
+        y.addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                editBody.getPosition().setY((float) (newValue.doubleValue() /32.0));
+            }
+        });
+
+
+
+
 
         for (B2Fixture fixture : body.getFixture()) {
             addFixture(fixture);
@@ -35,19 +55,6 @@ public class CcEditBodyNode extends CcNode{
    }
 
 
-    @Override
-    public void setX(double x) {
-        super.setX(x);
-        editBody.getPosition().setX((float) x /32.0f);
-
-    }
-
-    @Override
-    public void setY(double y) {
-        super.setY(y);
-        editBody.getPosition().setY((float) y /32.0f);
-
-    }
 
     @Override
     public void setAngle(double angle) {
@@ -92,8 +99,8 @@ public class CcEditBodyNode extends CcNode{
     private void update(){
 
 
-            x = editBody.getPosition().getX() * 32;
-            y = editBody.getPosition().getY()* 32;
+            x.setValue(editBody.getPosition().getX() * 32);
+            y.setValue(editBody.getPosition().getY()* 32);
             setAngle(-editBody.getAngle() * MathUtils.radDeg);
 
     }
@@ -136,6 +143,10 @@ public class CcEditBodyNode extends CcNode{
 
     public void save(){
 
+    }
+
+    public B2Body getEditBody(){
+        return editBody;
     }
 }
 
