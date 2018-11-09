@@ -56,11 +56,15 @@ public class ParserMain {
             System.out.println(font.getPath());
             System.out.println(font.getUuid());
         }
-
         nodes.forEach((k,v)->{
             System.out.println("Key :" + k + " v : " + v);
 
-        });
+
+
+
+
+        } );
+
 
 
 
