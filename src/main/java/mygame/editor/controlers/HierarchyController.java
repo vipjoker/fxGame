@@ -1,16 +1,15 @@
 package mygame.editor.controlers;
 
-import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import mygame.editor.App;
+import mygame.editor.model.Command;
 import mygame.editor.model.box2d.B2Body;
 import mygame.editor.model.box2d.B2Joint;
 import mygame.editor.render.TreeItemHolder;
-import mygame.editor.render.TreeItemPath;
 import mygame.editor.views.CcNode;
 
 import java.net.URL;
@@ -93,7 +92,7 @@ public class HierarchyController implements Initializable {
             this.clazz = clazz;
         }
     }
-    private void onActionChange(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
+    private void onActionChange(ObservableValue<? extends Command> observableValue, Command oldValue, Command newValue) {
         System.out.println("Hierarchy " + newValue);
     }
 

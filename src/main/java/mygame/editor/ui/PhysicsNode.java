@@ -59,10 +59,7 @@ public class PhysicsNode extends Pane implements Bodyeable {
 
 
     private void onLayoutChange(ObservableValue<? extends Number> observable,Number oldValue,Number newValue){
-        InfoController infoController = controller.getInfoController();
-        infoController.setPositionInfo(new Point(getLayoutX(),getLayoutX()));
-        infoController.setWidthInfo(getWidth());
-        infoController.setHeightInfo(getHeight());
+
     }
 
 

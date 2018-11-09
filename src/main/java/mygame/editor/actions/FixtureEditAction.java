@@ -19,12 +19,8 @@ import mygame.editor.views.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by oleh on 3/27/17.
- */
 public class FixtureEditAction extends Action implements CanvasRenderer.OnCanvasDragListener,KeyListener {
 
-    private InfoController mController;
 
     enum Mode{
         SELECT,MOVE,ROTATE, ADD_VERTEX, EDIT_VERTEX
@@ -36,9 +32,8 @@ public class FixtureEditAction extends Action implements CanvasRenderer.OnCanvas
     private final List<CcEditBodyNode> editBodyNodes = new ArrayList<>();
     private Mode mode = Mode.SELECT;
 
-    public FixtureEditAction(CanvasRenderer renderer, NodeRepository repository, InfoController controller) {
+    public FixtureEditAction(CanvasRenderer renderer, NodeRepository repository) {
         super(renderer, repository);
-        this.mController = controller;
     }
 
     @Override
@@ -50,10 +45,6 @@ public class FixtureEditAction extends Action implements CanvasRenderer.OnCanvas
             mRenderer.addChild(node);
             editBodyNodes.add(node);
         }
-
-
-
-
 
         mRenderer.update();
         mRenderer.setOnCanvasDragListener(this);

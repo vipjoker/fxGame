@@ -41,10 +41,7 @@ public class Box2dAction extends Action implements TimerCounter.FrameRateCallbac
 
     @Override
     public void update(long delta) {
-
         world.step(1f/60f,8,3);
-
-        mRenderer.update();
     }
 
     @Override

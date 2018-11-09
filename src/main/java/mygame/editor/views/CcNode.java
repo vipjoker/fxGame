@@ -236,6 +236,7 @@ public class CcNode implements Drawable {
 
     public void setX(double x) {
         this.x.set(x);
+
         updateBoundingBox();
     }
 

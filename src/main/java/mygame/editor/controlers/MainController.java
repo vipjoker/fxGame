@@ -1,6 +1,8 @@
 package mygame.editor.controlers;
 
 import javafx.application.Platform;
+import javafx.beans.Observable;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.SplitPane;
@@ -13,10 +15,12 @@ import javafx.scene.layout.VBox;
 import mygame.editor.App;
 import mygame.editor.actions.*;
 import mygame.editor.component.SpriteComponent;
+import mygame.editor.model.Command;
 import mygame.editor.model.TreeFileHolder;
 import mygame.editor.render.CanvasRenderer;
 import mygame.editor.render.TreeItemPath;
 import mygame.editor.repository.NodeRepository;
+import mygame.editor.util.Constants;
 import mygame.editor.util.Resources;
 import mygame.editor.views.CcNode;
 
@@ -39,7 +43,6 @@ public class MainController implements Initializable {
     public SplitPane root;
 
     public TreeView<TreeFileHolder> resourcesTreeview;
-    public HBox toolbar;
 
     private CanvasRenderer canvasRenderer;
     private Action currentDrawer;
@@ -54,10 +57,6 @@ public class MainController implements Initializable {
 
     }
 
-    public InfoController getInfoController() {
-        return infoController;
-    }
-
     private void setListeners() {
 
         Platform.runLater(() -> {
@@ -66,14 +65,20 @@ public class MainController implements Initializable {
             root.prefHeightProperty().bind(App.instance.stage.heightProperty());
             root.setDividerPositions(.2, .8);
             setLeftPane();
-            setRightPane();
             initActions();
+
         });
+        App.instance.observableAction.addListener(this::onActionChanged);
     }
 
+    private void onActionChanged(ObservableValue<? extends Command> observableValue, Command oldValue, Command newValue) {
+        switchDrawer(newValue.action);
+    }
 
-    private void setRightPane() {
-        infoController.setNameInfo("Test message");
+    private void switchDrawer(String newValue) {
+        if (currentDrawer != null) currentDrawer.finishDrawing();
+        currentDrawer = actions.get(newValue);
+        currentDrawer.init();
     }
 
 
@@ -113,9 +118,11 @@ public class MainController implements Initializable {
 
     private void initActions() {
         NodeRepository repository = App.instance.repository;
-        actions.put(ACTION_FIXTURE_EDIT, new FixtureEditAction(canvasRenderer, repository, infoController));
-        actions.put(ACTION_BODY_EDIT, new BodyEditAction(canvasRenderer, repository, infoController));
-        actions.put(ACTION_BOX_2D, new Box2dAction(canvasRenderer, repository));
+
+
+        actions.put(Constants.MODE_FIXTURE, new FixtureEditAction(canvasRenderer, repository));
+        actions.put(Constants.MODE_BODY, new BodyEditAction(canvasRenderer, repository, infoController));
+        actions.put(Constants.MODE_RUN, new Box2dAction(canvasRenderer, repository));
         actions.put(ACTION_CREATE_SQUARE_BODY, new CreateBodyAction(canvasRenderer, repository, CreateBodyAction.Mode.SQUARE));
         actions.put(ACTION_CREATE_CIRCLE_BODY, new CreateBodyAction(canvasRenderer, repository, CreateBodyAction.Mode.CIRCLE));
         actions.put(ACTION_CREATE_CHAIN_BODY, new CreateBodyAction(canvasRenderer, repository, CreateBodyAction.Mode.CHAIN));
@@ -165,10 +172,5 @@ public class MainController implements Initializable {
         return canvasRenderer;
     }
 
-    public void switchDrawer(String action) {
-        App.instance.observableAction.set(action);
-        if (currentDrawer != null) currentDrawer.finishDrawing();
-        currentDrawer = actions.get(action);
-        currentDrawer.init();
-    }
+
 }

@@ -1,64 +1,45 @@
 package mygame.editor;
 
-import java.io.File;
-import java.nio.file.*;
-import java.util.stream.Collectors;
+import javafx.beans.Observable;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
+import javafx.util.Callback;
+
+import java.util.ArrayList;
 
 public class FileListener {
     public static void main(String[] args) {
-        ClassLoader classLoader = FileListener.class.getClassLoader();
-        File file = new File(classLoader.getResource("scripts/").getFile());
-        System.out.println(file.length());
+        final ObservableList<DoubleProperty> observableList = FXCollections.observableList(new ArrayList<>(), new Callback<DoubleProperty, javafx.beans.Observable[]>() {
+            @Override
+            public javafx.beans.Observable[] call(DoubleProperty param) {
+                return new Observable[]{param};
+            }
+        });
 
 
+        observableList.addListener(new ListChangeListener<DoubleProperty>() {
+            @Override
+            public void onChanged(Change<? extends DoubleProperty> change) {
+                change.next();
+                if(change.wasPermutated()) {
+                    final int from = change.getFrom();
+                    System.out.println(change +"  " + from + " " + change.getTo());
 
-        try (final WatchService watchService = FileSystems.getDefault().newWatchService()) {
-            final WatchKey watchKey = file.toPath().register(watchService, StandardWatchEventKinds.ENTRY_MODIFY,
-                    StandardWatchEventKinds.ENTRY_CREATE,
-                    StandardWatchEventKinds.ENTRY_DELETE);
-
-
-            WatchKey key;
-            while ((key = watchService.take()) != null) {
-                for (WatchEvent<?> event : key.pollEvents()) {
-                    System.out.println(
-                            "Event kind:" + event.kind()
-                                    + ". File affected: " + event.context() + ".");
-                    if(event.context() instanceof Path){
-                        System.out.println(Files.readAllLines((Path) event.context()).stream().collect(Collectors.joining()));
-                    }
                 }
-                key.reset();
+
             }
+        });
 
 
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
+        observableList.add(new SimpleDoubleProperty(10));
+        observableList.add(new SimpleDoubleProperty(15));
+        observableList.get(0).set(777);
+        observableList.get(1).set(555);
     }
 
 
-    private void listen() throws  Exception{
-        WatchService watchService
-                = FileSystems.getDefault().newWatchService();
-
-        Path path = Paths.get(System.getProperty("user.home"));
-
-        path.register(
-                watchService,
-                StandardWatchEventKinds.ENTRY_CREATE,
-                StandardWatchEventKinds.ENTRY_DELETE,
-                StandardWatchEventKinds.ENTRY_MODIFY);
-
-        WatchKey key;
-        while ((key = watchService.take()) != null) {
-            for (WatchEvent<?> event : key.pollEvents()) {
-                System.out.println(
-                        "Event kind:" + event.kind()
-                                + ". File affected: " + event.context() + ".");
-            }
-            key.reset();
-        }
-    }
 }
