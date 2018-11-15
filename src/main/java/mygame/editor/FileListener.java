@@ -115,5 +115,11 @@ public class FileListener extends Application {
         launch(args);
     }
 
+    static class TreeItem{
+        public TreeItem(String value){
 
+        }
+        String value;
+        List<TreeItem> items = new ArrayList<>();
+    }
 }
