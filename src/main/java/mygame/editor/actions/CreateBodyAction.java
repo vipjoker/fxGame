@@ -6,18 +6,20 @@ import javafx.geometry.Point2D;
 import mygame.editor.model.box2d.*;
 import mygame.editor.render.CanvasRenderer;
 import mygame.editor.repository.NodeRepository;
+import mygame.editor.util.Constants;
 import mygame.editor.views.CcEditBodyNode;
 
 import java.util.List;
 
 public class CreateBodyAction extends Action implements CanvasRenderer.OnCanvasDragListener{
 
-    private final Mode mode;
 
-    public CreateBodyAction(CanvasRenderer renderer, NodeRepository repository, Mode mode) {
+
+    public CreateBodyAction(CanvasRenderer renderer, NodeRepository repository) {
         super(renderer,repository);
-        this.mode = mode;
+        this.mode = Constants.PARAM_SQUARE;
     }
+
 
 
     @Override
@@ -48,25 +50,25 @@ public class CreateBodyAction extends Action implements CanvasRenderer.OnCanvasD
 
         B2Body body = null;
         switch (mode){
-            case SQUARE: {
+            case Constants.PARAM_SQUARE: {
                 body = new B2Body(B2Type.DYNAMIC, new B2Point(x, y));
                 B2Fixture fixture = new B2Fixture(B2FixtureType.POLYGON, Vector2.Zero, new Vector2(1, 0),new Vector2(1,1),new Vector2(0.5f,2),new Vector2(0,1));
                 body.addFixture(fixture);
             }
                 break;
-            case CIRCLE: {
+            case Constants.PARAM_CIRCLE: {
                 body = new B2Body(B2Type.DYNAMIC, new B2Point(x, y));
                 B2Fixture fixture = new B2Fixture(B2FixtureType.CIRCLE, Vector2.Zero, new Vector2(0, 1));
                 body.addFixture(fixture);
             }
                 break;
-            case CHAIN:{
+            case Constants.PARAM_CHAIN:{
                 body = new B2Body(B2Type.STATIC, new B2Point(x, y));
                 B2Fixture fixture = new B2Fixture(B2FixtureType.CHAIN, new Vector2(0,1), new Vector2(1, 0),new Vector2(2,0),new Vector2(3,1));
                 body.addFixture(fixture);
             }
                 break;
-            case EDGE:{
+            case Constants.PARAM_EDGE:{
 
             }
                 break;
@@ -95,7 +97,5 @@ public class CreateBodyAction extends Action implements CanvasRenderer.OnCanvasD
     public void onStopMove(Point2D point) {
 
     }
-    public enum Mode{
-        SQUARE,CIRCLE,EDGE,CHAIN
-    }
+
 }

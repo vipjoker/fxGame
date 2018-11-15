@@ -2,15 +2,13 @@ package mygame.editor;
 
 import javafx.scene.canvas.GraphicsContext;
 
-import mygame.editor.customShapes.Drawable;
-import mygame.editor.util.Constants;
 import mygame.editor.views.Global;
 
 /**
  * Created by Makhobey Oleh on 6/7/16.
  * email: tajcig@ya.ru
  */
-public class SimpleFPS implements Drawable {
+public class SimpleFPS {
 
     private long initTime;
     private long lastTime;
@@ -19,7 +17,7 @@ public class SimpleFPS implements Drawable {
         initTime = System.currentTimeMillis();
 
     }
-    @Override
+
     public void draw(GraphicsContext context,long time) {
         long tmp = System.currentTimeMillis();
 

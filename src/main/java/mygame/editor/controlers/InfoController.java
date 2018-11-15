@@ -108,7 +108,12 @@ public class InfoController implements Initializable {
         tvX.setOnMouseReleased(event -> lastX = 0);
         tvX.setOnMouseDragged(event->{
             if(lastX == 0){
-                lastX = event.getX();
+                if(etX.getText() != null && !etX.getText().isEmpty()){
+
+                    lastX = Double.parseDouble(etX.getText());
+                }else{
+                    lastX = event.getX();
+                }
             }else{
 
                 double temp = event.getX() - lastX;

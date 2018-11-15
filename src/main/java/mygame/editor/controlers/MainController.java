@@ -46,6 +46,7 @@ public class MainController implements Initializable {
 
     private CanvasRenderer canvasRenderer;
     private Action currentDrawer;
+    private String currentDrawerName;
     private Map<String, Action> actions = new HashMap<>();
 
     @FXML
@@ -72,13 +73,25 @@ public class MainController implements Initializable {
     }
 
     private void onActionChanged(ObservableValue<? extends Command> observableValue, Command oldValue, Command newValue) {
-        switchDrawer(newValue.action);
+        switchDrawer(newValue);
     }
 
-    private void switchDrawer(String newValue) {
-        if (currentDrawer != null) currentDrawer.finishDrawing();
-        currentDrawer = actions.get(newValue);
-        currentDrawer.init();
+    private void switchDrawer(Command command) {
+
+        if(!command.action.equals(currentDrawerName)){
+            if (currentDrawer != null) {
+                currentDrawer.finishDrawing();
+            }
+
+            currentDrawer = actions.get(command.action);
+            currentDrawer.init();
+        }
+
+
+        currentDrawerName = command.action;
+        currentDrawer.setMode(command.param);
+
+
     }
 
 
@@ -123,12 +136,9 @@ public class MainController implements Initializable {
         actions.put(Constants.MODE_FIXTURE, new FixtureEditAction(canvasRenderer, repository));
         actions.put(Constants.MODE_BODY, new BodyEditAction(canvasRenderer, repository, infoController));
         actions.put(Constants.MODE_RUN, new Box2dAction(canvasRenderer, repository));
-        actions.put(ACTION_CREATE_SQUARE_BODY, new CreateBodyAction(canvasRenderer, repository, CreateBodyAction.Mode.SQUARE));
-        actions.put(ACTION_CREATE_CIRCLE_BODY, new CreateBodyAction(canvasRenderer, repository, CreateBodyAction.Mode.CIRCLE));
-        actions.put(ACTION_CREATE_CHAIN_BODY, new CreateBodyAction(canvasRenderer, repository, CreateBodyAction.Mode.CHAIN));
-        actions.put(ACTION_CREATE_EDGE_BODY, new CreateBodyAction(canvasRenderer, repository, CreateBodyAction.Mode.EDGE));
-        actions.put(ACTION_SPRITE, new CreateSpriteAction(canvasRenderer, repository));
-        switchDrawer(ACTION_BODY_EDIT);
+        actions.put(Constants.MODE_CREATE, new CreateBodyAction(canvasRenderer, repository));
+
+        switchDrawer(new Command(Constants.MODE_BODY,Constants.PARAM_MOVE));
     }
 
     private void fillTreeView(String parent, File dir, TreeItem<TreeFileHolder> root) throws IOException {

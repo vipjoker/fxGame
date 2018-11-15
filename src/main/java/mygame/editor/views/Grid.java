@@ -10,15 +10,14 @@ import javafx.scene.text.TextAlignment;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
 import mygame.editor.util.Constants;
-import mygame.editor.customShapes.Drawable;
 
-public class Grid implements Drawable {
+public class Grid  {
 
     private int gridStep = 100;
     private int padding = 40;
     private Affine lastTransform;
 
-    @Override
+
     public void draw(GraphicsContext g, long time) {
         g.beginPath();
         g.setTextAlign(TextAlignment.RIGHT);

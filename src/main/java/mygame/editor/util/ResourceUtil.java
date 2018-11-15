@@ -12,6 +12,9 @@ public class ResourceUtil {
 
         StringBuilder builder = new StringBuilder();
         try {
+            if(!path.startsWith("/")){
+                path = "/" + path;
+            }
             URL resource = ResourceUtil.class.getResource(path);
             Files.readAllLines(Paths.get(resource.toURI())).forEach(builder::append);
         } catch (Exception e) {

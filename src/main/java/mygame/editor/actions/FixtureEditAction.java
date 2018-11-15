@@ -14,6 +14,7 @@ import mygame.editor.model.box2d.B2Body;
 import mygame.editor.model.box2d.B2Fixture;
 import mygame.editor.render.CanvasRenderer;
 import mygame.editor.repository.NodeRepository;
+import mygame.editor.util.Constants;
 import mygame.editor.views.*;
 
 import java.util.ArrayList;
@@ -22,15 +23,13 @@ import java.util.List;
 public class FixtureEditAction extends Action implements CanvasRenderer.OnCanvasDragListener,KeyListener {
 
 
-    enum Mode{
-        SELECT,MOVE,ROTATE, ADD_VERTEX, EDIT_VERTEX
-    }
+
     private final List<CcFixtureNode> selected = new ArrayList<>();
     private final List<CcVertex> editablePoints = new ArrayList<>();
     private final List<CcVertex> selectedPoints = new ArrayList<>();
 
     private final List<CcEditBodyNode> editBodyNodes = new ArrayList<>();
-    private Mode mode = Mode.SELECT;
+
 
     public FixtureEditAction(CanvasRenderer renderer, NodeRepository repository) {
         super(renderer, repository);
@@ -40,13 +39,13 @@ public class FixtureEditAction extends Action implements CanvasRenderer.OnCanvas
     public void init() {
         mRenderer.getNodes().clear();
         App.instance.addKeyListener(this);
+        mode = Constants.PARAM_MOVE;
         for (B2Body body : mRepository.getBodies()) {
             CcEditBodyNode node = new CcEditBodyNode(body);
             mRenderer.addChild(node);
             editBodyNodes.add(node);
         }
 
-        mRenderer.update();
         mRenderer.setOnCanvasDragListener(this);
 
     }
@@ -76,18 +75,16 @@ public class FixtureEditAction extends Action implements CanvasRenderer.OnCanvas
 //        }
 
         switch (mode){
-            case SELECT:
+            case Constants.PARAM_MOVE:
                 handleSelect(point);
                 break;
-            case MOVE:
-
-                break;
-            case ADD_VERTEX:
+            case Constants.PARAM_ADD_POINT:
                 if(selected.size() == 1){
                     final CcFixtureNode ccFixtureNode = selected.get(0);
                     ccFixtureNode.addPoint(point);
                 }else{
-                    mode = Mode.SELECT;
+
+                   // mode = Constants.SELECT;
                 }
 
         }
@@ -144,7 +141,7 @@ public class FixtureEditAction extends Action implements CanvasRenderer.OnCanvas
     public void onDrag(Point2D point) {
 
         switch (mode){
-            case MOVE:
+            case Constants.PARAM_MOVE:
                 for (CcNode s : selected) {
                     double newX = s.getX().doubleValue() - point.getX();
                     double newY = s.getY().doubleValue() + point.getY();
@@ -152,12 +149,8 @@ public class FixtureEditAction extends Action implements CanvasRenderer.OnCanvas
                     s.setY(newY);
                 }
                 break;
-            case ROTATE:
-                for (CcNode ccNode : selected) {
-                    ccNode.setAngle(ccNode.getAngle() - point.getX() - point.getY());
-                }
-                break;
-            case EDIT_VERTEX:
+
+            case Constants.PARAM_EDIT_POINTS:
                 for (CcVertex editablePoint : selectedPoints) {
                     editablePoint.move(point);
                 }
@@ -179,19 +172,14 @@ public class FixtureEditAction extends Action implements CanvasRenderer.OnCanvas
     public void onKeyPressed(KeyEvent event) {
         switch (event.getCode()){
             case T:
-                mode = Mode.MOVE;
+                mode =Constants.PARAM_MOVE;
                 break;
-            case R:
-                mode = Mode.ROTATE;
-                break;
-            case Q:
-                mode = Mode.SELECT;
-                break;
+
             case V:
-                mode = Mode.EDIT_VERTEX;
+                mode = Constants.PARAM_EDIT_POINTS;
                 break;
             case A:
-                mode = Mode.ADD_VERTEX;
+                mode = Constants.PARAM_ADD_POINT;
                 break;
 
         }

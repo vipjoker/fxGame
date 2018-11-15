@@ -28,6 +28,7 @@ public class Constants {
     public static final String PARAM_MOVE = "move_param";
     public static final String PARAM_ROTATE = "rotate_param";
     public static final String PARAM_EDIT_POINTS = "edit_param";
+    public static final String PARAM_ADD_POINT = "add_point";
     public static final String PARAM_SQUARE = "square_param";
     public static final String PARAM_CIRCLE = "circle_param";
     public static final String PARAM_CHAIN = "chain_param";

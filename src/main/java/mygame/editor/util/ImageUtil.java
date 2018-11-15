@@ -13,4 +13,10 @@ public class ImageUtil {
                .class
                .getResourceAsStream("/" + path));
     }
+
+    public static Image getImage(String path, int width, int height){
+        return new Image(ImageUtil
+                .class
+                .getResourceAsStream("/" + path),width,height,true,true);
+    }
 }

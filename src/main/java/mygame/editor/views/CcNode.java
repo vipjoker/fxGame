@@ -12,7 +12,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
 import mygame.editor.component.Component;
-import mygame.editor.customShapes.Drawable;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -20,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-public class CcNode implements Drawable {
+public class CcNode {
     public int id;
     public int layer;
     protected SimpleDoubleProperty x = new SimpleDoubleProperty(0);
@@ -72,7 +71,7 @@ public class CcNode implements Drawable {
     }
 
 
-    @Override
+
     public void draw(GraphicsContext context, long time) {
         context.save();
         context.translate(x.doubleValue(), -y.doubleValue());
