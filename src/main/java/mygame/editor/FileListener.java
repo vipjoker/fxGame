@@ -2,7 +2,6 @@ package mygame.editor;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.sun.javafx.scene.control.skin.TreeViewSkin;
 import javafx.application.Application;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
@@ -10,11 +9,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.control.cell.TextFieldTreeCell;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.util.Callback;
+import mygame.editor.model.TreeFileHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,58 +25,49 @@ import java.util.List;
 public class FileListener extends Application {
 
 
-    private TreeItem<String> root;
+
+    private TreeView<TreeHolder> treeView;
+    List<Rectangle > rects = new ArrayList<>();
 
     @Override
     public void start(Stage primaryStage) throws Exception  {
         primaryStage.setWidth(400);
         primaryStage.setHeight(400);
 
-        TreeView treeView = new TreeView();
+        treeView = new TreeView<>();
         treeView.setPrefWidth(200);
         VBox hBox = new VBox();
-        final Button clear = new Button("Clear");
-        clear.setOnMouseClicked(event -> {
-            root.getChildren().clear();
-        });
 
-        hBox.getChildren().add(clear);
+
         hBox.setPrefWidth(200);
         primaryStage.setScene(new Scene(new HBox(treeView,hBox)));
 
-        final JsonObject grandparrent = createObject("Grand parent");
-        final JsonObject parent = createObject("Parent");
-        final JsonObject child = createObject("Child");
-        final JsonObject grandChild = createObject("Grand child");
 
-        grandparrent.getAsJsonArray("children").add(parent);
-        parent.getAsJsonArray("children").add(child);
+        TreeHolder grandParent = new TreeHolder("Grand parent");
 
 
+        TreeHolder parent1 = new TreeHolder("Parent 1");
+        TreeHolder parent2 = new TreeHolder("Parent 2");
+        TreeHolder parent3 = new TreeHolder("Parent 3");
+        TreeHolder child = new TreeHolder("Child");
+        TreeHolder grandChild1 = new TreeHolder("Grandchild 1");
+        TreeHolder grandChild2 = new TreeHolder("Grandchild 2");
+        TreeHolder grandChild3 = new TreeHolder("Grandchild 3");
+        grandParent.items.add(parent1);
+        grandParent.items.add(parent2);
+        grandParent.items.add(parent3);
+        parent2.items.add(child);
+        child.items.add(grandChild1);
+        child.items.add(grandChild2);
+        child.items.add(grandChild3);
 
-        String [] array = {"One","Two","Three","Four"};
-        root = new TreeItem<>("root");
 
-        treeView.setRoot(root);
+        treeView.setCellFactory((v)->new TreeItemTreeHolder());
 
-
-
-
-
-        List<Rectangle > rects = new ArrayList<>();
-        for (String s : array) {
-            TreeItem<String> item = new TreeItem<>(s);
-            Rectangle rectangle = new Rectangle(0,0,100,40);
-            rectangle.setFill(Color.PINK);
-            item.setGraphic(rectangle);
-            rects.add(rectangle);
-            root.getChildren().add(item);
-        }
 
 
 
         treeView.setOnMouseDragged(event -> {
-            System.out.println("Touch " + event.getX() + " " + event.getY() + " size " + rects.size());
             for (Rectangle cell : rects) {
                 if(cell.getParent() != null) {
 
@@ -98,28 +91,52 @@ public class FileListener extends Application {
             System.out.println("************************************************");
         });
 
+        updateTreeView(grandParent);
         primaryStage.show();
     }
 
-    private JsonObject createObject(String name) {
-        JsonObject object = new JsonObject();
 
+    private void updateTreeView(TreeHolder holder){
+        TreeItem<TreeHolder> root = new TreeItem<>(holder);
+        treeView.setRoot(root);
+        Rectangle rectangle = new Rectangle(0,0,40,40);
+        rectangle.setFill(Color.PINK);
+        root.setGraphic(rectangle);
+        rects.add(rectangle);
+       // root.getChildren().add(item);
 
-        object.addProperty("name",name);
-        object.add("children",new JsonArray());
-        return object;
     }
+
 
 
     public static void main(String[] args) {
         launch(args);
     }
 
-    static class TreeItem{
-        public TreeItem(String value){
+
+    static class TreeItemTreeHolder extends TextFieldTreeCell<TreeHolder> {
+        @Override
+        public void updateItem(TreeHolder item, boolean empty) {
+            super.updateItem(item, empty);
+            if(item!=null){
+
+                setText(item.value);
+            }
+        }
+    }
+
+
+    static class TreeHolder{
+
+
+        public TreeHolder(String value){
+            this.value = value;
+        }
+        public void addChild(){
 
         }
-        String value;
-        List<TreeItem> items = new ArrayList<>();
+
+        private String value;
+        private List<TreeHolder> items = new ArrayList<>();
     }
 }
