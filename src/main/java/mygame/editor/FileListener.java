@@ -2,14 +2,18 @@ package mygame.editor;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.sun.javafx.scene.control.skin.VirtualFlow;
 import javafx.application.Application;
 import javafx.geometry.Point2D;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.TextFieldTreeCell;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -25,12 +29,11 @@ import java.util.List;
 public class FileListener extends Application {
 
 
-
     private TreeView<TreeHolder> treeView;
-    List<Rectangle > rects = new ArrayList<>();
+    List<Rectangle> rects = new ArrayList<>();
 
     @Override
-    public void start(Stage primaryStage) throws Exception  {
+    public void start(Stage primaryStage) throws Exception {
         primaryStage.setWidth(400);
         primaryStage.setHeight(400);
 
@@ -40,7 +43,7 @@ public class FileListener extends Application {
 
 
         hBox.setPrefWidth(200);
-        primaryStage.setScene(new Scene(new HBox(treeView,hBox)));
+        primaryStage.setScene(new Scene(new HBox(treeView, hBox)));
 
 
         TreeHolder grandParent = new TreeHolder("Grand parent");
@@ -62,28 +65,28 @@ public class FileListener extends Application {
         child.items.add(grandChild3);
 
 
-        treeView.setCellFactory((v)->new TreeItemTreeHolder());
-
-
+        treeView.setCellFactory((v) -> new TreeItemTreeHolder());
 
 
         treeView.setOnMouseDragged(event -> {
+
+
+
             for (Rectangle cell : rects) {
-                if(cell.getParent() != null) {
+                if (cell.getParent() != null) {
 
-                    for (Rectangle rect : rects) {
 
-                        final Point2D point2D = rect.getParent().parentToLocal(event.getX(),event.getY());
-                        final Point2D pointInRect = rect.parentToLocal(point2D);
-                        if(rect.contains(pointInRect)){
+                    final Point2D point2D = cell.getParent().parentToLocal(event.getX(), event.getY());
+                    final Point2D pointInRect = cell.parentToLocal(point2D);
+                    if (cell.contains(pointInRect)) {
 
-                            rect.setStroke(Color.RED);
-                        }else{
-                            rect.setStroke(Color.TRANSPARENT);
-                        }
-
-                        System.out.println(point2D);
+                        cell.setStroke(Color.RED);
+                    } else {
+                        cell.setStroke(Color.TRANSPARENT);
                     }
+
+                    System.out.println(point2D);
+
                 }
 
 
@@ -96,17 +99,16 @@ public class FileListener extends Application {
     }
 
 
-    private void updateTreeView(TreeHolder holder){
+    private void updateTreeView(TreeHolder holder) {
         TreeItem<TreeHolder> root = new TreeItem<>(holder);
         treeView.setRoot(root);
-        Rectangle rectangle = new Rectangle(0,0,40,40);
+        Rectangle rectangle = new Rectangle(0, 0, 40, 40);
         rectangle.setFill(Color.PINK);
         root.setGraphic(rectangle);
         rects.add(rectangle);
-       // root.getChildren().add(item);
+        // root.getChildren().add(item);
 
     }
-
 
 
     public static void main(String[] args) {
@@ -118,7 +120,7 @@ public class FileListener extends Application {
         @Override
         public void updateItem(TreeHolder item, boolean empty) {
             super.updateItem(item, empty);
-            if(item!=null){
+            if (item != null) {
 
                 setText(item.value);
             }
@@ -126,13 +128,14 @@ public class FileListener extends Application {
     }
 
 
-    static class TreeHolder{
+    static class TreeHolder {
 
 
-        public TreeHolder(String value){
+        public TreeHolder(String value) {
             this.value = value;
         }
-        public void addChild(){
+
+        public void addChild() {
 
         }
 
