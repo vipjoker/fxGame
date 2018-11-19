@@ -1,26 +1,19 @@
 package mygame.editor;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.sun.javafx.scene.control.skin.VirtualFlow;
 import javafx.application.Application;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.TextFieldTreeCell;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import javafx.util.Callback;
-import mygame.editor.model.TreeFileHolder;
+import physicsPort.Action;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +23,6 @@ public class FileListener extends Application {
 
 
     private TreeView<TreeHolder> treeView;
-    List<Rectangle> rects = new ArrayList<>();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -68,46 +60,64 @@ public class FileListener extends Application {
         treeView.setCellFactory((v) -> new TreeItemTreeHolder());
 
 
-        treeView.setOnMouseDragged(event -> {
-
-
-
-            for (Rectangle cell : rects) {
-                if (cell.getParent() != null) {
-
-
-                    final Point2D point2D = cell.getParent().parentToLocal(event.getX(), event.getY());
-                    final Point2D pointInRect = cell.parentToLocal(point2D);
-                    if (cell.contains(pointInRect)) {
-
-                        cell.setStroke(Color.RED);
-                    } else {
-                        cell.setStroke(Color.TRANSPARENT);
-                    }
-
-                    System.out.println(point2D);
-
-                }
-
-
-            }
-            System.out.println("************************************************");
-        });
-
-        updateTreeView(grandParent);
+        treeView.setOnMouseDragged(this::onMouseDragged);
+        treeView.setOnMouseReleased(this::onMouseReleased);
+        treeView.setRoot(updateTreeView(grandParent));
         primaryStage.show();
     }
 
+    private void onMouseDragged(MouseEvent event){
+        final TreeItem<TreeHolder> root = treeView.getRoot();
+        traverse(root,cell->{
+            if (cell!= null &&  cell.getParent() != null) {
 
-    private void updateTreeView(TreeHolder holder) {
+
+                final Point2D point2D = cell.getParent().parentToLocal(event.getX(), event.getY());
+                final Point2D pointInRect = cell.parentToLocal(point2D);
+                if (cell.contains(pointInRect)) {
+
+                    cell.setFill(Color.RED);
+                } else {
+                    cell.setFill (Color.GREEN);
+                }
+                System.out.println(point2D);
+            }else{
+                if(cell == null){
+                    System.out.println("Cell is null");
+                }else if(cell.getParent() == null){
+                    System.out.println("Parent is null");
+                }
+            }
+        });
+
+    }
+
+    private void onMouseReleased(MouseEvent event){
+
+    }
+
+
+
+    private void traverse(TreeItem<TreeHolder> treeItem, Action<Rectangle> action){
+        final Node graphic = treeItem.getGraphic();
+        action.call((Rectangle)graphic);
+        for(TreeItem<TreeHolder> holderTreeItem :treeItem.getChildren()){
+            traverse(holderTreeItem,action);
+        }
+    }
+
+
+    private TreeItem<TreeHolder> updateTreeView(TreeHolder holder) {
         TreeItem<TreeHolder> root = new TreeItem<>(holder);
-        treeView.setRoot(root);
+        for (TreeHolder item : holder.items) {
+            root.getChildren().add(updateTreeView(item));
+        }
+
         Rectangle rectangle = new Rectangle(0, 0, 40, 40);
         rectangle.setFill(Color.PINK);
         root.setGraphic(rectangle);
-        rects.add(rectangle);
-        // root.getChildren().add(item);
 
+        return root;
     }
 
 
@@ -121,7 +131,6 @@ public class FileListener extends Application {
         public void updateItem(TreeHolder item, boolean empty) {
             super.updateItem(item, empty);
             if (item != null) {
-
                 setText(item.value);
             }
         }
