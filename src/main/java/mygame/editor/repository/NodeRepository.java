@@ -12,6 +12,8 @@ public interface NodeRepository {
 
     CcNode getRootNode();
 
+    List<CcNode> getNodes();
+
     CcNode getNodeById(long id);
 
     void save(CcNode node);
@@ -43,5 +45,7 @@ public interface NodeRepository {
     void listenForBodies(ListChangeListener<B2Body> listener);
 
     void listenForJoints(ListChangeListener<B2Joint> listener);
+
+    void listenForNodes(ListChangeListener<CcNode> listener);
 
 }

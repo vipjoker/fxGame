@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -23,6 +24,7 @@ import mygame.editor.repository.NodeRepository;
 import mygame.editor.util.Constants;
 import mygame.editor.util.Resources;
 import mygame.editor.views.CcNode;
+import mygame.editor.views.CcSprite;
 
 import java.io.File;
 import java.io.IOException;
@@ -65,7 +67,7 @@ public class MainController implements Initializable {
             root.prefWidthProperty().bind(App.instance.stage.widthProperty());
             root.prefHeightProperty().bind(App.instance.stage.heightProperty());
             root.setDividerPositions(.2, .8);
-            setLeftPane();
+
             initActions();
 
         });
@@ -95,13 +97,12 @@ public class MainController implements Initializable {
     }
 
 
-    private void setLeftPane() {
+    public void setLeftPane(File file) {
 
         TreeItem<TreeFileHolder> treeRoot = new TreeItem<>(new TreeFileHolder("root", "/"));
 
         try {
-            URI uri = getClass().getResource("/").toURI();
-            File file = new File(uri);
+
             fillTreeView("/", file, treeRoot);
         } catch (Exception e) {
             e.printStackTrace();
@@ -117,12 +118,13 @@ public class MainController implements Initializable {
             if (selected != null && selected.isLeaf()) {
                 String path = selected.getValue().getPath();
                 System.out.println(path);
-                CcNode node = new CcNode();
-                node.setWidth(100);
-                node.setHeight(100);
-                SpriteComponent spriteComponent = new SpriteComponent(path);
-                node.addComponent(spriteComponent);
-                canvasRenderer.addChild(node);
+
+                final File f = new File(App.instance.getWorkingFolder(), path);
+
+                final CcSprite ccSprite = new CcSprite(new Image(f.toURI().toString()),100,100);
+                App.instance.repository.save(ccSprite);
+
+                canvasRenderer.addChild(ccSprite);
                 canvasRenderer.update();
             }
         });

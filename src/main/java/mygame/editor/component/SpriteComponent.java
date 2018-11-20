@@ -6,6 +6,8 @@ import mygame.editor.util.ImageUtil;
 import mygame.editor.util.Resources;
 import mygame.editor.views.CcNode;
 
+import java.io.File;
+
 /**
  * Created by oleh on 17.05.18.
  */
@@ -20,6 +22,11 @@ public class SpriteComponent extends Component {
     public SpriteComponent(String path) {
         this.url = path;
         this.mImage = Resources.initImage(path);
+    }
+    public SpriteComponent(File path) {
+        this.url = path.getPath();
+        this.mImage = new Image(path.toURI().toString());
+
     }
 
 

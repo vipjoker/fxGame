@@ -37,7 +37,13 @@ public class MenuController implements Initializable {
 
         final Scene scene = menuBar.getScene();
         File selectedFile = fileChooser.showOpenDialog(scene.getWindow());
+        if(selectedFile != null) {
+            final File parentFile = selectedFile.getParentFile();
+            MainController controller = App.instance.getController(MainController.class);
+            App.instance.setWorkingFolder(parentFile);
 
+            controller.setLeftPane(parentFile);
+        }
     }
 
     public void onSave(ActionEvent actionEvent) {

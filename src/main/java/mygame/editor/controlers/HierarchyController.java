@@ -5,6 +5,7 @@ import javafx.collections.ListChangeListener;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.input.MouseEvent;
 import mygame.editor.App;
 import mygame.editor.model.Command;
 import mygame.editor.model.box2d.B2Body;
@@ -28,6 +29,7 @@ public class HierarchyController implements Initializable {
     private Map<String, Object> map = new HashMap<>();
     private TreeItem<Holder> bodiesItem;
     private TreeItem<Holder> jointsItem;
+    private TreeItem<Holder> nodesItem;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -35,8 +37,19 @@ public class HierarchyController implements Initializable {
         App.instance.observableAction.addListener(this::onActionChange);
         App.instance.repository.listenForBodies(this::onBodiesChanged);
         App.instance.repository.listenForJoints(this::onJointsChanged);
+        App.instance.repository.listenForNodes(this::onNodesChanged);
+        nodeTreeview.setOnMousePressed(this::onTreePressed);
     }
 
+    private void onNodesChanged(ListChangeListener.Change<? extends CcNode> change) {
+
+    }
+
+    private void onTreePressed(MouseEvent event) {
+        final TreeItem<Holder> treeItem = nodeTreeview.selectionModelProperty().get().getSelectedItems().get(0);
+        Holder holder = treeItem.getValue();
+        System.out.println(holder);
+    }
 
 
     private void onBodiesChanged(ListChangeListener.Change<? extends B2Body> change) {
@@ -61,12 +74,14 @@ public class HierarchyController implements Initializable {
         Holder holder = new Holder("Root",null,null);
         Holder bodies = new Holder("Bodies",null,null);
         Holder joints = new Holder("Joints",null,null);
+        Holder nodes = new Holder("Nodes",null,null);
         TreeItem<Holder> root = new TreeItem<>(holder);
         nodeTreeview.setRoot(root);
 
         bodiesItem = new TreeItem<>(bodies);
         jointsItem = new TreeItem<>(joints);
-        root.getChildren().addAll(bodiesItem, jointsItem);
+        nodesItem = new TreeItem<>(nodes);
+        root.getChildren().addAll(nodesItem,bodiesItem, jointsItem);
 
     }
     private void fillNodeTreeView(TreeItem<CcNode> ccNodeTreeItem ,CcNode root) {

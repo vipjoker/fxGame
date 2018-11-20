@@ -215,12 +215,22 @@ public class SqlNodeRepository implements NodeRepository {
     }
 
     @Override
+    public List<CcNode> getNodes() {
+        return null;
+    }
+
+    @Override
     public void listenForBodies(ListChangeListener<B2Body> listener) {
 
     }
 
     @Override
     public void listenForJoints(ListChangeListener<B2Joint> listener) {
+
+    }
+
+    @Override
+    public void listenForNodes(ListChangeListener<CcNode> listener) {
 
     }
 }

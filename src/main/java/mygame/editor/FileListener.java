@@ -2,7 +2,6 @@ package mygame.editor;
 
 import javafx.application.Application;
 import javafx.geometry.Point2D;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -14,9 +13,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import physicsPort.Action;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class FileListener extends Application {
@@ -127,7 +123,6 @@ public class FileListener extends Application {
 
     private void onMouseReleased(MouseEvent event){
         TreeItem<TreeHolder> root = treeView.getRoot();
-
         traverse(root,treeItem->{
             final Rectangle cell = (Rectangle) treeItem.getGraphic();
             if (cell!= null &&  cell.getParent() != null) {
@@ -151,7 +146,7 @@ public class FileListener extends Application {
             }
         });
 
-        if(firstCell != null && lastCell != null && firstCell != rootHolder){
+        if(firstCell != null && lastCell != null && firstCell != rootHolder && firstCell != lastCell){
             firstCell.removeFromParent();
             lastCell.addChild(firstCell);
             treeView.setRoot(updateTreeView(rootHolder));
@@ -163,7 +158,6 @@ public class FileListener extends Application {
 
 
     }
-
 
 
     private void traverse(TreeItem<TreeHolder> treeItem, Action<TreeItem<TreeHolder>> action){
@@ -181,7 +175,7 @@ public class FileListener extends Application {
             root.getChildren().add(updateTreeView(item));
         }
 
-        Rectangle rectangle = new Rectangle(0, 0, 40, 40);
+        Rectangle rectangle = new Rectangle(0, 0, 20, 20);
         rectangle.setFill(Color.PINK);
         root.setGraphic(rectangle);
 
