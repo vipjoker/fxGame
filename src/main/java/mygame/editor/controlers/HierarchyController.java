@@ -42,7 +42,12 @@ public class HierarchyController implements Initializable {
     }
 
     private void onNodesChanged(ListChangeListener.Change<? extends CcNode> change) {
-
+        nodesItem.getChildren().clear();
+        for (CcNode node : change.getList()) {
+            Holder holder = new Holder(node.toString(),node,CcNode.class);
+            TreeItem<Holder> treeItem = new TreeItem<>(holder);
+            nodesItem.getChildren().add(treeItem);
+        }
     }
 
     private void onTreePressed(MouseEvent event) {
