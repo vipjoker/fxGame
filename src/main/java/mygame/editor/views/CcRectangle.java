@@ -10,8 +10,8 @@ public class CcRectangle extends CcNode {
     public CcRectangle(double x, double y, double width, double height) {
         this.x.set(x);
         this.y.set(y);
-        this.width = width;
-        this.height = height;
+        this.width.set(width);
+        this.height.set(height);
 
     }
 

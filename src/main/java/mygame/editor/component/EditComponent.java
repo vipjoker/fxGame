@@ -62,7 +62,7 @@ public class EditComponent extends Component {
         if(owner.active) {
 
             g.setStroke(Color.GREEN);
-            g.strokeRect(-5, -owner.getHeight() - 5, owner.getWidth()+ 10, owner.getHeight()+ 10);
+            g.strokeRect(-5, -owner.getHeight().doubleValue() - 5, owner.getWidth().doubleValue()+ 10, owner.getHeight().doubleValue()+ 10);
             g.stroke();
 
 
@@ -71,7 +71,7 @@ public class EditComponent extends Component {
 //            drawCircle(g, 0, 0);
 //            drawCircle(g, 0, -owner.getHeight());
 //            drawCircle(g, owner.getWidth(), 0);
-            drawRect(g,owner.getWidth(),-owner.getHeight());
+            drawRect(g,owner.getWidth().doubleValue(),-owner.getHeight().doubleValue());
 
 
             drawArrow(g);

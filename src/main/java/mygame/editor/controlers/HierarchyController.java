@@ -21,22 +21,16 @@ import java.util.ResourceBundle;
 
 public class HierarchyController implements Initializable {
     public TreeView<Holder> nodeTreeview;
-    private List<B2Body> bodies ;
-    private List<B2Body> joint;
 
 
 
     private Map<String, Object> map = new HashMap<>();
-    private TreeItem<Holder> bodiesItem;
-    private TreeItem<Holder> jointsItem;
     private TreeItem<Holder> nodesItem;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         updateNodeTreeView();
         App.instance.observableAction.addListener(this::onActionChange);
-        App.instance.repository.listenForBodies(this::onBodiesChanged);
-        App.instance.repository.listenForJoints(this::onJointsChanged);
         App.instance.repository.listenForNodes(this::onNodesChanged);
         nodeTreeview.setOnMousePressed(this::onTreePressed);
     }
@@ -44,31 +38,28 @@ public class HierarchyController implements Initializable {
     private void onNodesChanged(ListChangeListener.Change<? extends CcNode> change) {
         nodesItem.getChildren().clear();
         for (CcNode node : change.getList()) {
-            Holder holder = new Holder(node.toString(),node,CcNode.class);
+            Holder holder = new Holder(node.getName().get(),node,CcNode.class);
             TreeItem<Holder> treeItem = new TreeItem<>(holder);
             nodesItem.getChildren().add(treeItem);
         }
     }
 
     private void onTreePressed(MouseEvent event) {
-        final TreeItem<Holder> treeItem = nodeTreeview.selectionModelProperty().get().getSelectedItems().get(0);
-        Holder holder = treeItem.getValue();
-        System.out.println(holder);
-    }
 
+        TreeItem<Holder> selectedItem = nodeTreeview.getSelectionModel().getSelectedItem();
 
-    private void onBodiesChanged(ListChangeListener.Change<? extends B2Body> change) {
-        bodiesItem.getChildren().clear();
-        for (B2Body body : change.getList()) {
-            Holder holder = new Holder(body.getName(),body,B2Body.class);
-            TreeItem<Holder> treeItem = new TreeItem<>(holder);
-            bodiesItem.getChildren().add(treeItem);
+        if(selectedItem != null && CcNode.class == selectedItem.getValue().clazz){
+
+            CcNode node = (CcNode)selectedItem.getValue().object;
+            App.instance.selected.clear();
+            App.instance.selected.add(node);
         }
     }
 
-    private void onJointsChanged(ListChangeListener.Change<? extends B2Joint> change) {
-        System.out.println(change);
-    }
+
+
+
+
 
 
     private void updateNodeTreeView() {
@@ -76,17 +67,10 @@ public class HierarchyController implements Initializable {
         nodeTreeview.setCellFactory(e->new TreeItemHolder());
 
 
-        Holder holder = new Holder("Root",null,null);
-        Holder bodies = new Holder("Bodies",null,null);
-        Holder joints = new Holder("Joints",null,null);
-        Holder nodes = new Holder("Nodes",null,null);
-        TreeItem<Holder> root = new TreeItem<>(holder);
-        nodeTreeview.setRoot(root);
+        Holder holder = new Holder("Nodes",null,null);
 
-        bodiesItem = new TreeItem<>(bodies);
-        jointsItem = new TreeItem<>(joints);
-        nodesItem = new TreeItem<>(nodes);
-        root.getChildren().addAll(nodesItem,bodiesItem, jointsItem);
+        nodesItem = new TreeItem<>(holder);
+        nodeTreeview.setRoot(nodesItem);
 
     }
     private void fillNodeTreeView(TreeItem<CcNode> ccNodeTreeItem ,CcNode root) {

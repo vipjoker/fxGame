@@ -122,6 +122,8 @@ public class MainController implements Initializable {
                 final File f = new File(App.instance.getWorkingFolder(), path);
 
                 final CcSprite ccSprite = new CcSprite(new Image(f.toURI().toString()),100,100);
+                int count = App.instance.repository.count();
+                ccSprite.getName().setValue("Sprite " + count);
                 App.instance.repository.save(ccSprite);
 
                 canvasRenderer.addChild(ccSprite);

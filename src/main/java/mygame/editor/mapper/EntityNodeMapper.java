@@ -13,19 +13,19 @@ public class EntityNodeMapper {
     public static EntityNode map(CcNode node){
         EntityNode entityNode = new EntityNode();
         entityNode.setId(node.id);
-        entityNode.setName(node.name.getName());
-        entityNode.setHeight((float) node.getHeight());
-        entityNode.setWidth((float) node.getWidth());
+        entityNode.setName(node.getName().getName());
+        entityNode.setHeight(node.getHeight().floatValue());
+        entityNode.setWidth(node.getWidth().floatValue());
         entityNode.setX(node.getX().floatValue());
         entityNode.setY(node.getY().floatValue());
-        entityNode.setRotation((float) node.getAngle());
+        entityNode.setRotation(node.getAngle().floatValue());
         return entityNode;
     }
 
     public static CcNode map(EntityNode node){
         CcNode ccNode = new CcNode();
         ccNode.setAngle(node.getRotation());
-        ccNode.name = new SimpleStringProperty(node.getName());
+        ccNode.setName(node.getName());
         ccNode.setX(node.getX());
         ccNode.setY(node.getY());
         ccNode.setWidth(node.getWidth());

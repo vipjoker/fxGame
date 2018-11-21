@@ -1,10 +1,7 @@
 package mygame.editor.views;
 
 import com.badlogic.gdx.math.Vector2;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
@@ -24,14 +21,14 @@ public class CcNode {
     public int layer;
     protected SimpleDoubleProperty x = new SimpleDoubleProperty(0);
     protected SimpleDoubleProperty y = new SimpleDoubleProperty(0);
+    protected SimpleDoubleProperty width = new SimpleDoubleProperty(0);
+    protected SimpleDoubleProperty height = new SimpleDoubleProperty(0);
+    protected SimpleDoubleProperty scaleX = new SimpleDoubleProperty(1);
+    protected SimpleDoubleProperty scaleY = new SimpleDoubleProperty(1);
+    protected SimpleDoubleProperty angle = new SimpleDoubleProperty(0);
+    protected StringProperty name  = new SimpleStringProperty("Node");
 
-    protected double width;
-    protected double height;
-    public double scaleX = 1;
-    public double scaleY = 1;
-    private double angle;
     public Affine transform;
-    public StringProperty name  = new SimpleStringProperty("");
     protected BoundingBox bBox;
     public boolean active;
     private CcNode parent;
@@ -49,17 +46,17 @@ public class CcNode {
         children.add(node);
     }
 
-    public double getAngle(){
+    public DoubleProperty getAngle(){
         return angle;
     }
 
     public void setAngle(double angle){
 
-        this.angle = angle;
+        this.angle.set(angle);
     }
 
     public void appendAngle(double deltaAngle){
-        angle -= deltaAngle;
+        angle.subtract(deltaAngle);
     }
 
     public void setParent(CcNode node){
@@ -75,8 +72,8 @@ public class CcNode {
     public void draw(GraphicsContext context, long time) {
         context.save();
         context.translate(x.doubleValue(), -y.doubleValue());
-        context.rotate(angle);
-        context.scale(scaleX, scaleY);
+        context.rotate(angle.doubleValue());
+        context.scale(scaleX.doubleValue(), scaleY.doubleValue());
         rasterize(context);
         components.sort(Comparator.comparingInt(Component::getZorder));
 
@@ -97,7 +94,7 @@ public class CcNode {
 
 
     public boolean contains(Point2D point2D){
-        Rectangle2D rectangle2D = new Rectangle2D(x.doubleValue(),y.doubleValue(),width,height);
+        Rectangle2D rectangle2D = new Rectangle2D(x.doubleValue(),y.doubleValue(),width.doubleValue(),height.doubleValue());
         return rectangle2D.contains(point2D);
     }
 
@@ -137,8 +134,8 @@ public class CcNode {
 
         Affine affine = new Affine();
         affine.appendTranslation(x.doubleValue(),y.doubleValue());
-        affine.appendRotation(angle);
-        affine.appendScale(scaleX,scaleY);
+        affine.appendRotation(angle.doubleValue());
+        affine.appendScale(scaleX.doubleValue(),scaleY.doubleValue());
         if(parent != null){
             point = parent.convertToLocalSpace(point);
         }
@@ -196,21 +193,21 @@ public class CcNode {
     public void setAnchor(Anchor anchor) {
         switch (anchor) {
             case MIDDLE:
-                bBox = new BoundingBox(-width / 2, -height / 2, width, height);
+                bBox = new BoundingBox(-width.doubleValue() / 2, -height.doubleValue() / 2, width.doubleValue(), height.doubleValue());
                 break;
             case BOTTOM_RIGHT:
-                bBox = new BoundingBox(-width, -height, width, height);
+                bBox = new BoundingBox(-width.doubleValue(), -height.doubleValue(), width.doubleValue(), height.doubleValue());
                 break;
             case BOTTOM_LEFT:
-                bBox = new BoundingBox(0, -height, width, height);
+                bBox = new BoundingBox(0, -height.doubleValue(), width.doubleValue(), height.doubleValue());
                 break;
 
             case TOP_LEFT:
-                bBox = new BoundingBox(0, 0, width, height);
+                bBox = new BoundingBox(0, 0, width.doubleValue(), height.doubleValue());
                 break;
 
             case TOP_RIGHT:
-                bBox = new BoundingBox(-width, 0, width, height);
+                bBox = new BoundingBox(-width.doubleValue(), 0, width.doubleValue(), height.doubleValue());
                 break;
 
         }
@@ -225,7 +222,7 @@ public class CcNode {
     }
 
     public void updateBoundingBox(){
-        bBox = new BoundingBox(0, -height, width, height);
+        bBox = new BoundingBox(0, -height.doubleValue(), width.doubleValue(), height.doubleValue());
 
     }
 
@@ -249,22 +246,31 @@ public class CcNode {
         updateBoundingBox();
     }
 
-    public double getWidth() {
+    public DoubleProperty getWidth() {
         return width;
     }
 
     public void setWidth(double width) {
-        this.width = width;
+        this.width.set(width);
         updateBoundingBox();
     }
 
-    public double getHeight() {
+    public DoubleProperty getHeight() {
         return height;
     }
 
     public void setHeight(double height) {
-        this.height = height;
+        this.height.set(height);
         updateBoundingBox();
+    }
+
+
+    public StringProperty getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name.set(name);
     }
 
     public void removeSelf(){

@@ -40,7 +40,7 @@ public class CanvasRenderer {
 
     private Grid grid = new Grid();
     private final ObservableList<CcNode> nodes = FXCollections.observableList(new ArrayList<>(), param ->
-            new Observable[]{param.name,param.getX(),param.getY()});
+            new Observable[]{param.getName(),param.getX(),param.getY()});
     private OnCanvasDragListener mOnCanvasDragListener;
 
     public CanvasRenderer(Pane pane) {

@@ -63,22 +63,6 @@ public class InfoController implements Initializable {
         initSpinners();
         setupScrollers();
 
-        etX.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                MainController controller = App.instance.getController(MainController.class);
-                controller.getCanvasRenderer().update();
-            }
-        });
-
-        etY.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                MainController controller = App.instance.getController(MainController.class);
-                controller.getCanvasRenderer().update();
-            }
-        });
-
     }
 
     private void onSelected(ListChangeListener.Change<? extends CcNode> c) {
@@ -86,7 +70,7 @@ public class InfoController implements Initializable {
         if(ccNode != null){
             etX.textProperty().unbindBidirectional(ccNode.getX());
             etY.textProperty().unbindBidirectional(ccNode.getY());
-            etName.textProperty().unbindBidirectional(ccNode.name);
+            etName.textProperty().unbindBidirectional(ccNode.getName());
         }
 
 
@@ -94,11 +78,10 @@ public class InfoController implements Initializable {
             ccNode = c.getList().get(0);
             etX.textProperty().bindBidirectional(ccNode.getX(),new DecimalFormat());
             etY.textProperty().bindBidirectional(ccNode.getY(),new DecimalFormat());
-            etName.textProperty().bindBidirectional(ccNode.name);
-
-
-
+            etName.textProperty().bindBidirectional(ccNode.getName());
         }
+
+
     }
 
     private double lastX = 0;

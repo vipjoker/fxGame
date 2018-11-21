@@ -91,7 +91,7 @@ public class BodyEditAction extends Action implements CanvasRenderer.OnCanvasDra
         if (mode == Mode.ROTATE) {
 
             for (CcNode ccNode : selected) {
-                ccNode.setAngle(ccNode.getAngle() - point.getX() - point.getY());
+                ccNode.setAngle(ccNode.getAngle().doubleValue() - point.getX() - point.getY());
             }
         } else {
             for (CcNode s : selected) {
