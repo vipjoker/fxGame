@@ -73,6 +73,7 @@ public class CcNode {
         context.save();
         context.translate(x.doubleValue(), -y.doubleValue());
         context.rotate(angle.doubleValue());
+        System.out.println(angle.doubleValue());
         context.scale(scaleX.doubleValue(), scaleY.doubleValue());
         rasterize(context);
         components.sort(Comparator.comparingInt(Component::getZorder));

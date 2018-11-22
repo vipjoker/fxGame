@@ -30,7 +30,7 @@ public class CcSprite extends CcNode {
     @Override
     public void rasterize(GraphicsContext context) {
         transform = context.getTransform();
-        context.drawImage(image, bBox.getMinX(), bBox.getMinY(), bBox.getWidth(), bBox.getHeight());
+        context.drawImage(image, 0,0,width.doubleValue(),height.doubleValue());
 
         if (active) {
             context.setLineWidth(2);

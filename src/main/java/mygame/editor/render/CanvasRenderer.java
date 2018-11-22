@@ -265,7 +265,6 @@ public class CanvasRenderer {
 
 
     public void update() {
-        System.out.println("update: " + Thread.currentThread().getName());
 //        draw(graphicsContext, Global.getWidth(), Global.getHeight());
     }
 

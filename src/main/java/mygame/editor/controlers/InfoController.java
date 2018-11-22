@@ -1,24 +1,18 @@
 package mygame.editor.controlers;
 
-import com.sun.deploy.uitoolkit.impl.fx.FXProgressBarSkin;
-import com.sun.javafx.robot.FXRobot;
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.embed.swt.FXCanvas;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-import javafx.util.StringConverter;
-import javafx.util.converter.DoubleStringConverter;
+import javafx.scene.layout.VBox;
 import mygame.editor.App;
 import mygame.editor.model.Point;
-import mygame.editor.render.CanvasRenderer;
+import mygame.editor.ui.SlideableTextField;
 import mygame.editor.views.CcNode;
 
 import java.net.URL;
@@ -45,6 +39,7 @@ public class InfoController implements Initializable {
     public Label tvY;
     public Label tvWidth;
     public Label tvHeight;
+    public VBox vbRoot;
     private CcNode ccNode;
     private Runnable mCallback;
     Pattern floatNumberPattern = Pattern.compile("[+-]?([0-9]*[.])?[0-9]+");
@@ -60,6 +55,10 @@ public class InfoController implements Initializable {
         comboType.setItems(strings);
 
        // setListeners();
+
+        vbRoot.getChildren().add(new SlideableTextField("X",new SimpleDoubleProperty(888)));
+        vbRoot.getChildren().add(new SlideableTextField("Y",new SimpleDoubleProperty(444)));
+        vbRoot.getChildren().add(new SlideableTextField("name", new SimpleStringProperty("test")));
         initSpinners();
         setupScrollers();
 
@@ -71,6 +70,9 @@ public class InfoController implements Initializable {
             etX.textProperty().unbindBidirectional(ccNode.getX());
             etY.textProperty().unbindBidirectional(ccNode.getY());
             etName.textProperty().unbindBidirectional(ccNode.getName());
+            etWidth.textProperty().unbindBidirectional(ccNode.getWidth());
+            etHeight.textProperty().unbindBidirectional(ccNode.getHeight());
+            etRotation.textProperty().unbindBidirectional(ccNode.getAngle());
         }
 
 
@@ -79,6 +81,11 @@ public class InfoController implements Initializable {
             etX.textProperty().bindBidirectional(ccNode.getX(),new DecimalFormat());
             etY.textProperty().bindBidirectional(ccNode.getY(),new DecimalFormat());
             etName.textProperty().bindBidirectional(ccNode.getName());
+            etWidth.textProperty().bindBidirectional(ccNode.getWidth(),new DecimalFormat());
+            etHeight.textProperty().bindBidirectional(ccNode.getHeight(),new DecimalFormat());
+            etRotation.textProperty().bindBidirectional(ccNode.getAngle(),new DecimalFormat());
+
+
         }
 
 
