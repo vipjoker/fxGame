@@ -180,7 +180,7 @@ function decomposePolygon(poly, polygons){
                 if (left(poly.at(i - 1), poly.at(i), poly.at(j))
                         && rightOn(poly.at(i - 1), poly.at(i), poly.at(j - 1))) { 								// if line intersects with an edge
                     p = lineInt(new Line(poly.at(i - 1), poly.at(i)), new Line(poly.at(j), poly.at(j - 1)));	// intersection(poly.at(i - 1), poly.at(i), poly.at(j), poly.at(j - 1)); // find the point of intersection
-                    if (right(poly.at(i + 1), poly.at(i), p)) { 												// make sure it's inside the poly
+                    if (right(poly.at(i + 1), poly.at(i), p)) { 												// make sure it'NODES inside the poly
                         d = sqdist(poly.at(i), p);
                         if (d < lowerDist) { 																	// keep only the closest intersection
                             lowerDist = d;

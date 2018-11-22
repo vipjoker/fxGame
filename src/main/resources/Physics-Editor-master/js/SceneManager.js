@@ -984,7 +984,7 @@ var SceneManager = (function(){
 		return world;
 	};
 
-	// exports the seleted object(s)
+	// exports the seleted object(NODES)
 	SceneManager.prototype.exportSelection = function(){
 		if (this.state == this.STATE_DEFAULT_MODE){
 			var array = {

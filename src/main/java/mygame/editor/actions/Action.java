@@ -1,21 +1,10 @@
 package mygame.editor.actions;
 
 
-import javafx.animation.FillTransition;
-import javafx.animation.ParallelTransition;
-import javafx.animation.ScaleTransition;
-import javafx.animation.StrokeTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.scene.Node;
-import javafx.scene.paint.Color;
-import javafx.util.Duration;
 import mygame.editor.render.CanvasRenderer;
 import mygame.editor.repository.NodeRepository;
-import mygame.editor.util.Constants;
-import mygame.editor.model.Point;
-
-import java.util.List;
 
 
 public abstract class Action implements ChangeListener<String>{

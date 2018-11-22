@@ -246,7 +246,7 @@ public interface Interpolator {
 
     Interpolator EASEOUTELASTIC = (start, end, val) -> {
 /* GFX47 MOD END */
-        //Thank you to rafael.marteleto for fixing this as a port over from Pedro's UnityTween
+        //Thank you to rafael.marteleto for fixing this as a port over from Pedro'NODES UnityTween
         end -= start;
 
         float d = 1f;

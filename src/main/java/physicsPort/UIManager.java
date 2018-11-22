@@ -277,7 +277,7 @@ public class UIManager {
 //            });
 //        });
 //
-//        // properties of selected shape(s)
+//        // properties of selected shape(NODES)
 //        this.shapeProperties = $("#shape_properties").find("input");
 //        for (var i = 0; i < 6; i++) {
 //            this.shapeProperties[i].addEventListener('keypress', function(e) {
@@ -311,7 +311,7 @@ public class UIManager {
 //            }
 //        });
 //
-//        // properties of selected body(s)
+//        // properties of selected body(NODES)
 //        this.bodyProperties = $("#body_properties").find("input");
 //        this.bodyProperties.push($("#body_properties").find("select")[0]);
 //        for (var i = 0; i < 2; i++) {
@@ -395,7 +395,7 @@ public class UIManager {
 //            });
 //        }
 //
-//        // properties of selected joint(s)
+//        // properties of selected joint(NODES)
 //        this.jointProperties = $("#joint_properties").find("input");
 //        this.jointPropertyRows = $("#joint_properties").find("tr");
 //        for (var i = 0; i < 8; i++) {

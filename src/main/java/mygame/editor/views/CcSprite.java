@@ -5,12 +5,15 @@ import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import mygame.editor.manager.FileManager;
 import mygame.editor.model.Point;
 import mygame.editor.util.Constants;
 
+import java.io.File;
+
 public class CcSprite extends CcNode {
     protected Image image;
-
+    private String imagePath;
     public CcSprite(Image image) {
         this.image = image;
         width.set(image.getWidth());
@@ -19,8 +22,11 @@ public class CcSprite extends CcNode {
 
     }
 
-    public CcSprite(Image image, double width, double height) {
-        this.image = image;
+    public CcSprite(String  path, double width, double height) {
+        this.imagePath = path;
+        final File f = new File(FileManager.getInstance().getWorkingFolder(), path);
+
+        this.image = new Image(f.toURI().toString());
         this.width.set(width);
         this.height.set(height);
         updateBoundingBox();
@@ -37,7 +43,6 @@ public class CcSprite extends CcNode {
             context.setStroke(Constants.GREEN);
             context.strokeRect(bBox.getMinX() -5, bBox.getMinY() -5, bBox.getWidth() +10, bBox.getHeight()+10);
             context.setFill(Color.RED);
-
             context.fillOval(-2.5, -2.5, 5, 5);
         }
     }
@@ -60,6 +65,10 @@ public class CcSprite extends CcNode {
 
     public void setActive(boolean isActive) {
         this.active = isActive;
+    }
+
+    public String getImagePath() {
+        return imagePath;
     }
 }
 

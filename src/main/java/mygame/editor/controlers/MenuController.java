@@ -9,6 +9,8 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.stage.FileChooser;
 import mygame.editor.App;
+import mygame.editor.manager.FileManager;
+import mygame.editor.parser.LocalParserKt;
 
 import java.awt.*;
 import java.io.File;
@@ -29,24 +31,12 @@ public class MenuController implements Initializable {
     }
 
     public void onLoad(ActionEvent actionEvent) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Resource File");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Json Files", "*.json"));
-
-
-        final Scene scene = menuBar.getScene();
-        File selectedFile = fileChooser.showOpenDialog(scene.getWindow());
-        if(selectedFile != null) {
-            final File parentFile = selectedFile.getParentFile();
-            MainController controller = App.instance.getController(MainController.class);
-            App.instance.setWorkingFolder(parentFile);
-
-            controller.setLeftPane(parentFile);
-        }
+        final String json = FileManager.getInstance().loadScene();
+        LocalParserKt.createNodesFromSting(App.instance.repository,json);
     }
 
     public void onSave(ActionEvent actionEvent) {
-
+        String json = LocalParserKt.createJsonFromNodes(App.instance.repository);
+        FileManager.getInstance().saveScene(json);
     }
 }

@@ -80,7 +80,7 @@ Joint.JOINT_REVOLUTE 		// bodies can rotate about localAnchorB
 Joint.JOINT_WHEEL 			// wheel - axle joint
 Joint.JOINT_PULLEY          // bodies suspended from pulley
 Joint.JOINT_GEAR 			// a body can drive another body using either revolute/prismatic joint
-Joint.JOINT_PRISMATIC 		// a body's translation can be constrained along an axis (localAxis)
+Joint.JOINT_PRISMATIC 		NODES
 Joint.JOINT_ROPE 			// distance between two bodies can be constrained
 ````
 How to create joints:

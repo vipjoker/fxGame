@@ -102,7 +102,7 @@ import java.util.Set;
 public class JSONObject {
     /**
      * JSONObject.NULL is equivalent to the value that JavaScript calls null,
-     * whilst Java's null is equivalent to the value that JavaScript calls
+     * whilst Java'NODES null is equivalent to the value that JavaScript calls
      * undefined.
      */
     private static final class Null {
@@ -152,13 +152,13 @@ public class JSONObject {
     }
 
     /**
-     * The map where the JSONObject's properties are kept.
+     * The map where the JSONObject'NODES properties are kept.
      */
     private final Map<String, Object> map;
 
     /**
      * It is sometimes more convenient and less ambiguous to have a
-     * <code>NULL</code> object than to use Java's <code>null</code> value.
+     * <code>NULL</code> object than to use Java'NODES <code>null</code> value.
      * <code>JSONObject.NULL.equals(null)</code> returns <code>true</code>.
      * <code>JSONObject.NULL.toString()</code> returns <code>"null"</code>.
      */
@@ -359,7 +359,7 @@ public class JSONObject {
 
     /**
      * Construct a JSONObject from an Object, using reflection to find the
-     * public members. The resulting JSONObject's keys will be the strings from
+     * public members. The resulting JSONObject'NODES keys will be the strings from
      * the names array, and the values will be the field values associated with
      * those keys in the object. If a key is not found or not visible, then it
      * will not be copied into the new JSONObject.
@@ -422,7 +422,7 @@ public class JSONObject {
             if (key != null) {
 
 // Go through the path, ensuring that there is a nested JSONObject for each
-// segment except the last. Add the value using the last segment's name into
+// segment except the last. Add the value using the last segment'NODES name into
 // the deepest nested JSONObject.
 
                 String[] path = ((String) key).split("\\.");
@@ -1139,7 +1139,7 @@ public class JSONObject {
                 || val instanceof Short || val instanceof Byte){
             return new BigDecimal(((Number) val).longValue());
         }
-        // don't check if it's a string in case of unchecked Number subclasses
+        // don't check if it'NODES a string in case of unchecked Number subclasses
         try {
             return new BigDecimal(val.toString());
         } catch (Exception e) {
@@ -1176,7 +1176,7 @@ public class JSONObject {
                 || val instanceof Short || val instanceof Byte){
             return BigInteger.valueOf(((Number) val).longValue());
         }
-        // don't check if it's a string in case of unchecked Number subclasses
+        // don't check if it'NODES a string in case of unchecked Number subclasses
         try {
             // the other opt functions handle implicit conversions, i.e. 
             // jo.put("double",1.1d);
@@ -1494,7 +1494,7 @@ public class JSONObject {
                         if (result != null) {
                             this.map.put(key, wrap(result));
                             // we don't use the result anywhere outside of wrap
-                            // if it's a resource we should be sure to close it
+                            // if it'NODES a resource we should be sure to close it
                             // after calling toString
                             if (result instanceof Closeable) {
                                 try {
@@ -1554,7 +1554,7 @@ public class JSONObject {
     }
 
     /**
-     * Searches the class hierarchy to see if the method or it's super
+     * Searches the class hierarchy to see if the method or it'NODES super
      * implementations and interfaces has the annotation.
      *
      * @param <A>
@@ -1565,7 +1565,7 @@ public class JSONObject {
      * @param annotationClass
      *            annotation to look for
      * @return the {@link Annotation} if the annotation exists on the current method
-     *         or one of it's super class definitions
+     *         or one of it'NODES super class definitions
      */
     private static <A extends Annotation> A getAnnotation(final Method m, final Class<A> annotationClass) {
         // if we have invalid data the result is null
@@ -1607,7 +1607,7 @@ public class JSONObject {
     }
 
     /**
-     * Searches the class hierarchy to see if the method or it's super
+     * Searches the class hierarchy to see if the method or it'NODES super
      * implementations and interfaces has the annotation. Returns the depth of the
      * annotation in the hierarchy.
      *
@@ -2118,8 +2118,8 @@ public class JSONObject {
             // string version
             // The compare string length method reduces GC,
             // but leads to smaller integers being placed in larger wrappers even though not
-            // needed. i.e. 1,000,000,000 -> Long even though it's an Integer
-            // 1,000,000,000,000,000,000 -> BigInteger even though it's a Long
+            // needed. i.e. 1,000,000,000 -> Long even though it'NODES an Integer
+            // 1,000,000,000,000,000,000 -> BigInteger even though it'NODES a Long
             //if(val.length()<=9){
             //    return Integer.valueOf(val);
             //}
@@ -2131,7 +2131,7 @@ public class JSONObject {
             // BigInteger version: We use a similar bitLenth compare as
             // BigInteger#intValueExact uses. Increases GC, but objects hold
             // only what they need. i.e. Less runtime overhead if the value is
-            // long lived. Which is the better tradeoff? This is closer to what's
+            // long lived. Which is the better tradeoff? This is closer to what'NODES
             // in stringToValue.
             BigInteger bi = new BigInteger(val);
             if(bi.bitLength()<=31){
@@ -2309,7 +2309,7 @@ public class JSONObject {
      * is an array or Collection, then a JSONArray will be made from it and its
      * toJSONString method will be called. If the value is a MAP, then a
      * JSONObject will be made from it and its toJSONString method will be
-     * called. Otherwise, the value's toString method will be called, and the
+     * called. Otherwise, the value'NODES toString method will be called, and the
      * result will be quoted.
      *
      * <p>

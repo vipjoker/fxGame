@@ -89,7 +89,7 @@ public class WorldLoader {
 	/** array list of all the joints loaded to use when creating gear joints **/
 	private ArrayList<Joint> loadedJoints;
 	
-	/** to offset scene's position (in pixels) **/
+	/** to offset scene'NODES position (in pixels) **/
 	public float offsetX = 0, offsetY = 0;
 	
 	/** ready the loader to load new scene **/

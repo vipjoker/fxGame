@@ -20,9 +20,13 @@
               styleClass="container_border">
             <children>
 
+                <Button fx:id="btnSelect" layoutX="81.0" layoutY="33.0" mnemonicParsing="false"
+                        styleClass="button" text="Body"
+                        textFill="WHITE" onAction="#onSelect"/>
                 <Button fx:id="btnBody" layoutX="81.0" layoutY="33.0" mnemonicParsing="false"
                         styleClass="button" text="Body"
                         textFill="WHITE" onAction="#onBodyMode"/>
+
                 <Button fx:id="btnFixture" layoutX="110.0" layoutY="33.0" mnemonicParsing="false" styleClass="button"
                         text="Fixture"
                         textFill="WHITE" onAction="#onFixtureMode"/>
@@ -38,7 +42,8 @@
 
         </HBox>
 
-        <HBox fx:id="hBoxActions" alignment="CENTER" minWidth="-Infinity" minHeight="-Infinity" styleClass="container_border">
+        <HBox fx:id="hBoxActions" alignment="CENTER" minWidth="-Infinity" minHeight="-Infinity"
+              styleClass="container_border">
 
             <children>
 

@@ -73,9 +73,9 @@ var main = function() {
     /*const*/ var titleSuffix = "- Scriptpad";
     /*const*/ var defaultTitle = "Untitled" + titleSuffix;
 
-    // Scriptpad's main frame
+    // Scriptpad'NODES main frame
     var frame;
-    // Scriptpad's main editor
+    // Scriptpad'NODES main editor
     var editor;
 
     // To track the current file name

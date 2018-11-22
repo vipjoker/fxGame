@@ -35,7 +35,6 @@ public class App extends Application {
     public final SimpleObjectProperty<Command> observableAction = new SimpleObjectProperty<>();
     public final NodeRepository repository = new InMemoryRepository();
     public final ObservableList<CcNode> selected = FXCollections.observableArrayList();
-    private File workingFolder;
 
     public void registerController(Object object) {
         controllers.put(object.getClass(),object);
@@ -94,12 +93,5 @@ public class App extends Application {
         keyListeners.remove(listener);
     }
 
-    public void setWorkingFolder(File workingFolder) {
-        this.workingFolder = workingFolder;
-    }
-
-    public File getWorkingFolder() {
-        return workingFolder;
-    }
 }
 

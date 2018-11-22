@@ -84,7 +84,7 @@ import java.util.Map;
 public class JSONArray implements Iterable<Object> {
 
     /**
-     * The arrayList where the JSONArray's properties are kept.
+     * The arrayList where the JSONArray'NODES properties are kept.
      */
     private final ArrayList<Object> myArrayList;
 
@@ -947,7 +947,7 @@ public class JSONArray implements Iterable<Object> {
     }
 
     /**
-     * Append a boolean value. This increases the array's length by one.
+     * Append a boolean value. This increases the array'NODES length by one.
      *
      * @param value
      *            A boolean value.
@@ -972,7 +972,7 @@ public class JSONArray implements Iterable<Object> {
     }
 
     /**
-     * Append a double value. This increases the array's length by one.
+     * Append a double value. This increases the array'NODES length by one.
      *
      * @param value
      *            A double value.
@@ -985,7 +985,7 @@ public class JSONArray implements Iterable<Object> {
     }
     
     /**
-     * Append a float value. This increases the array's length by one.
+     * Append a float value. This increases the array'NODES length by one.
      *
      * @param value
      *            A float value.
@@ -998,7 +998,7 @@ public class JSONArray implements Iterable<Object> {
     }
 
     /**
-     * Append an int value. This increases the array's length by one.
+     * Append an int value. This increases the array'NODES length by one.
      *
      * @param value
      *            An int value.
@@ -1009,7 +1009,7 @@ public class JSONArray implements Iterable<Object> {
     }
 
     /**
-     * Append an long value. This increases the array's length by one.
+     * Append an long value. This increases the array'NODES length by one.
      *
      * @param value
      *            A long value.
@@ -1036,7 +1036,7 @@ public class JSONArray implements Iterable<Object> {
     }
 
     /**
-     * Append an object value. This increases the array's length by one.
+     * Append an object value. This increases the array'NODES length by one.
      *
      * @param value
      *            An object value. The value should be a Boolean, Double,

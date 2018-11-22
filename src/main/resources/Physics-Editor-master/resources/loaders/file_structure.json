@@ -12,7 +12,7 @@
         type: STATIC(0), KINEMATIC(1), DYNAMIC(2)
         userData: userdata_provided_in_editor, used in collision detection 
         position: [position_on_x_axis, position_on_y_axis]
-        rotation: body's rotation in degrees
+        rotation: body'NODES rotation in degrees
         isBullet: whether body is bullet or not (bullet bodies are expensive to simulate but there collision detection is better than normal bodies), avoid wherever psossible
         isFixedRotation: is rotation of body fixed, if true => body won't rotate
         fixtures: array of fixtures
@@ -29,17 +29,17 @@
 
     shape : the actual geometry
         type: BOX(0), CIRCLE(1), POLYGON(2), CHAIN(3)
-        position: position in body's local space (with respect to bodies position)
+        position: position in body'NODES local space (with respect to bodies position)
         vertices: array of vertices
 
-    vertices : [position_x, position_y] in shape's local space (position relative to shapes position)
+    vertices : [position_x, position_y] in shape'NODES local space (position relative to shapes position)
 
     joints : array of joints
         jointType: DISTANCE(0), WELD(1), REVOLUTE(2), WHEEL(3), PULLEY(4), GEAR(5)
         bodyA: index of bodyA (primary anchor)
         bodyB: index of bodyB (secondary anchor)
-        localAnchorA: [position_x, position_y], offset from bodyA's position (in bodyA's local space)
-        localAnchorB: [position_x, position_y], offset from bodyB's position (in bodyB's local space)
+        localAnchorA: [position_x, position_y], offset from bodyA'NODES position (in bodyA'NODES local space)
+        localAnchorB: [position_x, position_y], offset from bodyB'NODES position (in bodyB'NODES local space)
         userData: userdata_provided_in_editor
         collideConnected: can bodyA and bodyB collide
 

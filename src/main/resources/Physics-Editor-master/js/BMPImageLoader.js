@@ -75,7 +75,7 @@ var BMPImageLoader = (function () {
 		var m = binaryFile.charAt(this.counter++);
 		if (b != 'B' && m != 'M'){
 			// not a bitmap
-			console.log("%cIt's not a bmp", "color:#f00;");
+			console.log("%cIt'NODES not a bmp", "color:#f00;");
 			// reset the counter for loading another files
 			this.counter = 0;
 			return;

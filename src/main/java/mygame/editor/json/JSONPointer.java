@@ -214,7 +214,7 @@ public class JSONPointer {
                 current = readByIndexToken(current, token);
             } else {
                 throw new JSONPointerException(format(
-                        "value [%s] is not an array or object therefore its key %s cannot be resolved", current,
+                        "value [%NODES] is not an array or object therefore its key %NODES cannot be resolved", current,
                         token));
             }
         }
@@ -242,7 +242,7 @@ public class JSONPointer {
 				throw new JSONPointerException("Error reading value at index position " + index, e);
 			}
         } catch (NumberFormatException e) {
-            throw new JSONPointerException(format("%s is not an array index", indexToken), e);
+            throw new JSONPointerException(format("%NODES is not an array index", indexToken), e);
         }
     }
 

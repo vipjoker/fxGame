@@ -1334,7 +1334,7 @@ public class LeanTween {
 //    }
 //
 //    /**
-//     * Fade a gameobject's material to a certain alpha value. The material's shader needs to support alpha. <a href="http://owlchemylabs.com/content/">Owl labs has some excellent efficient shaders</a>.
+//     * Fade a gameobject'NODES material to a certain alpha value. The material'NODES shader needs to support alpha. <a href="http://owlchemylabs.com/content/">Owl labs has some excellent efficient shaders</a>.
 //     *
 //     * @param {GameObject} gameObject:GameObject Gameobject that you wish to fade
 //     * @param {float}      to:float the final alpha value (0-1)
@@ -1378,7 +1378,7 @@ public class LeanTween {
 //     * Move a GameObject along a set of bezier curves
 //     *
 //     * @param {GameObject} gameObject:GameObject Gameobject that you wish to move
-//     * @param {Vector2[]}  path:Vector2[] A set of points that define the curve(s) ex: Point1,Handle1,Handle2,Point2,...
+//     * @param {Vector2[]}  path:Vector2[] A set of points that define the curve(NODES) ex: Point1,Handle1,Handle2,Point2,...
 //     * @param {float}      time:float The time to complete the tween in
 //     * @return {LTDescr} LTDescr an object that distinguishes the tween
 //     * @method physicsPort.LeanTween.move
@@ -1456,7 +1456,7 @@ public class LeanTween {
 //     * Move a GameObject along a set of bezier curves
 //     *
 //     * @param {GameObject} gameObject:GameObject Gameobject that you wish to move
-//     * @param {Vector2[]}  path:Vector2[] A set of points that define the curve(s) ex: Point1,Handle1,Handle2,Point2,...
+//     * @param {Vector2[]}  path:Vector2[] A set of points that define the curve(NODES) ex: Point1,Handle1,Handle2,Point2,...
 //     * @param {float}      time:float The time to complete the tween in
 //     * @return {LTDescr} LTDescr an object that distinguishes the tween
 //     * @method physicsPort.LeanTween.move

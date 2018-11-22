@@ -3,6 +3,7 @@ package mygame.editor.controlers;
 import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.SplitPane;
@@ -16,12 +17,15 @@ import javafx.scene.layout.VBox;
 import mygame.editor.App;
 import mygame.editor.actions.*;
 import mygame.editor.component.SpriteComponent;
+import mygame.editor.manager.FileManager;
 import mygame.editor.model.Command;
 import mygame.editor.model.TreeFileHolder;
+import mygame.editor.model.box2d.B2Body;
 import mygame.editor.render.CanvasRenderer;
 import mygame.editor.render.TreeItemPath;
 import mygame.editor.repository.NodeRepository;
 import mygame.editor.util.Constants;
+import mygame.editor.util.FileUtil;
 import mygame.editor.util.Resources;
 import mygame.editor.views.CcNode;
 import mygame.editor.views.CcSprite;
@@ -71,7 +75,18 @@ public class MainController implements Initializable {
             initActions();
 
         });
-        App.instance.observableAction.addListener(this::onActionChanged);
+
+
+        App.instance.selected.addListener(new ListChangeListener<CcNode>() {
+                                              @Override
+                                              public void onChanged(Change<? extends CcNode> c) {
+                                                  for (CcNode node : App.instance.repository.getNodes()) {
+                                                      node.setActive(c.getList().contains(node));
+                                                  }
+                                              }
+                                          });
+
+                App.instance.observableAction.addListener(this::onActionChanged);
     }
 
     private void onActionChanged(ObservableValue<? extends Command> observableValue, Command oldValue, Command newValue) {
@@ -119,9 +134,9 @@ public class MainController implements Initializable {
                 String path = selected.getValue().getPath();
                 System.out.println(path);
 
-                final File f = new File(App.instance.getWorkingFolder(), path);
 
-                final CcSprite ccSprite = new CcSprite(new Image(f.toURI().toString()),100,100);
+
+                final CcSprite ccSprite = new CcSprite(path,100,100);
                 int count = App.instance.repository.count();
                 ccSprite.getName().setValue("Sprite " + count);
                 App.instance.repository.save(ccSprite);
@@ -136,7 +151,7 @@ public class MainController implements Initializable {
     private void initActions() {
         NodeRepository repository = App.instance.repository;
 
-
+        actions.put(Constants.MODE_SELECT, new SelectAction(canvasRenderer, repository));
         actions.put(Constants.MODE_FIXTURE, new FixtureEditAction(canvasRenderer, repository));
         actions.put(Constants.MODE_BODY, new BodyEditAction(canvasRenderer, repository, infoController));
         actions.put(Constants.MODE_RUN, new Box2dAction(canvasRenderer, repository));
@@ -181,10 +196,5 @@ public class MainController implements Initializable {
             }
 
     }
-
-    public CanvasRenderer getCanvasRenderer() {
-        return canvasRenderer;
-    }
-
 
 }

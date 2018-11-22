@@ -44,7 +44,7 @@ LineSegment.prototype.distanceFromPoint = function(pX, pY){
 
 /**
 *
-* returns true if point's x coordinate lies in line segment bounds 
+* returns true if point'NODES x coordinate lies in line segment bounds
 */
 LineSegment.prototype.checkInBoundsX = function(px){
 	return (this.signX * px < this.signX * this.sX && this.signX * px > this.signX * this.eX);
@@ -52,7 +52,7 @@ LineSegment.prototype.checkInBoundsX = function(px){
 
 /**
 *
-* returns true if point's y coordinate lies in line segment bounds 
+* returns true if point'NODES y coordinate lies in line segment bounds
 */
 LineSegment.prototype.checkInBoundsY = function(py){
 	return (this.signY * py < this.signY * this.sY && this.signY * py > this.signY * this.eY);

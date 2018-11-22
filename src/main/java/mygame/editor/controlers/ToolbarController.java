@@ -153,6 +153,9 @@ public class ToolbarController implements Initializable {
 
     }
 
+    public void onSelect(ActionEvent actionEvent) {
+
+    }
 
     public void onCreateSprite(MouseEvent actionEvent) {
         //clearSelectoin();
@@ -221,6 +224,7 @@ public class ToolbarController implements Initializable {
                 break;
         }
     }
+
 }
 
 
