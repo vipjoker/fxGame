@@ -1,9 +1,13 @@
 package mygame.editor.controlers;
 
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import mygame.editor.App;
@@ -17,213 +21,95 @@ import java.util.ResourceBundle;
 public class ToolbarController implements Initializable {
 
     private final static String SELECTED = "selected";
+    public HBox mainActions;
+    public HBox secondaryActions;
+    private ToggleButton nodeMove;
+    private ToggleButton nodeRotate;
+    private ToggleButton fixtureMove;
+    private ToggleButton fixtureEdit;
 
-    private Button btnEditPoints = new Button("Edit points");
-    private Button btnMove = new Button("Move");
-    private Button btnMoveFixture = new Button("Move");
-    private Button btnRotate = new Button("Rotate");
-
-    private Button btnCreateSquare = new Button("Create square");
-    private Button btnCreateCircle = new Button("Create circle");
-    private Button btnCreateChain = new Button("Create chain");
-    private Button btnDistanceJoint = new Button("Distance joint");
-    private Button btnRevoluteJoint = new Button("Revolute joint");
-    private Button btnSprite = new Button("Sprite");
-
-    private Button[] bodyActions = {btnMove, btnRotate};
-    private Button[] fixtureActions = {btnMoveFixture, btnEditPoints};
-    private Button[] createActions = {btnCreateSquare, btnCreateCircle, btnCreateChain};
-
-    public Button btnCreate;
-    public Button btnRun;
-    public Button btnBody;
-    public Button btnFixture;
-    public HBox hBoxActions;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         App.instance.registerController(this);
-        btnMove.setOnMouseClicked(this::onBodyMove);
-        btnRotate.setOnMouseClicked(this::onBodyRotate);
-        btnMoveFixture.setOnMouseClicked(this::onFixtureMove);
-        btnEditPoints.setOnMouseClicked(this::onEditPoint);
 
-        btnCreateSquare.setOnMouseClicked(this::onCreateSquare);
-        btnCreateChain.setOnMouseClicked(this::onCreateChain);
-        btnCreateCircle.setOnMouseClicked(this::onCreateCircle);
-        btnDistanceJoint.setOnMouseClicked(this::onCreateDistanceJoint);
-        btnRevoluteJoint.setOnMouseClicked(this::onCreateRevoluteJoint);
-        btnSprite.setOnMouseClicked(this::onCreateSprite);
+
+        ToggleGroup mainToggleGroup = new ToggleGroup();
+
+        ToggleButton nodeToggle=  new ToggleButton("Node");
+        nodeToggle.setUserData("Node");
+        ToggleButton fixtureToggle=  new ToggleButton("Fixture");
+        fixtureToggle.setUserData("Fixture");
+        mainToggleGroup.getToggles().addAll(nodeToggle,fixtureToggle);
+        mainActions.getChildren().addAll(nodeToggle,fixtureToggle);
+
+        ToggleGroup nodeToggleGroup  = new ToggleGroup();
+
+        nodeMove = new ToggleButton("Move");
+        Command nodeMoveCommand = new Command(Constants.MODE_NODE,Constants.PARAM_MOVE);
+        nodeMove.setUserData(nodeMoveCommand);
+
+        nodeRotate = new ToggleButton("Rotate");
+        Command nodeRotateCommand = new Command(Constants.MODE_NODE,Constants.PARAM_ROTATE);
+        nodeRotate.setUserData(nodeRotateCommand);
+        nodeToggleGroup.getToggles().addAll(nodeMove,nodeRotate);
+
+        ToggleGroup fixtureToggleGroup = new ToggleGroup();
+        fixtureMove = new ToggleButton("Move");
+        fixtureEdit = new ToggleButton("Edit");
+        fixtureToggleGroup.getToggles().addAll(fixtureMove,fixtureEdit);
+        final Command fixtureCommand = new Command(Constants.MODE_FIXTURE, Constants.PARAM_MOVE);
+        fixtureMove.setUserData(fixtureCommand);
+
+        final Command fixtureEditCommand = new Command(Constants.MODE_FIXTURE,Constants.PARAM_EDIT_POINTS);
+        fixtureEdit.setUserData(fixtureEditCommand);
+
+        nodeToggleGroup.selectedToggleProperty().addListener(this::onSecondaryActionChanged);
+        fixtureToggleGroup.selectedToggleProperty().addListener(this::onSecondaryActionChanged);
+
         App.instance.observableAction.addListener(this::onActionChanged);
-    }
-
-    private void onCreateDistanceJoint(MouseEvent mouseEvent) {
-        clearEditableSelection();
-        btnDistanceJoint.getStyleClass().add(SELECTED);
-
-        App.instance.observableAction.set(new Command(Constants.MODE_CREATE, Constants.PARAM_DISTANCE));
-    }
-
-    private void onCreateCircle(MouseEvent mouseEvent) {
-        clearEditableSelection();
-        btnCreateCircle.getStyleClass().add(SELECTED);
-        App.instance.observableAction.set(new Command(Constants.MODE_CREATE, Constants.PARAM_CIRCLE));
-    }
 
 
-    private void onCreateChain(MouseEvent mouseEvent) {
-        clearEditableSelection();
-        btnCreateChain.getStyleClass().add(SELECTED);
-        App.instance.observableAction.set(new Command(Constants.MODE_CREATE, Constants.PARAM_CHAIN));
-    }
 
-    private void onCreateSquare(MouseEvent mouseEvent) {
-        clearEditableSelection();
-        btnCreateSquare.getStyleClass().add(SELECTED);
-        App.instance.observableAction.set(new Command(Constants.MODE_CREATE, Constants.PARAM_SQUARE));
-    }
 
-    private void onBodyRotate(MouseEvent mouseEvent) {
-        clearEditableSelection();
-        btnRotate.getStyleClass().add(SELECTED);
-        App.instance.observableAction.setValue(new Command(Constants.MODE_BODY, Constants.PARAM_ROTATE));
-    }
-
-    private void onFixtureMove(MouseEvent mouseEvent) {
-        clearEditableSelection();
-        btnMoveFixture.getStyleClass().add(SELECTED);
-        App.instance.observableAction.setValue(new Command(Constants.MODE_FIXTURE, Constants.PARAM_MOVE));
+        mainToggleGroup.selectedToggleProperty().addListener(this::onModeChanged);
+        nodeToggle.fire();
 
     }
 
-    private void onBodyMove(MouseEvent mouseEvent) {
-        clearEditableSelection();
-        btnMove.getStyleClass().add(SELECTED);
-        App.instance.observableAction.setValue(new Command(Constants.MODE_BODY, Constants.PARAM_MOVE));
-    }
-
-    public void onEditPoint(MouseEvent actionEvent) {
-        MainController controller = App.instance.getController(MainController.class);
-        clearEditableSelection();
-        btnEditPoints.getStyleClass().add(SELECTED);
-
-        App.instance.observableAction.set(new Command(Constants.MODE_FIXTURE, Constants.PARAM_EDIT_POINTS));
-    }
-
-    public void onRun(ActionEvent actionEvent) {
-        clearEditableSelection();
-        btnRun.getStyleClass().add(SELECTED);
-        App.instance.observableAction.set(new Command(Constants.MODE_RUN, Constants.PARAM_RUN));
-
-    }
-
-    private void clearEditableSelection() {
-        for (Button editButton : bodyActions) editButton.getStyleClass().remove(SELECTED);
-        for (Button editButton : fixtureActions) editButton.getStyleClass().remove(SELECTED);
-        for (Button createButton : createActions) createButton.getStyleClass().remove(SELECTED);
-        for (Button btn : new Button[]{btnCreate, btnRun, btnBody, btnFixture}) {
-            btn.getStyleClass().remove(SELECTED);
+    private void onSecondaryActionChanged(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue){
+        if (newValue != null) {
+            Command command = (Command) newValue.getUserData();
+            App.instance.observableAction.set(command);
+        }else {
+            oldValue.setSelected(true);
         }
-
-
     }
 
 
-    public void onFixtureMode(ActionEvent actionEvent) {
-        App.instance
-                .observableAction
-                .set(new Command(Constants.MODE_FIXTURE, Constants.PARAM_MOVE));
 
-    }
-
-    public void onBodyMode(ActionEvent actionEvent) {
-        App.instance
-                .observableAction
-                .set(new Command(Constants.MODE_BODY, Constants.PARAM_MOVE));
-
-
-    }
-
-    public void onCreateMode(ActionEvent actionEvent) {
-
-        App.instance
-                .observableAction
-                .set(new Command(Constants.MODE_CREATE, Constants.PARAM_SQUARE));
-
-
-    }
-
-    public void onSelect(ActionEvent actionEvent) {
-
-    }
-
-    public void onCreateSprite(MouseEvent actionEvent) {
-        //clearSelectoin();
-        btnSprite.getStyleClass().add(SELECTED);
-        App.instance.observableAction.set(new Command(Constants.MODE_CREATE, Constants.ACTION_SPRITE));
-    }
-
-
-    public void onCreateRevoluteJoint(MouseEvent actionEvent) {
-//        clearSelectoin();
-
-        btnRevoluteJoint.getStyleClass().add(SELECTED);
-        App.instance.observableAction.set(new Command(Constants.MODE_CREATE, Constants.PARAM_REVOLUTE));
-    }
-
-
-    public void onActionChanged(ObservableValue<? extends Command> observable, Command oldValue, Command newValue) {
-        clearEditableSelection();
-        switch (newValue.action) {
-            case Constants.MODE_CREATE:
-                btnCreate.getStyleClass().add(SELECTED);
-                hBoxActions.getChildren().clear();
-                hBoxActions.getChildren().addAll(createActions);
-                switch (newValue.param) {
-                    case Constants.PARAM_SQUARE:
-                        btnCreateSquare.getStyleClass().add(SELECTED);
-                        break;
-                    case Constants.PARAM_CIRCLE:
-                        btnCreateCircle.getStyleClass().add(SELECTED);
-                        break;
-                    case Constants.PARAM_CHAIN:
-                        btnCreateChain.getStyleClass().add(SELECTED);
-                        break;
-                }
+    private void onModeChanged (ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue){
+        secondaryActions.getChildren().clear();
+        if(newValue == null){
+           oldValue.setSelected(true);
+            return;
+        }
+        switch (newValue.getUserData().toString()){
+            case "Node":
+                secondaryActions.getChildren().addAll(nodeMove,nodeRotate);
+                nodeMove.fire();
                 break;
-            case Constants.MODE_BODY:
-                btnBody.getStyleClass().add(SELECTED);
-                hBoxActions.getChildren().clear();
-                hBoxActions.getChildren().addAll(bodyActions);
-                switch (newValue.param) {
-                    case Constants.PARAM_MOVE:
-                        btnMove.getStyleClass().add(SELECTED);
-                        break;
-                    case Constants.PARAM_ROTATE:
-                        btnRotate.getStyleClass().add(SELECTED);
-                        break;
-                }
-                break;
-            case Constants.MODE_FIXTURE:
-                btnFixture.getStyleClass().add(SELECTED);
-                hBoxActions.getChildren().clear();
-                hBoxActions.getChildren().addAll(fixtureActions);
-                switch (newValue.param) {
-                    case Constants.PARAM_MOVE:
-                        btnMoveFixture.getStyleClass().add(SELECTED);
-                        break;
-                    case Constants.PARAM_EDIT_POINTS:
-                        btnEditPoints.getStyleClass().add(SELECTED);
-                        break;
-                }
-                break;
-            case Constants.MODE_RUN:
-                btnRun.getStyleClass().add(SELECTED);
-
-
+            case "Fixture":
+                secondaryActions.getChildren().addAll(fixtureMove,fixtureEdit);
+                fixtureMove.fire();
                 break;
         }
     }
+
+    private void onActionChanged(ObservableValue<? extends Command> observableValue, Command object, Command object1) {
+
+    }
+
 
 }
 

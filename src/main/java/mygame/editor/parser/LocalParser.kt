@@ -25,7 +25,7 @@ fun createNodesFromSting(repository: NodeRepository, json: String) {
 
     val jsonObject = JSONObject(json)
     val nodes = jsonObject.getJSONArray(NODES)
-    for (i in 0..nodes.length()) {
+    for (i in 0 until nodes.length()) {
         val jsonNode = nodes.getJSONObject(i)
         val type = jsonNode.getString(TYPE)
         when (type) {
@@ -47,10 +47,11 @@ fun createSprite(jsonObject: JSONObject): CcSprite {
     val width = jsonObject.getDouble(WIDTH)
     val height = jsonObject.getDouble(HEIGHT)
     val name = jsonObject.getString(NAME)
-    jsonObject.getDouble(ANGLE)
+    val angle = jsonObject.getDouble(ANGLE)
     val sprite = CcSprite(image, width, height)
     sprite.setX(x)
     sprite.setY(y)
+    sprite.setAngle(angle)
     sprite.setName(name)
     return sprite
 }
@@ -68,9 +69,9 @@ fun createJsonFromNodes(repository: NodeRepository): String {
 
 fun createJsonNode(node: CcNode): JSONObject? {
     if (node is CcSprite) {
-        return createJsonSprite(node);
+        return createJsonSprite(node)
     } else {
-        return null;
+        return null
     }
 }
 
@@ -84,6 +85,6 @@ fun createJsonSprite(node: CcSprite): JSONObject {
     jsonObject.put(HEIGHT, node.height.doubleValue())
     jsonObject.put(ANGLE, node.angle.doubleValue())
     jsonObject.put(IMAGE, node.imagePath)
-    return jsonObject;
+    return jsonObject
 }
 

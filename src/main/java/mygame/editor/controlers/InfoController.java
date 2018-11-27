@@ -13,6 +13,7 @@ import javafx.scene.layout.VBox;
 import mygame.editor.App;
 import mygame.editor.model.Point;
 import mygame.editor.ui.SlideableTextField;
+import mygame.editor.ui.StringTextField;
 import mygame.editor.views.CcNode;
 
 import java.net.URL;
@@ -24,25 +25,17 @@ import java.util.regex.Pattern;
  * Created by oleh on 3/27/17.
  */
 public class InfoController implements Initializable {
-    public GridPane gpInfo;
-    public TextField etName;
-    public TextField etX;
-    public TextField etY;
-    public TextField etWidth;
-    public TextField etHeight;
-    public ComboBox<String> comboType;
-    public TextField etRotation;
-    public Spinner<Double> spFriction;
-    public Spinner<Double> spRestitution;
-    public Spinner<Double> spDensity;
-    public Label tvX;
-    public Label tvY;
-    public Label tvWidth;
-    public Label tvHeight;
     public VBox vbRoot;
     private CcNode ccNode;
-    private Runnable mCallback;
-    Pattern floatNumberPattern = Pattern.compile("[+-]?([0-9]*[.])?[0-9]+");
+
+    private Pattern floatNumberPattern = Pattern.compile("[+-]?([0-9]*[.])?[0-9]+");
+    private StringTextField etName = new StringTextField("Name");
+    private SlideableTextField etX = new SlideableTextField("X");
+    private SlideableTextField etY = new SlideableTextField("Y");
+    private SlideableTextField etWidth = new SlideableTextField("Width");
+    private SlideableTextField etHeight = new SlideableTextField("Height");
+    private SlideableTextField etAngle = new SlideableTextField("Angle");
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -52,128 +45,42 @@ public class InfoController implements Initializable {
 
         App.instance.selected.addListener(this::onSelected);
 
-        comboType.setItems(strings);
 
-       // setListeners();
+        vbRoot.getChildren().addAll(etName, etX, etY, etAngle, etWidth, etHeight);
 
-        vbRoot.getChildren().add(new SlideableTextField("X",new SimpleDoubleProperty(888)));
-        vbRoot.getChildren().add(new SlideableTextField("Y",new SimpleDoubleProperty(444)));
-        vbRoot.getChildren().add(new SlideableTextField("name", new SimpleStringProperty("test")));
-        initSpinners();
-        setupScrollers();
 
     }
 
     private void onSelected(ListChangeListener.Change<? extends CcNode> c) {
 
-        if(ccNode != null){
-            etX.textProperty().unbindBidirectional(ccNode.getX());
-            etY.textProperty().unbindBidirectional(ccNode.getY());
-            etName.textProperty().unbindBidirectional(ccNode.getName());
-            etWidth.textProperty().unbindBidirectional(ccNode.getWidth());
-            etHeight.textProperty().unbindBidirectional(ccNode.getHeight());
-            etRotation.textProperty().unbindBidirectional(ccNode.getAngle());
+        if (ccNode != null) {
+            etX.unbind();
+            etY.unbind();
+            etAngle.unbind();
+            etWidth.unbind();
+            etHeight.unbind();
+            etName.unbind();
         }
 
 
-        if(c.getList().size() == 1) {
+        if (c.getList().size() == 1) {
             ccNode = c.getList().get(0);
-            etX.textProperty().bindBidirectional(ccNode.getX(),new DecimalFormat());
-            etY.textProperty().bindBidirectional(ccNode.getY(),new DecimalFormat());
-            etName.textProperty().bindBidirectional(ccNode.getName());
-            etWidth.textProperty().bindBidirectional(ccNode.getWidth(),new DecimalFormat());
-            etHeight.textProperty().bindBidirectional(ccNode.getHeight(),new DecimalFormat());
-            etRotation.textProperty().bindBidirectional(ccNode.getAngle(),new DecimalFormat());
-
-
+            etX.bind(ccNode.getX());
+            etY.bind(ccNode.getY());
+            etName.bind(ccNode.getName());
+            etWidth.bind(ccNode.getWidth());
+            etHeight.bind(ccNode.getHeight());
+            etAngle.bind(ccNode.getAngle());
         }
 
 
     }
 
-    private double lastX = 0;
-    private double value;
-    private void setupScrollers() {
-        tvX.setCursor(Cursor.H_RESIZE);
-        tvX.setOnMouseReleased(event -> lastX = 0);
-        tvX.setOnMouseDragged(event->{
-            if(lastX == 0){
-                if(etX.getText() != null && !etX.getText().isEmpty()){
-
-                    lastX = Double.parseDouble(etX.getText());
-                }else{
-                    lastX = event.getX();
-                }
-            }else{
-
-                double temp = event.getX() - lastX;
-                value += temp;
-                tvX.setText(String.valueOf(value));
-                etX.setText(String.valueOf(value));
-                lastX = event.getX();
-            }
-
-        });
-    }
-
-    public void setNode(CcNode node, Runnable runnable) {
-        this.ccNode = node;
-        this.mCallback = runnable;
-
-        etX.setText(String.valueOf(node.getX()));
-        etY.setText(String.valueOf(node.getY()));
-        etWidth.setText(String.valueOf(node.getWidth()));
-        etHeight.setText(String.valueOf(node.getHeight()));
-    }
 
     private void initSpinners() {
-        spFriction.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0, 1, 0.5, 0.1));
-        spDensity.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0, 1, 0.5, 0.1));
-        spRestitution.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0, 1, 0.5, 0.1));
-    }
-
-    private void setListeners() {
-
-        etX.textProperty().addListener((observable, oldValue, newValue) -> {
-
-
-          if(validateNumberField(oldValue,newValue,etX)) {
-                ccNode.setX(Double.parseDouble(newValue));
-                mCallback.run();
-            }
-
-
-        });
-        etY.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(validateNumberField(oldValue,newValue,etY)) {
-                ccNode.setY(Double.parseDouble(newValue));
-                mCallback.run();
-            }
-        });
-
-        etWidth.textProperty().addListener((observable, oldValue, newValue) -> {
-
-            if(validateNumberField(oldValue,newValue,etWidth)) {
-                ccNode.setWidth(Double.parseDouble(newValue));
-                mCallback.run();
-            }
-        });
-
-        etHeight.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(validateNumberField(oldValue,newValue,etHeight)) {
-                ccNode.setHeight(Double.parseDouble(newValue));
-                mCallback.run();
-            }
-
-        });
-
-        etRotation.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(validateNumberField(oldValue,newValue,etRotation)) {
-                ccNode.setAngle(Double.parseDouble(newValue));
-                mCallback.run();
-            }
-        });
-
+//        spFriction.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0, 1, 0.5, 0.1));
+//        spDensity.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0, 1, 0.5, 0.1));
+//        spRestitution.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0, 1, 0.5, 0.1));
     }
 
 
@@ -181,36 +88,20 @@ public class InfoController implements Initializable {
         if (!floatNumberPattern.matcher(newValue).matches()) {
 
             if (newValue.endsWith(".")) {
-                String replace = newValue.substring(0,newValue.length()-1);
+                String replace = newValue.substring(0, newValue.length() - 1);
                 textField.setText(replace);
-            } else if(newValue.equals("-")){
+            } else if (newValue.equals("-")) {
                 textField.setText("0");
-            }
-            else {
+            } else {
                 textField.setText(newValue.isEmpty() ? "0" : oldValue);
             }
             return false;
-        }else if(newValue.length() > 1 && newValue.startsWith("0") && !newValue.contains(".")){
+        } else if (newValue.length() > 1 && newValue.startsWith("0") && !newValue.contains(".")) {
             textField.setText(newValue.substring(1));
         }
 
         return true;
     }
 
-    public void setWidthInfo(Double width) {
-        etWidth.setText(String.valueOf(width));
-    }
 
-    public void setHeightInfo(Double height) {
-        etHeight.setText(String.valueOf(height));
-    }
-
-    public void setNameInfo(String name) {
-        etName.setText(name);
-    }
-
-    public void setPositionInfo(Point positionInfo) {
-        etX.setText(String.valueOf(positionInfo.getX()));
-        etY.setText(String.valueOf(positionInfo.getY()));
-    }
 }

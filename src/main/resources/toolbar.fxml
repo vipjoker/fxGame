@@ -16,33 +16,19 @@
     <children>
 
 
-        <HBox alignment="CENTER" minWidth="-Infinity" minHeight="-Infinity"
+        <HBox alignment="CENTER"
+              minWidth="-Infinity"
+              minHeight="-Infinity"
+              fx:id="mainActions"
               styleClass="container_border">
-            <children>
 
-                <Button fx:id="btnSelect" layoutX="81.0" layoutY="33.0" mnemonicParsing="false"
-                        styleClass="button" text="Body"
-                        textFill="WHITE" onAction="#onSelect"/>
-                <Button fx:id="btnBody" layoutX="81.0" layoutY="33.0" mnemonicParsing="false"
-                        styleClass="button" text="Body"
-                        textFill="WHITE" onAction="#onBodyMode"/>
-
-                <Button fx:id="btnFixture" layoutX="110.0" layoutY="33.0" mnemonicParsing="false" styleClass="button"
-                        text="Fixture"
-                        textFill="WHITE" onAction="#onFixtureMode"/>
-
-                <Button fx:id="btnCreate" layoutX="110.0" layoutY="33.0" mnemonicParsing="false" styleClass="button"
-                        text="Create"
-                        textFill="WHITE" onAction="#onCreateMode"/>
-
-            </children>
             <padding>
                 <Insets bottom="2.0" left="2.0" right="2.0" top="2.0"/>
             </padding>
 
         </HBox>
 
-        <HBox fx:id="hBoxActions" alignment="CENTER" minWidth="-Infinity" minHeight="-Infinity"
+        <HBox fx:id="secondaryActions" alignment="CENTER" minWidth="-Infinity" minHeight="-Infinity"
               styleClass="container_border">
 
             <children>
@@ -58,5 +44,4 @@
         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
     </padding>
 
-    <Button fx:id="btnRun" text="Run" onAction="#onRun"/>
 </HBox>

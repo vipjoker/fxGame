@@ -3,101 +3,234 @@ package mygame.editor.controlers;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.Initializable;
+import javafx.geometry.Point2D;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import mygame.editor.App;
+import mygame.editor.TreeHolder;
 import mygame.editor.model.Command;
-import mygame.editor.model.box2d.B2Body;
-import mygame.editor.model.box2d.B2Joint;
+import mygame.editor.model.TreeNodeHolder;
 import mygame.editor.render.TreeItemHolder;
 import mygame.editor.views.CcNode;
+import physicsPort.Action;
 
 import java.net.URL;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 public class HierarchyController implements Initializable {
-    public TreeView<Holder> nodeTreeview;
+    public TreeView<CcNode> nodeTreeview;
 
 
-
-    private Map<String, Object> map = new HashMap<>();
-    private TreeItem<Holder> nodesItem;
+    private TreeItem<CcNode> nodesItem;
+    private CcNode rootNode;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        updateNodeTreeView();
+        initTreeView();
         App.instance.observableAction.addListener(this::onActionChange);
         App.instance.repository.listenForNodes(this::onNodesChanged);
-        nodeTreeview.setOnMousePressed(this::onTreePressed);
+        nodeTreeview.setOnMousePressed(this::onMousePressed);
+        nodeTreeview.setOnMouseDragged(this::onMouseDragged);
+        nodeTreeview.setOnMouseReleased(this::onMouseReleased);
+
     }
 
     private void onNodesChanged(ListChangeListener.Change<? extends CcNode> change) {
         nodesItem.getChildren().clear();
         for (CcNode node : change.getList()) {
-            Holder holder = new Holder(node.getName().get(),node,CcNode.class);
-            TreeItem<Holder> treeItem = new TreeItem<>(holder);
+            TreeItem<CcNode> treeItem = createTreeItem(node);
             nodesItem.getChildren().add(treeItem);
         }
     }
 
-    private void onTreePressed(MouseEvent event) {
+    private TreeItem<CcNode> createTreeItem(CcNode node){
+        TreeItem<CcNode> treeItem = new TreeItem<>(node);
+        Rectangle rectangle = new Rectangle(0, 0, 20, 20);
+        rectangle.setFill(Color.PINK);
+        treeItem.setGraphic(rectangle);
+        return treeItem;
+    }
 
-        TreeItem<Holder> selectedItem = nodeTreeview.getSelectionModel().getSelectedItem();
-
-        if(selectedItem != null && CcNode.class == selectedItem.getValue().clazz){
-
-            CcNode node = (CcNode)selectedItem.getValue().object;
-            App.instance.selected.clear();
-            App.instance.selected.add(node);
+    private void traverse(CcNode ccNode,Action<CcNode> action){
+        action.call(ccNode);
+        for (CcNode node : ccNode.getChildren()) {
+            traverse(node,action);
         }
     }
 
 
+    private void initTreeView() {
+
+        nodeTreeview.setCellFactory(e -> new TreeNodeHolder());
+
+        rootNode = new CcNode();
+        rootNode.setName("Nodes");
 
 
-
-
-
-    private void updateNodeTreeView() {
-
-        nodeTreeview.setCellFactory(e->new TreeItemHolder());
-
-
-        Holder holder = new Holder("Nodes",null,null);
-
-        nodesItem = new TreeItem<>(holder);
+        nodesItem = new TreeItem<>(rootNode);
         nodeTreeview.setRoot(nodesItem);
 
     }
-    private void fillNodeTreeView(TreeItem<CcNode> ccNodeTreeItem ,CcNode root) {
-        for (CcNode node : root.getChildren()) {
-            TreeItem<CcNode> item = new TreeItem<>(node);
 
-            ccNodeTreeItem.getChildren().add(item);
-            if(!node.getChildren().isEmpty()){
-                fillNodeTreeView(item,node);
+    //************************************************************************
+
+    private CcNode lastCell;
+    private CcNode firstCell;
+
+    private void onMousePressed(MouseEvent event) {
+        final TreeItem<CcNode> selectedItem = nodeTreeview.getSelectionModel().getSelectedItem();
+        if(selectedItem != null){
+            final CcNode value = selectedItem.getValue();
+            if(value != rootNode){
+                App.instance.selected.clear();
+                App.instance.selected.add(value);
+            }
+        }
+        final TreeItem<CcNode> root = nodeTreeview.getRoot();
+        traverse(root, treeItem -> {
+
+            final Rectangle cell = (Rectangle) treeItem.getGraphic();
+
+            if (cell != null && cell.getParent() != null) {
+
+
+                final Point2D point2D = cell.getParent().parentToLocal(event.getX(), event.getY());
+                final Point2D pointInRect = cell.parentToLocal(point2D);
+                if (cell.contains(pointInRect)) {
+
+                    cell.setFill(Color.SKYBLUE);
+                    firstCell = treeItem.getValue();
+                }
+                System.out.println(point2D);
+            } else {
+                if (cell == null) {
+                    System.out.println("Cell is null");
+                } else if (cell.getParent() == null) {
+                    System.out.println("Parent is null");
+                }
+            }
+        });
+    }
+
+    private void onMouseDragged(MouseEvent event) {
+        final TreeItem<CcNode> root = nodeTreeview.getRoot();
+        traverse(root, treeItem -> {
+
+            final Rectangle cell = (Rectangle) treeItem.getGraphic();
+
+            if (cell != null && cell.getParent() != null) {
+
+
+                final Point2D point2D = cell.getParent().parentToLocal(event.getX(), event.getY());
+                final Point2D pointInRect = cell.parentToLocal(point2D);
+                if (cell.contains(pointInRect)) {
+
+                    cell.setFill(Color.RED);
+                } else {
+                    cell.setFill(Color.GREEN);
+                }
+                System.out.println(point2D);
+            } else {
+                if (cell == null) {
+                    System.out.println("Cell is null");
+                } else if (cell.getParent() == null) {
+                    System.out.println("Parent is null");
+                }
+            }
+        });
+
+    }
+
+    private void onMouseReleased(MouseEvent event) {
+        TreeItem<CcNode> root = nodeTreeview.getRoot();
+        traverse(root, treeItem -> {
+            final Rectangle cell = (Rectangle) treeItem.getGraphic();
+            if (cell != null && cell.getParent() != null) {
+
+
+                final Point2D point2D = cell.getParent().parentToLocal(event.getX(), event.getY());
+                final Point2D pointInRect = cell.parentToLocal(point2D);
+                cell.setFill(Color.GREEN);
+                if (cell.contains(pointInRect)) {
+                    cell.setFill(Color.YELLOW);
+                    lastCell = treeItem.getValue();
+                }
+
+
+            } else {
+                if (cell == null) {
+                    System.out.println("Cell is null");
+                } else if (cell.getParent() == null) {
+                    System.out.println("Parent is null");
+                }
+            }
+        });
+
+        if (firstCell != null && lastCell != null && firstCell != rootNode && firstCell != lastCell) {
+            firstCell.removeSelf();
+            App.instance.repository.delete(firstCell);
+
+            lastCell.addChild(firstCell);
+            for (CcNode ccNode : rootNode.getChildren()) {
+                ccNode.removeSelf();
             }
 
+            for (CcNode ccNode : App.instance.repository.getNodes()) {
+                rootNode.addChild(ccNode);
+
+            }
+            nodeTreeview.setRoot(updateTreeView(rootNode));
 
         }
+
+        firstCell = null;
+        lastCell = null;
+
+
     }
+
+
+    private void traverse(TreeItem<CcNode> treeItem, Action<TreeItem<CcNode>> action) {
+        action.call(treeItem);
+        for (TreeItem<CcNode> holderTreeItem : treeItem.getChildren()) {
+            traverse(holderTreeItem, action);
+        }
+    }
+
+
+    private TreeItem<CcNode> updateTreeView(CcNode holder) {
+        TreeItem<CcNode> root = new TreeItem<>(holder);
+        for (CcNode item : holder.getChildren()) {
+            root.getChildren().add(updateTreeView(item));
+        }
+
+        Rectangle rectangle = new Rectangle(0, 0, 20, 20);
+        rectangle.setFill(Color.PINK);
+        root.setGraphic(rectangle);
+
+        return root;
+    }
+
+//************************************************************************
 
     public static class Holder {
         public final String name;
         public final Object object;
         public final Class clazz;
-        public Holder(String name,Object object,Class clazz){
+
+        public Holder(String name, Object object, Class clazz) {
             this.name = name;
-            this.object =object;
+            this.object = object;
             this.clazz = clazz;
         }
     }
+
     private void onActionChange(ObservableValue<? extends Command> observableValue, Command oldValue, Command newValue) {
         System.out.println("Hierarchy " + newValue);
     }
+
 
 }

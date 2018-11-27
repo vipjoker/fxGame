@@ -1,7 +1,6 @@
 package mygame.editor.controlers;
 
 import javafx.application.Platform;
-import javafx.beans.Observable;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
@@ -9,36 +8,27 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import mygame.editor.App;
 import mygame.editor.actions.*;
-import mygame.editor.component.SpriteComponent;
-import mygame.editor.manager.FileManager;
 import mygame.editor.model.Command;
 import mygame.editor.model.TreeFileHolder;
-import mygame.editor.model.box2d.B2Body;
 import mygame.editor.render.CanvasRenderer;
 import mygame.editor.render.TreeItemPath;
 import mygame.editor.repository.NodeRepository;
 import mygame.editor.util.Constants;
-import mygame.editor.util.FileUtil;
 import mygame.editor.util.Resources;
 import mygame.editor.views.CcNode;
 import mygame.editor.views.CcSprite;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
-
-import static mygame.editor.util.Constants.*;
 
 
 public class MainController implements Initializable {
@@ -90,11 +80,12 @@ public class MainController implements Initializable {
     }
 
     private void onActionChanged(ObservableValue<? extends Command> observableValue, Command oldValue, Command newValue) {
+        System.out.println("Attempt to switch " + newValue.action + " : " + newValue.param);
         switchDrawer(newValue);
     }
 
     private void switchDrawer(Command command) {
-
+        System.out.println("Switch drawer " + command.action + " : " + command.param);
         if(!command.action.equals(currentDrawerName)){
             if (currentDrawer != null) {
                 currentDrawer.finishDrawing();
@@ -132,9 +123,6 @@ public class MainController implements Initializable {
 
             if (selected != null && selected.isLeaf()) {
                 String path = selected.getValue().getPath();
-                System.out.println(path);
-
-
 
                 final CcSprite ccSprite = new CcSprite(path,100,100);
                 int count = App.instance.repository.count();
@@ -151,13 +139,13 @@ public class MainController implements Initializable {
     private void initActions() {
         NodeRepository repository = App.instance.repository;
 
-        actions.put(Constants.MODE_SELECT, new SelectAction(canvasRenderer, repository));
+        actions.put(Constants.MODE_NODE, new NodeEditAction(canvasRenderer, repository));
         actions.put(Constants.MODE_FIXTURE, new FixtureEditAction(canvasRenderer, repository));
         actions.put(Constants.MODE_BODY, new BodyEditAction(canvasRenderer, repository, infoController));
         actions.put(Constants.MODE_RUN, new Box2dAction(canvasRenderer, repository));
         actions.put(Constants.MODE_CREATE, new CreateBodyAction(canvasRenderer, repository));
 
-        switchDrawer(new Command(Constants.MODE_BODY,Constants.PARAM_MOVE));
+        switchDrawer(new Command(Constants.MODE_NODE,Constants.PARAM_MOVE));
     }
 
     private void fillTreeView(String parent, File dir, TreeItem<TreeFileHolder> root) throws IOException {

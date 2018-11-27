@@ -3,6 +3,7 @@ package mygame.editor.render;
 import javafx.beans.Observable;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
@@ -15,6 +16,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
+import mygame.editor.App;
 import mygame.editor.TimerCounter;
 import mygame.editor.util.Constants;
 import mygame.editor.views.CcNode;
@@ -83,8 +85,18 @@ public class CanvasRenderer {
         canvas.setCursor(Cursor.CROSSHAIR);
         canvas.setOnMouseMoved(this::onMouseMoved);
         draw(graphicsContext, Global.getWidth(), Global.getHeight());
-
+        App.instance.selected.addListener(this::onSelectChanged);
     }
+
+    private void onSelectChanged(ListChangeListener.Change<? extends CcNode> change){
+        final ObservableList<? extends CcNode> list = change.getList();
+        for (CcNode ccNode : list) {
+            final boolean contains = list.contains(ccNode);
+            ccNode.setActive(contains);
+        }
+    }
+
+
     private void onMouseMoved(MouseEvent event){
         mouseCursor = new Point2D(event.getX(), event.getY());
         update();

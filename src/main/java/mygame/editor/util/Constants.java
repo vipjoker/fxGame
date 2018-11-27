@@ -20,7 +20,7 @@ public class Constants {
 
     public static final String ACTION_SPRITE = "sprite";
 
-    public static final String MODE_SELECT = "select_mode";
+    public static final String MODE_NODE = "select_mode";
     public static final String MODE_BODY = "body_mode";
     public static final String MODE_FIXTURE = "fixture_mode";
     public static final String MODE_CREATE = "create_mode";

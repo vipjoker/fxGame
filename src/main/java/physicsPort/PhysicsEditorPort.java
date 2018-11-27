@@ -74,11 +74,6 @@ public class PhysicsEditorPort extends Application implements TimerCounter.Frame
             });
 
             pane.setOnMouseDragged(event->{
-                final Node target = (Node) event.getTarget();
-                double layoutX = target.getLayoutX() ;
-                double layoutY = target.getLayoutY() ;
-
-                System.out.println( target.getBoundsInLocal() + " " + target.getBoundsInParent());
 
                 for (Node node : nodes) {
                     if(node.getParent().contains(event.getX(),event.getY())){

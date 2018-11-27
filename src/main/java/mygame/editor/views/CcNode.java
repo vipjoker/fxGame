@@ -73,7 +73,6 @@ public class CcNode {
         context.save();
         context.translate(x.doubleValue(), -y.doubleValue());
         context.rotate(angle.doubleValue());
-        System.out.println(angle.doubleValue());
         context.scale(scaleX.doubleValue(), scaleY.doubleValue());
         rasterize(context);
         components.sort(Comparator.comparingInt(Component::getZorder));
@@ -109,8 +108,8 @@ public class CcNode {
     }
 
     public void move(Point2D point2D){
-        this.x.subtract(point2D.getX()) ;
-        this.y.add(point2D.getY());
+        this.x.set(this.x.subtract(point2D.getX()).doubleValue()) ;
+        this.y.set(this.y.add(point2D.getY()).doubleValue());
     }
 
     public void addComponent(Component component) {
@@ -135,7 +134,7 @@ public class CcNode {
 
         Affine affine = new Affine();
         affine.appendTranslation(x.doubleValue(),y.doubleValue());
-        affine.appendRotation(angle.doubleValue());
+        affine.appendRotation(-angle.doubleValue());
         affine.appendScale(scaleX.doubleValue(),scaleY.doubleValue());
         if(parent != null){
             point = parent.convertToLocalSpace(point);
@@ -214,6 +213,10 @@ public class CcNode {
         }
     }
 
+    public void rotate(Point2D point) {
+        setAngle(getAngle().doubleValue() - point.getX() - point.getY());
+    }
+
     public enum Anchor {
         MIDDLE,
         TOP_LEFT,
@@ -275,7 +278,9 @@ public class CcNode {
     }
 
     public void removeSelf(){
-        parent.getChildren().remove(this);
+        if(parent != null) {
+            parent.getChildren().remove(this);
+        }
     }
 
     @Override
