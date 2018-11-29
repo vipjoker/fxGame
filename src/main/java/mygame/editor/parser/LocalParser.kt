@@ -1,11 +1,10 @@
 package mygame.editor.parser;
 
-import mygame.editor.json.JSONArray;
-import mygame.editor.json.JSONException;
-import mygame.editor.json.JSONObject;
-import mygame.editor.repository.NodeRepository;
-import mygame.editor.views.CcNode;
-import mygame.editor.views.CcSprite;
+import mygame.editor.repository.NodeRepository
+import mygame.editor.views.CcNode
+import mygame.editor.views.CcSprite
+import org.json.JSONArray
+import org.json.JSONObject
 
 
 private const val NODES = "nodes"
@@ -49,6 +48,9 @@ fun createSprite(jsonObject: JSONObject): CcSprite {
     val name = jsonObject.getString(NAME)
     val angle = jsonObject.getDouble(ANGLE)
     val sprite = CcSprite(image, width, height)
+    if (jsonObject.has("nodes")){
+
+    }
     sprite.setX(x)
     sprite.setY(y)
     sprite.setAngle(angle)

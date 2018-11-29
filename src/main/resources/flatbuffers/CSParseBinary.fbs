@@ -17,7 +17,7 @@ table CSParseBinary
     texturePngs:[string];
 
     nodeTree:NodeTree;
-    action:NodeAction;
+    callback:NodeAction;
 	animationList:[AnimationInfo];
 }
 
