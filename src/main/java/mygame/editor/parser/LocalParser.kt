@@ -1,4 +1,4 @@
-package mygame.editor.parser;
+package mygame.editor.parser
 
 import mygame.editor.repository.NodeRepository
 import mygame.editor.views.CcNode
@@ -48,8 +48,13 @@ fun createSprite(jsonObject: JSONObject): CcSprite {
     val name = jsonObject.getString(NAME)
     val angle = jsonObject.getDouble(ANGLE)
     val sprite = CcSprite(image, width, height)
-    if (jsonObject.has("nodes")){
-
+    if (jsonObject.has("nodes")) {
+        val nodes = jsonObject.getJSONArray("nodes")
+        for ( index in 0 until nodes.length()){
+            val jsonNode = nodes.getJSONObject(index)
+            val parsedNode = createSprite(jsonNode)
+            sprite.children.add(parsedNode)
+        }
     }
     sprite.setX(x)
     sprite.setY(y)
@@ -63,15 +68,25 @@ fun createJsonFromNodes(repository: NodeRepository): String {
     val nodes = JSONArray()
     jsonObject.put(NODES, nodes)
     for (ccNode in repository.nodes) {
+
         val jsonNode = createJsonNode(ccNode)
+
         nodes.put(jsonNode)
     }
     return jsonObject.toString()
 }
 
 fun createJsonNode(node: CcNode): JSONObject? {
+
     if (node is CcSprite) {
-        return createJsonSprite(node)
+        val json = createJsonSprite(node)
+        val children = JSONArray()
+        for (child in node.children) {
+            val jsonChild = createJsonNode(child)
+            children.put(jsonChild)
+        }
+        json.put("nodes",children)
+        return json
     } else {
         return null
     }
@@ -82,7 +97,7 @@ fun createJsonSprite(node: CcSprite): JSONObject {
     jsonObject.put(TYPE, SPRITE)
     jsonObject.put(X, node.x.doubleValue())
     jsonObject.put(Y, node.y.doubleValue())
-    jsonObject.put(NAME,node.name.value)
+    jsonObject.put(NAME, node.name.value)
     jsonObject.put(WIDTH, node.width.doubleValue())
     jsonObject.put(HEIGHT, node.height.doubleValue())
     jsonObject.put(ANGLE, node.angle.doubleValue())
