@@ -22,6 +22,7 @@ import mygame.editor.util.Constants;
 import mygame.editor.views.CcNode;
 import mygame.editor.views.Global;
 import mygame.editor.views.Grid;
+import physicsPort.Action;
 
 import java.util.*;
 
@@ -42,7 +43,7 @@ public class CanvasRenderer {
 
     private Grid grid = new Grid();
     private final ObservableList<CcNode> nodes = FXCollections.observableList(new ArrayList<>(), param ->
-            new Observable[]{param.getName(),param.getX(),param.getY()});
+            new Observable[]{param.getName(), param.getX(), param.getY()});
     private OnCanvasDragListener mOnCanvasDragListener;
 
     public CanvasRenderer(Pane pane) {
@@ -57,7 +58,7 @@ public class CanvasRenderer {
             }
         });
         counter.start();
-       // nodes.addListener((ListChangeListener<CcNode>) change -> update());
+        // nodes.addListener((ListChangeListener<CcNode>) change -> update());
 
 
         graphicsContext = canvas.getGraphicsContext2D();
@@ -88,16 +89,28 @@ public class CanvasRenderer {
         App.instance.selected.addListener(this::onSelectChanged);
     }
 
-    private void onSelectChanged(ListChangeListener.Change<? extends CcNode> change){
+    private void onSelectChanged(ListChangeListener.Change<? extends CcNode> change) {
         final ObservableList<? extends CcNode> list = change.getList();
         for (CcNode ccNode : list) {
-            final boolean contains = list.contains(ccNode);
-            ccNode.setActive(contains);
+
+            traverse(ccNode, n -> {
+                final boolean contains = list.contains(n);
+                n.setActive(contains);
+            });
+
+
+        }
+    }
+
+    private void traverse(CcNode node, Action<CcNode> action) {
+        action.call(node);
+        for (CcNode ccNode : node.getChildren()) {
+            traverse(ccNode, action);
         }
     }
 
 
-    private void onMouseMoved(MouseEvent event){
+    private void onMouseMoved(MouseEvent event) {
         mouseCursor = new Point2D(event.getX(), event.getY());
         update();
     }
@@ -280,7 +293,7 @@ public class CanvasRenderer {
 //        draw(graphicsContext, Global.getWidth(), Global.getHeight());
     }
 
-    public void scheduledUpdate(){
+    public void scheduledUpdate() {
         draw(graphicsContext, Global.getWidth(), Global.getHeight());
     }
 
@@ -297,11 +310,11 @@ public class CanvasRenderer {
     }
 
 
-
-
     public interface OnCanvasDragListener {
         void onStartMove(Point2D point);
+
         void onDrag(Point2D point);
+
         void onStopMove(Point2D point);
     }
 }
