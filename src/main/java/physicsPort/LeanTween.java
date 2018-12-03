@@ -31,9 +31,9 @@ public class LeanTween {
 //        public Interpolator loopType;
 //        public int loopCount;
 //        public float direction;
-//        public Action<Float> onUpdateFloat;
-//        public Action<Vector2> onUpdateVector2;
-//        public Action onComplete;
+//        public Callback<Float> onUpdateFloat;
+//        public Callback<Vector2> onUpdateVector2;
+//        public Callback onComplete;
 //
 //    }
 }
@@ -258,12 +258,12 @@ public class LeanTween {
 //        /**
 //         * Have a method called when the tween finishes
 //         *
-//         * @param {Action} onComplete:Action the method that should be called when the tween is finished ex: tweenFinished(){ }
+//         * @param {Callback} onComplete:Callback the method that should be called when the tween is finished ex: tweenFinished(){ }
 //         * @return {LTDescr} LTDescr an object that distinguishes the tween
 //         * @method setOnComplete
 //         * @example physicsPort.LeanTween.moveX(gameObject, 5f, 2.0f).setOnComplete(tweenFinished);
 //         */
-//        public LTDescr setOnComplete(Action onComplete) {
+//        public LTDescr setOnComplete(Callback onComplete) {
 //            this.onComplete = onComplete;
 //            return this;
 //        }
@@ -272,20 +272,20 @@ public class LeanTween {
 //        /**
 //         * Have a method called on each frame that the tween is being animated (passes a float value)
 //         *
-//         * @param {Action<float>} onUpdate:Action<float> a method that will be called on every frame with the float value of the tweened object
+//         * @param {Callback<float>} onUpdate:Callback<float> a method that will be called on every frame with the float value of the tweened object
 //         * @return {LTDescr} LTDescr an object that distinguishes the tween
 //         * @method setOnUpdate
 //         * @example physicsPort.LeanTween.moveX(gameObject, 5f, 2.0f).setOnUpdate(tweenMoved);<br>
 //         * <br>
 //         * void tweenMoved( float val ){ }<br>
 //         */
-//        public LTDescr setOnUpdate(Action<Float> onUpdate) {
+//        public LTDescr setOnUpdate(Callback<Float> onUpdate) {
 //            this.onUpdateFloat = onUpdate;
 //            return this;
 //        }
 //
 //
-//        public LTDescr setOnUpdateVector2(Action<Vector2> onUpdate) {
+//        public LTDescr setOnUpdateVector2(Callback<Vector2> onUpdate) {
 //            this.onUpdateVector2 = onUpdate;
 //            return this;
 //        }
@@ -1352,7 +1352,7 @@ public class LeanTween {
 //
 //
 //
-//    public static LTDescr delayedCall(GameObject gameObject, float delayTime, Action callback) {
+//    public static LTDescr delayedCall(GameObject gameObject, float delayTime, Callback callback) {
 //        return pushNewTween(gameObject, Vector2.Zero, delayTime, TweenAction.CALLBACK, options().setOnComplete(callback));
 //    }
 //
@@ -1626,14 +1626,14 @@ public class LeanTween {
 //     * Tween any particular value, it does not need to be tied to any particular type or GameObject
 //     *
 //     * @param {GameObject}    GameObject gameObject GameObject with which to tie the tweening with. This is only used when you need to cancel this tween, it does not actually perform any operations on this gameObject
-//     * @param {Action<float>} callOnUpdate:Action<float> The function that is called on every Update frame, this function needs to accept a float value ex: function updateValue( float val ){ }
+//     * @param {Callback<float>} callOnUpdate:Callback<float> The function that is called on every Update frame, this function needs to accept a float value ex: function updateValue( float val ){ }
 //     * @param {float}         float from The original value to start the tween from
 //     * @param {float}         float to The value to end the tween on
 //     * @param {float}         float time The time to complete the tween in
 //     * @return {LTDescr} LTDescr an object that distinguishes the tween
 //     * @method physicsPort.LeanTween.value (float)
 //     */
-//    public static LTDescr value(GameObject gameObject, Action<Float> callOnUpdate, float from, float to, float time) {
+//    public static LTDescr value(GameObject gameObject, Callback<Float> callOnUpdate, float from, float to, float time) {
 //        return pushNewTween(gameObject, new Vector2(to, 0), time, TweenAction.CALLBACK, options().setFrom(new Vector2(from, 0)).setOnUpdate(callOnUpdate));
 //    }
 //
@@ -1641,14 +1641,14 @@ public class LeanTween {
 //     * Tween any particular value (Vector2), this could be used to tween an arbitrary value like a material color
 //     *
 //     * @param {GameObject}      gameObject:GameObject Gameobject that you wish to attach the tween to
-//     * @param {Action<Vector2>} callOnUpdate:Action<Vector2> The function that is called on every Update frame, this function needs to accept a float value ex: function updateValue( Vector2 val ){ }
+//     * @param {Callback<Vector2>} callOnUpdate:Callback<Vector2> The function that is called on every Update frame, this function needs to accept a float value ex: function updateValue( Vector2 val ){ }
 //     * @param {float}           from:Vector2 The original value to start the tween from
 //     * @param {Vector2}         to:Vector2 The final Vector2 with which to tween to
 //     * @param {float}           time:float The time to complete the tween in
 //     * @return {LTDescr} LTDescr an object that distinguishes the tween
 //     * @method physicsPort.LeanTween.value (Vector2)
 //     */
-//    public static LTDescr value(GameObject gameObject, Action<Vector2> callOnUpdate, Vector2 from, Vector2 to, float time) {
+//    public static LTDescr value(GameObject gameObject, Callback<Vector2> callOnUpdate, Vector2 from, Vector2 to, float time) {
 //        return pushNewTween(gameObject, to, time, TweenAction.VALUE3, options().setFrom(from).setOnUpdateVector2(callOnUpdate));
 //    }
 //
@@ -1656,7 +1656,7 @@ public class LeanTween {
 //     * Tween any particular value (float)
 //     *
 //     * @param {GameObject}           gameObject:GameObject Gameobject that you wish to attach the tween to
-//     * @param {Action<float,object>} callOnUpdate:Action<float,object> The function that is called on every Update frame, this function needs to accept a float value ex: function updateValue( Vector2 val, object obj ){ }
+//     * @param {Callback<float,object>} callOnUpdate:Callback<float,object> The function that is called on every Update frame, this function needs to accept a float value ex: function updateValue( Vector2 val, object obj ){ }
 //     * @param {float}                from:Vector2 The original value to start the tween from
 //     * @param {Vector2}              to:Vector2 The final Vector2 with which to tween to
 //     * @param {float}                time:float The time to complete the tween in
@@ -1695,11 +1695,11 @@ public class LeanTween {
 ////        return value(gameObject, callOnUpdate, from, to, time, h(optional));
 ////    }
 ////
-////    public static int value(GameObject gameObject, Action<float> callOnUpdate, float from, float to, float time, object[] optional) {
+////    public static int value(GameObject gameObject, Callback<float> callOnUpdate, float from, float to, float time, object[] optional) {
 ////        return value(gameObject, callOnUpdate, from, to, time, h(optional));
 ////    }
 ////
-////    public static int value(GameObject gameObject, Action<float, Hashtable> callOnUpdate, float from, float to, float time, object[] optional) {
+////    public static int value(GameObject gameObject, Callback<float, Hashtable> callOnUpdate, float from, float to, float time, object[] optional) {
 ////        return value(gameObject, callOnUpdate, from, to, time, h(optional));
 ////    }
 ////
@@ -1713,7 +1713,7 @@ public class LeanTween {
 ////        return id;
 ////    }
 //
-////    public static int value(GameObject gameObject, Action<Float> callOnUpdate, float from, float to, float time, Hashtable optional) {
+////    public static int value(GameObject gameObject, Callback<Float> callOnUpdate, float from, float to, float time, Hashtable optional) {
 ////        if (optional == null || optional.Count == 0)
 ////            optional = new Hashtable();
 ////
@@ -1723,7 +1723,7 @@ public class LeanTween {
 ////        return id;
 ////    }
 ////
-////    public static int value(GameObject gameObject, Action<Float, Hashtable> callOnUpdate, float from, float to, float time, Hashtable optional) {
+////    public static int value(GameObject gameObject, Callback<Float, Hashtable> callOnUpdate, float from, float to, float time, Hashtable optional) {
 ////        if (optional == null || optional.Count == 0)
 ////            optional = new Hashtable();
 ////
@@ -1747,7 +1747,7 @@ public class LeanTween {
 ////        return value(gameObject, callOnUpdate, from, to, time, h(optional));
 ////    }
 ////
-////    public static int value(GameObject gameObject, Action<Vector2> callOnUpdate, Vector2 from, Vector2 to, float time, Hashtable optional) {
+////    public static int value(GameObject gameObject, Callback<Vector2> callOnUpdate, Vector2 from, Vector2 to, float time, Hashtable optional) {
 ////        if (optional == null || optional.Count == 0)
 ////            optional = new Hashtable();
 ////
@@ -1757,7 +1757,7 @@ public class LeanTween {
 ////        return id;
 ////    }
 ////
-////    public static int value(GameObject gameObject, Action<Vector2, Hashtable> callOnUpdate, Vector2 from, Vector2 to, float time, Hashtable optional) {
+////    public static int value(GameObject gameObject, Callback<Vector2, Hashtable> callOnUpdate, Vector2 from, Vector2 to, float time, Hashtable optional) {
 ////        if (optional == null || optional.Count == 0)
 ////            optional = new Hashtable();
 ////
@@ -1767,11 +1767,11 @@ public class LeanTween {
 ////        return id;
 ////    }
 ////
-////    public static int value(GameObject gameObject, Action<Vector2> callOnUpdate, Vector2 from, Vector2 to, float time, object[] optional) {
+////    public static int value(GameObject gameObject, Callback<Vector2> callOnUpdate, Vector2 from, Vector2 to, float time, object[] optional) {
 ////        return value(gameObject, callOnUpdate, from, to, time, h(optional));
 ////    }
 ////
-////    public static int value(GameObject gameObject, System.Action<Vector2, Hashtable> callOnUpdate, Vector2 from, Vector2 to, float time, object[] optional) {
+////    public static int value(GameObject gameObject, System.Callback<Vector2, Hashtable> callOnUpdate, Vector2 from, Vector2 to, float time, object[] optional) {
 ////        return value(gameObject, callOnUpdate, from, to, time, h(optional));
 ////    }
 ////
@@ -2046,7 +2046,7 @@ public class LeanTween {
 ////        return delayedCall(tweenEmpty, delayTime, callback, optional);
 ////    }
 ////
-////    public static int delayedCall(float delayTime, Action callback, object[] optional) {
+////    public static int delayedCall(float delayTime, Callback callback, object[] optional) {
 ////        init();
 ////        return delayedCall(tweenEmpty, delayTime, callback, h(optional));
 ////    }
@@ -2055,7 +2055,7 @@ public class LeanTween {
 ////        return delayedCall(gameObject, delayTime, callback, h(optional));
 ////    }
 ////
-////    public static int delayedCall(GameObject gameObject, float delayTime, Action callback, object[] optional) {
+////    public static int delayedCall(GameObject gameObject, float delayTime, Callback callback, object[] optional) {
 ////        return delayedCall(gameObject, delayTime, callback, h(optional));
 ////    }
 ////
@@ -2067,7 +2067,7 @@ public class LeanTween {
 ////        return pushNewTween(gameObject, Vector2.zero, delayTime, TweenAction.CALLBACK, optional);
 ////    }
 ////
-////    public static int delayedCall(GameObject gameObject, float delayTime, Action callback, Map optional) {
+////    public static int delayedCall(GameObject gameObject, float delayTime, Callback callback, Map optional) {
 ////        if (optional == null)
 ////            optional = new Hashtable();
 ////        optional["onComplete"] = callback;
@@ -2075,7 +2075,7 @@ public class LeanTween {
 ////        return pushNewTween(gameObject, Vector2.zero, delayTime, TweenAction.CALLBACK, optional);
 ////    }
 ////
-////    public static int delayedCall(GameObject gameObject, float delayTime, Action<object> callback, Map optional) {
+////    public static int delayedCall(GameObject gameObject, float delayTime, Callback<object> callback, Map optional) {
 ////        if (optional == null)
 ////            optional = new Hashtable();
 ////        optional["onComplete"] = callback;
@@ -2096,9 +2096,9 @@ public class LeanTween {
 //
 //
 //
-//    public static void addListener(GameObject caller, int eventId, Action<LTEvent> callback) {
+//    public static void addListener(GameObject caller, int eventId, Callback<LTEvent> callback) {
 ////        if (eventListeners == null) {
-////            eventListeners = new Action<LTEvent>[EVENTS_MAX * LISTENERS_MAX];
+////            eventListeners = new Callback<LTEvent>[EVENTS_MAX * LISTENERS_MAX];
 ////            goListeners = new GameObject[EVENTS_MAX * LISTENERS_MAX];
 ////        }
 ////        // Debug.Log("searching for an empty space for:"+caller + " eventid:"+event);
@@ -2118,7 +2118,7 @@ public class LeanTween {
 //    }
 //
 //
-//    public static boolean removeListener(GameObject caller, int eventId, Action<LTEvent> callback) {
+//    public static boolean removeListener(GameObject caller, int eventId, Callback<LTEvent> callback) {
 //        for (i = 0; i < eventsMaxSearch; i++) {
 //            int point = eventId * LISTENERS_MAX + i;
 //

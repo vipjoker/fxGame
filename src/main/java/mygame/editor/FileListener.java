@@ -12,7 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import physicsPort.Action;
+import mygame.editor.util.Callback;
 
 
 public class FileListener extends Application {
@@ -160,11 +160,11 @@ public class FileListener extends Application {
     }
 
 
-    private void traverse(TreeItem<TreeHolder> treeItem, Action<TreeItem<TreeHolder>> action){
+    private void traverse(TreeItem<TreeHolder> treeItem, Callback<TreeItem<TreeHolder>> callback){
 
-        action.call(treeItem);
+        callback.call(treeItem);
         for(TreeItem<TreeHolder> holderTreeItem :treeItem.getChildren()){
-            traverse(holderTreeItem,action);
+            traverse(holderTreeItem, callback);
         }
     }
 

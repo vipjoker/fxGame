@@ -22,8 +22,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import mygame.editor.json.JSONArray;
-import mygame.editor.json.JSONObject;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Vector2;
@@ -52,6 +50,8 @@ import com.badlogic.gdx.physics.box2d.joints.WeldJoint;
 import com.badlogic.gdx.physics.box2d.joints.WeldJointDef;
 import com.badlogic.gdx.physics.box2d.joints.WheelJoint;
 import com.badlogic.gdx.physics.box2d.joints.WheelJointDef;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /* 
 	Json library can be downloaded from : https://github.com/douglascrockford/JSON-java

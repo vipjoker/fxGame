@@ -13,7 +13,7 @@ import static org.junit.Assert.assertTrue;
 public class DataBaseTest {
     @Test
     public void test(){
-        assertEquals(true,true)
+        assertTrue(true)
         ;
     }
 

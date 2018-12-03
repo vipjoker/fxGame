@@ -10,12 +10,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import mygame.editor.App;
-import mygame.editor.TreeHolder;
 import mygame.editor.model.Command;
 import mygame.editor.model.TreeNodeHolder;
-import mygame.editor.render.TreeItemHolder;
+import mygame.editor.util.Callback;
 import mygame.editor.views.CcNode;
-import physicsPort.Action;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -54,10 +52,10 @@ public class HierarchyController implements Initializable {
         return treeItem;
     }
 
-    private void traverse(CcNode ccNode,Action<CcNode> action){
-        action.call(ccNode);
+    private void traverse(CcNode ccNode, Callback<CcNode> callback){
+        callback.call(ccNode);
         for (CcNode node : ccNode.getChildren()) {
-            traverse(node,action);
+            traverse(node, callback);
         }
     }
 
@@ -193,10 +191,10 @@ public class HierarchyController implements Initializable {
     }
 
 
-    private void traverse(TreeItem<CcNode> treeItem, Action<TreeItem<CcNode>> action) {
-        action.call(treeItem);
+    private void traverse(TreeItem<CcNode> treeItem, Callback<TreeItem<CcNode>> callback) {
+        callback.call(treeItem);
         for (TreeItem<CcNode> holderTreeItem : treeItem.getChildren()) {
-            traverse(holderTreeItem, action);
+            traverse(holderTreeItem, callback);
         }
     }
 

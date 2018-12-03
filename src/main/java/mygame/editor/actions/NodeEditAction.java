@@ -5,6 +5,7 @@ import javafx.geometry.Point2D;
 import mygame.editor.App;
 import mygame.editor.render.CanvasRenderer;
 import mygame.editor.repository.NodeRepository;
+import mygame.editor.util.Callback;
 import mygame.editor.util.Constants;
 import mygame.editor.views.CcNode;
 
@@ -41,11 +42,23 @@ public class NodeEditAction extends Action implements CanvasRenderer.OnCanvasDra
     public void onStartMove(Point2D point) {
         App.instance.selected.clear();
         for (CcNode ccNode : mRenderer.getNodes()) {
-            final boolean contains = ccNode.contains(point);
-            if (contains) {
-                App.instance.selected.add(ccNode);
-                break;
-            }
+
+            traverse(ccNode,n->{
+                final boolean contains = n.contains(point);
+                if (contains) {
+                    App.instance.selected.add(n);
+
+                }
+            });
+
+
+        }
+    }
+
+    public void traverse(CcNode node, Callback<CcNode> action){
+        action.call(node);
+        for (CcNode child : node.getChildren()) {
+            traverse(child,action);
         }
     }
 
