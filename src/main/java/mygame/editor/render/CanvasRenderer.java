@@ -18,11 +18,11 @@ import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
 import mygame.editor.App;
 import mygame.editor.TimerCounter;
+import mygame.editor.util.Callback;
 import mygame.editor.util.Constants;
 import mygame.editor.views.CcNode;
 import mygame.editor.views.Global;
 import mygame.editor.views.Grid;
-import physicsPort.Action;
 
 import java.util.*;
 
@@ -102,7 +102,7 @@ public class CanvasRenderer {
         }
     }
 
-    private void traverse(CcNode node, Action<CcNode> action) {
+    private void traverse(CcNode node, Callback<CcNode> action) {
         action.call(node);
         for (CcNode ccNode : node.getChildren()) {
             traverse(ccNode, action);

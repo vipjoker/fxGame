@@ -44,7 +44,7 @@ public class StringTextField extends AnchorPane {
     }
 
     public void unbind(){
-        textFiled.textProperty().unbindBidirectional(textFiled);
+        textFiled.textProperty().unbindBidirectional(stringProperty);
     }
 
 }

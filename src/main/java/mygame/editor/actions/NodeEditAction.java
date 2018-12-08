@@ -37,19 +37,27 @@ public class NodeEditAction extends Action implements CanvasRenderer.OnCanvasDra
     public void finishDrawing() {
 
     }
-
     @Override
     public void onStartMove(Point2D point) {
         App.instance.selected.clear();
         for (CcNode ccNode : mRenderer.getNodes()) {
+                traverse(ccNode, n -> {
+                    boolean contains = false;
+                    if(n.getParent()!= null){
 
-            traverse(ccNode,n->{
-                final boolean contains = n.contains(point);
-                if (contains) {
-                    App.instance.selected.add(n);
+                        Point2D point2D = n.getParent().convertToLocalSpace(point);
+                        contains = n.contains(point2D);
+                    }else{
+                        contains = n.contains(point);
+                    }
 
-                }
-            });
+                    if (contains) {
+                        App.instance.selected.clear();
+                        App.instance.selected.add(n);
+
+                    }
+                });
+
 
 
         }
@@ -58,7 +66,9 @@ public class NodeEditAction extends Action implements CanvasRenderer.OnCanvasDra
     public void traverse(CcNode node, Callback<CcNode> action){
         action.call(node);
         for (CcNode child : node.getChildren()) {
-            traverse(child,action);
+
+                traverse(child, action);
+
         }
     }
 

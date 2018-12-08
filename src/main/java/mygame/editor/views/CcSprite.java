@@ -1,14 +1,10 @@
 package mygame.editor.views;
 
-import javafx.geometry.BoundingBox;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.SVGPath;
 import mygame.editor.manager.FileManager;
-import mygame.editor.model.Point;
-import mygame.editor.model.Rect;
 import mygame.editor.util.Constants;
 
 import java.io.File;
@@ -16,7 +12,6 @@ import java.io.File;
 public class CcSprite extends CcNode {
     protected Image image;
     private String imagePath;
-    private Rect bounds;
 
     public CcSprite(Image image) {
         this.image = image;
@@ -27,13 +22,15 @@ public class CcSprite extends CcNode {
     }
 
     public CcSprite(String path, double width, double height) {
-        this.imagePath = path;
-        final File f = new File(FileManager.getInstance().getWorkingFolder(), path);
-
-        this.image = new Image(f.toURI().toString());
+        this(path);
         this.width.set(width);
         this.height.set(height);
-        bounds = new Rect(x, y, this.width, this.height);
+    }
+
+    public CcSprite(String path){
+        this.imagePath = path;
+        final File f = new File(FileManager.getInstance().getWorkingFolder(), path);
+        this.image = new Image(f.toURI().toString());
     }
 
 
@@ -47,7 +44,7 @@ public class CcSprite extends CcNode {
         if (active) {
             context.setLineWidth(2);
             context.setStroke(Constants.GREEN);
-            context.strokeRect(bBox.getMinX() - 5, bBox.getMinY() - 5, bBox.getWidth() + 10, bBox.getHeight() + 10);
+            context.strokeRect( - 5  , - 5  - height.getValue(), width.getValue() +10,   height.doubleValue()  + 10);
             context.setFill(Color.RED);
             context.fillOval(-2.5, -2.5, 5, 5);
         }
