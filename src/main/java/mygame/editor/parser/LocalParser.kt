@@ -20,8 +20,6 @@ private const val TYPE = "type"
 
 fun createNodesFromSting(repository: NodeRepository, json: String) {
     repository.nodes.clear()
-
-
     val jsonObject = JSONObject(json)
     val nodes = jsonObject.getJSONArray(NODES)
     for (i in 0 until nodes.length()) {
@@ -35,8 +33,6 @@ fun createNodesFromSting(repository: NodeRepository, json: String) {
             else -> print("do nothing")
         }
     }
-
-
 }
 
 fun createSprite(jsonObject: JSONObject): CcSprite {
@@ -77,7 +73,6 @@ fun createJsonFromNodes(repository: NodeRepository): String {
 }
 
 fun createJsonNode(node: CcNode): JSONObject? {
-
     if (node is CcSprite) {
         val json = createJsonSprite(node)
         val children = JSONArray()
