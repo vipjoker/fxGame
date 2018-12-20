@@ -2,8 +2,12 @@ package mygame.editor.controlers;
 
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.MouseEvent;
@@ -33,14 +37,47 @@ public class HierarchyController implements Initializable {
         nodeTreeview.setOnMousePressed(this::onMousePressed);
         nodeTreeview.setOnMouseDragged(this::onMouseDragged);
         nodeTreeview.setOnMouseReleased(this::onMouseReleased);
+        setupContextMenu();
+    }
+
+    private void setupContextMenu() {
+        ContextMenu contextMenu = new ContextMenu();
+
+        MenuItem item1 = new MenuItem("Delete item");
+        item1.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                TreeItem<CcNode> selectedItem = nodeTreeview.getSelectionModel().getSelectedItem();
+
+                if(selectedItem != null){
+                    App.instance.repository.delete(selectedItem.getValue());
+                }
+            }
+        });
+
+        contextMenu.getItems().add(item1);
+
+        nodeTreeview.setOnContextMenuRequested(event -> {
+            contextMenu.show(nodeTreeview,event.getScreenX(),event.getScreenY());
+        });
 
     }
 
     private void onNodesChanged(ListChangeListener.Change<? extends CcNode> change) {
         nodesItem.getChildren().clear();
         for (CcNode node : change.getList()) {
-            TreeItem<CcNode> treeItem = createTreeItem(node);
-            nodesItem.getChildren().add(treeItem);
+           traversTreeItems(node,nodesItem);
+
+        }
+    }
+
+
+    private void traversTreeItems(CcNode node,TreeItem<CcNode> parent){
+        TreeItem<CcNode> treeItem = createTreeItem(node);
+        parent.getChildren().add(treeItem);
+        for(CcNode child : node.getChildren()) {
+            traversTreeItems(child,treeItem);
         }
     }
 

@@ -1,6 +1,7 @@
 package mygame.editor.repository;
 
 import com.badlogic.gdx.math.Vector2;
+import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -17,7 +18,11 @@ public class InMemoryRepository implements NodeRepository {
 
     private ObservableList<B2Joint> joints = FXCollections.observableArrayList();
 
-    private final ObservableList<CcNode> nodes = FXCollections.observableArrayList();
+
+
+
+
+    private final ObservableList<CcNode> nodes = FXCollections.observableList(new ArrayList<>(),param-> new Observable[]{param.getName(), param.getX(), param.getY()});
 
     private Vector2 gravity = new Vector2();
 
