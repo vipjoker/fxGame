@@ -43,8 +43,6 @@ private const val STATIC = "static"
 fun createNodesFromString(json: String): List<CcNode> {
 
     val layers = arrayListOf<CcNode>()
-
-
     val jsonObject = JSONObject(json)
     val nodes = jsonObject.getJSONArray(NODES)
 
