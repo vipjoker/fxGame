@@ -27,6 +27,14 @@ public class B2Fixture implements Editable{
         }
 
     }
+public B2Fixture(B2FixtureType type, List<Vector2> points){
+        this.type = type;
+        for (Vector2 point : points) {
+
+            this.points.add(point);
+        }
+
+    }
 
     public String getName() {
         return name;

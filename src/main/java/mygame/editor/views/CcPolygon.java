@@ -90,7 +90,9 @@ public class CcPolygon extends CcFixtureNode {
 
     }
 
-
+    public B2Fixture getFixture() {
+        return fixture;
+    }
 
     @Override
     public boolean contains(javafx.geometry.Point2D point2D) {

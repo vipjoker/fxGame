@@ -1,0 +1,52 @@
+{
+  "n": {
+    "image": "/textures/shield.png",
+    "nodes": [],
+    "x": -269.05346318529297,
+    "name": "Rock",
+    "width": 100,
+    "y": 111.90240195427192,
+    "angle": 0,
+    "type": "sprite:node:text",
+    "height": 100,
+    "physics": {
+      "id": 0,
+      "type": "static:dynamic:kinematic",
+      "fixutres": [
+        {
+          "type": "circle:rect:polygon:chain",
+          "restitution": 0,
+          "density": 1,
+          "friction": 0,
+          "points": [
+            {
+              "x": 10,
+              "y": 10
+            },
+            {
+              "x": 10,
+              "y": 10
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "joints": [
+    {
+      "type": "distance:revolute",
+      "bodyA": 0,
+      "bodyB": 1,
+      "pointA": {
+        "x": 0,
+        "y": 0
+      },
+      "pointB": {
+        "x": 1,
+        "y": 1
+      }
+    }
+  ]
+}
+
+

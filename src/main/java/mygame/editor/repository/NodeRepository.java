@@ -25,13 +25,13 @@ public interface NodeRepository {
     void update(CcNode node);
 
     int count();
-
+    @Deprecated
     List<B2Body> getBodies();
 
     List<B2Joint> getJoints();
 
     void deleteBody(B2Body body);
-
+    @Deprecated
     void saveBody(B2Body body);
 
     void saveJoint(B2Joint joint);
@@ -47,5 +47,6 @@ public interface NodeRepository {
     void listenForJoints(ListChangeListener<B2Joint> listener);
 
     void listenForNodes(ListChangeListener<CcNode> listener);
+
 
 }

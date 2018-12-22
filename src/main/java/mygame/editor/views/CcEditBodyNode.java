@@ -1,6 +1,7 @@
 package mygame.editor.views;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -10,8 +11,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
-import mygame.editor.model.box2d.B2Body;
-import mygame.editor.model.box2d.B2Fixture;
+import mygame.editor.model.box2d.*;
+import mygame.editor.util.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,38 @@ public class CcEditBodyNode extends CcNode{
     private B2Body editBody;
     private boolean isInSimulateMode;
     private final List<CcFixtureNode> fixtureNodes = new ArrayList<>();
+
+
+    public static CcEditBodyNode create(String type,float x,float y){
+        B2Body body = null;
+        switch (type){
+            case Constants.PARAM_SQUARE: {
+                body = new B2Body(B2Type.DYNAMIC, new B2Point(x, y));
+                B2Fixture fixture = new B2Fixture(B2FixtureType.POLYGON, Vector2.Zero, new Vector2(1, 0),new Vector2(1,1),new Vector2(0.5f,2),new Vector2(0,1));
+                body.addFixture(fixture);
+            }
+            break;
+            case Constants.PARAM_CIRCLE: {
+                body = new B2Body(B2Type.DYNAMIC, new B2Point(x, y));
+                B2Fixture fixture = new B2Fixture(B2FixtureType.CIRCLE, Vector2.Zero, new Vector2(0, 1));
+                body.addFixture(fixture);
+            }
+            break;
+            case Constants.PARAM_CHAIN:{
+                body = new B2Body(B2Type.STATIC, new B2Point(x, y));
+                B2Fixture fixture = new B2Fixture(B2FixtureType.CHAIN, new Vector2(0,1), new Vector2(1, 0),new Vector2(2,0),new Vector2(3,1));
+                body.addFixture(fixture);
+            }
+            break;
+            case Constants.PARAM_EDGE:{
+
+            }
+            break;
+        }
+        CcEditBodyNode bodyNode = new CcEditBodyNode(body);
+        return bodyNode;
+    }
+
     public CcEditBodyNode(B2Body body) {
         this.editBody = body;
         isInSimulateMode = true;
@@ -145,7 +178,7 @@ public class CcEditBodyNode extends CcNode{
 
     }
 
-    public B2Body getEditBody(){
+    public B2Body getB2EditBody(){
         return editBody;
     }
 }

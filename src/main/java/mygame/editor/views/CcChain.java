@@ -21,6 +21,7 @@ public class CcChain extends CcFixtureNode {
     List<Vector2> points = new ArrayList<>();
     private Path path;
 
+
     public CcChain(ChainShape chainShape) {
 
         Vector2 buffer = new Vector2();
@@ -42,6 +43,11 @@ public class CcChain extends CcFixtureNode {
 
         path = initPath();
 
+    }
+
+    @Override
+    public B2Fixture getFixture() {
+        return fixture;
     }
 
     private Path initPath(){

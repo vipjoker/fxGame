@@ -2,6 +2,7 @@ package mygame.editor.controlers;
 
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
@@ -20,6 +21,7 @@ import mygame.editor.util.Callback;
 import mygame.editor.views.CcNode;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class HierarchyController implements Initializable {
@@ -28,6 +30,8 @@ public class HierarchyController implements Initializable {
 
     private TreeItem<CcNode> nodesItem;
     private CcNode rootNode;
+    private CcNode lastCell;
+    private CcNode firstCell;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -43,8 +47,8 @@ public class HierarchyController implements Initializable {
     private void setupContextMenu() {
         ContextMenu contextMenu = new ContextMenu();
 
-        MenuItem item1 = new MenuItem("Delete item");
-        item1.setOnAction(new EventHandler<ActionEvent>() {
+        MenuItem delete_item = new MenuItem("Delete item");
+        delete_item.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent event) {
@@ -52,11 +56,13 @@ public class HierarchyController implements Initializable {
 
                 if(selectedItem != null){
                     App.instance.repository.delete(selectedItem.getValue());
+                    selectedItem.getValue().removeSelf();
+
                 }
             }
         });
 
-        contextMenu.getItems().add(item1);
+        contextMenu.getItems().add(delete_item);
 
         nodeTreeview.setOnContextMenuRequested(event -> {
             contextMenu.show(nodeTreeview,event.getScreenX(),event.getScreenY());
@@ -112,10 +118,13 @@ public class HierarchyController implements Initializable {
 
     //************************************************************************
 
-    private CcNode lastCell;
-    private CcNode firstCell;
 
     private void onMousePressed(MouseEvent event) {
+
+
+
+
+
         final TreeItem<CcNode> selectedItem = nodeTreeview.getSelectionModel().getSelectedItem();
         if(selectedItem != null){
             final CcNode value = selectedItem.getValue();

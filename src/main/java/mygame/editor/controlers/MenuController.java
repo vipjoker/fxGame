@@ -1,5 +1,6 @@
 package mygame.editor.controlers;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.MenuBar;
@@ -36,5 +37,9 @@ public class MenuController implements Initializable {
     public void onSave(ActionEvent actionEvent) {
         String json = LocalParserKt.createJsonFromNodes(App.instance.repository.getNodes());
         FileManager.getInstance().saveScene(json);
+    }
+
+    public void onExit(ActionEvent actionEvent) {
+        Platform.exit();
     }
 }

@@ -91,7 +91,7 @@ public class CanvasRenderer {
 
     private void onSelectChanged(ListChangeListener.Change<? extends CcNode> change) {
         final ObservableList<? extends CcNode> list = change.getList();
-        for (CcNode ccNode : list) {
+        for (CcNode ccNode : this.nodes) {
 
             traverse(ccNode, n -> {
                 final boolean contains = list.contains(n);

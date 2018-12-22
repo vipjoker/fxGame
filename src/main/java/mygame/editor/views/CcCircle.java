@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.sun.xml.internal.fastinfoset.tools.FI_DOM_Or_XML_DOM_SAX_SAXEvent;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import mygame.editor.component.physics.FixtureDrawable;
@@ -15,6 +16,7 @@ import java.util.List;
 
 public class CcCircle extends CcFixtureNode{
 
+    private B2Fixture fixture;
     private boolean active;
     Vector2 position;
     float radius;
@@ -33,10 +35,13 @@ public class CcCircle extends CcFixtureNode{
 
         points.add(position);
         points.add(position.cpy().add(radius,0));
+        this.fixture = fixture;
     }
 
-
-
+    @Override
+    public B2Fixture getFixture() {
+        return fixture;
+    }
 
     @Override
     public void rasterize(GraphicsContext context) {

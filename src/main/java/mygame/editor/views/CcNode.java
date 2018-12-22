@@ -9,6 +9,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
 import mygame.editor.component.Component;
+import mygame.editor.model.box2d.B2Body;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -27,13 +28,17 @@ public class CcNode {
     protected SimpleDoubleProperty scaleY = new SimpleDoubleProperty(1);
     protected SimpleDoubleProperty angle = new SimpleDoubleProperty(0);
     protected StringProperty name  = new SimpleStringProperty("Node");
+    protected SimpleDoubleProperty anchorX = new SimpleDoubleProperty(0);
+    protected SimpleDoubleProperty anchorY = new SimpleDoubleProperty(0);
+    protected SimpleBooleanProperty hasPhysics = new SimpleBooleanProperty(false);
+
+    private CcEditBodyNode editBody; //has physics
 
     public Affine transform;
     protected BoundingBox bBox;
     public boolean active;
     private CcNode parent;
     private List<Component> components = new ArrayList<>();
-    private Anchor anchor = Anchor.BOTTOM_LEFT;
 
     private List<CcNode> children = new ArrayList<>();
 
@@ -67,7 +72,13 @@ public class CcNode {
         return parent;
     }
 
+    public void setEditBody(CcEditBodyNode editBody){
+        this.editBody = editBody;
+    }
 
+    public CcEditBodyNode getEditBody(){
+        return editBody;
+    }
 
     public void draw(GraphicsContext context, long time) {
         context.save();
@@ -75,6 +86,9 @@ public class CcNode {
         context.rotate(angle.doubleValue());
         context.scale(scaleX.doubleValue(), scaleY.doubleValue());
         rasterize(context);
+        if(editBody != null){
+            editBody.draw(context,time);
+        }
         components.sort(Comparator.comparingInt(Component::getZorder));
 
         components.forEach(c->{
@@ -96,6 +110,40 @@ public class CcNode {
     public boolean contains(Point2D point2D){
         Rectangle2D rectangle2D = new Rectangle2D(x.doubleValue(),y.doubleValue(),width.doubleValue(),height.doubleValue());
         return rectangle2D.contains(point2D);
+    }
+
+    public void setAnchorX (double anchorX){
+        this.anchorX.set(anchorX);
+    }
+
+    public void setAnchorY(double anchorY){
+        this.anchorY.set(anchorY);
+    }
+
+
+
+    public double getAnchorX() {
+        return anchorX.get();
+    }
+
+    public SimpleDoubleProperty anchorXProperty() {
+        return anchorX;
+    }
+
+    public double getAnchorY() {
+        return anchorY.get();
+    }
+
+    public SimpleDoubleProperty anchorYProperty() {
+        return anchorY;
+    }
+
+    public boolean isHasPhysics() {
+        return hasPhysics.get();
+    }
+
+    public SimpleBooleanProperty hasPhysicsProperty() {
+        return hasPhysics;
     }
 
     public void setActive(boolean isActive) {

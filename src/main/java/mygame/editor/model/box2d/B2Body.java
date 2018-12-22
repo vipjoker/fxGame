@@ -12,6 +12,7 @@ import java.util.List;
  */
 public class B2Body implements Editable{
     private String name;
+    private int id;
     private float angle;
     private float angularVelocity;
     private Boolean awake;
@@ -30,6 +31,10 @@ public class B2Body implements Editable{
     public B2Body (B2Type type, B2Point position){
         this.type = type;
         this.position = position;
+    }
+
+    public B2Body(B2Type type){
+        this(type,new B2Point(0,0));
     }
 
     public String getName() {
@@ -116,6 +121,14 @@ public class B2Body implements Editable{
     @Override
     public void select() {
 
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override

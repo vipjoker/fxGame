@@ -2,6 +2,8 @@ package mygame.editor.controlers;
 
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -12,8 +14,11 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import mygame.editor.App;
 import mygame.editor.model.Point;
+import mygame.editor.model.box2d.B2Type;
 import mygame.editor.ui.SlideableTextField;
 import mygame.editor.ui.StringTextField;
+import mygame.editor.util.Constants;
+import mygame.editor.views.CcEditBodyNode;
 import mygame.editor.views.CcNode;
 
 import java.net.URL;
@@ -29,24 +34,63 @@ public class InfoController implements Initializable {
     private CcNode ccNode;
 
     private Pattern floatNumberPattern = Pattern.compile("[+-]?([0-9]*[.])?[0-9]+");
+
+
+    private SlideableTextField etGravityX = new SlideableTextField("Gravity x");
+    private SlideableTextField etGravityY = new SlideableTextField("Gravity y");
+    private SlideableTextField screenWidth = new SlideableTextField("Screen width");
+    private SlideableTextField screenHeight = new SlideableTextField("Screen height");
+
     private StringTextField etName = new StringTextField("Name");
     private SlideableTextField etX = new SlideableTextField("X");
     private SlideableTextField etY = new SlideableTextField("Y");
     private SlideableTextField etWidth = new SlideableTextField("Width");
     private SlideableTextField etHeight = new SlideableTextField("Height");
     private SlideableTextField etAngle = new SlideableTextField("Angle");
+    private SlideableTextField etAnchorX = new SlideableTextField("Anchor x");
+    private SlideableTextField etAnchorY = new SlideableTextField("Anchor y");
+
+
+    private SlideableTextField etDensity = new SlideableTextField("Density");
+    private SlideableTextField etRestitution = new SlideableTextField("Restitution");
+    private SlideableTextField etFriction = new SlideableTextField("Friction");
+    ObservableList<String> strings = FXCollections.observableArrayList("Static", "Kinematic", "Dynamic");
+    ChoiceBox<String> choiceBox = new ChoiceBox<>(strings);
+    private CheckBox cbHasPhysics = new CheckBox("Physics");
+    VBox generalLayout = new VBox();
+    VBox nodeSettingsLayout = new VBox();
+    VBox physicsLayout = new VBox();
+    TitledPane titledPane = new TitledPane("General",generalLayout);
+    TitledPane nodeSettings = new TitledPane("Node settings",nodeSettingsLayout);
+    TitledPane physicsSettingsLayout = new TitledPane("Physics",physicsLayout);
+
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         App.instance.registerController(this);
 
-        ObservableList<String> strings = FXCollections.observableArrayList("Static", "Kinematic", "Dynamic");
-
         App.instance.selected.addListener(this::onSelected);
 
+        physicsLayout.getChildren().addAll(choiceBox,etDensity,etRestitution,etFriction);
+        Accordion accordion = new Accordion(titledPane,nodeSettings,physicsSettingsLayout);
 
-        vbRoot.getChildren().addAll(etName, etX, etY, etAngle, etWidth, etHeight);
+        nodeSettingsLayout.getChildren().addAll(etName, etX, etY, etAngle, etWidth, etHeight,etAnchorX,etAnchorY,cbHasPhysics);
+        generalLayout.getChildren().addAll(etGravityX,etGravityY,screenWidth,screenHeight);
+        vbRoot.getChildren().addAll(accordion);
+
+
+        cbHasPhysics.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                physicsSettingsLayout.setVisible(newValue);
+                if(newValue){
+                    ccNode.setEditBody(CcEditBodyNode.create(Constants.PARAM_SQUARE,0,0));
+                }else{
+                    ccNode.setEditBody(null);
+                }
+            }
+        });
 
 
     }
@@ -60,6 +104,8 @@ public class InfoController implements Initializable {
             etWidth.unbind();
             etHeight.unbind();
             etName.unbind();
+            etAnchorX.unbind();
+            etAnchorY.unbind();
         }
 
 
@@ -71,17 +117,14 @@ public class InfoController implements Initializable {
             etWidth.bind(ccNode.getWidth());
             etHeight.bind(ccNode.getHeight());
             etAngle.bind(ccNode.getAngle());
+            etAnchorX.bind(ccNode.anchorXProperty());
+            etAnchorY.bind(ccNode.anchorYProperty());
+
         }
 
 
     }
 
-
-    private void initSpinners() {
-//        spFriction.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0, 1, 0.5, 0.1));
-//        spDensity.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0, 1, 0.5, 0.1));
-//        spRestitution.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0, 1, 0.5, 0.1));
-    }
 
 
     private boolean validateNumberField(String oldValue, String newValue, TextField textField) {

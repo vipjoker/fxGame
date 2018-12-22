@@ -47,43 +47,13 @@ public class CreateBodyAction extends Action implements CanvasRenderer.OnCanvasD
 
 
 
+        CcEditBodyNode bodyNode =  CcEditBodyNode.create(mode,x,y);
 
-        B2Body body = null;
-        switch (mode){
-            case Constants.PARAM_SQUARE: {
-                body = new B2Body(B2Type.DYNAMIC, new B2Point(x, y));
-                B2Fixture fixture = new B2Fixture(B2FixtureType.POLYGON, Vector2.Zero, new Vector2(1, 0),new Vector2(1,1),new Vector2(0.5f,2),new Vector2(0,1));
-                body.addFixture(fixture);
-            }
-                break;
-            case Constants.PARAM_CIRCLE: {
-                body = new B2Body(B2Type.DYNAMIC, new B2Point(x, y));
-                B2Fixture fixture = new B2Fixture(B2FixtureType.CIRCLE, Vector2.Zero, new Vector2(0, 1));
-                body.addFixture(fixture);
-            }
-                break;
-            case Constants.PARAM_CHAIN:{
-                body = new B2Body(B2Type.STATIC, new B2Point(x, y));
-                B2Fixture fixture = new B2Fixture(B2FixtureType.CHAIN, new Vector2(0,1), new Vector2(1, 0),new Vector2(2,0),new Vector2(3,1));
-                body.addFixture(fixture);
-            }
-                break;
-            case Constants.PARAM_EDGE:{
-
-            }
-                break;
-        }
+//        body.setName("Body " + mRepository.getBodies().size());
+//        mRepository.saveBody(body);
 
 
 
-
-
-
-
-        CcEditBodyNode bodyNode = new CcEditBodyNode(body);
-
-        body.setName("Body " + mRepository.getBodies().size());
-        mRepository.saveBody(body);
         mRenderer.addChild(bodyNode);
         mRenderer.update();
     }
