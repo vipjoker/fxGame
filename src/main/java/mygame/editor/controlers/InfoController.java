@@ -55,7 +55,10 @@ public class InfoController implements Initializable {
     private SlideableTextField etRestitution = new SlideableTextField("Restitution");
     private SlideableTextField etFriction = new SlideableTextField("Friction");
     ObservableList<String> strings = FXCollections.observableArrayList("Static", "Kinematic", "Dynamic");
+    ObservableList<String> fixtureType = FXCollections.observableArrayList("Circle","Rectangle","Line");
+
     ChoiceBox<String> choiceBox = new ChoiceBox<>(strings);
+    ChoiceBox<String> fixtureTypeChoiceBox = new ChoiceBox<>(fixtureType);
     private CheckBox cbHasPhysics = new CheckBox("Physics");
     VBox generalLayout = new VBox();
     VBox nodeSettingsLayout = new VBox();
@@ -72,7 +75,10 @@ public class InfoController implements Initializable {
 
         App.instance.selected.addListener(this::onSelected);
 
-        physicsLayout.getChildren().addAll(choiceBox,etDensity,etRestitution,etFriction);
+
+        choiceBox.setValue(strings.get(0));
+        fixtureTypeChoiceBox.setValue(fixtureType.get(0));
+        physicsLayout.getChildren().addAll(choiceBox,fixtureTypeChoiceBox,etDensity,etRestitution,etFriction);
         Accordion accordion = new Accordion(titledPane,nodeSettings,physicsSettingsLayout);
 
         nodeSettingsLayout.getChildren().addAll(etName, etX, etY, etAngle, etWidth, etHeight,etAnchorX,etAnchorY,cbHasPhysics);

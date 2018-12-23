@@ -30,8 +30,8 @@ public class CanvasRenderer {
     private double scale = 1;
     private double scrollx = 400;
     private double scrolly = 400;
-    private double translatex = 400;
-    private double translatey = -400;
+    private double translatex = 0;
+    private double translatey = 0;
 
     Point2D mouseCursor = new Point2D(0, 0);
     private GraphicsContext graphicsContext;

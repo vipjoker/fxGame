@@ -27,7 +27,7 @@ public class ToolbarController implements Initializable {
     private ToggleButton nodeRotate;
     private ToggleButton fixtureMove;
     private ToggleButton fixtureEdit;
-
+    private Command lastCommand;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -35,14 +35,16 @@ public class ToolbarController implements Initializable {
 
 
         ToggleGroup mainToggleGroup = new ToggleGroup();
-
         ToggleButton nodeToggle=  new ToggleButton("Node");
+        ToggleButton runToggle = new ToggleButton("Run");
         nodeToggle.setUserData("Node");
+
         ToggleButton fixtureToggle=  new ToggleButton("Fixture");
         fixtureToggle.setUserData("Fixture");
-        mainToggleGroup.getToggles().addAll(nodeToggle,fixtureToggle);
-        mainActions.getChildren().addAll(nodeToggle,fixtureToggle);
 
+        mainToggleGroup.getToggles().addAll(nodeToggle,fixtureToggle);
+        mainActions.getChildren().addAll(nodeToggle,fixtureToggle,runToggle);
+        runToggle.selectedProperty().addListener(this::onRunChanged);
         ToggleGroup nodeToggleGroup  = new ToggleGroup();
 
         nodeMove = new ToggleButton("Move");
@@ -75,6 +77,16 @@ public class ToolbarController implements Initializable {
         mainToggleGroup.selectedToggleProperty().addListener(this::onModeChanged);
         nodeToggle.fire();
 
+    }
+
+    public void onRunChanged(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue){
+        if(newValue){
+            lastCommand = App.instance.observableAction.get();
+
+            App.instance.observableAction.set(new Command(Constants.MODE_RUN,""));
+        }else{
+            App.instance.observableAction.setValue(lastCommand);
+        }
     }
 
     private void onSecondaryActionChanged(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue){

@@ -1,6 +1,6 @@
 package mygame;
 
-import mygame.editor.parser.LocalParserKt;
+import mygame.editor.parser.LocalParser;
 import mygame.editor.views.CcNode;
 import org.junit.Test;
 
@@ -19,11 +19,11 @@ public class ParserTest {
         List<CcNode> list = new ArrayList<>();
         list.add(ccNode);
 
-        String result = LocalParserKt.createJsonFromNodes(list);
+        String result = LocalParser.createJsonFromNodes(list);
         System.out.println(result);
         assertTrue(result.contains("OLEH"));
 
-        List<CcNode> parsedNodes = LocalParserKt.createNodesFromString(result);
+        List<CcNode> parsedNodes = LocalParser.createNodesFromString(result);
         assertNotNull("Node is not null",parsedNodes.get(0) );
         assertEquals("Node name", "OLEH", parsedNodes.get(0).getName().getValue());
         assertNotEquals("Node name", "OLEH9", parsedNodes.get(0).getName().getValue());
@@ -47,13 +47,13 @@ public class ParserTest {
         repository.add(parent);
 
 
-        String json = LocalParserKt.createJsonFromNodes(repository);
+        String json = LocalParser.createJsonFromNodes(repository);
         System.out.println(json);
         assertTrue(json.contains("Child one"));
         assertTrue(json.contains("Child two"));
 
 
-        List<CcNode> nodesFromString = LocalParserKt.createNodesFromString(json);
+        List<CcNode> nodesFromString = LocalParser.createNodesFromString(json);
         assertEquals(nodesFromString.get(0).getChildren().size(),2);
 
     }

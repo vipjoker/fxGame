@@ -30,7 +30,7 @@ public class CcEditBodyNode extends CcNode{
         switch (type){
             case Constants.PARAM_SQUARE: {
                 body = new B2Body(B2Type.DYNAMIC, new B2Point(x, y));
-                B2Fixture fixture = new B2Fixture(B2FixtureType.POLYGON, Vector2.Zero, new Vector2(1, 0),new Vector2(1,1),new Vector2(0.5f,2),new Vector2(0,1));
+                B2Fixture fixture = new B2Fixture(B2FixtureType.POLYGON, Vector2.Zero, new Vector2(1, 0),new Vector2(1,1),new Vector2(0,1));
                 body.addFixture(fixture);
             }
             break;

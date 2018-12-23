@@ -6,7 +6,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.MenuBar;
 import mygame.editor.App;
 import mygame.editor.manager.FileManager;
-import mygame.editor.parser.LocalParserKt;
+import mygame.editor.parser.LocalParser;
 import mygame.editor.views.CcNode;
 
 import java.net.URL;
@@ -28,14 +28,14 @@ public class MenuController implements Initializable {
 
     public void onLoad(ActionEvent actionEvent) {
         final String json = FileManager.getInstance().loadScene();
-        List<CcNode> nodesFromString = LocalParserKt.createNodesFromString(json);
+        List<CcNode> nodesFromString = LocalParser.createNodesFromString(json);
         for (CcNode ccNode : nodesFromString) {
             App.instance.repository.save(ccNode);
         }
     }
 
     public void onSave(ActionEvent actionEvent) {
-        String json = LocalParserKt.createJsonFromNodes(App.instance.repository.getNodes());
+        String json = LocalParser.createJsonFromNodes(App.instance.repository.getNodes());
         FileManager.getInstance().saveScene(json);
     }
 
