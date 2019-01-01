@@ -5,21 +5,13 @@ import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import mygame.editor.App;
-import mygame.editor.component.SelectComponent;
 import mygame.editor.controlers.InfoController;
-import mygame.editor.interfaces.Editable;
 import mygame.editor.interfaces.KeyListener;
-import mygame.editor.model.Point;
-import mygame.editor.model.Selectable;
 import mygame.editor.model.box2d.B2Body;
 import mygame.editor.render.CanvasRenderer;
-import mygame.editor.repository.NodeRepository;
-import mygame.editor.views.CcBodyNode;
+import mygame.editor.repository.NodeModel;
 import mygame.editor.views.CcEditBodyNode;
-import mygame.editor.views.CcNode;
-
-import java.util.ArrayList;
-import java.util.List;
+import mygame.editor.views.NodeView;
 
 /**
  * Created by oleh on 3/27/17.
@@ -34,7 +26,7 @@ public class BodyEditAction extends Action implements CanvasRenderer.OnCanvasDra
 
     private Mode mode = Mode.MOVE;
 
-    public BodyEditAction(CanvasRenderer renderer, NodeRepository repository, InfoController controller) {
+    public BodyEditAction(CanvasRenderer renderer, NodeModel repository, InfoController controller) {
         super(renderer, repository);
         this.mController = controller;
     }
@@ -43,9 +35,9 @@ public class BodyEditAction extends Action implements CanvasRenderer.OnCanvasDra
     public void init() {
         mRenderer.getNodes().clear();
         App.instance.addKeyListener(this);
-        for (B2Body body : mRepository.getBodies()) {
-            mRenderer.addChild(new CcEditBodyNode(body));
-        }
+//        for (B2Body body : mRepository.getBodies()) {
+//            mRenderer.addChild(new CcEditBodyNode(body));
+//        }
         mRenderer.update();
         mRenderer.setOnCanvasDragListener(this);
     }
@@ -65,12 +57,12 @@ public class BodyEditAction extends Action implements CanvasRenderer.OnCanvasDra
 
     private void handleSelect(Point2D point) {
 
-        final ObservableList<CcNode> selected = App.instance.selected;
+        final ObservableList<NodeView> selected = App.instance.selected;
         if (!App.buttons.contains(KeyCode.SHIFT)) {
             selected.clear();
         }
 
-        for (CcNode node : mRenderer.getNodes()) {
+        for (NodeView node : mRenderer.getNodes()) {
             final Point2D point2D = node.convertToLocalSpace(point);
             if (node.contains(point2D) && !selected.contains(node)) {
 
@@ -79,22 +71,22 @@ public class BodyEditAction extends Action implements CanvasRenderer.OnCanvasDra
             }
         }
 
-        for (CcNode node : mRenderer.getNodes()) {
+        for (NodeView node : mRenderer.getNodes()) {
             node.setActive(selected.contains(node));
         }
     }
 
     @Override
     public void onDrag(Point2D point) {
-        final ObservableList<CcNode> selected = App.instance.selected;
+        final ObservableList<NodeView> selected = App.instance.selected;
 
         if (mode == Mode.ROTATE) {
 
-            for (CcNode ccNode : selected) {
+            for (NodeView ccNode : selected) {
                 ccNode.setAngle(ccNode.getAngle().doubleValue() - point.getX() - point.getY());
             }
         } else {
-            for (CcNode s : selected) {
+            for (NodeView s : selected) {
                 double newX = s.getX().doubleValue() - point.getX();
                 double newY = s.getY().doubleValue() + point.getY();
                 s.setX(newX);

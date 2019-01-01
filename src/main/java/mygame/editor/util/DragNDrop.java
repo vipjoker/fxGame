@@ -28,8 +28,8 @@ public class DragNDrop  {
     private void onDragMove(MouseEvent mouseEvent) {
         Node source = (Node) mouseEvent.getSource();
         Point2D p = source.getParent().screenToLocal(mouseEvent.getScreenX(),mouseEvent.getScreenY());
-        source.setLayoutX(p.getX()- startPoint.getX());
-        source.setLayoutY(p.getY()- startPoint.getY());
+        source.setLayoutX(p.getX()- startPoint.getX().get());
+        source.setLayoutY(p.getY()- startPoint.getY().get());
 
 
 

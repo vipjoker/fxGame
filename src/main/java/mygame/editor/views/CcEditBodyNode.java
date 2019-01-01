@@ -2,22 +2,19 @@ package mygame.editor.views;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import javafx.scene.transform.Affine;
-import javafx.scene.transform.NonInvertibleTransformException;
 import mygame.editor.model.box2d.*;
 import mygame.editor.util.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CcEditBodyNode extends CcNode{
+public class CcEditBodyNode extends NodeView {
 
 
     private B2Body editBody;
@@ -120,9 +117,6 @@ public class CcEditBodyNode extends CcNode{
         if(active){
             context.beginPath();
             context.setStroke(Color.CYAN);
-            for (CcNode ccNode : getChildren()) {
-
-            }
             context.strokeRect(-10,-10,20,20);
             context.stroke();
         }
@@ -130,12 +124,9 @@ public class CcEditBodyNode extends CcNode{
     }
 
     private void update(){
-
-
-            x.setValue(editBody.getPosition().getX() * 32);
-            y.setValue(editBody.getPosition().getY()* 32);
-            setAngle(-editBody.getAngle() * MathUtils.radDeg);
-
+        x.setValue(editBody.getPosition().getX() * 32);
+        y.setValue(editBody.getPosition().getY()* 32);
+        setAngle(-editBody.getAngle() * MathUtils.radDeg);
     }
 
     @Override

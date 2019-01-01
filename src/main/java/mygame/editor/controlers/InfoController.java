@@ -1,28 +1,21 @@
 package mygame.editor.controlers;
 
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
-import javafx.scene.Cursor;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import mygame.editor.App;
-import mygame.editor.model.Point;
-import mygame.editor.model.box2d.B2Type;
 import mygame.editor.ui.SlideableTextField;
 import mygame.editor.ui.StringTextField;
 import mygame.editor.util.Constants;
 import mygame.editor.views.CcEditBodyNode;
-import mygame.editor.views.CcNode;
+import mygame.editor.views.NodeView;
 
 import java.net.URL;
-import java.text.*;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
@@ -31,7 +24,7 @@ import java.util.regex.Pattern;
  */
 public class InfoController implements Initializable {
     public VBox vbRoot;
-    private CcNode ccNode;
+    private NodeView ccNode;
 
     private Pattern floatNumberPattern = Pattern.compile("[+-]?([0-9]*[.])?[0-9]+");
 
@@ -101,7 +94,7 @@ public class InfoController implements Initializable {
 
     }
 
-    private void onSelected(ListChangeListener.Change<? extends CcNode> c) {
+    private void onSelected(ListChangeListener.Change<? extends NodeView> c) {
 
         if (ccNode != null) {
             etX.unbind();
@@ -125,6 +118,10 @@ public class InfoController implements Initializable {
             etAngle.bind(ccNode.getAngle());
             etAnchorX.bind(ccNode.anchorXProperty());
             etAnchorY.bind(ccNode.anchorYProperty());
+
+            if(ccNode.getEditBody() != null){
+
+            }
 
         }
 

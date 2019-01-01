@@ -4,15 +4,15 @@ package mygame.editor.actions;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import mygame.editor.render.CanvasRenderer;
-import mygame.editor.repository.NodeRepository;
+import mygame.editor.repository.NodeModel;
 
 
 public abstract class Action implements ChangeListener<String>{
 
     protected final CanvasRenderer mRenderer;
-    protected final NodeRepository mRepository;
+    protected final NodeModel mRepository;
     protected String mode;
-    protected Action(CanvasRenderer renderer,NodeRepository repository) {
+    protected Action(CanvasRenderer renderer, NodeModel repository) {
         this.mRenderer = renderer;
         this.mRepository = repository;
     }

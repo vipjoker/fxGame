@@ -1,7 +1,10 @@
 package mygame.editor.parser;
 
 import com.badlogic.gdx.math.Vector2;
-import mygame.editor.model.box2d.B2Body;
+import mygame.editor.model.Node;
+import mygame.editor.model.Physics;
+import mygame.editor.model.Point;
+import mygame.editor.model.Sprite;
 import mygame.editor.model.box2d.B2Fixture;
 import mygame.editor.model.box2d.B2FixtureType;
 import mygame.editor.model.box2d.B2Type;
@@ -24,6 +27,7 @@ public class LocalParser {
     private static final String ANGLE = "angle";
     private static final String IMAGE = "image";
     private static final String TYPE = "type";
+    private static final String SHAPE = "shape";
     private static final String NODE = "node";
     private static final String SPRITE = "sprite";
     private static final String PHYSICS = "physics";
@@ -32,19 +36,22 @@ public class LocalParser {
     private static final String DENSITY = "density";
     private static final String FRICTION = "friction";
     private static final String POINTS = "points";
+
+    private static final String CENTER = "center";
+    private static final String RADIUS = "radius";
+
     private static final String RECT = "rect";
     private static final String CIRCLE = "circle";
     private static final String CHAIN = "chain";
-    private static final String EDGE = "edge";
     private static final String POLYGON = "polygon";
     private static final String DYNAMIC = "dynamic";
     private static final String KINEMATIC = "kinematic";
     private static final String STATIC = "static";
 
 
-    public static List<CcNode> createNodesFromString(String json) {
+    public static List<Node> createNodesFromString(String json) {
 
-        List<CcNode> layers = new ArrayList<>();
+        List<Node> layers = new ArrayList<>();
 
 
         JSONObject jsonObject = new JSONObject(json);
@@ -52,25 +59,25 @@ public class LocalParser {
 
         for (int i = 0; i < nodes.length(); i++) {
             JSONObject jsonNode = nodes.getJSONObject(i);
-            CcNode node = parseNode(jsonNode);
+            Node node = parseNode(jsonNode);
             layers.add(node);
         }
 
         return layers;
     }
 
-    public static String createJsonFromNodes(List<CcNode> nodes) {
+    public static String createJsonFromNodes(List<Node> nodes) {
         JSONObject jsonObject = new JSONObject();
         JSONArray jsonArray = new JSONArray();
         jsonObject.put(NODES, jsonArray);
-        for (CcNode ccNode : nodes) {
+        for (Node ccNode : nodes) {
             JSONObject jsonNode = createJsonNode(ccNode);
             jsonArray.put(jsonNode);
         }
         return jsonObject.toString();
     }
 
-    private static CcNode parseNode(JSONObject jsonObject) {
+    private static Node parseNode(JSONObject jsonObject) {
         String type = jsonObject.getString(TYPE);
         if (SPRITE.equals(type)) {
             return createSprite(jsonObject);
@@ -80,20 +87,20 @@ public class LocalParser {
 
     }
 
-    private static CcNode createNode(JSONObject jsonObject) {
-        CcNode node = new CcNode();
+    private static Node createNode(JSONObject jsonObject) {
+        Node node = new Node();
         fillNode(node, jsonObject);
         return node;
     }
 
-    private static CcSprite createSprite(JSONObject jsonObject) {
+    private static Sprite createSprite(JSONObject jsonObject) {
         String image = jsonObject.getString(IMAGE);
-        CcSprite sprite = new CcSprite(image);
+        Sprite sprite = new Sprite(image);
         fillNode(sprite, jsonObject);
         return sprite;
     }
 
-    private static void fillNode(CcNode node, JSONObject jsonObject) {
+private static void fillNode(Node node, JSONObject jsonObject) {
         double x = jsonObject.getDouble(X);
         double y = jsonObject.getDouble(Y);
         double width = jsonObject.getDouble(WIDTH);
@@ -101,8 +108,7 @@ public class LocalParser {
         String name = jsonObject.getString(NAME);
         double angle = jsonObject.getDouble(ANGLE);
 
-        node.getX().set(x);
-        node.getY().set(y);
+        node.getPosition().set(x,y);
         node.getWidth().set(width);
         node.getHeight().set(height);
         node.getName().set(name);
@@ -110,41 +116,47 @@ public class LocalParser {
         if (jsonObject.has(PHYSICS)) {
 
             JSONObject physicsObject = jsonObject.getJSONObject(PHYSICS);
+
             String physicsType = physicsObject.getString(TYPE);
-            B2Type bodyType = parseBodyType(physicsType);
-            B2Body body = new B2Body(bodyType);
+            double friction = physicsObject.getDouble(FRICTION);
+            double restitution = physicsObject.getDouble(RESTITUTION);
+            double density = physicsObject.getDouble(DENSITY);
 
-            JSONArray fixturesArray = physicsObject.getJSONArray(FIXTURES);
-            for (int index = 0; index < fixturesArray.length(); index++) {
-                JSONObject fixtureJson = fixturesArray.getJSONObject(index);
-                String fixtureType = fixtureJson.getString(TYPE);
+            Physics physics = new Physics();
+            physics.setType(physicsType);
+            physics.setFriction(friction);
+            physics.setRestitution(restitution);
+            physics.setDensity(density);
 
+            String shape = physicsObject.getString(SHAPE);
 
-                B2FixtureType fixtureTypeEnum = parseFixtureType(fixtureType);
+            switch (shape){
+                case RECT:
+                    double rectWidth = physicsObject.getDouble(WIDTH);
+                    double rectHeight = physicsObject.getDouble(HEIGHT);
+                    physics.setWidth(rectWidth);
+                    physics.setHeight(rectHeight);
+                    break;
+                case CIRCLE :
+                    JSONObject centerPointJson = physicsObject.getJSONObject(CENTER);
+                    double centerPointX = centerPointJson.getDouble(X);
+                    double centerPointY = centerPointJson.getDouble(Y);
+                    double radius  = physicsObject.getDouble(RADIUS);
+                    physics.setCenter(centerPointX,centerPointY);
+                    physics.setRadius(radius);
+                    break;
+                case CHAIN :
+                    JSONArray pointsJson = physicsObject.getJSONArray(POINTS);
+                    for (int i = 0; i < pointsJson.length(); i++) {
+                        JSONObject jsonPoint = pointsJson.getJSONObject(i);
+                        double pointX = jsonPoint.getDouble(X);
+                        double pointY = jsonPoint.getDouble(Y);
+                        physics.getPoints().add(new Point(pointX, pointY));
+                    }
+                    break;
 
-
-                float friction = fixtureJson.getFloat(FRICTION);
-                float restitution = fixtureJson.getFloat(RESTITUTION);
-                float density = fixtureJson.getFloat(DENSITY);
-
-                JSONArray pointsJsonArray = fixtureJson.getJSONArray(POINTS);
-
-                List<Vector2> list = new ArrayList<>();
-                for (int pointIndex = 0; pointIndex < pointsJsonArray.length(); pointIndex++){
-                    JSONObject jsonPoint = pointsJsonArray.getJSONObject(pointIndex);
-                    float pointX = jsonPoint.getFloat(X);
-                    float pointY = jsonPoint.getFloat(Y);
-                    list.add(new Vector2(pointX, pointY));
-
-                }
-                B2Fixture fixture = new B2Fixture(fixtureTypeEnum, list);
-                fixture.setDensity(density);
-                fixture.setRestitution(restitution);
-                fixture.setFriction(friction);
-
-                body.addFixture(fixture);
             }
-            node.setEditBody(new CcEditBodyNode(body));
+            node.setPhysics(physics);
 
         }
 
@@ -152,82 +164,32 @@ public class LocalParser {
             JSONArray nodes = jsonObject.getJSONArray(NODES);
             for (int index = 0;index < nodes.length(); index++){
                 JSONObject jsonNode = nodes.getJSONObject(index);
-                CcNode parsedNode = parseNode(jsonNode);
+                Node parsedNode = parseNode(jsonNode);
                 node.addChild(parsedNode);
             }
         }
     }
 
-    private static B2Type parseBodyType(String type) {
-        switch (type) {
-            case STATIC:
-                return B2Type.STATIC;
-            case DYNAMIC:
-                return B2Type.DYNAMIC;
-            default:
-                return B2Type.KINEMATIC;
-        }
-    }
 
-    private static B2FixtureType parseFixtureType(String type) {
-        switch (type) {
-            case RECT:
-                return B2FixtureType.RECT;
-            case CIRCLE:
-                return B2FixtureType.CIRCLE;
-            case CHAIN:
-                return B2FixtureType.CHAIN;
-            case EDGE:
-                return B2FixtureType.CHAIN;
-            default:
-                return B2FixtureType.POLYGON;
-        }
-    }
 
-    private static String enumToBodyType(B2Type type) {
-        switch (type) {
-            case STATIC:
-                return STATIC;
-            case DYNAMIC:
-                return DYNAMIC;
-            default:
-                return KINEMATIC;
-        }
-    }
-
-    private static String enumToFixtureType(B2FixtureType type) {
-        switch (type) {
-            case CHAIN:
-                return CHAIN;
-            case CIRCLE:
-                return CIRCLE;
-            case RECT:
-                return RECT;
-            case EDGE:
-                return EDGE;
-            default:
-                return POLYGON;
-        }
-    }
-
-    private static JSONObject createJsonNode(CcNode node) {
+    private static JSONObject createJsonNode(Node node) {
 
         JSONObject json;
-        if (node instanceof CcSprite){
-            json = createJsonSprite((CcSprite) node);
+        if (node instanceof Sprite){
+            json = createJsonSprite((Sprite) node);
         } else{
             json = createJsonDefaultNode(node);
 
         }
 
-        if (node.getEditBody() != null) {
-            JSONObject editBody = createPhysicsJson(node.getEditBody());
+        if (node.getPhysics() != null) {
+            JSONObject editBody = createPhysicsJson(node.getPhysics());
             json.put(PHYSICS, editBody);
         }
 
 
         JSONArray children = new JSONArray();
-        for (CcNode child :node.getChildren()) {
+        for (Node child :node.getChildren()) {
             JSONObject jsonChild = createJsonNode(child);
             children.put(jsonChild);
         }
@@ -237,65 +199,57 @@ public class LocalParser {
 
     }
 
-    private static JSONObject createPhysicsJson(CcEditBodyNode editBody) {
+    private static JSONObject createPhysicsJson(Physics physics) {
+
         JSONObject jsonObject = new JSONObject();
-        B2Body b2EditBody = editBody.getB2EditBody();
-        jsonObject.put(TYPE, enumToBodyType(b2EditBody.getType()));
 
-        jsonObject.put(ID, b2EditBody.getId());
-        JSONArray jsonFixtures = new JSONArray();
-        jsonObject.put(FIXTURES, jsonFixtures);
-        for (CcFixtureNode fixtureNode : editBody.getFixtureNodes()) {
-            JSONObject jsonFixture = new JSONObject();
-            B2Fixture fixture = fixtureNode.getFixture();
-            jsonFixture.put(RESTITUTION, fixture.getRestitution());
-            jsonFixture.put(DENSITY, fixture.getDensity());
-            jsonFixture.put(FRICTION, fixture.getFriction());
-            String fixtureType = enumToFixtureType(fixture.getType());
-            jsonFixture.put(TYPE, fixtureType);
+        jsonObject.put(RESTITUTION, physics.getRestitution().get());
+        jsonObject.put(DENSITY, physics.getDensity().get());
+        jsonObject.put(FRICTION, physics.getFriction().get());
+        jsonObject.put(TYPE,physics.getType());
+        switch (physics.getShape().getValue()){
+            case RECT:
+                jsonObject.put(SHAPE,RECT);
+                jsonObject.put(WIDTH, physics.getWidth().doubleValue());
+                jsonObject.put(HEIGHT,physics.getHeight().doubleValue());
+                break;
+            case CIRCLE:
+                jsonObject.put(SHAPE,CIRCLE);
+                jsonObject.put(RADIUS,physics.getRadius().doubleValue());
+                JSONObject center = new JSONObject();
+                center.put(X,physics.getCenter().getX().doubleValue());
+                center.put(Y,physics.getCenter().getY().doubleValue());
+                jsonObject.put(CENTER,center);
 
-            if (fixtureNode instanceof CcPolygon){
-                jsonFixture.put(TYPE, POLYGON);
-            }else if (fixtureNode instanceof CcCircle){
-                jsonFixture.put(TYPE, CIRCLE);
-            }else if (fixtureNode instanceof CcChain){
-                jsonFixture.put(TYPE, CHAIN);
-            }
-
-            JSONArray jsonPoints = new JSONArray();
-
-            for (Vector2 point : fixtureNode.getPoints()) {
-
-                JSONObject p =new  JSONObject();
-                p.put(X, point.x);
-                p.put(Y, point.y);
-                jsonPoints.put(p);
-            }
-            jsonFixture.put(POINTS, jsonPoints);
-            jsonFixtures.put(jsonFixture);
+                break;
+            case CHAIN:
+                jsonObject.put(SHAPE,CHAIN);
+                JSONArray points = new JSONArray();
+                for (Point point : physics.getPoints()) {
+                    JSONObject p = new JSONObject();
+                    p.put(X, point.getX().getValue());
+                    p.put(Y, point.getY().getValue());
+                    points.put(p);
+                }
+                jsonObject.put(POINTS, points);
+                break;
         }
 
         return jsonObject;
     }
 
-    private static JSONObject createJsonSprite(CcSprite node) {
-        JSONObject jsonObject = new JSONObject();
+    private static JSONObject createJsonSprite(Sprite node) {
+        JSONObject jsonObject = createJsonDefaultNode(node);
         jsonObject.put(TYPE, SPRITE);
-        jsonObject.put(X, node.getX().doubleValue());
-        jsonObject.put(Y, node.getY().doubleValue());
-        jsonObject.put(NAME, node.getName().getValue());
-        jsonObject.put(WIDTH, node.getWidth().doubleValue());
-        jsonObject.put(HEIGHT, node.getHeight().doubleValue());
-        jsonObject.put(ANGLE, node.getAngle().doubleValue());
-        jsonObject.put(IMAGE, node.getImagePath());
+        jsonObject.put(IMAGE, node.getImage().get());
         return jsonObject;
     }
 
-    private static JSONObject createJsonDefaultNode(CcNode node) {
+    private static JSONObject createJsonDefaultNode(Node node) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(TYPE, NODE);
-        jsonObject.put(X, node.getX().doubleValue());
-        jsonObject.put(Y, node.getY().doubleValue());
+        jsonObject.put(X, node.getPosition().getX().doubleValue());
+        jsonObject.put(Y, node.getPosition().getY().doubleValue());
         jsonObject.put(NAME, node.getName().getValue());
         jsonObject.put(WIDTH, node.getWidth().doubleValue());
         jsonObject.put(HEIGHT, node.getHeight().doubleValue());

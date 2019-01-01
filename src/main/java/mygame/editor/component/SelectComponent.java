@@ -2,7 +2,7 @@ package mygame.editor.component;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import mygame.editor.views.CcNode;
+import mygame.editor.views.NodeView;
 
 /**
  * Created by oleh on 17.05.18.
@@ -17,7 +17,7 @@ public class SelectComponent extends Component {
     }
 
     @Override
-    public void setNode(CcNode node) {
+    public void setNode(NodeView node) {
         this.owner = node;
     }
 

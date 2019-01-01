@@ -5,7 +5,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import mygame.editor.util.Constants;
 
-public class CcRectangle extends CcNode {
+public class CcRectangle extends NodeView {
 
     public CcRectangle(double x, double y, double width, double height) {
         this.x.set(x);

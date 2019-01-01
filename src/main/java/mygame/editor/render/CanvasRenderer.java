@@ -20,7 +20,7 @@ import mygame.editor.App;
 import mygame.editor.TimerCounter;
 import mygame.editor.util.Callback;
 import mygame.editor.util.Constants;
-import mygame.editor.views.CcNode;
+import mygame.editor.views.NodeView;
 import mygame.editor.views.Global;
 import mygame.editor.views.Grid;
 
@@ -42,7 +42,7 @@ public class CanvasRenderer {
     private Point2D endRect;
 
     private Grid grid = new Grid();
-    private final ObservableList<CcNode> nodes = FXCollections.observableList(new ArrayList<>(), param ->
+    private final ObservableList<NodeView> nodes = FXCollections.observableList(new ArrayList<>(), param ->
             new Observable[]{param.getName(), param.getX(), param.getY()});
     private OnCanvasDragListener mOnCanvasDragListener;
 
@@ -58,7 +58,7 @@ public class CanvasRenderer {
             }
         });
         counter.start();
-        // nodes.addListener((ListChangeListener<CcNode>) change -> update());
+        // nodes.addListener((ListChangeListener<NodeView>) change -> update());
 
 
         graphicsContext = canvas.getGraphicsContext2D();
@@ -89,9 +89,9 @@ public class CanvasRenderer {
         App.instance.selected.addListener(this::onSelectChanged);
     }
 
-    private void onSelectChanged(ListChangeListener.Change<? extends CcNode> change) {
-        final ObservableList<? extends CcNode> list = change.getList();
-        for (CcNode ccNode : this.nodes) {
+    private void onSelectChanged(ListChangeListener.Change<? extends NodeView> change) {
+        final ObservableList<? extends NodeView> list = change.getList();
+        for (NodeView ccNode : this.nodes) {
 
             traverse(ccNode, n -> {
                 final boolean contains = list.contains(n);
@@ -102,9 +102,9 @@ public class CanvasRenderer {
         }
     }
 
-    private void traverse(CcNode node, Callback<CcNode> action) {
+    private void traverse(NodeView node, Callback<NodeView> action) {
         action.call(node);
-        for (CcNode ccNode : node.getChildren()) {
+        for (NodeView ccNode : node.getChildren()) {
             traverse(ccNode, action);
         }
     }
@@ -124,17 +124,17 @@ public class CanvasRenderer {
 
         }
 
-        Deque<List<CcNode>> lists = new LinkedList<>();
-        List<CcNode> sortedNodes = new ArrayList<>();
+        Deque<List<NodeView>> lists = new LinkedList<>();
+        List<NodeView> sortedNodes = new ArrayList<>();
         int layer = 0;
         lists.push(nodes);
         boolean isPressed = false;
         while (!lists.isEmpty()) {
             layer++;
-            Deque<List<CcNode>> newList = new LinkedList<>();
+            Deque<List<NodeView>> newList = new LinkedList<>();
             while (!lists.isEmpty()) {
-                List<CcNode> pop = lists.pop();
-                for (CcNode n : pop) {
+                List<NodeView> pop = lists.pop();
+                for (NodeView n : pop) {
                     n.layer = layer;
                     sortedNodes.add(n);
                     if (!n.getChildren().isEmpty()) {
@@ -145,7 +145,7 @@ public class CanvasRenderer {
             lists = newList;
         }
         sortedNodes.sort(Collections.reverseOrder(Comparator.comparingInt(l -> l.layer)));
-//        for (CcNode n : sortedNodes) {
+//        for (NodeView n : sortedNodes) {
 //            Point2D point2D = new Point2D(event.getX(), event.getY());
 //            if (n.contains(point2D) && !isPressed) {
 ////                n.setActive(true);
@@ -242,7 +242,7 @@ public class CanvasRenderer {
 
 
         g.translate(20, height - 20);
-        for (CcNode node : nodes) {
+        for (NodeView node : nodes) {
             node.draw(g, 0);
         }
         grid.draw(g, 0);
@@ -297,11 +297,11 @@ public class CanvasRenderer {
         draw(graphicsContext, Global.getWidth(), Global.getHeight());
     }
 
-    public void addChild(CcNode node) {
+    public void addChild(NodeView node) {
         nodes.add(node);
     }
 
-    public List<CcNode> getNodes() {
+    public List<NodeView> getNodes() {
         return nodes;
     }
 

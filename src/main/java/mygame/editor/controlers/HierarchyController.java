@@ -2,7 +2,6 @@ package mygame.editor.controlers;
 
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
@@ -16,22 +15,22 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import mygame.editor.App;
 import mygame.editor.model.Command;
+import mygame.editor.model.Node;
 import mygame.editor.model.TreeNodeHolder;
 import mygame.editor.util.Callback;
-import mygame.editor.views.CcNode;
+import mygame.editor.views.NodeView;
 
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class HierarchyController implements Initializable {
-    public TreeView<CcNode> nodeTreeview;
+    public TreeView<NodeView> nodeTreeview;
 
 
-    private TreeItem<CcNode> nodesItem;
-    private CcNode rootNode;
-    private CcNode lastCell;
-    private CcNode firstCell;
+    private TreeItem<NodeView> nodesItem;
+    private NodeView rootNode;
+    private NodeView lastCell;
+    private NodeView firstCell;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -52,13 +51,13 @@ public class HierarchyController implements Initializable {
 
             @Override
             public void handle(ActionEvent event) {
-                TreeItem<CcNode> selectedItem = nodeTreeview.getSelectionModel().getSelectedItem();
+                TreeItem<NodeView> selectedItem = nodeTreeview.getSelectionModel().getSelectedItem();
 
-                if(selectedItem != null){
-                    App.instance.repository.delete(selectedItem.getValue());
-                    selectedItem.getValue().removeSelf();
-
-                }
+//                if(selectedItem != null){
+//                    App.instance.repository.delete(selectedItem.getValue());
+//                    selectedItem.getValue().removeSelf();
+//
+//                }
             }
         });
 
@@ -70,34 +69,34 @@ public class HierarchyController implements Initializable {
 
     }
 
-    private void onNodesChanged(ListChangeListener.Change<? extends CcNode> change) {
+    private void onNodesChanged(ListChangeListener.Change<? extends Node> change) {
         nodesItem.getChildren().clear();
-        for (CcNode node : change.getList()) {
-           traversTreeItems(node,nodesItem);
-
-        }
+//        for (NodeView node : change.getList()) {
+//           traversTreeItems(node,nodesItem);
+//
+//        }
     }
 
 
-    private void traversTreeItems(CcNode node,TreeItem<CcNode> parent){
-        TreeItem<CcNode> treeItem = createTreeItem(node);
+    private void traversTreeItems(NodeView node, TreeItem<NodeView> parent){
+        TreeItem<NodeView> treeItem = createTreeItem(node);
         parent.getChildren().add(treeItem);
-        for(CcNode child : node.getChildren()) {
+        for(NodeView child : node.getChildren()) {
             traversTreeItems(child,treeItem);
         }
     }
 
-    private TreeItem<CcNode> createTreeItem(CcNode node){
-        TreeItem<CcNode> treeItem = new TreeItem<>(node);
+    private TreeItem<NodeView> createTreeItem(NodeView node){
+        TreeItem<NodeView> treeItem = new TreeItem<>(node);
         Rectangle rectangle = new Rectangle(0, 0, 20, 20);
         rectangle.setFill(Color.PINK);
         treeItem.setGraphic(rectangle);
         return treeItem;
     }
 
-    private void traverse(CcNode ccNode, Callback<CcNode> callback){
+    private void traverse(Node ccNode, Callback<Node> callback){
         callback.call(ccNode);
-        for (CcNode node : ccNode.getChildren()) {
+        for (Node node : ccNode.getChildren()) {
             traverse(node, callback);
         }
     }
@@ -107,7 +106,7 @@ public class HierarchyController implements Initializable {
 
         nodeTreeview.setCellFactory(e -> new TreeNodeHolder());
 
-        rootNode = new CcNode();
+        rootNode = new NodeView();
         rootNode.setName("Nodes");
 
 
@@ -125,15 +124,15 @@ public class HierarchyController implements Initializable {
 
 
 
-        final TreeItem<CcNode> selectedItem = nodeTreeview.getSelectionModel().getSelectedItem();
+        final TreeItem<NodeView> selectedItem = nodeTreeview.getSelectionModel().getSelectedItem();
         if(selectedItem != null){
-            final CcNode value = selectedItem.getValue();
+            final NodeView value = selectedItem.getValue();
             if(value != rootNode){
                 App.instance.selected.clear();
                 App.instance.selected.add(value);
             }
         }
-        final TreeItem<CcNode> root = nodeTreeview.getRoot();
+        final TreeItem<NodeView> root = nodeTreeview.getRoot();
         traverse(root, treeItem -> {
 
             final Rectangle cell = (Rectangle) treeItem.getGraphic();
@@ -160,7 +159,7 @@ public class HierarchyController implements Initializable {
     }
 
     private void onMouseDragged(MouseEvent event) {
-        final TreeItem<CcNode> root = nodeTreeview.getRoot();
+        final TreeItem<NodeView> root = nodeTreeview.getRoot();
         traverse(root, treeItem -> {
 
             final Rectangle cell = (Rectangle) treeItem.getGraphic();
@@ -189,7 +188,7 @@ public class HierarchyController implements Initializable {
     }
 
     private void onMouseReleased(MouseEvent event) {
-        TreeItem<CcNode> root = nodeTreeview.getRoot();
+        TreeItem<NodeView> root = nodeTreeview.getRoot();
         traverse(root, treeItem -> {
             final Rectangle cell = (Rectangle) treeItem.getGraphic();
             if (cell != null && cell.getParent() != null) {
@@ -215,15 +214,15 @@ public class HierarchyController implements Initializable {
 
         if (firstCell != null && lastCell != null && firstCell != rootNode && firstCell != lastCell) {
             firstCell.removeSelf();
-            App.instance.repository.delete(firstCell);
+           // App.instance.repository.delete(firstCell);
 
             lastCell.addChild(firstCell);
-            for (CcNode ccNode : rootNode.getChildren()) {
+            for (NodeView ccNode : rootNode.getChildren()) {
                 ccNode.removeSelf();
             }
 
-            for (CcNode ccNode : App.instance.repository.getNodes()) {
-                rootNode.addChild(ccNode);
+            for (Node ccNode : App.instance.repository.getNodes()) {
+//                rootNode.addChild(ccNode);
 
             }
             nodeTreeview.setRoot(updateTreeView(rootNode));
@@ -237,17 +236,17 @@ public class HierarchyController implements Initializable {
     }
 
 
-    private void traverse(TreeItem<CcNode> treeItem, Callback<TreeItem<CcNode>> callback) {
+    private void traverse(TreeItem<NodeView> treeItem, Callback<TreeItem<NodeView>> callback) {
         callback.call(treeItem);
-        for (TreeItem<CcNode> holderTreeItem : treeItem.getChildren()) {
+        for (TreeItem<NodeView> holderTreeItem : treeItem.getChildren()) {
             traverse(holderTreeItem, callback);
         }
     }
 
 
-    private TreeItem<CcNode> updateTreeView(CcNode holder) {
-        TreeItem<CcNode> root = new TreeItem<>(holder);
-        for (CcNode item : holder.getChildren()) {
+    private TreeItem<NodeView> updateTreeView(NodeView holder) {
+        TreeItem<NodeView> root = new TreeItem<>(holder);
+        for (NodeView item : holder.getChildren()) {
             root.getChildren().add(updateTreeView(item));
         }
 

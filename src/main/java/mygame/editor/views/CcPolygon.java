@@ -7,7 +7,6 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Array;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import mygame.editor.model.Point;
 import mygame.editor.model.box2d.B2Fixture;
 import mygame.editor.util.Box2dUtil;
 import physicsPort.triangulation.Vec2;

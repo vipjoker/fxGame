@@ -4,7 +4,7 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import mygame.editor.views.CcNode;
+import mygame.editor.views.NodeView;
 
 /**
  * Created by oleh on 28.05.18.
@@ -16,7 +16,7 @@ public class EditComponent extends Component {
     private Point2D rotatateHandle = new Point2D(-40,0);
     private double radius = 10;
     @Override
-    public void setNode(CcNode node) {
+    public void setNode(NodeView node) {
         this.owner = node;
     }
 

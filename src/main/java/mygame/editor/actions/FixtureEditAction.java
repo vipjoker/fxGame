@@ -5,15 +5,10 @@ import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import mygame.editor.App;
-import mygame.editor.component.SelectComponent;
-import mygame.editor.controlers.InfoController;
-import mygame.editor.interfaces.Editable;
 import mygame.editor.interfaces.KeyListener;
-import mygame.editor.model.Point;
 import mygame.editor.model.box2d.B2Body;
-import mygame.editor.model.box2d.B2Fixture;
 import mygame.editor.render.CanvasRenderer;
-import mygame.editor.repository.NodeRepository;
+import mygame.editor.repository.NodeModel;
 import mygame.editor.util.Constants;
 import mygame.editor.views.*;
 
@@ -31,7 +26,7 @@ public class FixtureEditAction extends Action implements CanvasRenderer.OnCanvas
     private final List<CcEditBodyNode> editBodyNodes = new ArrayList<>();
 
 
-    public FixtureEditAction(CanvasRenderer renderer, NodeRepository repository) {
+    public FixtureEditAction(CanvasRenderer renderer, NodeModel repository) {
         super(renderer, repository);
     }
 
@@ -40,11 +35,11 @@ public class FixtureEditAction extends Action implements CanvasRenderer.OnCanvas
         mRenderer.getNodes().clear();
         App.instance.addKeyListener(this);
         mode = Constants.PARAM_MOVE;
-        for (B2Body body : mRepository.getBodies()) {
-            CcEditBodyNode node = new CcEditBodyNode(body);
-            mRenderer.addChild(node);
-            editBodyNodes.add(node);
-        }
+//        for (B2Body body : mRepository.getBodies()) {
+//            CcEditBodyNode node = new CcEditBodyNode(body);
+//            mRenderer.addChild(node);
+//            editBodyNodes.add(node);
+//        }
 
         mRenderer.setOnCanvasDragListener(this);
 
@@ -142,7 +137,7 @@ public class FixtureEditAction extends Action implements CanvasRenderer.OnCanvas
 
         switch (mode){
             case Constants.PARAM_MOVE:
-                for (CcNode s : selected) {
+                for (NodeView s : selected) {
                     double newX = s.getX().doubleValue() - point.getX();
                     double newY = s.getY().doubleValue() + point.getY();
                     s.setX(newX);

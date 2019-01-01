@@ -2,9 +2,8 @@ package mygame.editor.component;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import mygame.editor.util.ImageUtil;
 import mygame.editor.util.Resources;
-import mygame.editor.views.CcNode;
+import mygame.editor.views.NodeView;
 
 import java.io.File;
 
@@ -42,7 +41,7 @@ public class SpriteComponent extends Component {
     }
 
     @Override
-    public void setNode(CcNode node) {
+    public void setNode(NodeView node) {
         this.owner = node;
     }
 

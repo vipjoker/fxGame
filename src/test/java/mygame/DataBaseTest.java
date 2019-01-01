@@ -1,7 +1,7 @@
 package mygame;
 
 import javafx.geometry.Point2D;
-import mygame.editor.views.CcNode;
+import mygame.editor.views.NodeView;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -21,13 +21,13 @@ public class DataBaseTest {
     public void ccNodeTransformTest(){
         Point2D p = new Point2D(0,0);
 
-        CcNode parent = new CcNode();
+        NodeView parent = new NodeView();
         parent.setX(100);
         parent.setY(100);
-        CcNode child = new CcNode();
+        NodeView child = new NodeView();
         child.setY(10);
         child.setX(10);
-        CcNode grandChild = new CcNode();
+        NodeView grandChild = new NodeView();
         grandChild.setX(5);
         grandChild.setY(5);
 

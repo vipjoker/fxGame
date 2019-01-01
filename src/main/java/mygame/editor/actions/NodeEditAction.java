@@ -3,17 +3,19 @@ package mygame.editor.actions;
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Point2D;
 import mygame.editor.App;
+import mygame.editor.model.Node;
+import mygame.editor.model.Point;
 import mygame.editor.render.CanvasRenderer;
-import mygame.editor.repository.NodeRepository;
+import mygame.editor.repository.NodeModel;
 import mygame.editor.util.Callback;
 import mygame.editor.util.Constants;
-import mygame.editor.views.CcNode;
+import mygame.editor.views.NodeView;
 
 import java.util.List;
 
 public class NodeEditAction extends Action implements CanvasRenderer.OnCanvasDragListener {
 
-    public NodeEditAction(CanvasRenderer renderer, NodeRepository repository) {
+    public NodeEditAction(CanvasRenderer renderer, NodeModel repository) {
         super(renderer, repository);
     }
 
@@ -21,16 +23,39 @@ public class NodeEditAction extends Action implements CanvasRenderer.OnCanvasDra
     public void init() {
         mRenderer.getNodes().clear();
         mRenderer.setOnCanvasDragListener(this);
-        final List<CcNode> nodes = App.instance.repository.getNodes();
-        mRenderer.getNodes().addAll(nodes);
+        final List<Node> nodes = App.instance.repository.getNodes();
+
+        Node n = new Node();
+        n.setWidth(100);
+        n.setHeight(100);
+        n.getPosition().set(10,10);
+        mRepository.save(n);
+        for (Node node : nodes) {
+            NodeView nodeView = new NodeView();
+            node.getWidth().bindBidirectional(nodeView.getWidth());
+            node.getHeight().bindBidirectional(nodeView.getHeight());
+            node.getPosition().getX().bindBidirectional(nodeView.getX());
+            node.getPosition().getY().bindBidirectional(nodeView.getY());
+        mRenderer.getNodes().add(nodeView);
+
+        }
+        mRenderer.update();
         mRepository.listenForNodes(this::onNodesChanged);
         System.out.println("NODE EDIT ACTION");
     }
 
-    private void onNodesChanged(ListChangeListener.Change<? extends CcNode> change) {
+    private void onNodesChanged(ListChangeListener.Change<? extends Node> change) {
         mRenderer.getNodes().clear();
+        for (Node node : change.getList()) {
+            NodeView nodeView = new NodeView();
 
-        mRenderer.getNodes().addAll(change.getList());
+            node.getWidth().bindBidirectional(nodeView.getWidth());
+            node.getHeight().bindBidirectional(nodeView.getHeight());
+            node.getPosition().getX().bindBidirectional(nodeView.getX());
+            node.getPosition().getY().bindBidirectional(nodeView.getY());
+            mRenderer.getNodes().add(nodeView);
+
+        }
     }
 
     @Override
@@ -40,7 +65,7 @@ public class NodeEditAction extends Action implements CanvasRenderer.OnCanvasDra
     @Override
     public void onStartMove(Point2D point) {
         App.instance.selected.clear();
-        for (CcNode ccNode : mRenderer.getNodes()) {
+        for (NodeView ccNode : mRenderer.getNodes()) {
                 traverse(ccNode, n -> {
                     boolean contains = false;
                     if(n.getParent()!= null){
@@ -63,9 +88,9 @@ public class NodeEditAction extends Action implements CanvasRenderer.OnCanvasDra
         }
     }
 
-    public void traverse(CcNode node, Callback<CcNode> action){
+    public void traverse(NodeView node, Callback<NodeView> action){
         action.call(node);
-        for (CcNode child : node.getChildren()) {
+        for (NodeView child : node.getChildren()) {
 
                 traverse(child, action);
 
@@ -75,7 +100,7 @@ public class NodeEditAction extends Action implements CanvasRenderer.OnCanvasDra
     @Override
     public void onDrag(Point2D point) {
         System.out.println("onDrag size " + App.instance.selected.size());
-        for (CcNode ccNode : App.instance.selected) {
+        for (NodeView ccNode : App.instance.selected) {
             switch (mode) {
                 case Constants.PARAM_MOVE:
                     ccNode.move(point);

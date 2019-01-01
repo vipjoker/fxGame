@@ -6,7 +6,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class CcVertex extends CcNode {
+public class CcVertex extends NodeView {
     private final Vector2 point;
 
     public CcVertex(Vector2 point) {

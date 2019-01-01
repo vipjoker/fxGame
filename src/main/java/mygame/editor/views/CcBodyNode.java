@@ -5,7 +5,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class CcBodyNode extends CcNode {
+public class CcBodyNode extends NodeView {
     private Body body;
 
     public CcBodyNode(Body body) {

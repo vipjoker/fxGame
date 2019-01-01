@@ -9,7 +9,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
 import mygame.editor.component.Component;
-import mygame.editor.model.box2d.B2Body;
+import mygame.editor.model.Node;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-public class CcNode {
+public class NodeView {
     public int id;
     public int layer;
     protected SimpleDoubleProperty x = new SimpleDoubleProperty(0);
@@ -34,19 +34,20 @@ public class CcNode {
 
     private CcEditBodyNode editBody; //has physics
 
+
     public Affine transform;
     protected BoundingBox bBox;
     public boolean active;
-    private CcNode parent;
+    private NodeView parent;
     private List<Component> components = new ArrayList<>();
 
-    private List<CcNode> children = new ArrayList<>();
+    private List<NodeView> children = new ArrayList<>();
 
-    public List<CcNode> getChildren() {
+    public List<NodeView> getChildren() {
         return children;
     }
 
-    public void addChild(CcNode node) {
+    public void addChild(NodeView node) {
         node.setParent(this);
         children.add(node);
     }
@@ -64,11 +65,11 @@ public class CcNode {
         angle.subtract(deltaAngle);
     }
 
-    public void setParent(CcNode node){
+    public void setParent(NodeView node){
         this.parent = node;
     }
 
-    public CcNode getParent() {
+    public NodeView getParent() {
         return parent;
     }
 
@@ -101,7 +102,7 @@ public class CcNode {
     }
 
     public void rasterize(GraphicsContext context) {
-
+        context.rect(0,0,width.doubleValue(),height.doubleValue());
         transform = context.getTransform().clone();
 
     }
@@ -198,9 +199,9 @@ public class CcNode {
 
     }
 
-     public CcNode getSelected(Point2D point2D){
-         for (CcNode ccNode : getChildren()) {
-             CcNode selected = ccNode.getSelected(point2D);
+     public NodeView getSelected(Point2D point2D){
+         for (NodeView ccNode : getChildren()) {
+             NodeView selected = ccNode.getSelected(point2D);
              if(selected != null){
                  return selected;
              }
@@ -213,8 +214,8 @@ public class CcNode {
              return null;
          }
      }
-     public void updateAll(Consumer<CcNode> function){
-         for (CcNode ccNode : getChildren()) {
+     public void updateAll(Consumer<NodeView> function){
+         for (NodeView ccNode : getChildren()) {
              ccNode.updateAll(function);
          }
 
@@ -222,16 +223,24 @@ public class CcNode {
      }
 
 
-    public CcNode findViewById(int id){
+    public NodeView findViewById(int id){
         return findViewById(this,id);
     }
 
-    private CcNode findViewById(CcNode root, int id){
+    private int getNextId(NodeView node){
+        int id = 1;
+        while(node.findViewById(id) != null){
+            id++;
+        }
+        return id;
+    }
+
+    private NodeView findViewById(NodeView root, int id){
         if(root.id == id)return root;
 
-        for (CcNode ccNode : root.getChildren()) {
+        for (NodeView ccNode : root.getChildren()) {
 
-            CcNode n = findViewById(ccNode,id);
+            NodeView n = findViewById(ccNode,id);
                 if(n != null)return n;
 
         }
@@ -333,7 +342,7 @@ public class CcNode {
 
     @Override
     public String toString() {
-        return "CcNode{" +
+        return "NodeView{" +
                 "id=" + id +
                 ", layer=" + layer +
                 ", x=" + x +

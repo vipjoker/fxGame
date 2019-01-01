@@ -1,11 +1,10 @@
 package mygame.editor.actions;
 
 
-import com.badlogic.gdx.math.Vector2;
 import javafx.geometry.Point2D;
 import mygame.editor.model.box2d.*;
 import mygame.editor.render.CanvasRenderer;
-import mygame.editor.repository.NodeRepository;
+import mygame.editor.repository.NodeModel;
 import mygame.editor.util.Constants;
 import mygame.editor.views.CcEditBodyNode;
 
@@ -15,7 +14,7 @@ public class CreateBodyAction extends Action implements CanvasRenderer.OnCanvasD
 
 
 
-    public CreateBodyAction(CanvasRenderer renderer, NodeRepository repository) {
+    public CreateBodyAction(CanvasRenderer renderer, NodeModel repository) {
         super(renderer,repository);
         this.mode = Constants.PARAM_SQUARE;
     }
@@ -26,11 +25,11 @@ public class CreateBodyAction extends Action implements CanvasRenderer.OnCanvasD
     public void init() {
         mRenderer.getNodes().clear();
         mRenderer.setOnCanvasDragListener(this);
-        final List<B2Body> bodies = mRepository.getBodies();
-        for (B2Body body : bodies) {
-            mRenderer.addChild(new CcEditBodyNode(body));
-        }
-        mRenderer.update();
+//        final List<B2Body> bodies = mRepository.getBodies();
+//        for (B2Body body : bodies) {
+//            mRenderer.addChild(new CcEditBodyNode(body));
+//        }
+//        mRenderer.update();
 
     }
 

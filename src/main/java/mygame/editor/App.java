@@ -2,7 +2,6 @@ package mygame.editor;
 
 import javafx.application.Application;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -14,12 +13,10 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import mygame.editor.interfaces.KeyListener;
 import mygame.editor.model.Command;
-import mygame.editor.model.Selectable;
-import mygame.editor.repository.InMemoryRepository;
-import mygame.editor.repository.NodeRepository;
-import mygame.editor.views.CcNode;
+import mygame.editor.model.Node;
+import mygame.editor.repository.NodeModel;
+import mygame.editor.views.NodeView;
 
-import java.io.File;
 import java.util.*;
 
 
@@ -33,8 +30,8 @@ public class App extends Application {
     public  final List<KeyListener> keyListeners = new ArrayList<>();
     public static Set<KeyCode> buttons  = new HashSet<>();
     public final SimpleObjectProperty<Command> observableAction = new SimpleObjectProperty<>();
-    public final NodeRepository repository = new InMemoryRepository();
-    public final ObservableList<CcNode> selected = FXCollections.observableArrayList();
+    public final NodeModel repository = new NodeModel();
+    public final ObservableList<NodeView> selected = FXCollections.observableArrayList();
 
     public void registerController(Object object) {
         controllers.put(object.getClass(),object);

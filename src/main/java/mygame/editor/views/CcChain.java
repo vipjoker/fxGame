@@ -8,7 +8,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
-import mygame.editor.model.Point;
 import mygame.editor.model.box2d.B2Fixture;
 import mygame.editor.util.Box2dUtil;
 

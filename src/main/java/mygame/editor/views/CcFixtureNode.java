@@ -6,7 +6,7 @@ import mygame.editor.model.box2d.B2Fixture;
 
 import java.util.List;
 
-public abstract class CcFixtureNode extends CcNode {
+public abstract class CcFixtureNode extends NodeView {
 
     public abstract List<Vector2> getPoints();
     public abstract void addPoint (Point2D points);

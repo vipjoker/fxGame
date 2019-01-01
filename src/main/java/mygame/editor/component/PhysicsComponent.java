@@ -2,11 +2,10 @@ package mygame.editor.component;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import mygame.editor.component.physics.FixtureDrawable;
-import mygame.editor.views.CcNode;
+import mygame.editor.views.NodeView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +22,7 @@ public class PhysicsComponent extends Component {
     }
 
     @Override
-    public void setNode(CcNode node) {
+    public void setNode(NodeView node) {
         this.owner = node;
     }
 

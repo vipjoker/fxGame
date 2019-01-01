@@ -14,13 +14,14 @@ import javafx.scene.layout.VBox;
 import mygame.editor.App;
 import mygame.editor.actions.*;
 import mygame.editor.model.Command;
+import mygame.editor.model.Sprite;
 import mygame.editor.model.TreeFileHolder;
 import mygame.editor.render.CanvasRenderer;
 import mygame.editor.render.TreeItemPath;
-import mygame.editor.repository.NodeRepository;
+import mygame.editor.repository.NodeModel;
 import mygame.editor.util.Constants;
 import mygame.editor.util.Resources;
-import mygame.editor.views.CcNode;
+import mygame.editor.views.NodeView;
 import mygame.editor.views.CcSprite;
 
 import java.io.File;
@@ -67,12 +68,12 @@ public class MainController implements Initializable {
         });
 
 
-        App.instance.selected.addListener(new ListChangeListener<CcNode>() {
+        App.instance.selected.addListener(new ListChangeListener<NodeView>() {
                                               @Override
-                                              public void onChanged(Change<? extends CcNode> c) {
-                                                  for (CcNode node : App.instance.repository.getNodes()) {
-                                                      node.setActive(c.getList().contains(node));
-                                                  }
+                                              public void onChanged(Change<? extends NodeView> c) {
+//                                                  for (NodeView node : App.instance.repository.getNodes()) {
+//                                                      node.setActive(c.getList().contains(node));
+//                                                  }
                                               }
                                           });
 
@@ -124,20 +125,18 @@ public class MainController implements Initializable {
             if (selected != null && selected.isLeaf()) {
                 String path = selected.getValue().getPath();
 
-                final CcSprite ccSprite = new CcSprite(path,100,100);
-                int count = App.instance.repository.count();
-                ccSprite.getName().setValue("Sprite " + count);
+                final Sprite ccSprite = new Sprite(path);
+                ccSprite.getName().setValue("Sprite " + System.currentTimeMillis());
                 App.instance.repository.save(ccSprite);
 
-                canvasRenderer.addChild(ccSprite);
-                canvasRenderer.update();
+
             }
         });
 
     }
 
     private void initActions() {
-        NodeRepository repository = App.instance.repository;
+        NodeModel repository = App.instance.repository;
 
         actions.put(Constants.MODE_NODE, new NodeEditAction(canvasRenderer, repository));
         actions.put(Constants.MODE_FIXTURE, new FixtureEditAction(canvasRenderer, repository));

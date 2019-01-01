@@ -9,7 +9,7 @@ import mygame.editor.util.Constants;
 
 import java.io.File;
 
-public class CcSprite extends CcNode {
+public class CcSprite extends NodeView {
     protected Image image;
     private String imagePath;
 
