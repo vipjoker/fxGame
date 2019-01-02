@@ -113,6 +113,10 @@ public class Node implements ObservableValue<Node> {
         return position;
     }
 
+    public void setPosition(double x,double y){
+        position.set(x,y);
+    }
+
     public Point getScale() {
         return scale;
     }

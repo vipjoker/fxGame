@@ -18,7 +18,7 @@
             <MenuItem mnemonicParsing="false" text="About"/>
             <Menu mnemonicParsing="false" onAction="#onAdd" text="Open folder"/>
             <SeparatorMenuItem mnemonicParsing="false"/>
-            <MenuItem mnemonicParsing="false" text="Close"/>
+            <MenuItem mnemonicParsing="false" text="Create" onAction="#onCreate"/>
             <MenuItem mnemonicParsing="false" onAction="#onLoad" text="Load"/>
             <MenuItem mnemonicParsing="false" onAction="#onSave" text="Save"/>
             <MenuItem mnemonicParsing="false" text="Revert"/>
