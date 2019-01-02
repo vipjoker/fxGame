@@ -9,11 +9,11 @@ import mygame.editor.util.Constants;
 
 import java.io.File;
 
-public class CcSprite extends NodeView {
+public class SpriteView extends NodeView {
     protected Image image;
     private String imagePath;
 
-    public CcSprite(Image image) {
+    public SpriteView(Image image) {
         this.image = image;
 
         width.set(image.getWidth());
@@ -21,13 +21,13 @@ public class CcSprite extends NodeView {
 
     }
 
-    public CcSprite(String path, double width, double height) {
+    public SpriteView(String path, double width, double height) {
         this(path);
         this.width.set(width);
         this.height.set(height);
     }
 
-    public CcSprite(String path){
+    public SpriteView(String path){
         this.imagePath = path;
         final File f = new File(FileManager.getInstance().getWorkingFolder(), path);
         this.image = new Image(f.toURI().toString());

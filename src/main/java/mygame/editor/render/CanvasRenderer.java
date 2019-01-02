@@ -290,7 +290,7 @@ public class CanvasRenderer {
 
 
     public void update() {
-//        draw(graphicsContext, Global.getWidth(), Global.getHeight());
+        draw(graphicsContext, Global.getWidth(), Global.getHeight());
     }
 
     public void scheduledUpdate() {

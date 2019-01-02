@@ -6,6 +6,7 @@ import javafx.geometry.BoundingBox;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
 import mygame.editor.component.Component;
@@ -102,7 +103,10 @@ public class NodeView {
     }
 
     public void rasterize(GraphicsContext context) {
-        context.rect(0,0,width.doubleValue(),height.doubleValue());
+        context.setLineWidth(2);
+        context.setStroke(Color.DEEPPINK);
+        context.strokeRect(0,-height.doubleValue(),width.doubleValue(),height.doubleValue());
+        context.stroke();
         transform = context.getTransform().clone();
 
     }

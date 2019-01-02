@@ -22,7 +22,6 @@ import mygame.editor.repository.NodeModel;
 import mygame.editor.util.Constants;
 import mygame.editor.util.Resources;
 import mygame.editor.views.NodeView;
-import mygame.editor.views.CcSprite;
 
 import java.io.File;
 import java.io.IOException;

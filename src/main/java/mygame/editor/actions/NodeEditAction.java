@@ -2,6 +2,7 @@ package mygame.editor.actions;
 
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Point2D;
+import javafx.scene.image.Image;
 import mygame.editor.App;
 import mygame.editor.model.Node;
 import mygame.editor.model.Point;
@@ -9,7 +10,9 @@ import mygame.editor.render.CanvasRenderer;
 import mygame.editor.repository.NodeModel;
 import mygame.editor.util.Callback;
 import mygame.editor.util.Constants;
+import mygame.editor.util.ImageUtil;
 import mygame.editor.views.NodeView;
+import mygame.editor.views.SpriteView;
 
 import java.util.List;
 
@@ -28,15 +31,16 @@ public class NodeEditAction extends Action implements CanvasRenderer.OnCanvasDra
         Node n = new Node();
         n.setWidth(100);
         n.setHeight(100);
-        n.getPosition().set(10,10);
+        n.getPosition().set(100, 50);
         mRepository.save(n);
         for (Node node : nodes) {
-            NodeView nodeView = new NodeView();
-            node.getWidth().bindBidirectional(nodeView.getWidth());
-            node.getHeight().bindBidirectional(nodeView.getHeight());
-            node.getPosition().getX().bindBidirectional(nodeView.getX());
-            node.getPosition().getY().bindBidirectional(nodeView.getY());
-        mRenderer.getNodes().add(nodeView);
+            Image image = ImageUtil.getImage("earth.jpg");
+            SpriteView nodeView = new SpriteView(image);
+            nodeView.getWidth().bindBidirectional(node.getWidth());
+            nodeView.getHeight().bindBidirectional(node.getHeight());
+            nodeView.getX().bindBidirectional(node.getPosition().getX());
+            nodeView.getY().bindBidirectional(node.getPosition().getY());
+            mRenderer.getNodes().add(nodeView);
 
         }
         mRenderer.update();
@@ -62,37 +66,37 @@ public class NodeEditAction extends Action implements CanvasRenderer.OnCanvasDra
     public void finishDrawing() {
 
     }
+
     @Override
     public void onStartMove(Point2D point) {
         App.instance.selected.clear();
         for (NodeView ccNode : mRenderer.getNodes()) {
-                traverse(ccNode, n -> {
-                    boolean contains = false;
-                    if(n.getParent()!= null){
+            traverse(ccNode, n -> {
+                boolean contains = false;
+                if (n.getParent() != null) {
 
-                        Point2D point2D = n.getParent().convertToLocalSpace(point);
-                        contains = n.contains(point2D);
-                    }else{
-                        contains = n.contains(point);
-                    }
+                    Point2D point2D = n.getParent().convertToLocalSpace(point);
+                    contains = n.contains(point2D);
+                } else {
+                    contains = n.contains(point);
+                }
 
-                    if (contains) {
-                        App.instance.selected.clear();
-                        App.instance.selected.add(n);
+                if (contains) {
+                    App.instance.selected.clear();
+                    App.instance.selected.add(n);
 
-                    }
-                });
-
+                }
+            });
 
 
         }
     }
 
-    public void traverse(NodeView node, Callback<NodeView> action){
+    public void traverse(NodeView node, Callback<NodeView> action) {
         action.call(node);
         for (NodeView child : node.getChildren()) {
 
-                traverse(child, action);
+            traverse(child, action);
 
         }
     }

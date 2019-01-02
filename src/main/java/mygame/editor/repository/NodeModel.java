@@ -31,11 +31,11 @@ public class NodeModel {
     }
 
     public void save(Node node){
-
+        nodes.add(node);
     }
 
     public void delete(Node node){
-
+        nodes.remove(node);
     }
 
     public void deleteAll(){
