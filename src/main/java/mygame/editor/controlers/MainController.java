@@ -53,26 +53,26 @@ public class MainController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         App.instance.registerController(this);
 
-
-        NodeModel repository = App.instance.repository;
-        Node n = new Node();
-        n.setWidth(100);
-        n.setHeight(100);
-        n.setPosition(100, 50);
-        repository.save(n);
-
-
-        Node n2 = new Node();
-        n2.setHeight(500);
-        n2.setWidth(200);
-        n2.setPosition(200,200);
-        repository.save(n2);
-
-        Node n3 = new Node();
-        n3.setHeight(400);
-        n3.setWidth(400);
-        n3.setPosition(0,400);
-        repository.save(n3);
+//
+//        NodeModel repository = App.instance.repository;
+//        Node n = new Node();
+//        n.setWidth(100);
+//        n.setHeight(100);
+//        n.setPosition(100, 50);
+//        repository.save(n);
+//
+//
+//        Node n2 = new Node();
+//        n2.setHeight(500);
+//        n2.setWidth(200);
+//        n2.setPosition(200,200);
+//        repository.save(n2);
+//
+//        Node n3 = new Node();
+//        n3.setHeight(400);
+//        n3.setWidth(400);
+//        n3.setPosition(0,400);
+//        repository.save(n3);
         setListeners();
 
     }

@@ -39,41 +39,9 @@ public class NodeEditAction extends Action implements CanvasRenderer.OnCanvasDra
         for (Node node : mRepository.getNodes()) {
             Image image = ImageUtil.getImage("earth.jpg");
             SpriteView nodeView = new SpriteView(image);
-            nodeView.setWidth(node.getWidth().doubleValue());
-            nodeView.setHeight(node.getHeight().doubleValue());
-            nodeView.setX(node.getPosition().getX().doubleValue());
-            nodeView.setY(node.getPosition().getY().doubleValue());
 
+            listenForChanges(nodeView,node);
 
-            nodeView.getX().addListener(new ChangeListener<Number>() {
-                @Override
-                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-
-                    node.setPosition(newValue.doubleValue(),node.getPosition().getY().doubleValue());
-                }
-            });
-
-            nodeView.getY().addListener(new ChangeListener<Number>() {
-                @Override
-                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                    node.setPosition(node.getPosition().getX().doubleValue(),newValue.doubleValue());
-                }
-            });
-
-
-            nodeView.getWidth().addListener(new ChangeListener<Number>() {
-                @Override
-                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                    node.setWidth(newValue.doubleValue());
-                }
-            });
-
-            nodeView.getHeight().addListener(new ChangeListener<Number>() {
-                @Override
-                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                    node.setHeight(newValue.doubleValue());
-                }
-            });
             mRenderer.getNodes().add(nodeView);
 
         }
@@ -85,10 +53,53 @@ public class NodeEditAction extends Action implements CanvasRenderer.OnCanvasDra
     private void onNodesChanged(ListChangeListener.Change<? extends Node> change) {
         mRenderer.getNodes().clear();
         for (Node node : change.getList()) {
-            NodeView nodeView = new NodeView();
+            Image image = ImageUtil.getImage("earth.jpg");
+            SpriteView nodeView = new SpriteView(image);
+            listenForChanges(nodeView,node);
+
+
             mRenderer.getNodes().add(nodeView);
 
         }
+    }
+
+
+    private void listenForChanges(NodeView nodeView,Node node){
+        nodeView.setWidth(node.getWidth().doubleValue());
+        nodeView.setHeight(node.getHeight().doubleValue());
+        nodeView.setX(node.getPosition().getX().doubleValue());
+        nodeView.setY(node.getPosition().getY().doubleValue());
+
+
+        nodeView.getX().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+
+                node.setPosition(newValue.doubleValue(),node.getPosition().getY().doubleValue());
+            }
+        });
+
+        nodeView.getY().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                node.setPosition(node.getPosition().getX().doubleValue(),newValue.doubleValue());
+            }
+        });
+
+
+        nodeView.getWidth().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                node.setWidth(newValue.doubleValue());
+            }
+        });
+
+        nodeView.getHeight().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                node.setHeight(newValue.doubleValue());
+            }
+        });
     }
 
     @Override
