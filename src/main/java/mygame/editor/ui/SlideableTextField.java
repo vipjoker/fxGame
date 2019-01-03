@@ -18,11 +18,11 @@ public class SlideableTextField extends AnchorPane {
     private double lastX;
     private double lastValue;
     private DoubleProperty property;
-    private double precission = 10;
+    private double precission;
 
-    public SlideableTextField(String name) {
+    public SlideableTextField(String name,double precission) {
         super();
-
+        this.precission = precission;
         setPrefHeight(40);
 
 

@@ -28,25 +28,25 @@ public class InfoController implements Initializable {
 
     private Pattern floatNumberPattern = Pattern.compile("[+-]?([0-9]*[.])?[0-9]+");
 
-
-    private SlideableTextField etGravityX = new SlideableTextField("Gravity x");
-    private SlideableTextField etGravityY = new SlideableTextField("Gravity y");
-    private SlideableTextField screenWidth = new SlideableTextField("Screen width");
-    private SlideableTextField screenHeight = new SlideableTextField("Screen height");
+    private double precission = 10;
+    private SlideableTextField etGravityX = new SlideableTextField("Gravity x",precission);
+    private SlideableTextField etGravityY = new SlideableTextField("Gravity y",precission);
+    private SlideableTextField screenWidth = new SlideableTextField("Screen width",precission);
+    private SlideableTextField screenHeight = new SlideableTextField("Screen height",precission);
 
     private StringTextField etName = new StringTextField("Name");
-    private SlideableTextField etX = new SlideableTextField("X");
-    private SlideableTextField etY = new SlideableTextField("Y");
-    private SlideableTextField etWidth = new SlideableTextField("Width");
-    private SlideableTextField etHeight = new SlideableTextField("Height");
-    private SlideableTextField etAngle = new SlideableTextField("Angle");
-    private SlideableTextField etAnchorX = new SlideableTextField("Anchor x");
-    private SlideableTextField etAnchorY = new SlideableTextField("Anchor y");
+    private SlideableTextField etX = new SlideableTextField("X",precission);
+    private SlideableTextField etY = new SlideableTextField("Y",precission);
+    private SlideableTextField etWidth = new SlideableTextField("Width",precission);
+    private SlideableTextField etHeight = new SlideableTextField("Height",precission);
+    private SlideableTextField etAngle = new SlideableTextField("Angle",5);
+    private SlideableTextField etAnchorX = new SlideableTextField("Anchor x",0.1);
+    private SlideableTextField etAnchorY = new SlideableTextField("Anchor y",0.1);
 
 
-    private SlideableTextField etDensity = new SlideableTextField("Density");
-    private SlideableTextField etRestitution = new SlideableTextField("Restitution");
-    private SlideableTextField etFriction = new SlideableTextField("Friction");
+    private SlideableTextField etDensity = new SlideableTextField("Density",0.1);
+    private SlideableTextField etRestitution = new SlideableTextField("Restitution",0.1);
+    private SlideableTextField etFriction = new SlideableTextField("Friction",0.1);
     ObservableList<String> strings = FXCollections.observableArrayList("Static", "Kinematic", "Dynamic");
     ObservableList<String> fixtureType = FXCollections.observableArrayList("Circle","Rectangle","Line");
 

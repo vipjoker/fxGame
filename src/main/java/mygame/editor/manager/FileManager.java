@@ -29,6 +29,19 @@ public class FileManager {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }else{
+            FileChooser chooser = new FileChooser();
+            chooser.setInitialFileName("scene.json");
+
+            currentSceneFile = chooser.showSaveDialog(App.instance.window);
+            try {
+                currentSceneFile.createNewFile();
+                workingFolder = currentSceneFile.getParentFile();
+                Files.write(json,currentSceneFile, Charset.defaultCharset());
+            } catch (IOException e) {
+                e.printStackTrace();
+
+            }
         }
     }
 
@@ -64,4 +77,8 @@ public class FileManager {
         return workingFolder;
     }
 
+
+    public void setCurrentSceneFile(File currentSceneFile) {
+        this.currentSceneFile = currentSceneFile;
+    }
 }
