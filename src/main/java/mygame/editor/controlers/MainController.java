@@ -13,10 +13,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import mygame.editor.App;
 import mygame.editor.actions.*;
-import mygame.editor.model.Command;
-import mygame.editor.model.Node;
-import mygame.editor.model.Sprite;
-import mygame.editor.model.TreeFileHolder;
+import mygame.editor.model.*;
 import mygame.editor.render.CanvasRenderer;
 import mygame.editor.render.TreeItemPath;
 import mygame.editor.repository.NodeModel;
@@ -53,26 +50,41 @@ public class MainController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         App.instance.registerController(this);
 
-//
-//        NodeModel repository = App.instance.repository;
-//        Node n = new Node();
-//        n.setWidth(100);
-//        n.setHeight(100);
-//        n.setPosition(100, 50);
-//        repository.save(n);
-//
-//
-//        Node n2 = new Node();
-//        n2.setHeight(500);
-//        n2.setWidth(200);
-//        n2.setPosition(200,200);
-//        repository.save(n2);
-//
-//        Node n3 = new Node();
-//        n3.setHeight(400);
-//        n3.setWidth(400);
-//        n3.setPosition(0,400);
-//        repository.save(n3);
+
+        NodeModel repository = App.instance.repository;
+        Node n = new Node();
+        n.setWidth(100);
+        n.setHeight(100);
+        n.setPosition(100, 50);
+        Physics physics1 = new Physics();
+        physics1.setType(Physics.STATIC);
+        physics1.setShape(Physics.RECT);
+        n.setPhysics(physics1);
+        repository.save(n);
+
+
+
+        Node n2 = new Node();
+        n2.setHeight(500);
+        n2.setWidth(200);
+        n2.setPosition(200,200);
+
+        Physics physics2 = new Physics();
+        physics2.setType(Physics.DYNAMIC);
+        physics2.setShape(Physics.CIRCLE);
+        n2.setPhysics(physics2);
+        repository.save(n2);
+
+        Node n3 = new Node();
+        n3.setHeight(400);
+        n3.setWidth(400);
+        n3.setPosition(0,400);
+
+        Physics physics3 = new Physics();
+        physics3.setType(Physics.KINEMATIC);
+        physics3.setShape(Physics.CHAIN);
+
+        repository.save(n3);
         setListeners();
 
     }

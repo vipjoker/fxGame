@@ -6,13 +6,23 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.apache.regexp.RE;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Physics implements ObservableValue<Physics> {
-    private StringProperty type = new SimpleStringProperty("static");
-    private StringProperty shape = new SimpleStringProperty("rect");
+
+
+    public static final String CIRCLE = "circle";
+    public static final String RECT = "rect";
+    public static final String CHAIN = "chain";
+
+    public static final String STATIC = "static";
+    public static final String DYNAMIC = "dynamic";
+    public static final String KINEMATIC = "kinematic";
+    private StringProperty type = new SimpleStringProperty(STATIC);
+    private StringProperty shape = new SimpleStringProperty(RECT);
 
     private DoubleProperty restitution = new SimpleDoubleProperty(1);
     private DoubleProperty density = new SimpleDoubleProperty(1);
@@ -123,12 +133,12 @@ public class Physics implements ObservableValue<Physics> {
         this.shape.set(shape);
 
         switch (shape){
-            case "circle":
+            case CIRCLE:
                 radius.set(width.doubleValue()/2);
                 break;
-            case "rect":
+            case RECT:
                 break;
-            case "chain":
+            case CHAIN:
                 points.clear();
                 points.add(new Point(0,0));
                 points.add(new Point(width.doubleValue(),0));
