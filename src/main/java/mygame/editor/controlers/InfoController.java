@@ -84,7 +84,7 @@ public class InfoController implements Initializable {
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 physicsSettingsLayout.setVisible(newValue);
                 if(newValue){
-                    ccNode.setEditBody(CcEditBodyNode.create(Constants.PARAM_SQUARE,0,0));
+                    ccNode.setEditBody(CcEditBodyNode.createRect(ccNode.getWidth().doubleValue(),ccNode.getHeight().doubleValue()));
                 }else{
                     ccNode.setEditBody(null);
                 }

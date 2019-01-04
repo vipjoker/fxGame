@@ -88,13 +88,13 @@ public class NodeEditAction extends Action implements CanvasRenderer.OnCanvasDra
         if(node.getPhysics() != null){
             switch (node.getPhysics().getShape().get()) {
                 case Physics.CIRCLE:
-                    nodeView.setEditBody(CcEditBodyNode.create(Constants.PARAM_CIRCLE,0,0));
+                    nodeView.setEditBody(CcEditBodyNode.createCircle(node.getPhysics().getRadius().doubleValue()));
                     break;
                 case Physics.CHAIN:
-                    nodeView.setEditBody(CcEditBodyNode.create(Constants.PARAM_CHAIN,0,0));
+                    nodeView.setEditBody(CcEditBodyNode.createChain(node.getPhysics().getPoints()));
                     break;
                 case Physics.RECT:
-                    nodeView.setEditBody(CcEditBodyNode.create(Constants.PARAM_SQUARE,0,0));
+                    nodeView.setEditBody(CcEditBodyNode.createRect(node.getPhysics().getWidth().doubleValue(),node.getPhysics().getHeight().doubleValue()));
                     break;
             }
         }

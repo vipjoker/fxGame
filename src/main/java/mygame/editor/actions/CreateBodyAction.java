@@ -46,14 +46,14 @@ public class CreateBodyAction extends Action implements CanvasRenderer.OnCanvasD
 
 
 
-        CcEditBodyNode bodyNode =  CcEditBodyNode.create(mode,x,y);
+//        CcEditBodyNode bodyNode =  CcEditBodyNode.create(mode,x,y);
 
 //        body.setName("Body " + mRepository.getBodies().size());
 //        mRepository.saveBody(body);
 
 
 
-        mRenderer.addChild(bodyNode);
+//        mRenderer.addChild(bodyNode);
         mRenderer.update();
     }
 

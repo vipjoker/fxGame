@@ -8,6 +8,7 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import mygame.editor.model.Point;
 import mygame.editor.model.box2d.*;
 import mygame.editor.util.Constants;
 
@@ -22,35 +23,37 @@ public class CcEditBodyNode extends NodeView {
     private final List<CcFixtureNode> fixtureNodes = new ArrayList<>();
 
 
-    public static CcEditBodyNode create(String type,float x,float y){
-        B2Body body = null;
-        switch (type){
-            case Constants.PARAM_SQUARE: {
-                body = new B2Body(B2Type.DYNAMIC, new B2Point(x, y));
-                B2Fixture fixture = new B2Fixture(B2FixtureType.POLYGON, Vector2.Zero, new Vector2(1, 0),new Vector2(1,1),new Vector2(0,1));
-                body.addFixture(fixture);
-            }
-            break;
-            case Constants.PARAM_CIRCLE: {
-                body = new B2Body(B2Type.DYNAMIC, new B2Point(x, y));
-                B2Fixture fixture = new B2Fixture(B2FixtureType.CIRCLE, Vector2.Zero, new Vector2(0, 1));
-                body.addFixture(fixture);
-            }
-            break;
-            case Constants.PARAM_CHAIN:{
-                body = new B2Body(B2Type.STATIC, new B2Point(x, y));
-                B2Fixture fixture = new B2Fixture(B2FixtureType.CHAIN, new Vector2(0,1), new Vector2(1, 0),new Vector2(2,0),new Vector2(3,1));
-                body.addFixture(fixture);
-            }
-            break;
-            case Constants.PARAM_EDGE:{
 
-            }
-            break;
-        }
+
+    public static CcEditBodyNode createRect(double width,double height){
+
+        B2Body body = new B2Body(B2Type.DYNAMIC, new B2Point(0, 0));
+        B2Fixture fixture = new B2Fixture(B2FixtureType.POLYGON, Vector2.Zero, new Vector2((float) width, 0),new Vector2((float) width,(float) height),new Vector2(0,(float) height));
+        body.addFixture(fixture);
+
         CcEditBodyNode bodyNode = new CcEditBodyNode(body);
         return bodyNode;
     }
+
+    public static CcEditBodyNode createCircle(double radius) {
+        B2Body body = new B2Body(B2Type.DYNAMIC, new B2Point(0, 0));
+        B2Fixture fixture = new B2Fixture(B2FixtureType.CIRCLE, Vector2.Zero, new Vector2(0, (float) radius));
+        body.addFixture(fixture);
+        CcEditBodyNode bodyNode = new CcEditBodyNode(body);
+        return bodyNode;
+    }
+
+    public static CcEditBodyNode createChain(List<Point> points){
+        B2Body body = new B2Body(B2Type.STATIC, new B2Point(0, 0));
+        CcEditBodyNode bodyNode = new CcEditBodyNode(body);
+        B2Fixture fixture = new B2Fixture(B2FixtureType.CHAIN, new Vector2(0,1), new Vector2(1, 0),new Vector2(2,0),new Vector2(3,1));
+        body.addFixture(fixture);
+        return bodyNode;
+    }
+
+
+
+
 
     public CcEditBodyNode(B2Body body) {
         this.editBody = body;
