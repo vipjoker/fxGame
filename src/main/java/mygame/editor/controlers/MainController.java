@@ -83,7 +83,7 @@ public class MainController implements Initializable {
         Physics physics3 = new Physics();
         physics3.setType(Physics.KINEMATIC);
         physics3.setShape(Physics.CHAIN);
-
+        n3.setPhysics(physics3);
         repository.save(n3);
         setListeners();
 

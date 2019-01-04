@@ -11,6 +11,7 @@ import mygame.editor.repository.NodeModel;
 import mygame.editor.util.Callback;
 import mygame.editor.util.Constants;
 import mygame.editor.util.ImageUtil;
+import mygame.editor.views.CcEditBodyNode;
 import mygame.editor.views.NodeView;
 import mygame.editor.views.SpriteView;
 
@@ -82,6 +83,21 @@ public class NodeEditAction extends Action implements CanvasRenderer.OnCanvasDra
 
         nodeView.getAngle().addListener((observable, oldValue, newValue)
                 -> node.setAngle(newValue.doubleValue()));
+
+
+        if(node.getPhysics() != null){
+            switch (node.getPhysics().getShape().get()) {
+                case Physics.CIRCLE:
+                    nodeView.setEditBody(CcEditBodyNode.create(Constants.PARAM_CIRCLE,0,0));
+                    break;
+                case Physics.CHAIN:
+                    nodeView.setEditBody(CcEditBodyNode.create(Constants.PARAM_CHAIN,0,0));
+                    break;
+                case Physics.RECT:
+                    nodeView.setEditBody(CcEditBodyNode.create(Constants.PARAM_SQUARE,0,0));
+                    break;
+            }
+        }
 
 
     }
