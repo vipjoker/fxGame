@@ -1,6 +1,5 @@
 package mygame.editor.model.box2d;
 
-import javafx.geometry.Point2D;
 import javafx.scene.shape.Rectangle;
 import mygame.editor.interfaces.Editable;
 

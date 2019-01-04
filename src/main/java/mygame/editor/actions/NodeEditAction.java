@@ -1,14 +1,11 @@
 package mygame.editor.actions;
 
-import javafx.beans.property.Property;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import mygame.editor.App;
 import mygame.editor.model.Node;
-import mygame.editor.model.Point;
+import mygame.editor.model.Physics;
 import mygame.editor.render.CanvasRenderer;
 import mygame.editor.repository.NodeModel;
 import mygame.editor.util.Callback;
@@ -18,7 +15,6 @@ import mygame.editor.views.NodeView;
 import mygame.editor.views.SpriteView;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 //amandani
 public class NodeEditAction extends Action implements CanvasRenderer.OnCanvasDragListener {
@@ -53,13 +49,14 @@ public class NodeEditAction extends Action implements CanvasRenderer.OnCanvasDra
     private void onNodesChanged(ListChangeListener.Change<? extends Node> change) {
         mRenderer.getNodes().clear();
         for (Node node : change.getList()) {
+            Physics physics = new Physics();
+            physics.setShape("circle");
+            physics.setDensity(32);
+            node.setPhysics(physics);
             Image image = ImageUtil.getImage("earth.jpg");
             SpriteView nodeView = new SpriteView(image);
             listenForChanges(nodeView,node);
-
-
             mRenderer.getNodes().add(nodeView);
-
         }
     }
 
@@ -69,37 +66,24 @@ public class NodeEditAction extends Action implements CanvasRenderer.OnCanvasDra
         nodeView.setHeight(node.getHeight().doubleValue());
         nodeView.setX(node.getPosition().getX().doubleValue());
         nodeView.setY(node.getPosition().getY().doubleValue());
+        nodeView.setAngle(node.getAngle().doubleValue());
+
+        nodeView.getX().addListener((observable, oldValue, newValue)
+                -> node.setPosition(newValue.doubleValue(),node.getPosition().getY().doubleValue()));
+
+        nodeView.getY().addListener((observable, oldValue, newValue)
+                -> node.setPosition(node.getPosition().getX().doubleValue(),newValue.doubleValue()));
+
+        nodeView.getWidth().addListener((observable, oldValue, newValue)
+                -> node.setWidth(newValue.doubleValue()));
+
+        nodeView.getHeight().addListener((observable, oldValue, newValue)
+                -> node.setHeight(newValue.doubleValue()));
+
+        nodeView.getAngle().addListener((observable, oldValue, newValue)
+                -> node.setAngle(newValue.doubleValue()));
 
 
-        nodeView.getX().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-
-                node.setPosition(newValue.doubleValue(),node.getPosition().getY().doubleValue());
-            }
-        });
-
-        nodeView.getY().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                node.setPosition(node.getPosition().getX().doubleValue(),newValue.doubleValue());
-            }
-        });
-
-
-        nodeView.getWidth().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                node.setWidth(newValue.doubleValue());
-            }
-        });
-
-        nodeView.getHeight().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                node.setHeight(newValue.doubleValue());
-            }
-        });
     }
 
     @Override
