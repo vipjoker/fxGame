@@ -36,8 +36,11 @@ public class CcPolygon extends CcFixtureNode {
         this.fixture = fixture;
         final List<Vector2> points = fixture.getPoints();
         for (int i = 0 ; i < points.size(); i++) {
-            final Vector2 p = Box2dUtil.fromBox2d(points.get(i));
-            this.points.add(p);
+
+            Vector2 point = points.get(i);
+            point.scl(new Vector2(1,-1));
+//            final Vector2 p = Box2dUtil.fromBox2d(point);
+            this.points.add(point);
         }
     }
 

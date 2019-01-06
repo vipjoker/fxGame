@@ -1,11 +1,15 @@
 package mygame.editor.actions;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import mygame.editor.App;
 import mygame.editor.model.Node;
 import mygame.editor.model.Physics;
+import mygame.editor.model.Point;
 import mygame.editor.render.CanvasRenderer;
 import mygame.editor.repository.NodeModel;
 import mygame.editor.util.Callback;
@@ -17,38 +21,65 @@ import mygame.editor.views.SpriteView;
 
 import java.util.HashMap;
 import java.util.Map;
-//amandani
+
 public class NodeEditAction extends Action implements CanvasRenderer.OnCanvasDragListener {
 
     public NodeEditAction(CanvasRenderer renderer, NodeModel repository) {
         super(renderer, repository);
     }
 
-    public final Map<NodeView, Node> propertyMap = new HashMap<>();
+    public final Map<Node, NodeView> nodesMap = new HashMap<>();
 
     @Override
     public void init() {
         mRenderer.getNodes().clear();
-        mRenderer.setOnCanvasDragListener(this);
+        nodesMap.clear();
+//       lorem ipsum CindySinn
 
+        mRenderer.setOnCanvasDragListener(this);
 
 
         for (Node node : mRepository.getNodes()) {
             Image image = ImageUtil.getImage("earth.jpg");
             SpriteView nodeView = new SpriteView(image);
 
-            listenForChanges(nodeView,node);
+            listenForChanges(nodeView, node);
 
+            nodesMap.put(node, nodeView);
             mRenderer.getNodes().add(nodeView);
 
         }
         mRenderer.update();
         mRepository.listenForNodes(this::onNodesChanged);
+        App.instance.selected.addListener(this::onSelectChanged);
         System.out.println("NODE EDIT ACTION");
     }
 
+    private void onSelectChanged(ListChangeListener.Change<? extends Node> change) {
+        final ObservableList<? extends Node> list = change.getList();
+//        for (Node ccNode : this.nodes) {
+//
+//            traverse(ccNode, n -> {
+//                final boolean contains = list.contains(n);
+//
+//                n.setActive(contains);
+//            });
+
+
+//        }
+    }
+
+    private void traverse(Node node, Callback<Node> action) {
+        action.call(node);
+        for (Node ccNode : node.getChildren()) {
+            traverse(ccNode, action);
+        }
+    }
+
+
     private void onNodesChanged(ListChangeListener.Change<? extends Node> change) {
         mRenderer.getNodes().clear();
+        nodesMap.clear();
         for (Node node : change.getList()) {
             Physics physics = new Physics();
             physics.setShape("circle");
@@ -56,13 +87,14 @@ public class NodeEditAction extends Action implements CanvasRenderer.OnCanvasDra
             node.setPhysics(physics);
             Image image = ImageUtil.getImage("earth.jpg");
             SpriteView nodeView = new SpriteView(image);
-            listenForChanges(nodeView,node);
+            nodesMap.put(node, nodeView);
+            listenForChanges(nodeView, node);
             mRenderer.getNodes().add(nodeView);
         }
     }
 
 
-    private void listenForChanges(NodeView nodeView,Node node){
+    private void listenForChanges(NodeView nodeView, Node node) {
         nodeView.setWidth(node.getWidth().doubleValue());
         nodeView.setHeight(node.getHeight().doubleValue());
         nodeView.setX(node.getPosition().getX().doubleValue());
@@ -70,10 +102,10 @@ public class NodeEditAction extends Action implements CanvasRenderer.OnCanvasDra
         nodeView.setAngle(node.getAngle().doubleValue());
 
         nodeView.getX().addListener((observable, oldValue, newValue)
-                -> node.setPosition(newValue.doubleValue(),node.getPosition().getY().doubleValue()));
+                -> node.setPosition(newValue.doubleValue(), node.getPosition().getY().doubleValue()));
 
         nodeView.getY().addListener((observable, oldValue, newValue)
-                -> node.setPosition(node.getPosition().getX().doubleValue(),newValue.doubleValue()));
+                -> node.setPosition(node.getPosition().getX().doubleValue(), newValue.doubleValue()));
 
         nodeView.getWidth().addListener((observable, oldValue, newValue)
                 -> node.setWidth(newValue.doubleValue()));
@@ -84,8 +116,28 @@ public class NodeEditAction extends Action implements CanvasRenderer.OnCanvasDra
         nodeView.getAngle().addListener((observable, oldValue, newValue)
                 -> node.setAngle(newValue.doubleValue()));
 
+        nodeView.setClickListener(view -> {
+            if (App.instance.selected.contains(node)) {
+                App.instance.selected.remove(node);
 
-        if(node.getPhysics() != null){
+            } else {
+                App.instance.selected.add(node);
+            }
+            view.setActive(!view.active);
+        });
+
+
+        node.getPosition().addListener((observable, oldValue, newValue) -> {
+            nodeView.setX(newValue.getX().doubleValue());
+            nodeView.setY(newValue.getY().doubleValue());
+        });
+
+        node.getAngle().addListener((observable, oldValue, newValue) -> nodeView.setAngle(newValue.floatValue()));
+
+        node.getWidth().addListener((observable, oldValue, newValue) -> nodeView.setWidth(newValue.doubleValue()));
+        node.getHeight().addListener((observable, oldValue, newValue) -> nodeView.setHeight(newValue.doubleValue()));
+
+        if (node.getPhysics() != null) {
             switch (node.getPhysics().getShape().get()) {
                 case Physics.CIRCLE:
                     nodeView.setEditBody(CcEditBodyNode.createCircle(node.getPhysics().getRadius().doubleValue()));
@@ -94,7 +146,7 @@ public class NodeEditAction extends Action implements CanvasRenderer.OnCanvasDra
                     nodeView.setEditBody(CcEditBodyNode.createChain(node.getPhysics().getPoints()));
                     break;
                 case Physics.RECT:
-                    nodeView.setEditBody(CcEditBodyNode.createRect(node.getPhysics().getWidth().doubleValue(),node.getPhysics().getHeight().doubleValue()));
+                    nodeView.setEditBody(CcEditBodyNode.createRect(node.getPhysics().getWidth().doubleValue(), node.getPhysics().getHeight().doubleValue()));
                     break;
             }
         }
@@ -116,26 +168,9 @@ public class NodeEditAction extends Action implements CanvasRenderer.OnCanvasDra
     @Override
     public void onStartMove(Point2D point) {
         App.instance.selected.clear();
-        for (NodeView ccNode : mRenderer.getNodes()) {
-            traverse(ccNode, n -> {
-                boolean contains = false;
-                if (n.getParent() != null) {
+        for (NodeView node : mRenderer.getNodes())
+            traverse(node, n -> n.setActive(false));
 
-                    Point2D point2D = n.getParent().convertToLocalSpace(point);
-                    contains = n.contains(point2D);
-                } else {
-                    contains = n.contains(point);
-                }
-
-                if (contains) {
-                    App.instance.selected.clear();
-                    App.instance.selected.add(n);
-
-                }
-            });
-
-
-        }
     }
 
     public void traverse(NodeView node, Callback<NodeView> action) {
@@ -150,13 +185,14 @@ public class NodeEditAction extends Action implements CanvasRenderer.OnCanvasDra
     @Override
     public void onDrag(Point2D point) {
         System.out.println("onDrag size " + App.instance.selected.size());
-        for (NodeView ccNode : App.instance.selected) {
+        for (Node ccNode : App.instance.selected) {
             switch (mode) {
                 case Constants.PARAM_MOVE:
-                    ccNode.move(point);
+                    nodesMap.get(ccNode).move(point);
+//                    ccNode.move(point);
                     break;
                 case Constants.PARAM_ROTATE:
-                    ccNode.rotate(point);
+                    nodesMap.get(ccNode).rotate(point);
                     break;
             }
 

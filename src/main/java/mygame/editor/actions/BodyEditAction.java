@@ -7,6 +7,7 @@ import javafx.scene.input.KeyEvent;
 import mygame.editor.App;
 import mygame.editor.controlers.InfoController;
 import mygame.editor.interfaces.KeyListener;
+import mygame.editor.model.Node;
 import mygame.editor.model.box2d.B2Body;
 import mygame.editor.render.CanvasRenderer;
 import mygame.editor.repository.NodeModel;
@@ -57,7 +58,7 @@ public class BodyEditAction extends Action implements CanvasRenderer.OnCanvasDra
 
     private void handleSelect(Point2D point) {
 
-        final ObservableList<NodeView> selected = App.instance.selected;
+        final ObservableList<Node> selected = App.instance.selected;
         if (!App.buttons.contains(KeyCode.SHIFT)) {
             selected.clear();
         }
@@ -66,7 +67,7 @@ public class BodyEditAction extends Action implements CanvasRenderer.OnCanvasDra
             final Point2D point2D = node.convertToLocalSpace(point);
             if (node.contains(point2D) && !selected.contains(node)) {
 
-                selected.add(node);
+//                selected.add(node);
                 break;
             }
         }
@@ -78,19 +79,19 @@ public class BodyEditAction extends Action implements CanvasRenderer.OnCanvasDra
 
     @Override
     public void onDrag(Point2D point) {
-        final ObservableList<NodeView> selected = App.instance.selected;
+        final ObservableList<Node> selected = App.instance.selected;
 
         if (mode == Mode.ROTATE) {
 
-            for (NodeView ccNode : selected) {
+            for (Node ccNode : selected) {
                 ccNode.setAngle(ccNode.getAngle().doubleValue() - point.getX() - point.getY());
             }
         } else {
-            for (NodeView s : selected) {
-                double newX = s.getX().doubleValue() - point.getX();
-                double newY = s.getY().doubleValue() + point.getY();
-                s.setX(newX);
-                s.setY(newY);
+            for (Node s : selected) {
+                double newX = s.getPosition().getX().doubleValue() - point.getX();
+                double newY = s.getPosition().getY().doubleValue() + point.getY();
+                s.getPosition().set(newX,newY);
+
             }
         }
     }

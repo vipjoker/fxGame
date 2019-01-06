@@ -30,8 +30,8 @@ public class CcCircle extends CcFixtureNode{
     }
 
     public CcCircle(B2Fixture fixture){
-        this.position = fixture.getCenter().cpy().scl(32);
-        this.radius = fixture.getRadius() * 32;
+        this.position = fixture.getCenter().cpy();
+        this.radius = fixture.getRadius();
 
         points.add(position);
         points.add(position.cpy().add(radius,0));

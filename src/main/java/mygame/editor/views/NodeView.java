@@ -34,7 +34,7 @@ public class NodeView {
     protected SimpleBooleanProperty hasPhysics = new SimpleBooleanProperty(false);
 
     private CcEditBodyNode editBody; //has physics
-
+    private ClickListener mListener;
 
     public Affine transform;
     protected BoundingBox bBox;
@@ -51,6 +51,14 @@ public class NodeView {
     public void addChild(NodeView node) {
         node.setParent(this);
         children.add(node);
+    }
+
+    public ClickListener getClickListener() {
+        return mListener;
+    }
+
+    public void setClickListener(ClickListener mListener) {
+        this.mListener = mListener;
     }
 
     public DoubleProperty getAngle(){
@@ -363,6 +371,10 @@ public class NodeView {
                 ", components=" + components +
                 ", children=" + children +
                 '}';
+    }
+
+    public interface ClickListener{
+         void onClick(NodeView nodeView);
     }
 }
 

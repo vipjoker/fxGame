@@ -24,13 +24,13 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class HierarchyController implements Initializable {
-    public TreeView<NodeView> nodeTreeview;
+    public TreeView<Node> nodeTreeview;
 
 
-    private TreeItem<NodeView> nodesItem;
-    private NodeView rootNode;
-    private NodeView lastCell;
-    private NodeView firstCell;
+    private TreeItem<Node> nodesItem;
+    private Node rootNode;
+    private Node lastCell;
+    private Node firstCell;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -51,13 +51,13 @@ public class HierarchyController implements Initializable {
 
             @Override
             public void handle(ActionEvent event) {
-                TreeItem<NodeView> selectedItem = nodeTreeview.getSelectionModel().getSelectedItem();
+                TreeItem<Node> selectedItem = nodeTreeview.getSelectionModel().getSelectedItem();
 
-//                if(selectedItem != null){
-//                    App.instance.repository.delete(selectedItem.getValue());
-//                    selectedItem.getValue().removeSelf();
-//
-//                }
+                if(selectedItem != null){
+                    App.instance.repository.delete(selectedItem.getValue());
+                    selectedItem.getValue().removeSelf();
+
+                }
             }
         });
 
@@ -71,23 +71,23 @@ public class HierarchyController implements Initializable {
 
     private void onNodesChanged(ListChangeListener.Change<? extends Node> change) {
         nodesItem.getChildren().clear();
-//        for (NodeView node : change.getList()) {
-//           traversTreeItems(node,nodesItem);
+        for (Node node : change.getList()) {
+           traversTreeItems(node,nodesItem);
 //
-//        }
+        }
     }
 
 
-    private void traversTreeItems(NodeView node, TreeItem<NodeView> parent){
-        TreeItem<NodeView> treeItem = createTreeItem(node);
+    private void traversTreeItems(Node node, TreeItem<Node> parent){
+        TreeItem<Node> treeItem = createTreeItem(node);
         parent.getChildren().add(treeItem);
-        for(NodeView child : node.getChildren()) {
+        for(Node child : node.getChildren()) {
             traversTreeItems(child,treeItem);
         }
     }
 
-    private TreeItem<NodeView> createTreeItem(NodeView node){
-        TreeItem<NodeView> treeItem = new TreeItem<>(node);
+    private TreeItem<Node> createTreeItem(Node node){
+        TreeItem<Node> treeItem = new TreeItem<>(node);
         Rectangle rectangle = new Rectangle(0, 0, 20, 20);
         rectangle.setFill(Color.PINK);
         treeItem.setGraphic(rectangle);
@@ -106,7 +106,7 @@ public class HierarchyController implements Initializable {
 
         nodeTreeview.setCellFactory(e -> new TreeNodeHolder());
 
-        rootNode = new NodeView();
+        rootNode = new Node();
         rootNode.setName("Nodes");
 
 
@@ -124,15 +124,15 @@ public class HierarchyController implements Initializable {
 
 
 
-        final TreeItem<NodeView> selectedItem = nodeTreeview.getSelectionModel().getSelectedItem();
+        final TreeItem<Node> selectedItem = nodeTreeview.getSelectionModel().getSelectedItem();
         if(selectedItem != null){
-            final NodeView value = selectedItem.getValue();
+            final Node value = selectedItem.getValue();
             if(value != rootNode){
                 App.instance.selected.clear();
                 App.instance.selected.add(value);
             }
         }
-        final TreeItem<NodeView> root = nodeTreeview.getRoot();
+        final TreeItem<Node> root = nodeTreeview.getRoot();
         traverse(root, treeItem -> {
 
             final Rectangle cell = (Rectangle) treeItem.getGraphic();
@@ -159,7 +159,7 @@ public class HierarchyController implements Initializable {
     }
 
     private void onMouseDragged(MouseEvent event) {
-        final TreeItem<NodeView> root = nodeTreeview.getRoot();
+        final TreeItem<Node> root = nodeTreeview.getRoot();
         traverse(root, treeItem -> {
 
             final Rectangle cell = (Rectangle) treeItem.getGraphic();
@@ -188,7 +188,7 @@ public class HierarchyController implements Initializable {
     }
 
     private void onMouseReleased(MouseEvent event) {
-        TreeItem<NodeView> root = nodeTreeview.getRoot();
+        TreeItem<Node> root = nodeTreeview.getRoot();
         traverse(root, treeItem -> {
             final Rectangle cell = (Rectangle) treeItem.getGraphic();
             if (cell != null && cell.getParent() != null) {
@@ -217,7 +217,7 @@ public class HierarchyController implements Initializable {
            // App.instance.repository.delete(firstCell);
 
             lastCell.addChild(firstCell);
-            for (NodeView ccNode : rootNode.getChildren()) {
+            for (Node ccNode : rootNode.getChildren()) {
                 ccNode.removeSelf();
             }
 
@@ -236,17 +236,17 @@ public class HierarchyController implements Initializable {
     }
 
 
-    private void traverse(TreeItem<NodeView> treeItem, Callback<TreeItem<NodeView>> callback) {
+    private void traverse(TreeItem<Node> treeItem, Callback<TreeItem<Node>> callback) {
         callback.call(treeItem);
-        for (TreeItem<NodeView> holderTreeItem : treeItem.getChildren()) {
+        for (TreeItem<Node> holderTreeItem : treeItem.getChildren()) {
             traverse(holderTreeItem, callback);
         }
     }
 
 
-    private TreeItem<NodeView> updateTreeView(NodeView holder) {
-        TreeItem<NodeView> root = new TreeItem<>(holder);
-        for (NodeView item : holder.getChildren()) {
+    private TreeItem<Node> updateTreeView(Node holder) {
+        TreeItem<Node> root = new TreeItem<>(holder);
+        for (Node item : holder.getChildren()) {
             root.getChildren().add(updateTreeView(item));
         }
 

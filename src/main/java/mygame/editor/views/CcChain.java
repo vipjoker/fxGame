@@ -35,7 +35,7 @@ public class CcChain extends CcFixtureNode {
     public CcChain(B2Fixture fixture) {
         this.fixture = fixture;
         for (Vector2 vector2 : fixture.getPoints()) {
-            final Vector2 v = vector2.cpy().scl(32);
+            final Vector2 v = vector2.cpy();
             v.y *= -1;
             points.add(v);
         }

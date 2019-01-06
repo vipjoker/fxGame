@@ -1,5 +1,7 @@
 package mygame.editor.controlers;
 
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -7,8 +9,11 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import mygame.editor.App;
+import mygame.editor.model.Node;
+import mygame.editor.model.Physics;
 import mygame.editor.ui.SlideableTextField;
 import mygame.editor.ui.StringTextField;
 import mygame.editor.util.Constants;
@@ -24,7 +29,7 @@ import java.util.regex.Pattern;
  */
 public class InfoController implements Initializable {
     public VBox vbRoot;
-    private NodeView ccNode;
+    private Node ccNode;
 
     private Pattern floatNumberPattern = Pattern.compile("[+-]?([0-9]*[.])?[0-9]+");
 
@@ -56,6 +61,7 @@ public class InfoController implements Initializable {
     VBox generalLayout = new VBox();
     VBox nodeSettingsLayout = new VBox();
     VBox physicsLayout = new VBox();
+    VBox pointsBox = new VBox();
     TitledPane titledPane = new TitledPane("General",generalLayout);
     TitledPane nodeSettings = new TitledPane("Node settings",nodeSettingsLayout);
     TitledPane physicsSettingsLayout = new TitledPane("Physics",physicsLayout);
@@ -71,11 +77,12 @@ public class InfoController implements Initializable {
 
         choiceBox.setValue(strings.get(0));
         fixtureTypeChoiceBox.setValue(fixtureType.get(0));
-        physicsLayout.getChildren().addAll(choiceBox,fixtureTypeChoiceBox,etDensity,etRestitution,etFriction);
+
+        physicsLayout.getChildren().addAll(choiceBox,etDensity,etRestitution,etFriction,fixtureTypeChoiceBox ,pointsBox);
         Accordion accordion = new Accordion(titledPane,nodeSettings,physicsSettingsLayout);
 
-        nodeSettingsLayout.getChildren().addAll(etName, etX, etY, etAngle, etWidth, etHeight,etAnchorX,etAnchorY,cbHasPhysics);
         generalLayout.getChildren().addAll(etGravityX,etGravityY,screenWidth,screenHeight);
+        nodeSettingsLayout.getChildren().addAll(etName, etX, etY, etAngle, etWidth, etHeight,etAnchorX,etAnchorY,cbHasPhysics);
         vbRoot.getChildren().addAll(accordion);
 
 
@@ -84,17 +91,28 @@ public class InfoController implements Initializable {
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 physicsSettingsLayout.setVisible(newValue);
                 if(newValue){
-                    ccNode.setEditBody(CcEditBodyNode.createRect(ccNode.getWidth().doubleValue(),ccNode.getHeight().doubleValue()));
+                    ccNode.setPhysics(new Physics());
                 }else{
-                    ccNode.setEditBody(null);
+                    ccNode.setPhysics(null);
                 }
             }
         });
 
+        pointsBox.getChildren().add(createDoubleNumberField(new SimpleDoubleProperty(0),new SimpleDoubleProperty(8)));
 
     }
 
-    private void onSelected(ListChangeListener.Change<? extends NodeView> c) {
+    private javafx.scene.Node createDoubleNumberField(DoubleProperty xProperty,DoubleProperty yProperty){
+        HBox hBox = new HBox();
+        Label label = new Label("Field");
+        SlideableTextField x = new SlideableTextField("X",precission);
+        SlideableTextField y = new SlideableTextField("Y",precission);
+        hBox.getChildren().addAll(label,x,y);
+        return hBox;
+
+    }
+
+    private void onSelected(ListChangeListener.Change<? extends Node> c) {
 
         if (ccNode != null) {
             etX.unbind();
@@ -110,16 +128,16 @@ public class InfoController implements Initializable {
 
         if (c.getList().size() == 1) {
             ccNode = c.getList().get(0);
-            etX.bind(ccNode.getX());
-            etY.bind(ccNode.getY());
+            etX.bind(ccNode.getPosition().getX());
+            etY.bind(ccNode.getPosition().getY());
             etName.bind(ccNode.getName());
             etWidth.bind(ccNode.getWidth());
             etHeight.bind(ccNode.getHeight());
             etAngle.bind(ccNode.getAngle());
-            etAnchorX.bind(ccNode.anchorXProperty());
-            etAnchorY.bind(ccNode.anchorYProperty());
+            etAnchorX.bind(ccNode.getAnchor().getX());
+            etAnchorY.bind(ccNode.getAnchor().getY());
 
-            if(ccNode.getEditBody() != null){
+            if(ccNode.getPhysics() != null){
 
             }
 

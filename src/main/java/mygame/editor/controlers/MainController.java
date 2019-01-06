@@ -70,9 +70,9 @@ public class MainController implements Initializable {
         n2.setPosition(200,200);
 
         Physics physics2 = new Physics();
+        n2.setPhysics(physics2);
         physics2.setType(Physics.DYNAMIC);
         physics2.setShape(Physics.CIRCLE);
-        n2.setPhysics(physics2);
         repository.save(n2);
 
         Node n3 = new Node();
@@ -81,9 +81,9 @@ public class MainController implements Initializable {
         n3.setPosition(0,400);
 
         Physics physics3 = new Physics();
+        n3.setPhysics(physics3);
         physics3.setType(Physics.KINEMATIC);
         physics3.setShape(Physics.CHAIN);
-        n3.setPhysics(physics3);
         repository.save(n3);
         setListeners();
 
@@ -102,12 +102,12 @@ public class MainController implements Initializable {
         });
 
 
-        App.instance.selected.addListener(new ListChangeListener<NodeView>() {
+        App.instance.selected.addListener(new ListChangeListener<Node>() {
                                               @Override
-                                              public void onChanged(Change<? extends NodeView> c) {
-//                                                  for (NodeView node : App.instance.repository.getNodes()) {
+                                              public void onChanged(Change<? extends Node> c) {
+                                                  for (Node node : App.instance.repository.getNodes()) {
 //                                                      node.setActive(c.getList().contains(node));
-//                                                  }
+                                                  }
                                               }
                                           });
 

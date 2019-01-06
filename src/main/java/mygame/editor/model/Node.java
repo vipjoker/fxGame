@@ -7,6 +7,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.geometry.Point2D;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -174,6 +175,16 @@ public class Node implements ObservableValue<Node> {
             parent.getChildren().remove(this);
         }
     }
+
+//    public void move(Point2D point2D){
+//        this.position.getX().set(this.position.getX().subtract(point2D.getX()).doubleValue()) ;
+//        this.position.getY().set(this.position.getY().add(point2D.getY()).doubleValue());
+//    }
+//
+//
+//    public void rotate(Point2D point) {
+//        setAngle(getAngle().doubleValue() - point.getX() - point.getY());
+//    }
 
     private void notifyChanges(){
         for (ChangeListener<? super Node> listener : listeners) {

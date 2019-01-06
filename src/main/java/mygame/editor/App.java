@@ -31,7 +31,7 @@ public class App extends Application {
     public static Set<KeyCode> buttons  = new HashSet<>();
     public final SimpleObjectProperty<Command> observableAction = new SimpleObjectProperty<>();
     public final NodeModel repository = new NodeModel();
-    public final ObservableList<NodeView> selected = FXCollections.observableArrayList();
+    public final ObservableList<Node> selected = FXCollections.observableArrayList();
 
     public void registerController(Object object) {
         controllers.put(object.getClass(),object);

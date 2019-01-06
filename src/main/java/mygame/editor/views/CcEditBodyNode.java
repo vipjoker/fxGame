@@ -45,12 +45,17 @@ public class CcEditBodyNode extends NodeView {
 
     public static CcEditBodyNode createChain(List<Point> points){
         B2Body body = new B2Body(B2Type.STATIC, new B2Point(0, 0));
-        CcEditBodyNode bodyNode = new CcEditBodyNode(body);
-        B2Fixture fixture = new B2Fixture(B2FixtureType.CHAIN, new Vector2(0,1), new Vector2(1, 0),new Vector2(2,0),new Vector2(3,1));
+
+        Vector2[] vectors = new Vector2[points.size()];
+        for (int i = 0; i < vectors.length; i++) {
+            Point point = points.get(i);
+            vectors[i] = new Vector2(point.getX().floatValue(),point.getY().floatValue());
+        }
+        B2Fixture fixture = new B2Fixture(B2FixtureType.CHAIN,vectors);
         body.addFixture(fixture);
+        CcEditBodyNode bodyNode = new CcEditBodyNode(body);
         return bodyNode;
     }
-
 
 
 

@@ -18,6 +18,7 @@ import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
 import mygame.editor.App;
 import mygame.editor.TimerCounter;
+import mygame.editor.model.Node;
 import mygame.editor.util.Callback;
 import mygame.editor.util.Constants;
 import mygame.editor.views.NodeView;
@@ -86,27 +87,7 @@ public class CanvasRenderer {
         canvas.setCursor(Cursor.CROSSHAIR);
         canvas.setOnMouseMoved(this::onMouseMoved);
         draw(graphicsContext, Global.getWidth(), Global.getHeight());
-        App.instance.selected.addListener(this::onSelectChanged);
-    }
 
-    private void onSelectChanged(ListChangeListener.Change<? extends NodeView> change) {
-        final ObservableList<? extends NodeView> list = change.getList();
-        for (NodeView ccNode : this.nodes) {
-
-            traverse(ccNode, n -> {
-                final boolean contains = list.contains(n);
-                n.setActive(contains);
-            });
-
-
-        }
-    }
-
-    private void traverse(NodeView node, Callback<NodeView> action) {
-        action.call(node);
-        for (NodeView ccNode : node.getChildren()) {
-            traverse(ccNode, action);
-        }
     }
 
 
@@ -121,7 +102,7 @@ public class CanvasRenderer {
             Point2D p = new Point2D(point2D.getX(), -point2D.getY());
 
             mOnCanvasDragListener.onStartMove(p);
-
+            handleSelect(p);
         }
 
         Deque<List<NodeView>> lists = new LinkedList<>();
@@ -158,6 +139,51 @@ public class CanvasRenderer {
 
         draw(graphicsContext, Global.getWidth(), Global.getHeight());
     }
+
+//    private void onSelectChanged(ListChangeListener.Change<? extends Node> change) {
+//        final ObservableList<? extends Node> list = change.getList();
+//        for (NodeView ccNode : this.nodes) {
+//
+//            traverse(ccNode, n -> {
+//                final boolean contains = list.contains(n);
+//                n.setActive(contains);
+//            });
+//
+//
+//        }
+//    }
+
+    private void handleSelect(Point2D point) {
+
+        App.instance.selected.clear();
+        for (NodeView ccNode : getNodes()) {
+            traverse(ccNode, n -> {
+                boolean contains;
+                if (n.getParent() != null) {
+
+                    Point2D point2D = n.getParent().convertToLocalSpace(point);
+                    contains = n.contains(point2D);
+                } else {
+                    contains = n.contains(point);
+                }
+
+                if (contains) {
+                    if(n.getClickListener() != null){
+                        n.getClickListener().onClick(n);
+                    }
+                }
+            });
+        }
+
+    }
+
+    private void traverse(NodeView node, Callback<NodeView> action) {
+        action.call(node);
+        for (NodeView ccNode : node.getChildren()) {
+            traverse(ccNode, action);
+        }
+    }
+
 
     private void onMouseReleased(MouseEvent event) {
 
