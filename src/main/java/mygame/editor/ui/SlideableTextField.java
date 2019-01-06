@@ -32,7 +32,7 @@ public class SlideableTextField extends AnchorPane {
 
         textFiled = new TextField();
         textFiled.setLayoutY(7);
-        textFiled.setPrefWidth(125);
+        textFiled.setPrefWidth(50);
 
         getChildren().add(text);
         getChildren().add(textFiled);

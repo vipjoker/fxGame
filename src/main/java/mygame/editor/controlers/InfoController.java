@@ -8,12 +8,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import mygame.editor.App;
 import mygame.editor.model.Node;
 import mygame.editor.model.Physics;
+import mygame.editor.model.Point;
 import mygame.editor.ui.SlideableTextField;
 import mygame.editor.ui.StringTextField;
 import mygame.editor.util.Constants;
@@ -21,6 +23,8 @@ import mygame.editor.views.CcEditBodyNode;
 import mygame.editor.views.NodeView;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
@@ -66,7 +70,7 @@ public class InfoController implements Initializable {
     TitledPane nodeSettings = new TitledPane("Node settings",nodeSettingsLayout);
     TitledPane physicsSettingsLayout = new TitledPane("Physics",physicsLayout);
 
-
+    private final List<SlideableTextField> slideableTextFields = new ArrayList<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -98,16 +102,27 @@ public class InfoController implements Initializable {
             }
         });
 
-        pointsBox.getChildren().add(createDoubleNumberField(new SimpleDoubleProperty(0),new SimpleDoubleProperty(8)));
 
     }
 
-    private javafx.scene.Node createDoubleNumberField(DoubleProperty xProperty,DoubleProperty yProperty){
+    private javafx.scene.Node createDoubleNumberField(String name,Point point){
         HBox hBox = new HBox();
-        Label label = new Label("Field");
+        hBox.setAlignment(Pos.CENTER_LEFT);
+        Label label = new Label(name);
+        label.setPrefWidth(50);
         SlideableTextField x = new SlideableTextField("X",precission);
+        x.bind(point.getX());
+        x.setPrefWidth(100);
         SlideableTextField y = new SlideableTextField("Y",precission);
+        y.bind(point.getY());
+        y.setPrefWidth(100);
         hBox.getChildren().addAll(label,x,y);
+        hBox.setSpacing(5);
+
+        slideableTextFields.add(x);
+        slideableTextFields.add(y);
+
+
         return hBox;
 
     }
@@ -123,6 +138,8 @@ public class InfoController implements Initializable {
             etName.unbind();
             etAnchorX.unbind();
             etAnchorY.unbind();
+            pointsBox.getChildren().clear();
+            for (SlideableTextField slideableTextField : slideableTextFields) slideableTextField.unbind();
         }
 
 
@@ -137,9 +154,38 @@ public class InfoController implements Initializable {
             etAnchorX.bind(ccNode.getAnchor().getX());
             etAnchorY.bind(ccNode.getAnchor().getY());
 
-            if(ccNode.getPhysics() != null){
+            Physics physics = ccNode.getPhysics();
+            if(physics != null)
+            switch (physics.getShape().getValue()){
+                case Physics.CHAIN:
+                        int pointCount = 1;
+                        for (Point point : physics.getPoints()) {
+                            pointsBox.getChildren().add(createDoubleNumberField("Point " + pointCount,point));
+                            pointCount++;
+                        }
+                        break;
+                case Physics.CIRCLE:
+                    SlideableTextField radiusField = new SlideableTextField("Radius", 5);
+                    radiusField.bind(physics.getRadius());
+                    slideableTextFields.add(radiusField);
+                    pointsBox.getChildren().add(radiusField);
+                    break;
 
+                case Physics.RECT:
+                    SlideableTextField width = new SlideableTextField("Width",5);
+
+                    SlideableTextField height = new SlideableTextField("Height", 5);
+
+                    width.bind(physics.getWidth());
+                    height.bind(physics.getHeight());
+                    slideableTextFields.add(width);
+                    slideableTextFields.add(height);
+                    pointsBox.getChildren().addAll(width, height);
+
+
+                    break;
             }
+
 
         }
 
