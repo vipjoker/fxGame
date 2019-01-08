@@ -1,7 +1,5 @@
 package mygame.editor.controlers;
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -18,9 +16,6 @@ import mygame.editor.model.Physics;
 import mygame.editor.model.Point;
 import mygame.editor.ui.SlideableTextField;
 import mygame.editor.ui.StringTextField;
-import mygame.editor.util.Constants;
-import mygame.editor.views.CcEditBodyNode;
-import mygame.editor.views.NodeView;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -56,10 +51,10 @@ public class InfoController implements Initializable {
     private SlideableTextField etDensity = new SlideableTextField("Density",0.1);
     private SlideableTextField etRestitution = new SlideableTextField("Restitution",0.1);
     private SlideableTextField etFriction = new SlideableTextField("Friction",0.1);
-    ObservableList<String> strings = FXCollections.observableArrayList("Static", "Kinematic", "Dynamic");
-    ObservableList<String> fixtureType = FXCollections.observableArrayList("Circle","Rectangle","Line");
+    ObservableList<String> physicsType = FXCollections.observableArrayList(Physics.STATIC, Physics.KINEMATIC, Physics.DYNAMIC);
+    ObservableList<String> fixtureType = FXCollections.observableArrayList(Physics.CIRCLE,Physics.RECT,Physics.CHAIN);
 
-    ChoiceBox<String> choiceBox = new ChoiceBox<>(strings);
+    ChoiceBox<String> physicsTypeChoiceBox = new ChoiceBox<>(physicsType);
     ChoiceBox<String> fixtureTypeChoiceBox = new ChoiceBox<>(fixtureType);
     private CheckBox cbHasPhysics = new CheckBox("Physics");
     VBox generalLayout = new VBox();
@@ -79,10 +74,8 @@ public class InfoController implements Initializable {
         App.instance.selected.addListener(this::onSelected);
 
 
-        choiceBox.setValue(strings.get(0));
-        fixtureTypeChoiceBox.setValue(fixtureType.get(0));
 
-        physicsLayout.getChildren().addAll(choiceBox,etDensity,etRestitution,etFriction,fixtureTypeChoiceBox ,pointsBox);
+        physicsLayout.getChildren().addAll(physicsTypeChoiceBox,etDensity,etRestitution,etFriction,fixtureTypeChoiceBox ,pointsBox);
         Accordion accordion = new Accordion(titledPane,nodeSettings,physicsSettingsLayout);
 
         generalLayout.getChildren().addAll(etGravityX,etGravityY,screenWidth,screenHeight);
@@ -90,19 +83,32 @@ public class InfoController implements Initializable {
         vbRoot.getChildren().addAll(accordion);
 
 
-        cbHasPhysics.selectedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                physicsSettingsLayout.setVisible(newValue);
-                if(newValue){
-                    ccNode.setPhysics(new Physics());
-                }else{
-                    ccNode.setPhysics(null);
-                }
-            }
-        });
+        cbHasPhysics.selectedProperty().addListener(this::onCheckPhysicsChanged);
+        physicsTypeChoiceBox.getSelectionModel().selectedItemProperty().addListener(this::onPhysicsTypeChanged);
 
+        fixtureTypeChoiceBox.getSelectionModel().selectedItemProperty().addListener(this::onFixtureTypeChanged);
 
+    }
+
+    private void onCheckPhysicsChanged(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue){
+        physicsSettingsLayout.setVisible(newValue);
+        if(newValue){
+            ccNode.setPhysics(new Physics());
+        }else{
+            ccNode.setPhysics(null);
+        }
+    }
+
+    private void onPhysicsTypeChanged(ObservableValue<? extends String> observable, String oldValue, String newValue){
+        if(ccNode != null && ccNode.getPhysics() != null){
+            ccNode.getPhysics().setType(newValue);
+        }
+    }
+
+    private void onFixtureTypeChanged(ObservableValue<? extends String> observable, String oldValue, String newValue){
+        if(ccNode != null && ccNode.getPhysics() != null){
+            ccNode.getPhysics().setShape(newValue);
+        }
     }
 
     private javafx.scene.Node createDoubleNumberField(String name,Point point){
@@ -155,37 +161,40 @@ public class InfoController implements Initializable {
             etAnchorY.bind(ccNode.getAnchor().getY());
 
             Physics physics = ccNode.getPhysics();
-            if(physics != null)
-            switch (physics.getShape().getValue()){
-                case Physics.CHAIN:
+            if(physics != null) {
+                switch (physics.getShape().getValue()) {
+                    case Physics.CHAIN:
                         int pointCount = 1;
                         for (Point point : physics.getPoints()) {
-                            pointsBox.getChildren().add(createDoubleNumberField("Point " + pointCount,point));
+                            pointsBox.getChildren().add(createDoubleNumberField("Point " + pointCount, point));
                             pointCount++;
                         }
                         break;
-                case Physics.CIRCLE:
-                    SlideableTextField radiusField = new SlideableTextField("Radius", 5);
-                    radiusField.bind(physics.getRadius());
-                    slideableTextFields.add(radiusField);
-                    pointsBox.getChildren().add(radiusField);
-                    break;
+                    case Physics.CIRCLE:
+                        SlideableTextField radiusField = new SlideableTextField("Radius", 5);
+                        radiusField.bind(physics.getRadius());
+                        slideableTextFields.add(radiusField);
+                        pointsBox.getChildren().add(radiusField);
+                        break;
 
-                case Physics.RECT:
-                    SlideableTextField width = new SlideableTextField("Width",5);
+                    case Physics.RECT:
+                        SlideableTextField width = new SlideableTextField("Width", 5);
 
-                    SlideableTextField height = new SlideableTextField("Height", 5);
+                        SlideableTextField height = new SlideableTextField("Height", 5);
 
-                    width.bind(physics.getWidth());
-                    height.bind(physics.getHeight());
-                    slideableTextFields.add(width);
-                    slideableTextFields.add(height);
-                    pointsBox.getChildren().addAll(width, height);
+                        width.bind(physics.getWidth());
+                        height.bind(physics.getHeight());
+                        slideableTextFields.add(width);
+                        slideableTextFields.add(height);
+                        pointsBox.getChildren().addAll(width, height);
 
 
-                    break;
+                        break;
+                }
+                physicsTypeChoiceBox.setValue(physics.getType().get());
+                fixtureTypeChoiceBox.setValue(physics.getShape().get());
+
             }
-
 
         }
 
