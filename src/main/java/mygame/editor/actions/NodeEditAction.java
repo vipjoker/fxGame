@@ -161,8 +161,12 @@ public class NodeEditAction extends Action implements CanvasRenderer.OnCanvasDra
 //            key.unbindBidirectional(value);
 //            value.unbindBidirectional(key);
 //        }
+
+        for (Node node : nodesMap.keySet()) {
+
+        }
         mRenderer.getNodes().clear();
-//        propertyMap.clear();
+        nodesMap.clear();
     }
 
     @Override
