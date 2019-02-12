@@ -4,6 +4,7 @@ import java.util.List;
 
 public class Scene {
     private List<Node> children;
+    private List<Joint> joints;
 
     public List<Node> getChildren() {
         return children;
@@ -13,5 +14,11 @@ public class Scene {
         this.children = children;
     }
 
+    public List<Joint> getJoints() {
+        return joints;
+    }
 
+    public void setJoints(List<Joint> joints) {
+        this.joints = joints;
+    }
 }

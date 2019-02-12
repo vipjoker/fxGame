@@ -3,6 +3,7 @@ package mygame.editor.parser.model;
 import java.util.List;
 
 public class Physics {
+    private int bodyId;
     private String type;
     private float linearDamping;
     private float angularDamping;
@@ -85,5 +86,13 @@ public class Physics {
 
     public void setShapes(List<Shape> shapes) {
         this.shapes = shapes;
+    }
+
+    public int getBodyId() {
+        return bodyId;
+    }
+
+    public void setBodyId(int bodyId) {
+        this.bodyId = bodyId;
     }
 }

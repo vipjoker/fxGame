@@ -6,6 +6,17 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.Stage;
 import mygame.editor.parser.json.*;
 import mygame.editor.parser.model.*;
 
@@ -14,13 +25,10 @@ import java.io.FilenameFilter;
 import java.lang.reflect.Type;
 import java.net.URL;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
-public class ParserMain {
+public class ParserMain extends Application {
     static final String NODE = "cc.Node";
     static final String SCENE = "cc.Scene";
     static final String SPRITE = "cc.Sprite";
@@ -31,12 +39,113 @@ public class ParserMain {
     static final String CHAIN_COLLIDER = "cc.PhysicsChainCollider";
     static final String POLYGON_COLLIDER = "cc.PhysicsPolygonCollider";
 
+    static final String WELD_JOINT = "cc.WeldJoint";
+    static final String WHEEL_JOINT = "cc.WheelJoint";
+    static final String REVOLUTE_JOINT = "cc.RevoluteJoint";
+    static final String DISTANCE_JOINT = "cc.DistanceJoint";
+    static final String ROPE_JOINT = "cc.RopeJoint";
+    static final String PRISMATIC_JOINT = "cc.PrismaticJoint";
     static final String LABEL = "cc.Label";
 
     static Gson gson = new Gson();
     public static Map<Integer, Typeable> nodes = new HashMap<>();
     public static Map<String, Texture> textures = new HashMap<>();
     public static List<Font> fonts = new ArrayList<>();
+
+    private Button chooseInputFolder;
+    private javafx.scene.Scene scene;
+    private Label inputFolder;
+    private Label outPutFolder;
+    private Button chooseOutPutFolder;
+    private Button btnConvert;
+    private File outputFolderFile;
+    private File inputFolderFile;
+    private Label status;
+    private Label lblName;
+    private TextField sceneName;
+
+    private Label textureInfo = new Label("0");
+    private Label fontInfo = new Label("0");
+    private Label nodeInfo = new Label("0");
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        VBox box = new VBox();
+        primaryStage.setTitle("Parser");
+
+        scene = new javafx.scene.Scene(box, 500, 300);
+
+        chooseInputFolder = new Button("Choose input");
+        chooseOutPutFolder = new Button("Choose output");
+        btnConvert = new Button("Convert");
+        inputFolder = new Label("Choose input folder");
+        outPutFolder = new Label("Choose output folder");
+        HBox hboxInput = new HBox(chooseInputFolder, inputFolder);
+        hboxInput.setSpacing(10);
+        hboxInput.setAlignment(Pos.CENTER_LEFT);
+        HBox hboxOutput = new HBox(chooseOutPutFolder, outPutFolder);
+        hboxOutput.setAlignment(Pos.CENTER_LEFT);
+        hboxOutput.setSpacing(10);
+        status = new Label();
+
+        lblName = new Label();
+        sceneName = new TextField();
+        lblName.textProperty().bind(sceneName.textProperty().concat(".json"));
+        HBox hBoxName = new HBox(sceneName, lblName);
+        hBoxName.setAlignment(Pos.CENTER_LEFT);
+        hBoxName.setSpacing(10);
+        HBox statusHbox = new HBox(status);
+        statusHbox.setAlignment(Pos.CENTER);
+
+
+        HBox texttureHbox = createHbox("Textures:", textureInfo);
+        HBox fontHbox = createHbox("Fonts:", fontInfo);
+        HBox nodeBox = createHbox("Nodes:", nodeInfo);
+
+
+        chooseInputFolder.setOnMousePressed(this::onChooseInputFolder);
+        chooseOutPutFolder.setOnMousePressed(this::onChooseOutputFolder);
+        btnConvert.setOnMousePressed(this::onConvertPressed);
+        box.setSpacing(10);
+        box.setPadding(new Insets(10));
+        box.getChildren().addAll(hboxInput, hboxOutput, hBoxName, btnConvert, statusHbox, texttureHbox, fontHbox, nodeBox);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    private HBox createHbox(String staticLabel, Label dynamicLabel) {
+
+
+        HBox hBoxName = new HBox(new Label(staticLabel), dynamicLabel);
+        hBoxName.setAlignment(Pos.CENTER_LEFT);
+        hBoxName.setSpacing(10);
+        return hBoxName;
+    }
+
+    private void onConvertPressed(MouseEvent mouseEvent) {
+        status.setText("Converted " + new Date());
+    }
+
+    private void onChooseOutputFolder(MouseEvent mouseEvent) {
+        DirectoryChooser chooser = new DirectoryChooser();
+        outputFolderFile = chooser.showDialog(scene.getWindow());
+        if (outputFolderFile != null) {
+            outPutFolder.setText(outputFolderFile.getPath());
+        } else {
+            outPutFolder.setText("Choose output folder");
+        }
+    }
+
+    private void onChooseInputFolder(MouseEvent mouseEvent) {
+        DirectoryChooser chooser = new DirectoryChooser();
+        inputFolderFile = chooser.showDialog(scene.getWindow());
+        if (inputFolderFile != null) {
+            inputFolder.setText(inputFolderFile.getPath());
+        } else {
+            inputFolder.setText("Choose input folder");
+        }
+    }
+
 
     public static void main(String[] args) throws Exception {
 
@@ -74,7 +183,19 @@ public class ParserMain {
         });
 
 
+        processJoints();
         saveNodeToFile(scene);
+
+        launch(args);
+    }
+
+    private static void processJoints() {
+        for (Integer nodeId : nodes.keySet()) {
+            Typeable typeable = nodes.get(nodeId);
+            if (typeable instanceof JsonRevoluteJoint) {
+
+            }
+        }
     }
 
 
@@ -106,8 +227,13 @@ public class ParserMain {
         JsonRigidBody rigidBody = findRigidBody(node);
         if (rigidBody != null) {
             List<JsonColider> coliders = findColiders(node);
-
             Physics physics = new Physics();
+            for (Integer key : nodes.keySet()) {
+                Typeable typeable = nodes.get(key);
+                if (typeable == rigidBody) {
+                    physics.setBodyId(key);
+                }
+            }
             physics.setAngularDamping(rigidBody.get_angularDamping().floatValue());
             physics.setLinearDamping(rigidBody.get_linearDamping().floatValue());
             physics.setBullet(rigidBody.getBullet());
@@ -199,7 +325,7 @@ public class ParserMain {
 
         List<Node> children = new ArrayList<>();
         for (JsonId child : node.get_children()) {
-            JsonNode jsonNode = (JsonNode)nodes.get(child.getId());
+            JsonNode jsonNode = (JsonNode) nodes.get(child.getId());
             Node ch = createNode(jsonNode);
             children.add(ch);
         }
@@ -361,6 +487,32 @@ public class ParserMain {
                         case LABEL:
                             JsonLabel jsonLabel = gson.fromJson(jsonObject, JsonLabel.class);
                             nodes.put(id, jsonLabel);
+                            break;
+                        case WELD_JOINT:
+                            JsonWeldJoint weldJoint = gson.fromJson(jsonObject,JsonWeldJoint.class);
+                            nodes.put(id,weldJoint);
+                            break;
+                        case WHEEL_JOINT:
+                            JsonWheelJoint wheelJoint = gson.fromJson(jsonObject,JsonWheelJoint.class);
+                            nodes.put(id,wheelJoint);
+                            break;
+                        case REVOLUTE_JOINT:
+                            JsonRevoluteJoint revoluteJoint = gson.fromJson(jsonObject,JsonRevoluteJoint.class);
+                            nodes.put(id,revoluteJoint);
+                            break;
+                        case DISTANCE_JOINT:
+                            JsonDistanceJoint distanceJoint = gson.fromJson(jsonObject,JsonDistanceJoint.class);
+                            nodes.put(id,distanceJoint);
+                            break;
+                        case ROPE_JOINT:
+                            JsonRopeJoint ropeJoint = gson.fromJson(jsonObject,JsonRopeJoint.class);
+                            nodes.put(id,ropeJoint);
+                            break;
+
+                        case PRISMATIC_JOINT:
+                            JsonPrismaticJoint prismaticJoint = gson.fromJson(jsonObject,JsonPrismaticJoint.class);
+                            nodes.put(id,prismaticJoint);
+
                             break;
                     }
 
