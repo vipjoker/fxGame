@@ -38,8 +38,9 @@ public class SpriteView extends NodeView {
     public void rasterize(GraphicsContext context) {
         transform = context.getTransform();
 
-        double imageY = -height.doubleValue();
-        context.drawImage(image, 0, imageY, width.doubleValue(), height.doubleValue());
+        double h = -height.doubleValue();
+        double w = width.doubleValue();
+        context.drawImage(image, - w * anchorX.doubleValue(), h - (h * anchorY.doubleValue()), width.doubleValue(), height.doubleValue());
 
         if (active) {
             context.setLineWidth(2);

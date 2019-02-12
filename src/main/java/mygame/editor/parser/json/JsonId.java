@@ -1,13 +1,16 @@
 package mygame.editor.parser.json;
 
-public class JsonId {
-    private Integer __id__;
+import com.google.gson.annotations.SerializedName;
 
-    public Integer get__id__() {
-        return __id__;
+public class JsonId {
+    @SerializedName("__id__")
+    private Integer id;
+
+    public Integer getId() {
+        return id;
     }
 
-    public void set__id__(Integer __id__) {
-        this.__id__ = __id__;
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

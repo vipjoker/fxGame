@@ -1,6 +1,7 @@
 package mygame.editor.parser.json;
 
 import com.google.gson.JsonSerializationContext;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
@@ -11,18 +12,19 @@ public class JsonNode extends Typeable{
     private List<JsonId> _children;
     private Integer _tag;
     private Boolean _active;
-    private List<JsonId> _components;
+    @SerializedName("_components")
+
+    private List<JsonId> components;
     private Object _prefab;
     private String _id;
     private Integer _opacity;
     private JsonColor _color;
     private Boolean _cascadeOpacityEnabled;
     private JsonVec2 _anchorPoint;
+    private JsonVec2 _scale;
     private JsonSize _contentSize;
-    private Double _rotationX;
-    private Double _rotationY;
-    private Double _scaleX;
-    private Double _scaleY;
+    private JsonQuat _quat;
+
     private JsonVec2 _position;
     private Double _skewX;
     private Double _skewY;
@@ -79,12 +81,12 @@ public class JsonNode extends Typeable{
         this._active = _active;
     }
 
-    public List<JsonId> get_components() {
-        return _components;
+    public List<JsonId> getComponents() {
+        return components;
     }
 
-    public void set_components(List<JsonId> _components) {
-        this._components = _components;
+    public void setComponents(List<JsonId> components) {
+        this.components = components;
     }
 
     public Object get_prefab() {
@@ -143,36 +145,20 @@ public class JsonNode extends Typeable{
         this._contentSize = _contentSize;
     }
 
-    public Double get_rotationX() {
-        return _rotationX;
+    public JsonQuat get_quat() {
+        return _quat;
     }
 
-    public void set_rotationX(Double _rotationX) {
-        this._rotationX = _rotationX;
+    public void set_quat(JsonQuat _quat) {
+        this._quat = _quat;
     }
 
-    public Double get_rotationY() {
-        return _rotationY;
+    public JsonVec2 get_scale() {
+        return _scale;
     }
 
-    public void set_rotationY(Double _rotationY) {
-        this._rotationY = _rotationY;
-    }
-
-    public Double get_scaleX() {
-        return _scaleX;
-    }
-
-    public void set_scaleX(Double _scaleX) {
-        this._scaleX = _scaleX;
-    }
-
-    public Double get_scaleY() {
-        return _scaleY;
-    }
-
-    public void set_scaleY(Double _scaleY) {
-        this._scaleY = _scaleY;
+    public void set_scale(JsonVec2 _scale) {
+        this._scale = _scale;
     }
 
     public JsonVec2 get_position() {

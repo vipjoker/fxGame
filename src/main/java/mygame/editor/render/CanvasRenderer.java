@@ -21,6 +21,7 @@ import mygame.editor.TimerCounter;
 import mygame.editor.model.Node;
 import mygame.editor.util.Callback;
 import mygame.editor.util.Constants;
+import mygame.editor.util.TraverseUtil;
 import mygame.editor.views.NodeView;
 import mygame.editor.views.Global;
 import mygame.editor.views.Grid;
@@ -156,6 +157,25 @@ public class CanvasRenderer {
     private void handleSelect(Point2D point) {
 
         App.instance.selected.clear();
+
+
+        NodeView found = TraverseUtil.find(getNodes(), node -> {
+                    if (node.getParent() != null) {
+
+                        Point2D point2D = node.getParent().convertToLocalSpace(point);
+                        return node.contains(point2D);
+                    } else {
+                        return node.contains(point);
+                    }
+                }
+
+
+        );
+
+        if (found != null && found.getClickListener() != null) {
+            found.getClickListener().onClick(found);
+
+        }
         for (NodeView ccNode : getNodes()) {
             traverse(ccNode, n -> {
                 boolean contains;
@@ -168,7 +188,7 @@ public class CanvasRenderer {
                 }
 
                 if (contains) {
-                    if(n.getClickListener() != null){
+                    if (n.getClickListener() != null) {
                         n.getClickListener().onClick(n);
                     }
                 }

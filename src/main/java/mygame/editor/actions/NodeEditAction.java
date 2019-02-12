@@ -15,6 +15,7 @@ import mygame.editor.repository.NodeModel;
 import mygame.editor.util.Callback;
 import mygame.editor.util.Constants;
 import mygame.editor.util.ImageUtil;
+import mygame.editor.util.TraverseUtil;
 import mygame.editor.views.CcEditBodyNode;
 import mygame.editor.views.NodeView;
 import mygame.editor.views.SpriteView;
@@ -116,13 +117,16 @@ public class NodeEditAction extends Action implements CanvasRenderer.OnCanvasDra
         nodeView.getAngle().addListener((observable, oldValue, newValue)
                 -> node.setAngle(newValue.doubleValue()));
 
-        nodeView.setClickListener(view -> {
-            if (App.instance.selected.contains(node)) {
-                App.instance.selected.remove(node);
 
-            } else {
-                App.instance.selected.add(node);
-            }
+
+
+        nodeView.setClickListener(view -> {
+            App.instance.selected.clear();
+            App.instance.selected.add(node);
+
+            TraverseUtil.action(mRenderer.getNodes(), nv -> {
+                nv.setActive(false);
+            });
             view.setActive(!view.active);
         });
 
@@ -136,7 +140,13 @@ public class NodeEditAction extends Action implements CanvasRenderer.OnCanvasDra
 
         node.getWidth().addListener((observable, oldValue, newValue) -> nodeView.setWidth(newValue.doubleValue()));
         node.getHeight().addListener((observable, oldValue, newValue) -> nodeView.setHeight(newValue.doubleValue()));
-
+        node.getAnchor().addListener(new ChangeListener<Point>() {
+            @Override
+            public void changed(ObservableValue<? extends Point> observable, Point oldValue, Point newValue) {
+                nodeView.setAnchorX(newValue.getX().doubleValue());
+                nodeView.setAnchorY(newValue.getY().doubleValue());
+            }
+        });
         if (node.getPhysics() != null) {
             switch (node.getPhysics().getShape().get()) {
                 case Physics.CIRCLE:
@@ -149,6 +159,26 @@ public class NodeEditAction extends Action implements CanvasRenderer.OnCanvasDra
                     nodeView.setEditBody(CcEditBodyNode.createRect(node.getPhysics().getWidth().doubleValue(), node.getPhysics().getHeight().doubleValue()));
                     break;
             }
+
+            node.getPhysics().addListener(new ChangeListener<Physics>() {
+                @Override
+                public void changed(ObservableValue<? extends Physics> observable, Physics oldValue, Physics newValue) {
+                    System.out.println("Changed");
+                    switch (node.getPhysics().getShape().get()) {
+                        case Physics.CIRCLE:
+                            nodeView.setEditBody(CcEditBodyNode.createCircle(node.getPhysics().getRadius().doubleValue()));
+                            break;
+                        case Physics.CHAIN:
+                            nodeView.setEditBody(CcEditBodyNode.createChain(node.getPhysics().getPoints()));
+                            break;
+                        case Physics.RECT:
+                            nodeView.setEditBody(CcEditBodyNode.createRect(node.getPhysics().getWidth().doubleValue(), node.getPhysics().getHeight().doubleValue()));
+                            break;
+                    }
+                }
+            });
+
+
         }
 
 

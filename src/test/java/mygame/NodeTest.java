@@ -86,6 +86,23 @@ public class NodeTest {
     }
 
     @Test
+    public void testPhysicsPointsProperty(){
+        result = false;
+        Physics physics = new Physics();
+        physics.setShape(Physics.CHAIN);
+        physics.addListener(new ChangeListener<Physics>() {
+            @Override
+            public void changed(ObservableValue<? extends Physics> observable, Physics oldValue, Physics newValue) {
+                result  = true;
+            }
+        });
+        physics.getPoints().get(0).set(777,777);
+        assertTrue(result);
+    }
+
+
+
+    @Test
     public void testPhysicsDensityProperty(){
         result = false;
         Physics physics = new Physics();
@@ -297,4 +314,7 @@ public class NodeTest {
         node.setPhysics(new Physics());
         assertTrue(result);
     }
+
+
+
 }

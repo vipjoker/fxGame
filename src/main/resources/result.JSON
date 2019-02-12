@@ -1,0 +1,541 @@
+{
+  "children": [
+    {
+      "children": [],
+      "name": "New Node",
+      "type": "node",
+      "positionX": 464.6,
+      "positionY": 390.2,
+      "angle": 0.0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "physics": {
+        "type": "static",
+        "linearDamping": 0.0,
+        "angularDamping": 0.0,
+        "linearVelocityX": 0.0,
+        "linearVelocityY": 0.0,
+        "angularVelocity": 0.0,
+        "isBullet": false,
+        "fixedRotation": false,
+        "shapes": [
+          {
+            "density": 1.0,
+            "sensor": false,
+            "friction": 0.2,
+            "restitution": 0.0,
+            "loop": false,
+            "type": "box",
+            "radius": 0.0,
+            "width": 100.0,
+            "height": 100.0
+          }
+        ]
+      }
+    },
+    {
+      "children": [],
+      "name": "arrow",
+      "type": "node",
+      "positionX": 604.0,
+      "positionY": 455.6,
+      "angle": 0.0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "physics": {
+        "type": "dynamic",
+        "linearDamping": 0.0,
+        "angularDamping": 0.0,
+        "linearVelocityX": 0.0,
+        "linearVelocityY": 0.0,
+        "angularVelocity": 0.0,
+        "isBullet": false,
+        "fixedRotation": false,
+        "shapes": [
+          {
+            "density": 1.0,
+            "sensor": false,
+            "friction": 0.2,
+            "restitution": 0.0,
+            "loop": false,
+            "type": "box",
+            "radius": 0.0,
+            "width": 200.0,
+            "height": 8.0
+          }
+        ]
+      }
+    },
+    {
+      "spriteName": "/assets/Texture/bodybike.png",
+      "children": [],
+      "name": "bodybike",
+      "type": "sprite",
+      "positionX": 198.0,
+      "positionY": 206.0,
+      "angle": 0.0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "physics": {
+        "type": "dynamic",
+        "linearDamping": 0.0,
+        "angularDamping": 0.0,
+        "linearVelocityX": 0.0,
+        "linearVelocityY": 0.0,
+        "angularVelocity": 0.0,
+        "isBullet": false,
+        "fixedRotation": false,
+        "shapes": []
+      }
+    },
+    {
+      "spriteName": "/assets/Texture/backBike.png",
+      "children": [],
+      "name": "backBike",
+      "type": "sprite",
+      "positionX": 108.1,
+      "positionY": 158.2,
+      "angle": 0.0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "physics": {
+        "type": "dynamic",
+        "linearDamping": 0.0,
+        "angularDamping": 0.0,
+        "linearVelocityX": 0.0,
+        "linearVelocityY": 0.0,
+        "angularVelocity": 0.0,
+        "isBullet": false,
+        "fixedRotation": false,
+        "shapes": []
+      }
+    },
+    {
+      "spriteName": "/assets/Texture/ball.png",
+      "children": [],
+      "name": "ball",
+      "type": "sprite",
+      "positionX": 77.4,
+      "positionY": 141.5,
+      "angle": 0.0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "physics": {
+        "type": "dynamic",
+        "linearDamping": 0.0,
+        "angularDamping": 0.0,
+        "linearVelocityX": 0.0,
+        "linearVelocityY": 0.0,
+        "angularVelocity": 0.0,
+        "isBullet": false,
+        "fixedRotation": false,
+        "shapes": [
+          {
+            "density": 3.0,
+            "sensor": false,
+            "friction": 0.2,
+            "restitution": 0.0,
+            "loop": false,
+            "type": "circle",
+            "radius": 45.0,
+            "width": 0.0,
+            "height": 0.0
+          }
+        ]
+      }
+    },
+    {
+      "spriteName": "/assets/Texture/ball.png",
+      "children": [],
+      "name": "frontWheel",
+      "type": "sprite",
+      "positionX": 304.3,
+      "positionY": 141.5,
+      "angle": 0.0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "physics": {
+        "type": "dynamic",
+        "linearDamping": 0.0,
+        "angularDamping": 0.0,
+        "linearVelocityX": 0.0,
+        "linearVelocityY": 0.0,
+        "angularVelocity": 0.0,
+        "isBullet": false,
+        "fixedRotation": false,
+        "shapes": [
+          {
+            "density": 1.0,
+            "sensor": false,
+            "friction": 0.2,
+            "restitution": 0.0,
+            "loop": false,
+            "type": "circle",
+            "radius": 45.0,
+            "width": 0.0,
+            "height": 0.0
+          }
+        ]
+      }
+    },
+    {
+      "children": [],
+      "name": "dollBody",
+      "type": "node",
+      "positionX": 164.0,
+      "positionY": 485.0,
+      "angle": 0.0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "physics": {
+        "type": "dynamic",
+        "linearDamping": 0.0,
+        "angularDamping": 0.0,
+        "linearVelocityX": 0.0,
+        "linearVelocityY": 0.0,
+        "angularVelocity": 0.0,
+        "isBullet": false,
+        "fixedRotation": false,
+        "shapes": [
+          {
+            "density": 1.0,
+            "sensor": false,
+            "friction": 0.2,
+            "restitution": 0.0,
+            "loop": false,
+            "type": "box",
+            "radius": 0.0,
+            "width": 40.0,
+            "height": 100.0
+          }
+        ]
+      }
+    },
+    {
+      "children": [],
+      "name": "ballBody",
+      "type": "node",
+      "positionX": 168.0,
+      "positionY": 597.0,
+      "angle": 0.0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "physics": {
+        "type": "dynamic",
+        "linearDamping": 0.0,
+        "angularDamping": 0.0,
+        "linearVelocityX": 0.0,
+        "linearVelocityY": 0.0,
+        "angularVelocity": 0.0,
+        "isBullet": false,
+        "fixedRotation": false,
+        "shapes": [
+          {
+            "density": 1.0,
+            "sensor": false,
+            "friction": 0.2,
+            "restitution": 0.0,
+            "loop": false,
+            "type": "circle",
+            "radius": 40.0,
+            "width": 0.0,
+            "height": 0.0
+          }
+        ]
+      }
+    },
+    {
+      "children": [],
+      "name": "legUp",
+      "type": "node",
+      "positionX": 206.0,
+      "positionY": 409.0,
+      "angle": 57.0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "physics": {
+        "type": "dynamic",
+        "linearDamping": 0.0,
+        "angularDamping": 0.0,
+        "linearVelocityX": 0.0,
+        "linearVelocityY": 0.0,
+        "angularVelocity": 0.0,
+        "isBullet": false,
+        "fixedRotation": false,
+        "shapes": [
+          {
+            "density": 1.0,
+            "sensor": false,
+            "friction": 0.2,
+            "restitution": 0.0,
+            "loop": false,
+            "type": "box",
+            "radius": 0.0,
+            "width": 25.0,
+            "height": 90.0
+          }
+        ]
+      }
+    },
+    {
+      "children": [],
+      "name": "legDown",
+      "type": "node",
+      "positionX": 223.0,
+      "positionY": 347.0,
+      "angle": 39.0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "physics": {
+        "type": "dynamic",
+        "linearDamping": 0.0,
+        "angularDamping": 0.0,
+        "linearVelocityX": 0.0,
+        "linearVelocityY": 0.0,
+        "angularVelocity": 0.0,
+        "isBullet": false,
+        "fixedRotation": false,
+        "shapes": [
+          {
+            "density": 1.0,
+            "sensor": false,
+            "friction": 0.2,
+            "restitution": 0.0,
+            "loop": false,
+            "type": "box",
+            "radius": 0.0,
+            "width": 25.0,
+            "height": 80.0
+          }
+        ]
+      }
+    },
+    {
+      "children": [],
+      "name": "armDown",
+      "type": "node",
+      "positionX": 206.0,
+      "positionY": 522.0,
+      "angle": 20.0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "physics": {
+        "type": "dynamic",
+        "linearDamping": 0.0,
+        "angularDamping": 0.0,
+        "linearVelocityX": 0.0,
+        "linearVelocityY": 0.0,
+        "angularVelocity": 0.0,
+        "isBullet": false,
+        "fixedRotation": false,
+        "shapes": [
+          {
+            "density": 1.0,
+            "sensor": false,
+            "friction": 0.2,
+            "restitution": 0.0,
+            "loop": false,
+            "type": "box",
+            "radius": 0.0,
+            "width": 80.0,
+            "height": 20.0
+          }
+        ]
+      }
+    },
+    {
+      "children": [],
+      "name": "armUp",
+      "type": "node",
+      "positionX": 278.0,
+      "positionY": 512.0,
+      "angle": 20.0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "physics": {
+        "type": "dynamic",
+        "linearDamping": 0.0,
+        "angularDamping": 0.0,
+        "linearVelocityX": 0.0,
+        "linearVelocityY": 0.0,
+        "angularVelocity": 0.0,
+        "isBullet": false,
+        "fixedRotation": false,
+        "shapes": [
+          {
+            "density": 1.0,
+            "sensor": false,
+            "friction": 0.2,
+            "restitution": 0.0,
+            "loop": false,
+            "type": "box",
+            "radius": 0.0,
+            "width": 90.0,
+            "height": 20.0
+          }
+        ]
+      }
+    },
+    {
+      "children": [
+        {
+          "spriteName": "/assets/Texture/248.png",
+          "children": [],
+          "name": "248",
+          "type": "sprite",
+          "positionX": 103.0,
+          "positionY": 120.0,
+          "angle": 0.0,
+          "scaleX": 1.0,
+          "scaleY": 1.0
+        },
+        {
+          "spriteName": "/assets/Texture/252.png",
+          "children": [],
+          "name": "252",
+          "type": "sprite",
+          "positionX": 108.4,
+          "positionY": 37.8,
+          "angle": 33.0,
+          "scaleX": 1.0,
+          "scaleY": 1.0
+        },
+        {
+          "spriteName": "/assets/Texture/256.png",
+          "children": [],
+          "name": "256",
+          "type": "sprite",
+          "positionX": 100.0,
+          "positionY": 64.3,
+          "angle": 46.0,
+          "scaleX": 1.0,
+          "scaleY": 1.0
+        },
+        {
+          "spriteName": "/assets/Texture/260.png",
+          "children": [],
+          "name": "260",
+          "type": "sprite",
+          "positionX": 93.3,
+          "positionY": 92.8,
+          "angle": 13.0,
+          "scaleX": 1.0,
+          "scaleY": 1.0
+        },
+        {
+          "spriteName": "/assets/Texture/244.png",
+          "children": [],
+          "name": "244",
+          "type": "sprite",
+          "positionX": 123.6,
+          "positionY": 84.7,
+          "angle": 70.0,
+          "scaleX": 1.0,
+          "scaleY": 1.0
+        },
+        {
+          "spriteName": "/assets/Texture/240.png",
+          "children": [],
+          "name": "240",
+          "type": "sprite",
+          "positionX": 105.8,
+          "positionY": 96.8,
+          "angle": 33.0,
+          "scaleX": 1.0,
+          "scaleY": 1.0
+        }
+      ],
+      "name": "biker",
+      "type": "node",
+      "positionX": 483.0,
+      "positionY": -19.0,
+      "angle": 0.0,
+      "scaleX": 4.0,
+      "scaleY": 4.0
+    },
+    {
+      "children": [],
+      "name": "ground",
+      "type": "node",
+      "positionX": -132.0,
+      "positionY": -24.0,
+      "angle": 0.0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "physics": {
+        "type": "static",
+        "linearDamping": 0.0,
+        "angularDamping": 0.0,
+        "linearVelocityX": 0.0,
+        "linearVelocityY": 0.0,
+        "angularVelocity": 0.0,
+        "isBullet": false,
+        "fixedRotation": false,
+        "shapes": [
+          {
+            "density": 1.0,
+            "sensor": false,
+            "friction": 0.2,
+            "restitution": 0.0,
+            "loop": false,
+            "type": "chain",
+            "radius": 0.0,
+            "width": 0.0,
+            "height": 0.0,
+            "points": [
+              {
+                "x": 583.9,
+                "y": 145.0
+              },
+              {
+                "x": 249.2,
+                "y": 48.0
+              },
+              {
+                "x": 166.6,
+                "y": 69.6
+              },
+              {
+                "x": -114.7,
+                "y": 199.0
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "children": [],
+      "name": "kinematicBody",
+      "type": "node",
+      "positionX": 5.1,
+      "positionY": 315.8,
+      "angle": 0.0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "physics": {
+        "type": "kinematic",
+        "linearDamping": 0.0,
+        "angularDamping": 0.0,
+        "linearVelocityX": 0.0,
+        "linearVelocityY": 0.0,
+        "angularVelocity": 0.0,
+        "isBullet": false,
+        "fixedRotation": false,
+        "shapes": [
+          {
+            "density": 1.0,
+            "sensor": false,
+            "friction": 0.2,
+            "restitution": 0.0,
+            "loop": false,
+            "type": "box",
+            "radius": 0.0,
+            "width": 100.0,
+            "height": 100.0
+          }
+        ]
+      }
+    }
+  ]
+}

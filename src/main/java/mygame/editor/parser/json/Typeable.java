@@ -1,14 +1,18 @@
 
 package mygame.editor.parser.json;
-public abstract class Typeable {
-    protected String __type__;
 
-    public String get__type__() {
-        return __type__;
+import com.google.gson.annotations.SerializedName;
+
+public abstract class Typeable {
+    @SerializedName("__type__")
+    protected String type;
+
+    public String getType() {
+        return type;
     }
 
-    public void set__type__(String __type__) {
-        this.__type__ = __type__;
+    public void setType(String type) {
+        this.type = type;
     }
 }
 

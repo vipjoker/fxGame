@@ -1,13 +1,16 @@
 package mygame.editor.parser.json;
 
-public class JsonSpriteFrame {
-    private String __uuid__;
+import com.google.gson.annotations.SerializedName;
 
-    public String get__uuid__() {
-        return __uuid__;
+public class JsonSpriteFrame {
+    @SerializedName("__uuid__")
+    private String uuid;
+
+    public String getUuid() {
+        return uuid;
     }
 
-    public void set__uuid__(String __uuid__) {
-        this.__uuid__ = __uuid__;
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 }

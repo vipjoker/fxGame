@@ -1,11 +1,13 @@
 package mygame.editor.parser;
 
+import com.badlogic.gdx.math.Quaternion;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import mygame.editor.parser.json.*;
+import mygame.editor.parser.model.*;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -19,7 +21,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ParserMain {
-    static final String SCENE_ASSET = "cc.SceneAsset";
     static final String NODE = "cc.Node";
     static final String SCENE = "cc.Scene";
     static final String SPRITE = "cc.Sprite";
@@ -28,51 +29,223 @@ public class ParserMain {
     static final String CIRCLE_COLLIDER = "cc.PhysicsCircleCollider";
     static final String BOX_COLLIDER = "cc.PhysicsBoxCollider";
     static final String CHAIN_COLLIDER = "cc.PhysicsChainCollider";
+    static final String POLYGON_COLLIDER = "cc.PhysicsPolygonCollider";
+
     static final String LABEL = "cc.Label";
 
     static Gson gson = new Gson();
-    public static Map<Integer,Typeable> nodes = new HashMap<>();
-
-
-
+    public static Map<Integer, Typeable> nodes = new HashMap<>();
+    public static Map<String, Texture> textures = new HashMap<>();
+    public static List<Font> fonts = new ArrayList<>();
 
     public static void main(String[] args) throws Exception {
 
-        List<Texture> textures = new ArrayList<>();
-        List<Font> fonts = new ArrayList<>();
 
         parseTextures("/assets/Texture/", textures);
         parseFonts("/assets/Fonts/", fonts);
         parseScene("/assets/Scene/");
 
 
+        for (String key : textures.keySet()) {
+            Texture texture = textures.get(key);
+            System.out.println(texture.getUuID() + " -> " + texture.getPath());
 
-        for (Texture texture : textures) {
-            System.out.println(texture.getUuID());
-            System.out.println(texture.getPath());
         }
         System.out.println("*******************FONT********************");
         for (Font font : fonts) {
-            System.out.println(font.getPath());
-            System.out.println(font.getUuid());
+            System.out.println(font.getPath() + " -> " + font.getUuid());
+
         }
-        nodes.forEach((k,v)->{
-            System.out.println("Key :" + k + " v : " + v);
+        Scene scene = new Scene();
+        List<Node> children = new ArrayList<>();
+        scene.setChildren(children);
+        nodes.forEach((k, v) -> {
+            if (SCENE.equals(v.getType())) {
+                JsonScene jsonScene = (JsonScene) v;
+                System.out.println("scene found");
+
+                for (JsonId child : jsonScene.getChildren()) {
+                    JsonNode jsonNode = (JsonNode) nodes.get(child.getId());
+                    Node node = createNode(jsonNode);
+                    children.add(node);
+                }
+            }
+
+        });
 
 
-
-
-
-        } );
-
-
-
-
-
+        saveNodeToFile(scene);
     }
 
 
-    private static void parseTextures(String path, List<Texture> list) {
+    private static Node createNode(JsonNode node) {
+        Node n = null;
+
+        JsonSprite sprite = findSprite(node);
+        if (sprite != null) {
+            System.out.println("Sprite found");
+            n = new Sprite();
+            String uuid = sprite.get_spriteFrame().getUuid();
+            Texture texture = textures.get(uuid);
+
+            if (texture != null) {
+                ((Sprite) n).setSpriteName(texture.getPath());
+                n.setType("sprite");
+                System.out.println("frame found " + texture.getPath());
+            } else {
+                System.out.println(uuid + " not found");
+            }
+
+        }
+
+        if (n == null) {
+            n = new Node();
+            n.setType("node");
+
+        }
+        JsonRigidBody rigidBody = findRigidBody(node);
+        if (rigidBody != null) {
+            List<JsonColider> coliders = findColiders(node);
+
+            Physics physics = new Physics();
+            physics.setAngularDamping(rigidBody.get_angularDamping().floatValue());
+            physics.setLinearDamping(rigidBody.get_linearDamping().floatValue());
+            physics.setBullet(rigidBody.getBullet());
+            physics.setFixedRotation(rigidBody.get_fixedRotation());
+            physics.setAngularVelocity(rigidBody.get_angularVelocity().floatValue());
+            physics.setLinearVelocityX(rigidBody.get_linearVelocity().getX().floatValue());
+            physics.setLinearVelocityY(rigidBody.get_linearVelocity().getY().floatValue());
+            switch (rigidBody.get_type()) {
+                case 0:
+                    physics.setType("static");
+                    break;
+                case 1:
+                    physics.setType("kinematic");
+                    break;
+                case 2:
+                    physics.setType("dynamic");
+                    break;
+            }
+
+            List<Shape> shapes = new ArrayList<>();
+            for (JsonColider colider : coliders) {
+                Shape shape = new Shape();
+                shape.setDensity(colider.getDensity());
+                shape.setFriction(colider.getFriction());
+                shape.setRestitution(colider.getRestitution());
+                shape.setSensor(colider.getSensor());
+                if (colider instanceof JsonBoxCollider) {
+
+                    JsonBoxCollider boxCollider = (JsonBoxCollider) colider;
+                    shape.setType("box");
+                    shape.setWidth(boxCollider.getSize().getWidth());
+                    shape.setHeight(boxCollider.getSize().getHeight());
+
+                } else if (colider instanceof JsonCircleColider) {
+                    shape.setType("circle");
+                    JsonCircleColider circleColider = (JsonCircleColider) colider;
+                    shape.setRadius(circleColider.getRadius().floatValue());
+
+                } else if (colider instanceof JsonChainCollider) {
+                    shape.setType("chain");
+                    JsonChainCollider chainCollider = (JsonChainCollider) colider;
+                    List<Point> points = new ArrayList<>();
+                    for (JsonVec2 point : chainCollider.getPoints()) {
+                        Point p = new Point(point.getX().floatValue(), point.getY().floatValue());
+                        points.add(p);
+                    }
+                    shape.setPoints(points);
+                    shape.setLoop(chainCollider.getLoop());
+
+
+                } else if (colider instanceof JsonPolygonCollider) {
+                    shape.setType("polygon");
+                    JsonPolygonCollider polygonCollider = (JsonPolygonCollider) colider;
+                    List<Point> points = new ArrayList<>();
+                    for (JsonVec2 point : polygonCollider.getPoints()) {
+                        Point p = new Point(point.getX().floatValue(), point.getY().floatValue());
+                        points.add(p);
+                    }
+                    shape.setPoints(points);
+
+                }
+
+                shapes.add(shape);
+            }
+            physics.setShapes(shapes);
+            n.setPhysics(physics);
+
+
+        }
+
+
+        n.setName(node.get_name());
+        n.setPositionX(node.get_position().getX().floatValue());
+        n.setPositionY(node.get_position().getY().floatValue());
+        Double rotationz = node.get_quat().getZ();
+        Double rotationw = node.get_quat().getW();
+
+
+        Quaternion quaternion = new Quaternion();
+        quaternion.w = rotationw.floatValue();
+        quaternion.z = rotationz.floatValue();
+        float angle = Math.round(quaternion.getAngle());
+
+
+//        float  deg = (float) (rad * (180 / Math.PI));
+        n.setAngle(angle);
+        n.setScaleX(node.get_scale().getX().floatValue());
+        n.setScaleY(node.get_scale().getY().floatValue());
+
+        List<Node> children = new ArrayList<>();
+        for (JsonId child : node.get_children()) {
+            JsonNode jsonNode = (JsonNode)nodes.get(child.getId());
+            Node ch = createNode(jsonNode);
+            children.add(ch);
+        }
+        n.setChildren(children);
+        return n;
+    }
+
+    private static JsonSprite findSprite(JsonNode node) {
+        for (JsonId component : node.getComponents()) {
+            Typeable typeable = nodes.get(component.getId());
+            if (typeable instanceof JsonSprite) {
+                return (JsonSprite) typeable;
+            }
+        }
+
+        return null;
+    }
+
+
+    private static JsonRigidBody findRigidBody(JsonNode node) {
+        for (JsonId component : node.getComponents()) {
+            Typeable typeable = nodes.get(component.getId());
+            if (typeable instanceof JsonRigidBody) {
+                return (JsonRigidBody) typeable;
+            }
+        }
+        return null;
+    }
+
+    private static List<JsonColider> findColiders(JsonNode node) {
+        List<JsonColider> coliders = new ArrayList<>();
+        for (JsonId component : node.getComponents()) {
+            Typeable typeable = nodes.get(component.getId());
+            if (typeable instanceof JsonChainCollider) {
+                coliders.add((JsonChainCollider) typeable);
+            } else if (typeable instanceof JsonCircleColider) {
+                coliders.add((JsonCircleColider) typeable);
+            } else if (typeable instanceof JsonBoxCollider) {
+                coliders.add((JsonBoxCollider) typeable);
+            }
+        }
+        return coliders;
+
+    }
+
+    private static void parseTextures(String path, Map<String, Texture> list) {
         try {
             URL assets = ParserMain.class.getResource(path);
             File dir = new File(assets.toURI());
@@ -95,7 +268,7 @@ public class ParserMain {
                 text.setHeight(textureMeta.getHeight());
                 text.setWidth(textureMeta.getWidth());
                 text.setPath(path + file.getName());
-                list.add(text);
+                list.put(textureMeta.getUuid(), text);
 
             }
 
@@ -141,7 +314,7 @@ public class ParserMain {
 
                 JsonArray array = fileToJson(file, JsonArray.class);
 
-                int id  = 1;
+                int id = 0;
                 for (JsonElement jsonElement : array) {
                     JsonObject jsonObject = jsonElement.getAsJsonObject();
                     String type = jsonObject.get("__type__").getAsString();
@@ -149,13 +322,9 @@ public class ParserMain {
 
                     System.out.println(type);
                     switch (type) {
-                        case SCENE_ASSET:
-                            JsonSceneAsset jsonSceneAsset = gson.fromJson(jsonObject, JsonSceneAsset.class);
-                            nodes.put(id, jsonSceneAsset);
-                            break;
                         case NODE:
                             JsonNode jsonNode = gson.fromJson(jsonObject, JsonNode.class);
-                            nodes.put(id,jsonNode);
+                            nodes.put(id, jsonNode);
                             break;
                         case SPRITE:
                             JsonSprite jsonSprite = gson.fromJson(jsonObject, JsonSprite.class);
@@ -170,7 +339,7 @@ public class ParserMain {
                             nodes.put(id, rigidBody);
                             break;
                         case CIRCLE_COLLIDER:
-                            JsonCircleColider circleColider = gson.fromJson(jsonObject,JsonCircleColider.class);
+                            JsonCircleColider circleColider = gson.fromJson(jsonObject, JsonCircleColider.class);
                             nodes.put(id, circleColider);
                             break;
                         case BOX_COLLIDER:
@@ -181,6 +350,10 @@ public class ParserMain {
                             JsonChainCollider jsonChainCollider = gson.fromJson(jsonObject, JsonChainCollider.class);
                             nodes.put(id, jsonChainCollider);
                             break;
+
+                        case POLYGON_COLLIDER:
+                            JsonPolygonCollider polygonCollider = gson.fromJson(jsonObject, JsonPolygonCollider.class);
+                            nodes.put(id, polygonCollider);
                         case CANVAS:
                             JsonCanvas jsonCanvas = gson.fromJson(jsonObject, JsonCanvas.class);
                             nodes.put(id, jsonCanvas);
@@ -210,5 +383,11 @@ public class ParserMain {
             e.printStackTrace();
         }
         return null;
+    }
+
+
+    private static void saveNodeToFile(Scene scene) {
+        String json = gson.toJson(scene);
+        System.out.println(json);
     }
 }

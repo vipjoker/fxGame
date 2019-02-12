@@ -1,8 +1,6 @@
 package mygame.editor.ui;
 
 import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.Property;
-import javafx.beans.property.StringProperty;
 import javafx.scene.Cursor;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -18,11 +16,11 @@ public class SlideableTextField extends AnchorPane {
     private double lastX;
     private double lastValue;
     private DoubleProperty property;
-    private double precission;
+    private double precision;
 
     public SlideableTextField(String name,double precission) {
         super();
-        this.precission = precission;
+        this.precision = precission;
         setPrefHeight(40);
 
 
@@ -66,7 +64,10 @@ public class SlideableTextField extends AnchorPane {
             double deltaX = newX - lastX ;
             double value = deltaX + lastValue;
             lastValue = value;
-            double reminder = value % precission;
+            if(precision < 1){
+                value = value /100.0;
+            }
+            double reminder = value % precision;
 
             property.set(value - reminder);
             lastX = newX;

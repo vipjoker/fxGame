@@ -1,11 +1,14 @@
 package mygame.editor.parser.json;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
-public class JsonScene extends Typeable{
+public class JsonScene extends Typeable {
     private Integer _objFlags;
     private Object _parent;
-    private List<JsonId> _children;
+    @SerializedName("_children")
+    private List<JsonId> children;
     private Integer _tag;
     private Boolean _active;
     private List<JsonId> _components;
@@ -38,12 +41,12 @@ public class JsonScene extends Typeable{
         this._parent = _parent;
     }
 
-    public List<JsonId> get_children() {
-        return _children;
+    public List<JsonId> getChildren() {
+        return children;
     }
 
-    public void set_children(List<JsonId> _children) {
-        this._children = _children;
+    public void set_children(List<JsonId> children) {
+        this.children = children;
     }
 
     public Integer get_tag() {

@@ -1,11 +1,14 @@
 package mygame.editor.model;
 
 import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.util.Callback;
 import org.apache.regexp.RE;
 
 import java.util.ArrayList;
@@ -32,7 +35,12 @@ public class Physics implements ObservableValue<Physics> {
     private final DoubleProperty height = new SimpleDoubleProperty(0);
     private final Point center = new Point(0,0);
     private DoubleProperty radius = new SimpleDoubleProperty(0);
-    private ObservableList<Point> points = FXCollections.observableArrayList();
+    private final ObservableList<Point> points = FXCollections.observableArrayList(new Callback<Point, Observable[]>() {
+        @Override
+        public Observable[] call(Point param) {
+            return new Observable[]{param.getX(),param.getY()};
+        }
+    });
 
     private final List<ChangeListener<? super Physics>> listeners = new ArrayList<>();
 
@@ -96,6 +104,13 @@ public class Physics implements ObservableValue<Physics> {
         radius.addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                notifyChanges();
+            }
+        });
+
+        points.addListener(new ListChangeListener<Point>() {
+            @Override
+            public void onChanged(Change<? extends Point> c) {
                 notifyChanges();
             }
         });
@@ -205,7 +220,8 @@ public class Physics implements ObservableValue<Physics> {
     }
 
     public void setPoints(ObservableList<Point> points) {
-        this.points = points;
+        this.points.clear();
+        this.points.addAll(points);
     }
 
     @Override
