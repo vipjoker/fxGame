@@ -1,11 +1,9 @@
 package physicsPort;
 
-import com.badlogic.gdx.Input;
 import javafx.scene.input.MouseEvent;
 import physicsPort.body.*;
 import physicsPort.viewport.InputHandler;
 import physicsPort.viewport.Navigator;
-import sun.security.provider.SHA;
 
 import java.util.ArrayList;
 import java.util.List;

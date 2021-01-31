@@ -27,7 +27,6 @@ public class Renderer {
 
     public Image[] jointAnchors;
     private double fontSize = 10 * 1.06;
-    ;
 
     // to render viewport
     public Renderer(GraphicsContext context) {
@@ -70,14 +69,12 @@ public class Renderer {
         this.renderBox(v.x, v.y, v.width, v.height, true);
     }
 
-    ;
 
     public void setStageWidthHeight(float w, float h) {
         this.width = w;
         this.height = h;
     }
 
-    ;
 
     public void renderJoint(Joint joint) {
         this.context.save();
@@ -398,8 +395,6 @@ public class Renderer {
         // this.context.fillRect(shape.centroid[0] - 5, shape.centroid[1] - 5, 10, 10);
     }
 
-    ;
-
     public void renderGrid(int range) {
         int cell_size = 10;
         for (int x = -range; x <= range; x += cell_size) {
@@ -478,8 +473,6 @@ public class Renderer {
         }
     }
 
-    ;
-
     public void renderBox(float x, float y, float w, float h, boolean fill) {
         if (fill) this.context.fillRect(x - w / 2, y - h / 2, w, h);
         this.context.strokeRect(x - w / 2, y - h / 2, w, h);
@@ -494,21 +487,15 @@ public class Renderer {
         this.context.stroke();
     }
 
-
-
-
     public void clear(float x, float y, float w, float h) {
         this.context.setFill(this.clearColor);
         this.context.clearRect(x, y, w, h);
         this.context.fillRect(x, y, w, h);
     }
 
-    ;
-
     public GraphicsContext getContext() {
         return context;
     }
-
 
     public void setLineDash(int i, int i1) {
         context.setLineDashes(i,i1);

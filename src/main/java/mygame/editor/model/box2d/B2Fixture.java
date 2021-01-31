@@ -2,7 +2,6 @@ package mygame.editor.model.box2d;
 
 import com.badlogic.gdx.math.Vector2;
 import mygame.editor.interfaces.Editable;
-import physicsPort.triangulation.Vec2;
 
 import java.util.ArrayList;
 import java.util.List;
