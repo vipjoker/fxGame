@@ -46,11 +46,11 @@ public class TestbedMain extends Application {
           new Alert(Alert.AlertType.ERROR).showAndWait();
         });
     
-    BorderPane testbed = new BorderPane();
+    BorderPane parentLayout = new BorderPane();
 
     AnchorPane anchorPane = new AnchorPane();
 
-    TestPanelJavaFX panel = new TestPanelJavaFX(model, controller, testbed);
+    TestPanelJavaFX panel = new TestPanelJavaFX(model, controller, parentLayout);
     model.setPanel(panel);
     model.setDebugDraw(new DebugDrawJavaFX(panel, true));
     TestList.populateModel(model);
@@ -59,12 +59,12 @@ public class TestbedMain extends Application {
 
 
 
-    testbed.setCenter(anchorPane);
+    parentLayout.setCenter(anchorPane);
 
-    testbed.setRight(new ScrollPane(new TestbedSidePanel(model, controller)));
+    parentLayout.setRight(new ScrollPane(new TestbedSidePanel(model, controller)));
     logViewer = new LogViewer();
-    testbed.setBottom(logViewer);
-    Scene scene = new Scene(testbed, TestPanelJavaFX.INIT_WIDTH + 175, TestPanelJavaFX.INIT_HEIGHT);
+    parentLayout.setBottom(logViewer);
+    Scene scene = new Scene(parentLayout, TestPanelJavaFX.INIT_WIDTH + 175, TestPanelJavaFX.INIT_HEIGHT);
     primaryStage.setScene(scene);
     primaryStage.setTitle("JBox2D Testbed");
     primaryStage.show();

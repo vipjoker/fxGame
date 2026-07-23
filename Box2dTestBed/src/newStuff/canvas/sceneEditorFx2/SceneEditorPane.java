@@ -77,11 +77,11 @@ class SceneEditorPane extends BorderPane {
 
 
     private ToolBar createToolbar() {
-        ComboBox<SceneEditorFx2.Tool> toolBox = new ComboBox<>();
-        toolBox.getItems().addAll(SceneEditorFx2.Tool.values());
-        toolBox.setValue(SceneEditorFx2.Tool.SELECT_MOVE);
+        ComboBox<Tool> toolBox = new ComboBox<>();
+        toolBox.getItems().addAll(Tool.values());
+        toolBox.setValue(Tool.SELECT_MOVE);
         toolBox.setOnAction(e -> {
-            SceneEditorFx2.Tool t = toolBox.getValue();
+            Tool t = toolBox.getValue();
             canvas.setTool(t);
             status.setText("Tool: " + t);
         });
@@ -97,8 +97,8 @@ class SceneEditorPane extends BorderPane {
                     Image img = new Image(f.toURI().toString());
                     if (!img.isError()) {
                         canvas.setPendingSprite(img, f.getName());
-                        canvas.setTool(SceneEditorFx2.Tool.ADD_SPRITE);
-                        toolBox.setValue(SceneEditorFx2.Tool.ADD_SPRITE);
+                        canvas.setTool(Tool.ADD_SPRITE);
+                        toolBox.setValue(Tool.ADD_SPRITE);
                         status.setText("Sprite loaded: " + f.getName() + " (click to place)");
                     }
                 } catch (Exception ex) {

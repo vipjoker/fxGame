@@ -24,7 +24,7 @@ class CanvasView extends Region {
     private final Canvas canvas = new Canvas();
     public  final List<SceneObject> objects = new ArrayList<>();
 
-    private SceneEditorFx2.Tool tool = SceneEditorFx2.Tool.SELECT_MOVE;
+    private Tool tool = Tool.SELECT_MOVE;
     private SceneObject selected;
 
     private double scale = 1.0;
@@ -111,9 +111,9 @@ class CanvasView extends Region {
         redraw();
     }
 
-    void setTool(SceneEditorFx2.Tool t) {
+    void setTool(Tool t) {
         this.tool = t;
-        if (t != SceneEditorFx2.Tool.ADD_POLYGON) polygonPoints.clear();
+        if (t != Tool.ADD_POLYGON) polygonPoints.clear();
         creationStart = null;
         redraw();
     }
@@ -376,7 +376,7 @@ class CanvasView extends Region {
         Point2D world = screenToWorld(e.getX(), e.getY());
         didDrag = false;
 
-        if (e.isMiddleButtonDown() || tool == SceneEditorFx2.Tool.PAN) {
+        if (e.isMiddleButtonDown() || tool == Tool.PAN) {
             panning = true;
             return;
         }
@@ -467,7 +467,7 @@ class CanvasView extends Region {
     }
 
     private void onMouseClicked(MouseEvent e) {
-        if (tool == SceneEditorFx2.Tool.ADD_POLYGON && e.getButton() == MouseButton.PRIMARY) {
+        if (tool == Tool.ADD_POLYGON && e.getButton() == MouseButton.PRIMARY) {
             Point2D world = screenToWorld(e.getX(), e.getY());
             if (e.getClickCount() == 2 && polygonPoints.size() >= 3) {
                 objects.add(new PolygonObj(new ArrayList<>(polygonPoints), Utils.randomColor()));
@@ -746,7 +746,7 @@ class CanvasView extends Region {
             }
         }
 
-        if (tool == SceneEditorFx2.Tool.ADD_POLYGON && !polygonPoints.isEmpty()) {
+        if (tool == Tool.ADD_POLYGON && !polygonPoints.isEmpty()) {
             g.setStroke(Color.rgb(255, 255, 255, 0.7));
             g.setLineWidth(1 / scale);
             for (int i = 0; i < polygonPoints.size() - 1; i++) {
@@ -890,7 +890,7 @@ class CanvasView extends Region {
         g.fillText("Objects: " + objects.size() +
                         " | Zoom: " + String.format("%.2fx", scale),
                 LEFT_RULER_W + 8, canvas.getHeight() - BOTTOM_RULER_H - 6);
-        if (tool == SceneEditorFx2.Tool.ADD_POLYGON) {
+        if (tool == Tool.ADD_POLYGON) {
             g.fillText("Polygon mode: click to add points, double-click to finish, ESC to cancel",
                     12, 18);
         }

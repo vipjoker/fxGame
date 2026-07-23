@@ -32,6 +32,9 @@ public class TestList {
 
   public static void populateModel(TestbedModel model) {
     // particles
+    model.addCategory("- Oleh -");
+    model.addTest(new OlehTest());
+
     model.addCategory("- Particles -");
     model.addTest(new BulletTest());
     model.addTest(new DamBreak());
