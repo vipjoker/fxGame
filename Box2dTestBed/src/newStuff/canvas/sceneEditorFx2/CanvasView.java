@@ -670,7 +670,9 @@ class CanvasView extends Region {
 
         for (SceneObject obj : objects) {
             obj.render(g, selected);
-            if (obj == selected) drawSelectionGizmos(g);
+            if (obj == selected) {
+                drawSelectionGizmos(g);
+            }
         }
         drawCreationPreview(g);
         g.restore(); // camera
