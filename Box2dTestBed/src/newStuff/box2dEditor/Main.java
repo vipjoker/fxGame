@@ -6,21 +6,23 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+import java.net.URL;
+
 public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Hello World!");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("main.fxml"));
+        URL resource = getClass().getResource("/main.fxml");
+
+        FXMLLoader loader = new FXMLLoader(resource);
         Parent root = loader.load();
 
-        // If you want to access the controller to e.g. call an init method or bind properties
         MainController controller = loader.getController();
-        // controller.someInit(data);
 
-        Scene scene = new Scene(root);
+        Scene scene = new Scene(root,1280,720);
+
         primaryStage.setScene(scene);
+
         primaryStage.show();
     }
 

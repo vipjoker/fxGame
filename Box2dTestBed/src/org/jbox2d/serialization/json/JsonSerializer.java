@@ -1,7 +1,6 @@
 package org.jbox2d.serialization.json;
 
 import com.google.gson.Gson;
-import org.box2d.proto.Box2D;
 import org.jbox2d.collision.shapes.*;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;

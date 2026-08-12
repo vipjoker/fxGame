@@ -1,5 +1,6 @@
 package org.jbox2d.serialization.json.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class JsonShape {
@@ -8,8 +9,8 @@ public class JsonShape {
     private JsonVec2 center; // circle
     private float radius; // circle
 
-    private List<JsonVec2> points; // polygon, chain
-    private List<JsonVec2> normals; // polygon
+    private List<JsonVec2> points  = new ArrayList<>(); // polygon, chain
+    private List<JsonVec2> normals = new ArrayList<>(); // polygon
     private JsonVec2 centroid; // polygon
 
     private JsonVec2 v0; // edge

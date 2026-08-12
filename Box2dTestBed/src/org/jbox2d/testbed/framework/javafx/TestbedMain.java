@@ -48,18 +48,18 @@ public class TestbedMain extends Application {
     
     BorderPane parentLayout = new BorderPane();
 
-    AnchorPane anchorPane = new AnchorPane();
+//    AnchorPane anchorPane = new AnchorPane();
 
-    TestPanelJavaFX panel = new TestPanelJavaFX(model, controller, parentLayout);
+    TestPanelJavaFX panel = new TestPanelJavaFX(model, controller);
     model.setPanel(panel);
     model.setDebugDraw(new DebugDrawJavaFX(panel, true));
     TestList.populateModel(model);
 
-    anchorPane.getChildren().add(panel);
+    parentLayout.setBottom(panel);
 
 
 
-    parentLayout.setCenter(anchorPane);
+//    parentLayout.setCenter(anchorPane);
 
     parentLayout.setRight(new ScrollPane(new TestbedSidePanel(model, controller)));
     logViewer = new LogViewer();
@@ -70,12 +70,9 @@ public class TestbedMain extends Application {
     primaryStage.show();
     System.out.println(System.getProperty("java.home"));
 
-    Platform.runLater(new Runnable() {
-      @Override
-      public void run() {
-        controller.playTest(0);
-        controller.start();
-      }
+    Platform.runLater(() -> {
+      controller.playTest(0);
+      controller.start();
     });
   }
 

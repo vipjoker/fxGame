@@ -1,5 +1,6 @@
 package org.jbox2d.serialization.json.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class JsonWorld {
@@ -12,8 +13,8 @@ public class JsonWorld {
         private boolean continuousPhysics ;
         private boolean subStepping ;
 
-        private List <JsonBody> bodies;
-        private List<JsonJoint> joints;
+        private List <JsonBody> bodies = new ArrayList<>();
+        private List<JsonJoint> joints = new ArrayList<>();
 
     public long getTag() {
         return tag;

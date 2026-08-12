@@ -47,8 +47,8 @@ import org.jbox2d.serialization.JbSerializer;
 import org.jbox2d.serialization.JbSerializer.ObjectSigner;
 import org.jbox2d.serialization.UnsupportedListener;
 import org.jbox2d.serialization.UnsupportedObjectException;
-import org.jbox2d.serialization.pb.PbDeserializer;
-import org.jbox2d.serialization.pb.PbSerializer;
+import org.jbox2d.serialization.json.JsonDeserializer;
+import org.jbox2d.serialization.json.JsonSerializer;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -117,7 +117,7 @@ public abstract class TestbedTest
     for (int i = 0; i < MAX_CONTACT_POINTS; i++) {
       points[i] = new ContactPoint();
     }
-    serializer = new PbSerializer(this, new SignerAdapter(this) {
+    serializer = new JsonSerializer(this, new SignerAdapter(this) {
       @Override
       public Long getTag(Body argBody) {
         if (isSaveLoadEnabled()) {
@@ -140,7 +140,7 @@ public abstract class TestbedTest
         return super.getTag(argJoint);
       }
     });
-    deserializer = new PbDeserializer(this, new ListenerAdapter(this) {
+    deserializer = new JsonDeserializer(this, new ListenerAdapter(this) {
       @Override
       public void processBody(Body argBody, Long argTag) {
         if (isSaveLoadEnabled()) {

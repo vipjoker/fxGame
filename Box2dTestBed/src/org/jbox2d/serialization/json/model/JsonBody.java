@@ -1,7 +1,7 @@
 package org.jbox2d.serialization.json.model;
 
-import org.box2d.proto.Box2D;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class JsonBody {
@@ -24,7 +24,7 @@ public class JsonBody {
         private boolean active ;
         private boolean fixed_rotation ;
 
-        private List<JsonFixture> fixtures ;
+        private List<JsonFixture> fixtures = new ArrayList<>();
 
     public Long getTag() {
         return tag;
