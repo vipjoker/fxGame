@@ -36,8 +36,6 @@ import org.jbox2d.pooling.arrays.Vec2Array;
  * @author Hallvard Traetteberg JavaFX port
  */
 public class DebugDrawJavaFX extends DebugDraw {
-  public static int circlePoints = 13;
-  public static final float edgeWidth = 0.02f;
 
   private final TestPanelJavaFX panel;
   private final ColorPool<Color> cpool = new ColorPool<Color>() {

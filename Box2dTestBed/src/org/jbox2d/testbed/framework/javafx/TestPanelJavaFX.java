@@ -28,6 +28,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontSmoothingType;
 import org.jbox2d.testbed.framework.AbstractTestbedController;
 import org.jbox2d.testbed.framework.TestbedModel;
 import org.jbox2d.testbed.framework.TestbedPanel;
@@ -49,17 +50,10 @@ public class TestPanelJavaFX extends Canvas implements TestbedPanel {
   
   public TestPanelJavaFX(final TestbedModel model, final AbstractTestbedController controller) {
     super(INIT_WIDTH, INIT_HEIGHT);
-
-
-
     parentProperty().addListener(e -> {
-
               widthProperty().bind(((Pane)getParent()).widthProperty());
               heightProperty().bind(((Pane)getParent()).heightProperty());
             }
-
-
-
     );
 
     this.controller = controller;
@@ -71,8 +65,8 @@ public class TestPanelJavaFX extends Canvas implements TestbedPanel {
     };
     widthProperty().addListener(sizeListener);
     heightProperty().addListener(sizeListener);
-
-    getGraphicsContext2D().setFont(new Font("Courier New", 12));
+    getGraphicsContext2D().setFontSmoothingType(FontSmoothingType.LCD);
+    getGraphicsContext2D().setFont(new Font("Ubuntu Mono", 12));
   }
 
   @Override

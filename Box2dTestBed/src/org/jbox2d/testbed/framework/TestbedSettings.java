@@ -59,9 +59,11 @@ public class TestbedSettings {
   public static final String DrawHelp = "Help";
   public static final String DrawTree = "Dynamic Tree";
   public static final String DrawWireframe = "Wireframe Mode";
-
+  public CreateMode create_mode = CreateMode.NONE;
   public boolean pause = false;
   public boolean singleStep = false;
+
+
 
   private List<TestbedSetting> settings;
   private final Map<String, TestbedSetting> settingsMap;
@@ -121,6 +123,11 @@ public class TestbedSettings {
    * @return
    */
   public TestbedSetting getSetting(String argName) {
+
     return settingsMap.get(argName);
+  }
+
+  public static enum CreateMode {
+    NONE, RECT, CIRCLE, POLY, LINE
   }
 }

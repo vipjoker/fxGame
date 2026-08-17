@@ -16,6 +16,7 @@ import org.jbox2d.dynamics.Fixture;
 import org.jbox2d.dynamics.joints.DistanceJointDef;
 import org.jbox2d.testbed.framework.TestbedSettings;
 import org.jbox2d.testbed.framework.TestbedTest;
+import org.jbox2d.utils.ConvexDecomposer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +38,9 @@ public class OlehTest
             return false;
         }
     };
+    private Vec2[] objects;
+    private List<List<Vec2>> decompose;
+
     @Override
     public Vec2 getDefaultCameraPos() {
         return new Vec2(0, 6);
@@ -119,7 +123,14 @@ public class OlehTest
             bodies.clear();
         }
         if(keyChar == 'k'){
+
+
             circles.add(getWorldMouse().clone());
+            objects = circles.toArray(new Vec2[]{});
+
+
+            decompose = ConvexDecomposer.decompose(circles);
+
         }
         if(keyChar == 'l'){
             circles.clear();
@@ -128,6 +139,10 @@ public class OlehTest
 
 
         if(keyChar == 'y'){
+
+
+
+
             PolygonShape polygonShape = new PolygonShape();
             polygonShape.set(circles.toArray(new Vec2[]{}), circles.size());
             BodyDef bd = new BodyDef();
@@ -150,6 +165,7 @@ public class OlehTest
     @Override
     public void step(TestbedSettings settings) {
         super.step(settings);
+        addTextLine(String.format("CreateMode " + settings.create_mode));
         addTextLine(String.format("WorldMouse %f %f", getWorldMouse().x,getWorldMouse().y));
         addTextLine(String.format("Selected " + bodies.size()));
         addTextLine(String.format("Circles " + circles.size()));
@@ -172,6 +188,17 @@ public class OlehTest
         for (Vec2 circle : circles) {
 
             getModel().getDebugDraw().drawSolidCircle(circle,.1f,new Vec2(), Color3f.WHITE);
+        }
+
+
+        if(decompose != null){
+            for (List<Vec2> vec2s : decompose) {
+
+                getModel().getDebugDraw().drawPolygon(vec2s.toArray(new Vec2[]{}),vec2s.size(),Color3f.GREEN);
+            }
+        }else if(objects != null){
+
+            getModel().getDebugDraw().drawPolygon(objects,objects.length,Color3f.GREEN);
         }
 //        if (getStepCount() % 60 == 0) {
 //            launch();
